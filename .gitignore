@@ -13,6 +13,11 @@
 .history
 .svn/
 
+# Test generated
+test_media/
+test_media_compressed/
+assets/images/
+
 # IntelliJ related
 *.iml
 *.ipr

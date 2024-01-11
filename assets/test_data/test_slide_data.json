@@ -1,0 +1,65 @@
+{
+    "slide1": {
+        "id": "slide1",
+        "components": [
+            {
+                "type": "text",
+                "text": "Welcome to Luna mHealth",
+                "width": 90,
+                "height": 10,
+                "left": 5,
+                "top": 5
+            },
+            {
+                "type": "image",
+                "imageUrl": "assets/images/luna.png",
+                "width": 80,
+                "height": 50,
+                "left": 10,
+                "top": 20
+            }
+        ]
+    },
+    "slide2": {
+        "id": "slide2",
+        "components": [
+            {
+                "type": "text",
+                "text": "Second Slide",
+                "width": 90,
+                "height": 10,
+                "left": 5,
+                "top": 5
+            },
+            {
+                "type": "image",
+                "imageUrl": "assets/images/welcome_image.png",
+                "width": 80,
+                "height": 50,
+                "left": 10,
+                "top": 20
+            }
+        ]
+    },
+    "slide3": {
+        "id": "slide3",
+        "components": [
+            {
+                "type": "text",
+                "text": "Third Slide",
+                "width": 90,
+                "height": 10,
+                "left": 5,
+                "top": 5
+            },
+            {
+                "type": "image",
+                "imageUrl": "assets/images/test_image.png",
+                "width": 80,
+                "height": 50,
+                "left": 10,
+                "top": 20
+            }
+        ]
+    }
+}
