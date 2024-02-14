@@ -16,11 +16,19 @@ import 'package:luna_mhealth_mobile/storage/istorage_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
+/// LocalStorageProvider
+/// Use for file operations on local mobile appdata stores
+/// Use IStorageProvider interface as LocalStorageProvider for usage:
+/// IStorageProvider myProvider = LocalStorageProvider();
 class LocalStorageProvider implements IStorageProvider {
-  final PathProviderPlatform pathPlatform;
 
-  LocalStorageProvider(this.pathPlatform) {
-    PathProviderPlatform.instance = pathPlatform;
+  final PathProviderPlatform _pathPlatform;
+
+  /// LocalStorageProvider CTOR w/PathProviderPlatform
+  /// Overrides default PathProviderPlatform behaviors
+  /// Useful for testing on non-mobile platforms
+  LocalStorageProvider(this._pathPlatform) {
+    PathProviderPlatform.instance = _pathPlatform;
   }
 
   @override

@@ -26,6 +26,14 @@ void main() {
   group('LocalStorageProvider Tests', () {
     late IStorageProvider storageProvider;
 
+    setUpAll(() {
+      // Create testdatafolder for file operations
+      final testDirectory = Directory(kApplicationDocumentsPath);
+      if (!testDirectory.existsSync()) {
+        testDirectory.createSync(recursive: false);
+      }
+    });
+
     setUp(() {
       // Use fake path provider to account for non-mobile unit tests
       storageProvider = LocalStorageProvider(FakePathProviderPlatform());
@@ -226,7 +234,8 @@ void main() {
           createContainer: true);
       await storageProvider.saveFile(fileName2, testData2);
 
-      final loadedFilesList = await storageProvider.getAllFiles(container: "sub");
+      final loadedFilesList =
+          await storageProvider.getAllFiles(container: "sub");
 
       // cant find test_file2.txt
       expect(loadedFilesList.length, equals(1));
@@ -237,6 +246,14 @@ void main() {
       // clear out all files in the test folder
       await clearTestFiles();
       storageProvider.close();
+    });
+
+    tearDownAll(() {
+      // remove testdatafolder
+      final testDirectory = Directory(kApplicationDocumentsPath);
+      if (testDirectory.existsSync()) {
+        testDirectory.deleteSync(recursive: false);
+      }
     });
   });
 }
