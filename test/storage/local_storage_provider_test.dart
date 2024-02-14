@@ -28,7 +28,35 @@ void main() {
 
     setUp(() {
       // Use fake path provider to account for non-mobile unit tests
-      storageProvider = LocalStorageProvider(FakePathProviderPlatform());    
+      storageProvider = LocalStorageProvider(FakePathProviderPlatform());
+    });
+
+    test('Save - Result', () async {
+      final fileName = 'test_file.txt';
+      final testData = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      bool result = await storageProvider.saveFile(fileName, testData);
+
+      expect(result, true);
+    });
+
+    test('Save - With Path', () async {
+      final fileName = 'stuff/test_file.txt';
+      final testData = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      bool result = await storageProvider.saveFile(fileName, testData,
+          createContainer: true);
+
+      expect(result, true);
+    });
+
+    test('Save - Bad Path', () async {
+      final fileName = 'stuff/test_file.txt';
+      final testData = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      bool result = await storageProvider.saveFile(fileName, testData);
+
+      expect(result, false);
     });
 
     test('Save and load local file', () async {
@@ -40,6 +68,25 @@ void main() {
       final loadedData = await storageProvider.loadFile(fileName);
 
       expect(loadedData, testData);
+    });
+
+    test('Load - Bad File', () async {
+      final fileName = 'test_file.txt';
+
+      final loadedData = await storageProvider.loadFile(fileName);
+
+      expect(loadedData, null);
+    });
+
+    test('Save and Load - Empty', () async {
+      final fileName = 'test_file.txt';
+      final testData = Uint8List.fromList([]);
+
+      await storageProvider.saveFile(fileName, testData);
+
+      final loadedData = await storageProvider.loadFile(fileName);
+
+      expect(loadedData, []);
     });
 
     test('Delete local file', () async {
@@ -59,6 +106,133 @@ void main() {
       expect(fileExistsAfterDeletion, isFalse);
     });
 
+    test('Find Multiple File Names - No Results', () async {
+      final fileNameList = await storageProvider.getAllFileNames();
+
+      expect(fileNameList, []);
+    });
+
+    test('Find Multiple File Names', () async {
+      final fileName1 = 'test_file1.txt';
+      final testData1 = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final fileName2 = 'test_file2.txt';
+      final testData2 = Uint8List.fromList([6, 7, 8, 9, 10]);
+
+      await storageProvider.saveFile(fileName1, testData1);
+      await storageProvider.saveFile(fileName2, testData2);
+
+      final fileNameList = await storageProvider.getAllFileNames();
+
+      expect(fileNameList, {"test_file1.txt", "test_file2.txt"});
+    });
+
+    test('Find Multiple File Names - Subfolder', () async {
+      final fileName1 = 'sub/test_file1.txt';
+      final testData1 = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final fileName2 = 'sub/test_file2.txt';
+      final testData2 = Uint8List.fromList([6, 7, 8, 9, 10]);
+
+      await storageProvider.saveFile(fileName1, testData1,
+          createContainer: true);
+      await storageProvider.saveFile(fileName2, testData2,
+          createContainer: true);
+
+      final fileNameList =
+          await storageProvider.getAllFileNames(container: "sub");
+
+      expect(fileNameList, {"test_file1.txt", "test_file2.txt"});
+    });
+
+    test('Find Multiple File Names - Subfolder - No Access Root', () async {
+      final fileName1 = 'test_file1.txt';
+      final testData1 = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final fileName2 = 'test_file2.txt';
+      final testData2 = Uint8List.fromList([6, 7, 8, 9, 10]);
+
+      await storageProvider.saveFile(fileName1, testData1);
+      await storageProvider.saveFile(fileName2, testData2);
+
+      final fileNameList =
+          await storageProvider.getAllFileNames(container: "sub");
+
+      expect(fileNameList, isNot({"test_file3.txt", "test_file4.txt"}));
+    });
+
+    test('Find Multiple Files', () async {
+      final fileName1 = 'test_file1.txt';
+      final testData1 = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final fileName2 = 'test_file2.txt';
+      final testData2 = Uint8List.fromList([6, 7, 8, 9, 10]);
+
+      await storageProvider.saveFile(fileName1, testData1);
+      await storageProvider.saveFile(fileName2, testData2);
+
+      final loadedFilesList = await storageProvider.getAllFiles();
+
+      expect(loadedFilesList[1], equals(testData1));
+      expect(loadedFilesList[0], equals(testData2));
+    });
+
+    test('Find Multiple Files - Subfolder', () async {
+      final fileName1 = 'sub/test_file1.txt';
+      final testData1 = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final fileName2 = 'sub/test_file2.txt';
+      final testData2 = Uint8List.fromList([6, 7, 8, 9, 10]);
+
+      await storageProvider.saveFile(fileName1, testData1,
+          createContainer: true);
+      await storageProvider.saveFile(fileName2, testData2,
+          createContainer: true);
+
+      final loadedFilesList =
+          await storageProvider.getAllFiles(container: "sub");
+
+      expect(loadedFilesList[1], equals(testData1));
+      expect(loadedFilesList[0], equals(testData2));
+    });
+
+    test('Find Multiple Files - child subfolder item access', () async {
+      final fileName1 = 'sub/test_file1.txt';
+      final testData1 = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final fileName2 = 'sub/test_file2.txt';
+      final testData2 = Uint8List.fromList([6, 7, 8, 9, 10]);
+
+      await storageProvider.saveFile(fileName1, testData1,
+          createContainer: true);
+      await storageProvider.saveFile(fileName2, testData2,
+          createContainer: true);
+
+      final loadedFilesList = await storageProvider.getAllFiles();
+
+      expect(loadedFilesList.length, equals(2));
+      expect(loadedFilesList[1], equals(testData1));
+      expect(loadedFilesList[0], equals(testData2));
+    });
+
+    test('Find Multiple Files - parent subfolder no access', () async {
+      final fileName1 = 'sub/test_file1.txt';
+      final testData1 = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final fileName2 = 'test_file2.txt';
+      final testData2 = Uint8List.fromList([6, 7, 8, 9, 10]);
+
+      await storageProvider.saveFile(fileName1, testData1,
+          createContainer: true);
+      await storageProvider.saveFile(fileName2, testData2);
+
+      final loadedFilesList = await storageProvider.getAllFiles(container: "sub");
+
+      // cant find test_file2.txt
+      expect(loadedFilesList.length, equals(1));
+      expect(loadedFilesList[0], equals(testData1));
+    });
+
     tearDown(() async {
       // clear out all files in the test folder
       await clearTestFiles();
@@ -76,12 +250,18 @@ class FakePathProviderPlatform extends Fake
   }
 }
 
-Future<void> clearTestFiles() async { 
+Future<void> clearTestFiles() async {
   final folder = Directory(kApplicationDocumentsPath);
-  final files = folder.list();
-  await for (var file in files) {
-    if (file is File) {
-      await file.delete();
+  if (await folder.exists()) {
+    final entities = await folder.list(recursive: true).toList();
+    for (var entity in entities) {
+      if (entity is File) {
+        try {
+          await entity.delete();
+        } catch (e) {}
+      } else if (entity is Directory) {
+        await entity.delete(recursive: true);
+      }
     }
   }
 }

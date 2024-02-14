@@ -14,19 +14,48 @@
 
 import 'dart:typed_data';
 
+/// IStorageProvider: Interface for low level file storage access
+/// To be implemented by local storage, database, and cloud data providers
 abstract class IStorageProvider {
-  // Save data to a file
-  Future<bool> saveFile(String fileName, Uint8List data);
+  /// saveFile: Save data to a file in a storage provider
+  /// fileName: {path/}filename.ext
+  /// data: data
+  /// createContainer: Create a subdirectory or container based upon path
+  /// returns: bool for success
+  Future<bool> saveFile(String fileName, Uint8List data,
+      {bool createContainer});
 
-  // Load data from a file
+  /// loadFile: Load data from a file
+  /// createContainer: Create a subdirectory or container based upon path
+  /// fileName: {path/}filename.ext
+  /// returns: Uint8List data 
   Future<Uint8List?> loadFile(String fileName);
 
-  // Delete a file
+  /// deleteFile: Delete a file.  Does not support recursive find.
+  /// fileName: {path/}filename.ext
+  /// returns: bool for success 
   Future<bool> deleteFile(String fileName);
 
-  // Check if a file exists
+  /// isFileExist: Lookup existance of a file.  Does not support recursive find.
+  /// fileName: {path/}filename.ext
+  /// returns: bool for success 
   Future<bool> isFileExists(String fileName);
 
-  // Dispose and cleanup connections
+  /// getAllFileNames: Get a list of filenames under the root path 
+  /// or optional container.  Supports recursive lookup.
+  /// container: the file subfolder or container
+  /// returns: list of strings
+  Future<List<String>> getAllFileNames({String container});
+
+  /// getAllFiles: Get a list of files under the root path 
+  /// or optional container.  Supports recursive lookup.
+  /// container: the file subfolder or container
+  /// returns: list of Uint8List data
+  Future<List<Uint8List>> getAllFiles({String container});
+
+  /// init: Supports connection initialization
+  Future<bool> init({String options});
+
+  /// Dispose and cleanup connections
   void close();
 }
