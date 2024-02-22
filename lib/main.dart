@@ -13,14 +13,22 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
-import 'package:luna_mhealth_mobile/models/image/image_component.dart';
+import 'package:provider/provider.dart';
 
 import 'enums/component_type.dart';
+import 'models/image/image_component.dart';
 import 'models/module.dart';
 import 'models/page.dart' as slide_page;
 import 'models/text/text_component.dart';
+import 'providers/click_state_provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(
+      providers: [
+        // ChangeNotifierProvider(create: (_) => ModuleProvider()),
+        ChangeNotifierProvider(create: (_) => ClickStateProvider()),
+      ],
+      child: MyApp(),
+    ));
 
 class MyApp extends StatelessWidget {
   @override
@@ -31,12 +39,46 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ModuleView extends StatelessWidget {
+// class ModuleView extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     // sample data (will ultimately come from PPT parsed JSON file)
+//     Module module = Module(title: 'Module #0', description: 'Demo');
+//     slide_page.Page page = slide_page.Page(index: 0);
+//     page.addComponent(
+//         TextComponent(text: 'Hello, Luna!!!', type: ComponentType.text));
+//     page.addComponent(ImageComponent(
+//         imagePath: 'assets/images/luna.png',
+//         type: ComponentType.image,
+//         width: 200,
+//         height: 200));
+//     module.addPage(page);
+
+//     return Scaffold(
+//       appBar: AppBar(title: Text(module.title)),
+//       body: Center(
+//         child: Column(
+//           children:
+//               page.components.map((component) => component.render()).toList(),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class ModuleView extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    // sample data (will ultimately come from PPT parsed JSON file)
-    Module module = Module(title: 'Module #0', description: 'Demo');
-    slide_page.Page page = slide_page.Page(index: 0);
+  _ModuleViewState createState() => _ModuleViewState();
+}
+
+class _ModuleViewState extends State<ModuleView> {
+  // Sample data
+  Module module = Module(title: 'Module #0', description: 'Demo');
+  slide_page.Page page = slide_page.Page(index: 0);
+
+  @override
+  void initState() {
+    super.initState();
     page.addComponent(
         TextComponent(text: 'Hello, Luna!!!', type: ComponentType.text));
     page.addComponent(ImageComponent(
@@ -45,7 +87,10 @@ class ModuleView extends StatelessWidget {
         width: 200,
         height: 200));
     module.addPage(page);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(module.title)),
       body: Center(

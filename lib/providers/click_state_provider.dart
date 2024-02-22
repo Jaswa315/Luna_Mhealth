@@ -6,21 +6,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/// Enum representing different types of components.
-///
-/// This enum is used to distinguish between different types of components
-/// in a layout or design. It currently supports text, image, shape, and audio.
+// ignore_for_file: public_member_api_docs
 
-enum ComponentType {
-  /// Represents a text component.
-  text,
+import 'package:flutter/foundation.dart';
+import '../models/click_state.dart';
 
-  /// Represents an image component.
-  image,
+/// A provider class that manages the state of a click event.
+class ClickStateProvider with ChangeNotifier {
+  ClickState _clickState = ClickState();
 
-  /// Represents a shape component.
-  shape,
-
-  /// Represents an audio component.
-  audio
+  /// Returns the current click state.
+  ClickState get clickState => _clickState;
 }

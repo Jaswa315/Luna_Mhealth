@@ -6,21 +6,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/// Enum representing different types of components.
-///
-/// This enum is used to distinguish between different types of components
-/// in a layout or design. It currently supports text, image, shape, and audio.
+/// Represents the type of an item.
+enum ItemType {
+  /// Represents a module item.
+  module,
 
-enum ComponentType {
-  /// Represents a text component.
-  text,
+  /// Represents a page item.
+  page,
 
-  /// Represents an image component.
-  image,
-
-  /// Represents a shape component.
-  shape,
-
-  /// Represents an audio component.
-  audio
+  /// Represents a component item.
+  component,
 }

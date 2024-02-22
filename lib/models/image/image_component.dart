@@ -1,31 +1,24 @@
-/// Represents an image component that can be rendered in a Flutter application.
-///
-/// The [ImageComponent] class extends the [Component] class and provides functionality
-/// for rendering an image using the [Image.asset] widget. It takes in the path of the image
-/// and other optional parameters such as position, width, and height.
-///
-/// Example usage:
-///
-/// ```dart
-/// ImageComponent image = ImageComponent(
-///   imagePath: 'assets/images/my_image.png',
-///   type: ComponentType.image,
-///   x: 100.0,
-///   y: 100.0,
-///   width: 200.0,
-///   height: 200.0,
-/// );
-/// ```
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../enums/component_type.dart';
+import '../../providers/click_state_provider.dart';
 import '../component.dart';
 
 class ImageComponent extends Component {
   /// The path of the image.
   String imagePath;
+  Color _borderColor = Colors.transparent; // Internal state for border color
 
   /// Creates a new instance of [ImageComponent].
   ///
@@ -46,15 +39,44 @@ class ImageComponent extends Component {
   /// Returns an [Image.asset] widget with the specified image path, width, and height.
   @override
   Widget render() {
-    return Image.asset(
-      imagePath,
-      width: width,
-      height: height,
+    return Consumer<ClickStateProvider>(
+      builder: (context, clickStateProvider, child) {
+        return GestureDetector(
+          onTap: () {
+            //print("ImageComponent clicked! Current isBold: $_borderColor");
+            _borderColor = _updateBorderColor(); // Update internal state
+            clickStateProvider.clickState
+                .changeBorderColor(); // Notify Provider change
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: _borderColor, width: 5.0), // Use internal state
+            ),
+            child: Image.asset(
+              imagePath,
+              //width: width,
+              //height: height,
+            ),
+          ),
+        );
+      },
     );
   }
 
   @override
-  void load() {
-    // TODO: implement loading logic
+  void onClick() {
+    print('Image clicked: $imagePath');
+  }
+
+  // Helper function to cycle border colors
+  Color _updateBorderColor() {
+    if (_borderColor == Colors.transparent) {
+      return Colors.blue;
+    } else if (_borderColor == Colors.blue) {
+      return Colors.red;
+    } else {
+      return Colors.transparent;
+    }
   }
 }
