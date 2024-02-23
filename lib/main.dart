@@ -13,22 +13,29 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:global_configuration/global_configuration.dart';
+//import 'package:provider/provider.dart';
 
 import 'enums/component_type.dart';
 import 'models/image/image_component.dart';
 import 'models/module.dart';
 import 'models/page.dart' as slide_page;
 import 'models/text/text_component.dart';
-import 'providers/click_state_provider.dart';
+//import 'providers/click_state_provider.dart';
 
-void main() => runApp(MultiProvider(
-      providers: [
-        // ChangeNotifierProvider(create: (_) => ModuleProvider()),
-        ChangeNotifierProvider(create: (_) => ClickStateProvider()),
-      ],
-      child: MyApp(),
-    ));
+// void main() => runApp(MultiProvider(
+//       providers: [
+//         // ChangeNotifierProvider(create: (_) => ModuleProvider()),
+//         ChangeNotifierProvider(create: (_) => ClickStateProvider()),
+//       ],
+//       child: MyApp(),
+//     ));
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GlobalConfiguration().loadFromAsset("app_settings");
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
