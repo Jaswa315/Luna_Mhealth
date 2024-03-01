@@ -18,15 +18,16 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 /// LocalStorageProvider
 /// Use for file operations on local mobile appdata stores
 /// Usage: IStorageProvider myProvider = LocalStorageProvider();
-/// Do not use as a concrete object within Luna!!!   
+/// Do not use as a concrete object within Luna!!!
 class LocalStorageProvider implements IStorageProvider {
-
   final PathProviderPlatform _pathPlatform;
+
+  LocalStorageProvider() : _pathPlatform = PathProviderPlatform.instance;
 
   /// LocalStorageProvider CTOR w/PathProviderPlatform
   /// Overrides default PathProviderPlatform behaviors
   /// Useful for testing on non-mobile platforms
-  LocalStorageProvider(this._pathPlatform) {
+  LocalStorageProvider.withPathPlatformProvider(this._pathPlatform) {
     PathProviderPlatform.instance = _pathPlatform;
   }
 
