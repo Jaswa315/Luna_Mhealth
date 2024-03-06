@@ -45,13 +45,13 @@ abstract class IStorageProvider {
   /// or optional container.  Supports recursive lookup.
   /// container: the file subfolder or container
   /// returns: list of strings
-  Future<List<String>> getAllFileNames({String container});
+  Future<List<String>> getAllFileNames({String container, bool recursiveSearch});
 
   /// getAllFiles: Get a list of files under the root path
   /// or optional container.  Supports recursive lookup.
   /// container: the file subfolder or container
   /// returns: list of Uint8List data
-  Future<List<Uint8List>> getAllFiles({String container});
+  Future<List<Uint8List>> getAllFiles({String container, bool recursiveSearch});
 
   /// init: Supports connection initialization
   Future<bool> init({String options});

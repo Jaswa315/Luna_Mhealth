@@ -86,13 +86,13 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<String>> getAllFileNames({String container = ''}) async {
+  Future<List<String>> getAllFileNames({String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";
       final folder = Directory(folderPath);
 
-      final files = folder.list(recursive: true);
+      final files = folder.list(recursive: recursiveSearch);
       final fileNames = <String>[];
 
       await for (var file in files) {
@@ -107,12 +107,12 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<Uint8List>> getAllFiles({String container = ''}) async {
+  Future<List<Uint8List>> getAllFiles({String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";
       final folder = Directory(folderPath);
-      final files = folder.list(recursive: true);
+      final files = folder.list(recursive: recursiveSearch);
       final fileDataList = <Uint8List>[];
 
       await for (var file in files) {

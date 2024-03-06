@@ -2,6 +2,6 @@
    "key1": "value1",
    "key2": "value2",
    "StorageProviderType": "Local",
-   "TempAudioFolder": "temp/audio/",
-   "TempImagesFolder": "temp/images/"
+   "TempAudioFolder": "audio",
+   "TempImagesFolder": "images"
  }
