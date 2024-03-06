@@ -35,7 +35,7 @@ void main() {
 
     setUp(() {
       // Use fake path provider to account for non-mobile unit tests
-      storageProvider = LocalStorageProvider(FakePathProviderPlatform());
+      storageProvider = LocalStorageProvider.withPathPlatformProvider(FakePathProviderPlatform());
     });
 
     test('Save - Result', () async {

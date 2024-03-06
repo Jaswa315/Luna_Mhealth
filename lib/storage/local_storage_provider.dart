@@ -18,15 +18,16 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 /// LocalStorageProvider
 /// Use for file operations on local mobile appdata stores
 /// Usage: IStorageProvider myProvider = LocalStorageProvider();
-/// Do not use as a concrete object within Luna!!!   
+/// Do not use as a concrete object within Luna!!!
 class LocalStorageProvider implements IStorageProvider {
-
   final PathProviderPlatform _pathPlatform;
+
+  LocalStorageProvider() : _pathPlatform = PathProviderPlatform.instance;
 
   /// LocalStorageProvider CTOR w/PathProviderPlatform
   /// Overrides default PathProviderPlatform behaviors
   /// Useful for testing on non-mobile platforms
-  LocalStorageProvider(this._pathPlatform) {
+  LocalStorageProvider.withPathPlatformProvider(this._pathPlatform) {
     PathProviderPlatform.instance = _pathPlatform;
   }
 
@@ -85,13 +86,13 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<String>> getAllFileNames({String container = ''}) async {
+  Future<List<String>> getAllFileNames({String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";
       final folder = Directory(folderPath);
 
-      final files = folder.list(recursive: true);
+      final files = folder.list(recursive: recursiveSearch);
       final fileNames = <String>[];
 
       await for (var file in files) {
@@ -106,12 +107,12 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<Uint8List>> getAllFiles({String container = ''}) async {
+  Future<List<Uint8List>> getAllFiles({String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";
       final folder = Directory(folderPath);
-      final files = folder.list(recursive: true);
+      final files = folder.list(recursive: recursiveSearch);
       final fileDataList = <Uint8List>[];
 
       await for (var file in files) {
