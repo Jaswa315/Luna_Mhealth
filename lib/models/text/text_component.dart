@@ -24,7 +24,6 @@ class TextComponent extends Component {
   FontStyle fontStyle;
   Color color;
   TextAlign alignment;
-  bool _isBold = false; // Internal state for font weight
 
   /// Constructs a [TextComponent] with the given parameters.
   ///
@@ -34,10 +33,11 @@ class TextComponent extends Component {
   /// The [fontStyle] parameter represents the font style of the text.
   /// The [color] parameter represents the color of the text.
   /// The [alignment] parameter represents the alignment of the text.
-  /// The [x], [y], [width], and [height] parameters represent the position and size of the component.
+  /// The [x], [y], [width], [height], and [name] parameters represent the position, size, and name of the component.
   TextComponent({
     required this.text,
     required ComponentType type,
+    required String name,
     this.fontSize = 16.0,
     this.fontStyle = FontStyle.normal,
     this.color = Colors.black,
@@ -46,7 +46,7 @@ class TextComponent extends Component {
     double y = 0.0,
     double width = 0.0,
     double height = 0.0,
-  }) : super(type: type, x: x, y: y, width: width, height: height);
+  }) : super(type: type, name: name, x: x, y: y, width: width, height: height);
 
   /// Renders the text component.
   /// Returns a [Container] widget containing the text.
