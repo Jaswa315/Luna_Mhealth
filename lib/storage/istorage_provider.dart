@@ -12,6 +12,8 @@
 
 import 'dart:typed_data';
 
+import 'package:luna_mhealth_mobile/storage/local_storage_provider.dart';
+
 /// IStorageProvider: Interface for low level file storage access
 /// To be implemented by local storage, database, and cloud data providers
 abstract class IStorageProvider {
@@ -26,34 +28,49 @@ abstract class IStorageProvider {
   /// loadFile: Load data from a file
   /// createContainer: Create a subdirectory or container based upon path
   /// fileName: {path/}filename.ext
-  /// returns: Uint8List data 
+  /// returns: Uint8List data
   Future<Uint8List?> loadFile(String fileName);
 
   /// deleteFile: Delete a file.  Does not support recursive find.
   /// fileName: {path/}filename.ext
-  /// returns: bool for success 
+  /// returns: bool for success
   Future<bool> deleteFile(String fileName);
 
   /// isFileExist: Lookup existance of a file.  Does not support recursive find.
   /// fileName: {path/}filename.ext
-  /// returns: bool for success 
+  /// returns: bool for success
   Future<bool> isFileExists(String fileName);
 
-  /// getAllFileNames: Get a list of filenames under the root path 
+  /// getAllFileNames: Get a list of filenames under the root path
   /// or optional container.  Supports recursive lookup.
   /// container: the file subfolder or container
   /// returns: list of strings
-  Future<List<String>> getAllFileNames({String container});
+  Future<List<String>> getAllFileNames({String container, bool recursiveSearch});
 
-  /// getAllFiles: Get a list of files under the root path 
+  /// getAllFiles: Get a list of files under the root path
   /// or optional container.  Supports recursive lookup.
   /// container: the file subfolder or container
   /// returns: list of Uint8List data
-  Future<List<Uint8List>> getAllFiles({String container});
+  Future<List<Uint8List>> getAllFiles({String container, bool recursiveSearch});
 
   /// init: Supports connection initialization
   Future<bool> init({String options});
 
   /// Dispose and cleanup connections
   void close();
+}
+
+class StorageProviderFactory {
+  static IStorageProvider createProvider(String providerType) {
+    switch (providerType.toLowerCase()) {
+      case 'local':
+        return LocalStorageProvider();
+      case 'cloud':
+        throw UnimplementedError('This method is not implemented yet');
+      case 'localDB':
+        throw UnimplementedError('This method is not implemented yet');
+      default:
+        throw ArgumentError('Invalid provider type: $providerType');
+    }
+  }
 }

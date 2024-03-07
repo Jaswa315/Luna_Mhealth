@@ -10,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_mhealth_mobile/models/module.dart';
 import 'package:luna_mhealth_mobile/enums/item_type.dart';
 import 'package:luna_mhealth_mobile/models/page.dart';
+import 'dart:io';
+import 'dart:convert';
 
 void main() {
   group('Module Class Tests', () {
@@ -85,6 +87,8 @@ void main() {
 
       final json = module.toJson();
 
+      File("test/models/module.json").writeAsStringSync(module.toString());
+
       expect(json, isMap);
       expect(json['id'], module.id);
       expect(json['title'], 'This is title');
@@ -99,6 +103,18 @@ void main() {
       expect(moduleFromJson.description, 'This is description');
       expect(moduleFromJson.itemType, ItemType.module);
       expect(moduleFromJson.pages.first.index, 1);
+    });
+
+    test('String Deserialization - Module', () {
+      String jsonModule = File("test/models/module.json").readAsStringSync();
+
+      Module module = Module.fromJson(jsonDecode(jsonModule));
+
+      expect('3380e95d-419c-4b5a-ac7e-22f53aecf0fc', module.id);
+      expect('This is title', module.title);
+      expect('This is description', module.description);
+      expect(ItemType.module, module.itemType);
+      expect(1, module.pages[0].index);
     });
   });
 }
