@@ -44,6 +44,8 @@ dependencies:
   azure_application_insights: ^4.0.1
   global_configuration: ^2.0.0
   collection: ^1.18.0
+  package_info: ^2.0.2
+  device_info: ^2.0.3
 
 dev_dependencies:
   coverage: 

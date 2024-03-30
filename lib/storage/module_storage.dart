@@ -6,7 +6,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/// ModuleStorage
+/// ModuleStorage Library
 /// Purpose: Module Storage class for module file handling.  Operates on an
 /// IStorageProvider.  Handles unpacking, packing, and validation of modules
 
@@ -17,6 +17,27 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_mhealth_mobile/models/module.dart';
 import 'package:luna_mhealth_mobile/storage/istorage_provider.dart';
 
+/// Handles packaging, asset retrieval, loading, and storage
+/// for Module operations
+///
+/// This class provides CRUD and storage operations for Module archive packages.
+/// Module loading, creating new modules, retrieving/adding/updating image/audio
+/// assets, and removing modules is currently supported.  Storage provider type 
+/// is handled by app_settings.json StorageProviderType key.  
+///
+/// ToDo: Add module validation and signing logic
+///
+/// Example usage:
+///
+/// ```dart
+/// ModuleStorage moduleStorage;
+/// Module module = await moduleStorage.addModule("ModuleName",
+/// jsonModuleString);
+/// Bool audioResult = await moduleStorage.addModuleAudio("ModuleName",
+/// audioFileName, audioBytes);
+/// Uint8List? audioBytes = await moduleStorage.getAudioBytes("ModuleName",
+/// audioFileName);
+/// ```
 class ModuleStorage {
   IStorageProvider storageProvider;
   final String userPath;
@@ -33,18 +54,32 @@ class ModuleStorage {
     Archive? archive = await _getModuleArchive(moduleName);
     if (archive == null) {
       return false;
-    }
-
-    String moduleJsonName = moduleName.trim().replaceAll(" ", "_");
-    moduleJsonName += '.json';
+    }    
 
     if (await _updateOrAddAssetToArchive(
-        archive, moduleJsonName, utf8.encode(jsonData))) {
+        archive, _getModuleJsonFileName(moduleName), utf8.encode(jsonData))) {
       return _saveArchiveToFileSystem(moduleName, archive);
     }
     return false;
   }
 
+  /// Loads a Module object from a Module.luna archive package
+  ///
+  /// This method will lookup and extract the Module.json file from
+  /// a Module.luna package and deserialize into a Module object.
+  ///
+  /// Parameters:
+  /// - [moduleName]: The name of the module. Accessable from Module.name.
+  /// Does not include file type suffix.
+  ///
+  /// Returns:
+  /// - A Module object. Will return null if no such module exists or
+  /// module package is corrupted.
+  ///
+  /// Usage:
+  /// ```dart
+  /// Module? module = await moduleStorage.loadModule("ModuleName");
+  /// ```
   Future<Module?> loadModule(String moduleName) async {
     moduleName.trim().replaceAll(" ", "_");
 
@@ -89,9 +124,7 @@ class ModuleStorage {
   }
 
   Future<Module> addModule(String moduleName, String jsonData) async {
-    Module module = Module.fromJson(jsonDecode(jsonData));
-    String moduleJsonName = moduleName.trim().replaceAll(" ", "_");
-    moduleJsonName += '.json';
+    Module module = Module.fromJson(jsonDecode(jsonData));    
     String moduleFileName = _getModuleFileName(moduleName);
     String fullModulePath = _getModuleFileNameWithPath(moduleName);
 
@@ -101,13 +134,14 @@ class ModuleStorage {
 
     Archive archive = Archive();
 
-    _updateOrAddAssetToArchive(archive, moduleJsonName, utf8.encode(jsonData));
+    _updateOrAddAssetToArchive(archive, _getModuleJsonFileName(moduleName), utf8.encode(jsonData));
 
     await _saveArchiveToFileSystem(moduleName, archive);
 
     return module;
   }
 
+  
   Future<bool> addModuleImage(
       String moduleName, String imageFileName, Uint8List? imageBytes) async {
     Archive? archive = await _getModuleArchive(moduleName);
@@ -218,7 +252,7 @@ class ModuleStorage {
     bool fileExists = archive.any((file) => file.name == filePath);
 
     ArchiveFile tempFile = ArchiveFile(filePath, fileData.length, fileData);
-        
+
     archive.addFile(tempFile);
     return true;
   }
@@ -237,5 +271,10 @@ class ModuleStorage {
     return userPath == ''
         ? _getModuleFileName(moduleName)
         : '$userPath/${_getModuleFileName(moduleName)}';
+  }
+
+  String _getModuleJsonFileName(String moduleName) {
+    return '${moduleName.trim().replaceAll(" ", "_")}.json';
+    
   }
 }
