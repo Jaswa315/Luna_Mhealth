@@ -372,7 +372,7 @@ void Function() overridePrint(void testFn()) => () {
       return Zone.current.fork(specification: spec).run<void>(testFn);
     };
 
-class MockLogger implements LunaLogger {
+class MockLogger implements ILunaLogger {
   @override
   void logEvent(String eventName, LunaSeverityLevel severity,
       {Map<String, Object>? additionalProperties}) {
