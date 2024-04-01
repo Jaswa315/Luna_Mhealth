@@ -41,12 +41,12 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
       Rect.fromLTWH(_bounds.left, _bounds.top, _bounds.width, _bounds.height);
 
   /// Creates a new Component instance.
-  Component({  
+  Component({
     required this.type,
     double x = 0.0,
     double y = 0.0,
     double width = 0.0,
-    double height = 0.0,
+    double height = 0.0, required String name,
   })  : _bounds = Rect.fromLTWH(x, y, width, height),
         super(itemType: ItemType.component);
 

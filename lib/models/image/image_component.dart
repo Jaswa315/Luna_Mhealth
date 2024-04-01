@@ -33,7 +33,7 @@ class ImageComponent extends Component {
     double y = 0.0,
     double width = 0.0,
     double height = 0.0,
-  }) : super(type: type, x: x, y: y, width: width, height: height);
+  }) : super(type: type, x: x, y: y, width: width, height: height, name: '');
 
   /// Renders the image component.
   /// Returns an [Image.asset] widget with the specified image path, width, and height.

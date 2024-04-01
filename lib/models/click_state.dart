@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 class ClickState with ChangeNotifier {
   bool _isBold = false;
   Color _borderColor = Colors.transparent;
-  String _text = "Initial Text";
+  String _text = "Hello, World!";
 
   bool get isBold => _isBold;
   Color get borderColor => _borderColor;
@@ -43,7 +43,7 @@ class ClickState with ChangeNotifier {
   /// "Initial Text" based on its current value. It also notifies listeners of
   /// the state change.
   void changeText() {
-    _text = _text == "Initial Text" ? "Updated Text" : "Initial Text";
+    _text = _text == "Hello, World!" ? "Updated Text" : "Hello, World!";
     print("ClickState.changeText() - text is now: $_text");
     notifyListeners();
   }
