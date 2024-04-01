@@ -115,14 +115,13 @@ class LogManager {
   /// If [populateLoggers] is true, initializes loggers based on configuration.
   /// Returns the singleton instance of the LogManager.
   static Future<LogManager> createInstance(
-      [bool populateLoggers = true]) async {
+      [bool populateLoggers = true]) async {    
     if (populateLoggers) {
-      if (GlobalConfiguration().getValue('UseApplicationInsightsLogging') ==
-          1) {
+      if (GlobalConfiguration().getValue<bool>('UseApplicationInsightsLogging')) {
         ILunaLogger aiLogger = await ApplicationInsightsLogger.createInstance();
         _instance._loggers.add(aiLogger);
       }
-      if (GlobalConfiguration().getValue('UseDartLogging') == 1) {
+      if (GlobalConfiguration().getValue<bool>('UseDartLogging')) {
         ILunaLogger dartLogger = DartLogger();
         _instance._loggers.add(dartLogger);
       }

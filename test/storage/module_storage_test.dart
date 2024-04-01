@@ -21,16 +21,18 @@ import 'package:luna_mhealth_mobile/storage/module_storage.dart';
 import 'package:luna_mhealth_mobile/models/module.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:global_configuration/global_configuration.dart';
 
 const String kApplicationDocumentsPath = 'test/storage/moduletestdata';
 const String kTestAssetsPath = 'test/storage/testassets';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  GlobalConfiguration().loadFromAsset("app_settings");
+  
 
   group('LocalStorageProvider Tests', () {
     late IStorageProvider storageProvider;
-    LogManager.createInstance();
 
     setUpAll(() {
       // Create testdatafolder for file operations
@@ -41,6 +43,7 @@ void main() {
         testDirectory.deleteSync(recursive: true);
         testDirectory.createSync(recursive: false);
       }
+      LogManager.createInstance();      
     });
 
     setUp(() {

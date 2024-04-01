@@ -53,15 +53,17 @@ class ModuleStorage {
 
   Future<bool> updateModuleSchema(String moduleName, String jsonData) async {
     Archive? archive = await _getModuleArchive(moduleName);
-    if (archive == null) {
-      return false;
-    }
+    return await LogManager().logFunction('updateModuleSchema', () async {
+      if (archive == null) {
+        return false;
+      }
 
-    if (await _updateOrAddAssetToArchive(
-        archive, _getModuleJsonFileName(moduleName), utf8.encode(jsonData))) {
-      return _saveArchiveToFileSystem(moduleName, archive);
-    }
-    return false;
+      if (await _updateOrAddAssetToArchive(
+          archive, _getModuleJsonFileName(moduleName), utf8.encode(jsonData))) {
+        return _saveArchiveToFileSystem(moduleName, archive);
+      }
+      return false;
+    });
   }
 
   /// Loads a Module object from a Module.luna archive package
