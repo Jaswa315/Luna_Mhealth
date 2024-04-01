@@ -21,6 +21,7 @@ import 'models/image/image_component.dart';
 import 'models/module.dart';
 import 'models/page.dart' as slide_page;
 import 'models/text/text_component.dart';
+import 'utils/logging.dart';
 //import 'providers/click_state_provider.dart';
 
 // void main() => runApp(MultiProvider(
@@ -34,6 +35,7 @@ import 'models/text/text_component.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GlobalConfiguration().loadFromAsset("app_settings");
+  await LogManager.createInstance();
   runApp(MyApp());
 }
 
