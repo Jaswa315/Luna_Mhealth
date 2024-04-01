@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:azure_application_insights/azure_application_insights.dart';
 import 'package:device_info/device_info.dart';
-import 'package:flutter/widgets.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
@@ -9,12 +8,12 @@ import 'package:package_info/package_info.dart';
 
 enum LunaSeverityLevel { Verbose, Information, Warning, Error, Critical }
 
-enum LunaLoggingResult { Success, Error }
+enum LunaLoggingResult { Success, Failure }
 
 abstract class LunaLogger {
   void logEvent(String eventName, LunaSeverityLevel severity,
       {Map<String, Object>? additionalProperties});
-  void logError(Exception error, StackTrace stack, bool isFatal,
+  void logError(Object error, StackTrace stack, bool isFatal,
       {Map<String, Object>? additionalProperties});
   void logTrace(String message, LunaSeverityLevel severity,
       {Map<String, Object>? additionalProperties});
@@ -37,14 +36,18 @@ class LogManager {
     _loggers = [];
   }
 
-  static Future<LogManager> createInstance() async {
-    if (GlobalConfiguration().getValue('UseApplicationInsightsLogging') == 1) {
-      LunaLogger aiLogger = await ApplicationInsightsLogger.createInstance();
-      _instance._loggers.add(aiLogger);
-    }
-    if (GlobalConfiguration().getValue('UseDartLogging') == 1) {
-      LunaLogger dartLogger = DartLogger();
-      _instance._loggers.add(dartLogger);
+  static Future<LogManager> createInstance(
+      [bool populateLoggers = true]) async {
+    if (populateLoggers) {
+      if (GlobalConfiguration().getValue('UseApplicationInsightsLogging') ==
+          1) {
+        LunaLogger aiLogger = await ApplicationInsightsLogger.createInstance();
+        _instance._loggers.add(aiLogger);
+      }
+      if (GlobalConfiguration().getValue('UseDartLogging') == 1) {
+        LunaLogger dartLogger = DartLogger();
+        _instance._loggers.add(dartLogger);
+      }
     }
     _initialized = true;
     return _instance;
@@ -58,6 +61,14 @@ class LogManager {
     _loggers.remove(logger);
   }
 
+  void clearLoggers() {
+    _loggers.clear();
+  }
+
+  List<LunaLogger> getLoggers() {
+    return _loggers;
+  }
+
   void logEvent(String eventName, LunaSeverityLevel severity,
       {Map<String, Object>? additionalProperties}) {
     for (var i = 0; i < _loggers.length; i++) {
@@ -66,7 +77,7 @@ class LogManager {
     }
   }
 
-  void logError(Exception error, StackTrace stack, bool isFatal,
+  void logError(Object error, StackTrace stack, bool isFatal,
       {Map<String, Object>? additionalProperties}) {
     for (var i = 0; i < _loggers.length; i++) {
       _loggers[i].logError(error, stack, isFatal,
@@ -82,7 +93,18 @@ class LogManager {
     }
   }
 
-  // stack trace will be the line in the calling function, not the failing line from the callback
+  dynamic logFunctionSync(String functionName, dynamic Function() callback,
+      {Map<String, Object>? additionalParameters}) {
+    try {
+      final result = callback();
+      logFunction(functionName, () async => result,
+          additionalParameters: additionalParameters);
+      return result;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> logFunction(
       String functionName, Future<dynamic> Function() callback,
       {Map<String, Object>? additionalParameters}) async {
@@ -94,25 +116,20 @@ class LogManager {
       final message = '$functionName executed successfully';
       additionalParameters['executionTimeMS'] = stopwatch.elapsedMilliseconds;
       additionalParameters['result'] = LunaLoggingResult.Success.toString();
-      LogManager().logTrace(message, LunaSeverityLevel.Information,
+      logTrace(message, LunaSeverityLevel.Information,
           additionalProperties: additionalParameters);
       return result;
-    } catch (error) {
-      LogManager().logError(
-          Exception(error), _scrubTraceLastEntry(StackTrace.current), false,
+    } catch (error, stackTrace) {
+      additionalParameters['result'] = LunaLoggingResult.Failure.toString();
+      additionalParameters['executionTimeMS'] = stopwatch.elapsedMilliseconds;
+      logError(error, stackTrace, false,
+          additionalProperties: additionalParameters);
+      logTrace('$functionName execution failed', LunaSeverityLevel.Error,
           additionalProperties: additionalParameters);
       rethrow;
     } finally {
       stopwatch.stop();
     }
-  }
-
-  StackTrace _scrubTraceLastEntry(StackTrace trace) {
-    List<String> frames = trace.toString().split('\n');
-    frames.removeAt(0); // Removes LogFunction frame
-    frames.removeAt(0); // Removes "asynchronous pause info"
-    String modifiedStackTrace = frames.join('\n');
-    return StackTrace.fromString(modifiedStackTrace);
   }
 }
 
@@ -144,7 +161,10 @@ class DartLogger implements LunaLogger {
   void _initializeLogging() {
     Logger.root.level = Level.ALL;
     Logger.root.onRecord.listen((record) {
-      stdout.write('${record.level.name}: ${record.time}: ${record.message}\n');
+      print('${record.level.name}: ${record.time}: ${record.message}:\n');
+      if (record.error != null && record.stackTrace != null) {
+        print('${record.error}: \n${record.stackTrace}\n');
+      }
     });
 
     _logger = Logger('DartLogger');
@@ -153,37 +173,30 @@ class DartLogger implements LunaLogger {
   @override
   void logEvent(String eventName, LunaSeverityLevel severity,
       {Map<String, Object>? additionalProperties}) {
-    _logMessage('[Event] $eventName', severity, additionalProperties);
+    _logMessage('[Event] $eventName', severity);
   }
 
   @override
-  void logError(Exception error, StackTrace stack, bool isFatal,
+  void logError(Object error, StackTrace stack, bool isFatal,
       {Map<String, Object>? additionalProperties}) {
-    _logger.log(
-        isFatal ? Level.SHOUT : Level.SEVERE,
-        additionalProperties != null ? additionalProperties.toString() : '',
-        '[Error] ${error.toString()}',
-        stack,
-        null);
+    if (isFatal) {
+      _logger.severe(error.toString(), error, stack);
+    } else {
+      _logger.severe(error.toString(), error, stack);
+    }
   }
 
   @override
   void logTrace(String message, LunaSeverityLevel severity,
       {Map<String, Object>? additionalProperties}) {
-    _logMessage('[Trace] $message', severity, additionalProperties);
+    _logMessage('[Trace] $message', severity);
   }
 
-  void _logMessage(String message, LunaSeverityLevel severity,
-      Map<String, Object>? additionalProperties,
-      [StackTrace? stack]) {
+  void _logMessage(String message, LunaSeverityLevel severity) {
     Level logLevel;
     logLevel = _severityFactory(severity);
 
-    _logger.log(
-      logLevel,
-      message,
-      additionalProperties != null ? additionalProperties.toString() : '',
-    );
+    _logger.log(logLevel, message, [null, null, null]);
   }
 
   Level _severityFactory(LunaSeverityLevel severity) {
@@ -208,9 +221,9 @@ class ApplicationInsightsLogger implements LunaLogger {
   static final ApplicationInsightsLogger _instance =
       ApplicationInsightsLogger._internal();
 
-  late final Client _client;
-  late final BufferedProcessor _processor;
-  late final TelemetryClient _telemetryClient;
+  late Client _client;
+  late BufferedProcessor _processor;
+  late TelemetryClient _telemetryClient;
   static bool _initialized = false;
 
   factory ApplicationInsightsLogger() {
@@ -222,26 +235,30 @@ class ApplicationInsightsLogger implements LunaLogger {
 
   ApplicationInsightsLogger._internal();
 
-  static Future<ApplicationInsightsLogger> createInstance() async {
-    if (!_initialized) {
-      await _instance._init();
+  static Future<ApplicationInsightsLogger> createInstance(
+      {bool resetInstance = false,
+      Client? client,
+      BufferedProcessor? processor}) async {
+    if (!_initialized || resetInstance) {
+      await _instance._init(client: client, processor: processor);
       _initialized = true;
     }
     return _instance;
   }
 
-  Future<void> _init() async {
-    _client = Client();
+  Future<void> _init({Client? client, BufferedProcessor? processor}) async {
+    _client = client ?? Client();
     // Note: We might want to change this or make a separate client to a
     // non-buffered processor for immediate errors later.
-    _processor = BufferedProcessor(
-      next: TransmissionProcessor(
-        instrumentationKey:
-            GlobalConfiguration().getValue('AppInsightsInstrumentationKey'),
-        httpClient: _client,
-        timeout: const Duration(seconds: 10),
-      ),
-    );
+    _processor = processor ??
+        BufferedProcessor(
+          next: TransmissionProcessor(
+            instrumentationKey:
+                GlobalConfiguration().getValue('AppInsightsInstrumentationKey'),
+            httpClient: _client,
+            timeout: const Duration(seconds: 10),
+          ),
+        );
     _telemetryClient = TelemetryClient(processor: _processor);
     await _initDeviceContext();
   }
@@ -265,7 +282,7 @@ class ApplicationInsightsLogger implements LunaLogger {
         additionalProperties: additionalProperties ?? {});
   }
 
-  Future<void> logError(Exception error, StackTrace stack, bool isFatal,
+  Future<void> logError(Object error, StackTrace stack, bool isFatal,
       {Map<String, Object>? additionalProperties}) async {
     _telemetryClient.trackError(
       severity: isFatal ? Severity.critical : Severity.error,
@@ -334,37 +351,4 @@ class ApplicationInsightsLogger implements LunaLogger {
       deviceContext.oemName = deviceOemName;
     }
   }
-}
-
-main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await GlobalConfiguration().loadFromAsset("app_settings");
-  LogManager lm = await LogManager.createInstance();
-
-  await lm.logFunction('exampleMethod', () async {
-    exampleMethod();
-  });
-
-  await lm.logFunction('exampleEvent', () async {
-    exampleEvent();
-  });
-
-  try {
-    await lm.logFunction('exampleErrorMethod', () async {
-      exampleErrorMethod();
-    });
-  } catch (error) {}
-}
-
-void exampleMethod() {
-  print('this is my method');
-}
-
-void exampleEvent() {
-  print('this is my event');
-}
-
-void exampleErrorMethod() {
-  print('this is my error method');
-  throw Exception("Oops, I did it again!");
 }
