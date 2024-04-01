@@ -20,6 +20,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:luna_mhealth_mobile/storage/module_storage.dart';
 import 'package:luna_mhealth_mobile/models/module.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:luna_mhealth_mobile/utils/logging.dart';
 
 const String kApplicationDocumentsPath = 'test/storage/moduletestdata';
 const String kTestAssetsPath = 'test/storage/testassets';
@@ -29,6 +30,7 @@ void main() {
 
   group('LocalStorageProvider Tests', () {
     late IStorageProvider storageProvider;
+    LogManager.createInstance();
 
     setUpAll(() {
       // Create testdatafolder for file operations
@@ -196,7 +198,8 @@ void main() {
 
       await moduleStorage.addModule(testModuleName, jsonModule);
 
-      bool result = await moduleStorage.updateModuleSchema(testModuleName, jsonModule2);
+      bool result =
+          await moduleStorage.updateModuleSchema(testModuleName, jsonModule2);
 
       Module? testData = await moduleStorage.loadModule(testModuleName);
 

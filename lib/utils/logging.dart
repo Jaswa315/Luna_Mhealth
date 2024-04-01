@@ -75,6 +75,20 @@ abstract class ILunaLogger {
 /// You can use the [logFunction] method to wrap your calls with logging to capture
 /// result, elapsed duration, and device context properties.  Alternately, you can
 /// use [logTrace], [logEvent], and [logError] directly.
+/// 
+/// Requirements:
+/// 
+/// To have LogManager calls work correctly, the Flutter Widgets Binding must be
+/// initialized and the Global Configuration must be loaded at some point in the
+/// runtime.  This will normally happen from main.dart -> run
+/// 
+/// Requirements usage:
+/// 
+/// ```
+/// WidgetsFlutterBinding.ensureInitialized();
+/// await GlobalConfiguration().loadFromAsset("app_settings");
+/// await LogManager.createInstance();
+/// ```
 class LogManager {
   static final LogManager _instance = LogManager._internal();
   late final List<ILunaLogger> _loggers;
@@ -252,10 +266,20 @@ class LogManager {
   ///
   /// Typical usage:
   /// ```
+  /// (wrapping outgoing call)
   /// LogManager lm = await LogManager.createInstance();
   /// await lm.logFunctionSync('testMethod', () async {
   ///    method();
   /// });
+  /// 
+  /// or 
+  /// 
+  /// (wrapping public method)
+  /// Future<Module> addModule(String moduleName, String jsonData) async {
+  ///   return await LogManager().logFunction('addModule', () async {
+  ///     ... normal function body ...
+  ///   });
+  /// }
   /// ```
   Future<dynamic> logFunction(
       String functionName, Future<dynamic> Function() callback,
