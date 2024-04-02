@@ -22,6 +22,7 @@ import 'models/module.dart';
 import 'models/page.dart' as slide_page;
 import 'models/text/text_component.dart';
 import 'providers/click_state_provider.dart';
+import 'utils/logging.dart';
 
 // void main() => runApp(MultiProvider(
 //       providers: [
@@ -34,6 +35,8 @@ import 'providers/click_state_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GlobalConfiguration().loadFromAsset("app_settings");
+  await LogManager.createInstance();
+
   runApp(MultiProvider(
     providers: [
       // ChangeNotifierProvider(create: (_) => ModuleProvider()),

@@ -20,12 +20,16 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:luna_mhealth_mobile/storage/module_storage.dart';
 import 'package:luna_mhealth_mobile/models/module.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:global_configuration/global_configuration.dart';
 
 const String kApplicationDocumentsPath = 'test/storage/moduletestdata';
 const String kTestAssetsPath = 'test/storage/testassets';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  GlobalConfiguration().loadFromAsset("app_settings");
+  
 
   group('LocalStorageProvider Tests', () {
     late IStorageProvider storageProvider;
@@ -39,6 +43,7 @@ void main() {
         testDirectory.deleteSync(recursive: true);
         testDirectory.createSync(recursive: false);
       }
+      LogManager.createInstance();      
     });
 
     setUp(() {
@@ -196,7 +201,8 @@ void main() {
 
       await moduleStorage.addModule(testModuleName, jsonModule);
 
-      bool result = await moduleStorage.updateModuleSchema(testModuleName, jsonModule2);
+      bool result =
+          await moduleStorage.updateModuleSchema(testModuleName, jsonModule2);
 
       Module? testData = await moduleStorage.loadModule(testModuleName);
 

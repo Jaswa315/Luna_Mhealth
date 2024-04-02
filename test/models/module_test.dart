@@ -110,7 +110,7 @@ void main() {
 
       Module module = Module.fromJson(jsonDecode(jsonModule));
 
-      expect('3380e95d-419c-4b5a-ac7e-22f53aecf0fc', module.id);
+      expect('e56828e4-0bd7-486e-9cd4-1308ebec3bb6', module.id);
       expect('This is title', module.title);
       expect('This is description', module.description);
       expect(ItemType.module, module.itemType);
