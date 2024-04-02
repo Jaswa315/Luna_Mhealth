@@ -18,6 +18,10 @@ Ensure Python 3.x is installed on your system. Additional dependencies are requi
 pip install -r requirements.txt
 ```
 
+## Errors
+
+No module named 'pptx'
+
 # Usage
 
 ## Parsing PowerPoint Files
