@@ -463,7 +463,7 @@ class ApplicationInsightsLogger implements ILunaLogger {
           next: TransmissionProcessor(
             instrumentationKey:
                 GlobalConfiguration().getValue('AppInsightsInstrumentationKey'),
-            // ToDo: Cow telemetry work goes here
+            // ToDo: Zebranet telemetry work goes here
             httpClient: _client,
             timeout: const Duration(seconds: 10),
           ),

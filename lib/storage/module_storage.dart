@@ -53,7 +53,7 @@ class ModuleStorage {
 
   Future<bool> updateModuleSchema(String moduleName, String jsonData) async {
     Archive? archive = await _getModuleArchive(moduleName);
-    return await LogManager().logFunction('updateModuleSchema', () async {
+    return await LogManager().logFunction('ModuleStorage.updateModuleSchema', () async {
       if (archive == null) {
         return false;
       }
@@ -84,7 +84,7 @@ class ModuleStorage {
   /// Module? module = await moduleStorage.loadModule("ModuleName");
   /// ```
   Future<Module?> loadModule(String moduleName) async {
-    return await LogManager().logFunction('loadModule', () async {
+    return await LogManager().logFunction('ModuleStorage.loadModule', () async {
       moduleName.trim().replaceAll(" ", "_");
 
       Uint8List? jsonData =
@@ -97,7 +97,7 @@ class ModuleStorage {
   }
 
   Future<List<Module?>> loadAllModules() async {
-    return await LogManager().logFunction('loadAllModules', () async {
+    return await LogManager().logFunction('ModuleStorage.loadAllModules', () async {
       List<Module> modules = [];
       List<Uint8List> modulesBytes = await storageProvider.getAllFiles(
           container: userPath, recursiveSearch: false);
@@ -122,20 +122,20 @@ class ModuleStorage {
 
   Future<Uint8List?> getImageBytes(
       String moduleName, String imageFileName) async {
-    return await LogManager().logFunction('getImageBytes', () async {
+    return await LogManager().logFunction('ModuleStorage.getImageBytes', () async {
       return _extractAssetFromModule(moduleName, "images/$imageFileName");
     });
   }
 
   Future<Uint8List?> getAudioBytes(
       String moduleName, String audioFileName) async {
-    return await LogManager().logFunction('getAudioBytes', () async {
+    return await LogManager().logFunction('ModuleStorage.getAudioBytes', () async {
       return _extractAssetFromModule(moduleName, "audio/$audioFileName");
     });
   }
-
+  
   Future<Module> addModule(String moduleName, String jsonData) async {
-    return await LogManager().logFunction('addModule', () async {
+    return await LogManager().logFunction('ModuleStorage.addModule', () async {
       Module module = Module.fromJson(jsonDecode(jsonData));
       String moduleFileName = _getModuleFileName(moduleName);
       String fullModulePath = _getModuleFileNameWithPath(moduleName);
@@ -157,7 +157,7 @@ class ModuleStorage {
 
   Future<bool> addModuleImage(
       String moduleName, String imageFileName, Uint8List? imageBytes) async {
-    return await LogManager().logFunction('addModuleImage', () async {
+    return await LogManager().logFunction('ModuleStorage.addModuleImage', () async {
       Archive? archive = await _getModuleArchive(moduleName);
 
       if (archive == null) {
@@ -174,7 +174,7 @@ class ModuleStorage {
 
   Future<bool> addModuleAudio(
       String moduleName, String audioFileName, Uint8List? audioBytes) async {
-    return await LogManager().logFunction('addModuleAudio', () async {
+    return await LogManager().logFunction('ModuleStorage.addModuleAudio', () async {
       Archive? archive = await _getModuleArchive(moduleName);
 
       if (archive == null) {
@@ -190,7 +190,7 @@ class ModuleStorage {
   }
 
   Future<bool> removeModule(String moduleName) async {
-    return await LogManager().logFunction('removeModule', () async {
+    return await LogManager().logFunction('ModuleStorage.removeModule', () async {
       // delete tempFiles
       List<String> fileNames = await storageProvider.getAllFileNames(
           container: _getModuleTempFilePath(moduleName));
@@ -204,7 +204,7 @@ class ModuleStorage {
   }
 
   void clearAllTempFiles(String moduleName) async {
-    return await LogManager().logFunction('clearAllTempFiles', () async {
+    return await LogManager().logFunction('ModuleStorage.clearAllTempFiles', () async {
       moduleName.trim().replaceAll(" ", "_");
       String modulePath = _getModuleFileName(moduleName);
 
