@@ -1,15 +1,19 @@
 import pptx
 import os
 from pptx.enum.shapes import MSO_SHAPE_TYPE
-from authoring_system.module_parser.pptx_handler.slide import Slide
-from authoring_system.module_parser.pptx_handler.slide_element import SlideElement
-from authoring_system.module_parser.utils.image_handler import ImageHandler
-from authoring_system.module_parser.utils.utils import extract_clickable_text
+from ..pptx_handler.slide import Slide
+from ..pptx_handler.slide_element import SlideElement
+from ..utils.image_handler import ImageHandler
+from ..utils.utils import extract_clickable_text
+from ...config import EMU_CONVERSION_FACTOR, DIMENSION_PRECISION
+
+def round_dimension(value):
+    return round(value / EMU_CONVERSION_FACTOR, DIMENSION_PRECISION)
 
 def extract_presentation_info(pptx_file, prs):
-    presentation_name = os.path.basename(pptx_file).split('.')[0]  
-    presentation_width = round(prs.slide_width / 360000, 4)
-    presentation_height = round(prs.slide_height / 360000, 4)
+    presentation_name = os.path.basename(pptx_file).split('.')[0]
+    presentation_width = round_dimension(prs.slide_width)
+    presentation_height = round_dimension(prs.slide_height)
 
     return {
         'Module': presentation_name,
@@ -17,6 +21,43 @@ def extract_presentation_info(pptx_file, prs):
             'width': presentation_width,
             'height': presentation_height
         }
+    }
+
+def get_text_properties(shape):
+    paragraphs = shape.text_frame.paragraphs
+    first_run = paragraphs[0].runs[0] if paragraphs and paragraphs[0].runs else None
+    if not first_run:
+        return {}
+    
+    return {
+        'font_name': first_run.font.name,
+        'font_size': first_run.font.size.pt if first_run.font.size else '',
+        'font_bold': first_run.font.bold,
+        'font_italic': first_run.font.italic,
+        'font_underline': first_run.font.underline,
+        'font_color': first_run.font.color.rgb if first_run.font.color and first_run.font.color.type == 'RGB' else '',
+    }
+
+def get_image_properties(shape, image_handler, slide_num):
+    image_path = image_handler.save_image(shape.image.blob, slide_num, shape.name)
+    return {
+        'image_path': image_path,
+        'image_properties': {
+            'name': shape.name,
+            'description': shape.description if hasattr(shape, 'description') else '',
+            'extension': shape.image.ext,
+            'content_type': shape.image.content_type,
+            'file_size': shape.image.size,
+            'dpi': shape.image.dpi,
+        }
+    }
+
+def get_position_properties(shape):
+    return {
+        'left': round_dimension(shape.left),
+        'top': round_dimension(shape.top),
+        'width': round_dimension(shape.width),
+        'height': round_dimension(shape.height)
     }
 
 def process_slide(slide, image_handler, slide_num):
@@ -27,38 +68,19 @@ def process_slide(slide, image_handler, slide_num):
         slide_data.clickable_text = extract_clickable_text(slide_data.notes)
 
     for shape in slide.shapes:
-        element = SlideElement(shape.shape_type.name if isinstance(shape.shape_type, MSO_SHAPE_TYPE) else shape.shape_type)
+        element_type = shape.shape_type.name if isinstance(shape.shape_type, MSO_SHAPE_TYPE) else shape.shape_type
+        element = SlideElement(element_type)
 
         if hasattr(shape, 'text'):
             element.text = shape.text
-            if shape.text_frame.paragraphs and shape.text_frame.paragraphs[0].runs:
-                element.text_properties = {
-                    'font_name': shape.text_frame.paragraphs[0].runs[0].font.name,
-                    'font_size': shape.text_frame.paragraphs[0].runs[0].font.size.pt if shape.text_frame.paragraphs[0].runs[0].font.size else '',
-                    'font_bold': shape.text_frame.paragraphs[0].runs[0].font.bold,
-                    'font_italic': shape.text_frame.paragraphs[0].runs[0].font.italic,
-                    'font_underline': shape.text_frame.paragraphs[0].runs[0].font.underline,
-                    'font_color': shape.text_frame.paragraphs[0].runs[0].font.color.rgb if shape.text_frame.paragraphs[0].runs[0].font.color.type == 'RGB' else '',
-                }
+            element.text_properties = get_text_properties(shape)
 
         if shape.shape_type == MSO_SHAPE_TYPE.PICTURE:
-            image_path = image_handler.save_image(shape.image.blob, slide_num, shape.name)
-            element.image_path = image_path
-            element.image_properties = {
-                        'name': shape.name,
-                        'description': shape.description if hasattr(shape, 'description') else '',
-                        'extension': shape.image.ext,
-                        'content_type': shape.image.content_type,
-                        'file_size': shape.image.size,
-                        'dpi': shape.image.dpi,
-                    }
+            image_properties = get_image_properties(shape, image_handler, slide_num)
+            element.image_path = image_properties['image_path']
+            element.image_properties = image_properties['image_properties']
         
-        element.position = {
-            'left': round(shape.left / 360000, 4),
-            'top': round(shape.top / 360000, 4),
-            'width': round(shape.width / 360000, 4),
-            'height': round(shape.height / 360000, 4)
-        }
+        element.position = get_position_properties(shape)
 
         slide_data.add_element(element)
 
@@ -75,4 +97,4 @@ def parse_pptx_to_json(pptx_file):
         print(f"Processed slide {slide_num} with {len(slide_obj.elements)} elements.")
         data['slides'].append(slide_obj)
 
-    return data 
+    return data
