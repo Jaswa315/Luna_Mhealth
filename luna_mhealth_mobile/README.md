@@ -7,9 +7,9 @@ For new onboarders, please check out and add to our [Onboarding Document](https:
 
 Welcome to the team! Please add your name and role.
 
+ **Name**: [Your Name Here] | **Role**: [Your Role Here] | **Fun Fact**: [Interesting fact about you]
 - **Name**: Alan Lai | **Role**: Developer for Translation + Localization
-- **Name**: [Your Name Here] | **Role**: [Your Role Here] | **Fun Fact**: [Interesting fact about you]
-
+- **Name**: Olivia Munineath Borath | **Role**: Developer for Translation + Localization | **Fun Fact**: I have never worked with Flutter before
 
 ### License
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
