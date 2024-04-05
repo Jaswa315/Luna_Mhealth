@@ -39,6 +39,18 @@ void extractTextShapes(XmlElement parentElement) {
             ? double.tryParse(ext.getAttribute("cy") ?? "0.0") ?? 0.0
             : 0.0;
 
+        var lnElem = child.getElement('p:spPr')?.getElement('a:ln');
+
+        String? lineColor;
+        String? lineWidth;
+        if (lnElem != null) {
+          lineWidth = lnElem.getAttribute("w");
+          lineColor = lnElem
+              .getElement("a:solidFill")
+              ?.getElement('a:schemeClr')
+              ?.getAttribute('val');
+        }
+
         var txBody = child.findElements('p:txBody').firstOrNull;
         if (txBody != null) {
           var rList = txBody.getElement('a:p')?.findElements('a:r');
@@ -52,15 +64,18 @@ void extractTextShapes(XmlElement parentElement) {
               var fontElem = font?.getElement('a:latin');
               var fontFamily = fontElem?.getAttribute("typeface");
               var italics = font != null ? font.getAttribute("i") : "0";
+              var bgHighlightElem =
+                  font?.getElement('a:highlight')?.getElement('a:srgbClr');
+              var highlight = bgHighlightElem?.getAttribute('val');
               var bold = font != null ? font.getAttribute("b") : "0";
               var fontSize = font != null
                   ? double.tryParse(font.getAttribute("sz") ?? "0.0") ?? 0.0
                   : 0.0;
 
-              print("Position (x, y): ($xPos, $yPos)");
-              print("Position Ext (x, y): ($cX, $cY)");
               print(
-                  "Font Family: $fontFamily, Font Size: $fontSize, Italics: $italics, Bolded: $bold");
+                  "Position Data: offx, offy: ($xPos, $yPos), extx, exty: ($cX, $cY), Outline Color: $lineColor, Outline Width: $lineWidth");
+              print(
+                  "Font Family: $fontFamily, Font Size: $fontSize, Italics: $italics, BGHighlight: $highlight, Bolded: $bold\n");
             }
           }
         }

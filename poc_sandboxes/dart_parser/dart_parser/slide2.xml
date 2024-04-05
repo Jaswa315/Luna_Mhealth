@@ -80,6 +80,50 @@
                </a:p>
             </p:txBody>
          </p:sp>
+         <p:sp>
+            <p:nvSpPr>
+               <p:cNvPr id="2" name="TextBox 1">
+                  <a:extLst>
+                     <a:ext uri="{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}">
+                        <a16:creationId
+                           xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main"
+                           id="{A2DA4118-0D99-8089-57E9-3135BEF76181}" />
+                     </a:ext>
+                  </a:extLst>
+               </p:cNvPr>
+               <p:cNvSpPr txBox="1" />
+               <p:nvPr />
+            </p:nvSpPr>
+            <p:spPr>
+               <a:xfrm>
+                  <a:off x="1729819" y="2535810" />
+                  <a:ext cx="1428160" cy="307777" />
+               </a:xfrm>
+               <a:prstGeom prst="rect">
+                  <a:avLst />
+               </a:prstGeom>
+               <a:noFill />
+               <a:ln w="28575">
+                  <a:solidFill>
+                     <a:schemeClr val="accent1" />
+                  </a:solidFill>
+               </a:ln>
+            </p:spPr>
+            <p:txBody>
+               <a:bodyPr wrap="square" rtlCol="0">
+                  <a:spAutoFit />
+               </a:bodyPr>
+               <a:lstStyle />
+               <a:p>
+                  <a:pPr algn="r" />
+                  <a:r>
+                     <a:rPr lang="en-US" dirty="0" err="1" />
+                     <a:t>TestText</a:t>
+                  </a:r>
+                  <a:endParaRPr lang="en-US" dirty="0" />
+               </a:p>
+            </p:txBody>
+         </p:sp>
       </p:spTree>
       <p:extLst>
          <p:ext uri="{BB962C8B-B14F-4D97-AF65-F5344CB8AC3E}">
