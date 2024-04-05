@@ -13,7 +13,6 @@ String? extractXMLFromZip(String filename, String xmlFilePath) {
 void extractTextShapes(XmlElement parentElement) {
   for (var child in parentElement.children) {
     if (child is XmlElement) {
-      // Check if the element represents a shape with text
       if (child.name.local == 'sp') {
         var off = child.getElement('p:spPr')?.getElement('a:xfrm')?.findElements('a:off').firstOrNull;           
         var ext = child.getElement('p:spPr')?.getElement('a:xfrm')?.findElements('a:ext').firstOrNull;    
@@ -66,24 +65,20 @@ void extractTextShapes(XmlElement parentElement) {
         }
       }
 
-      // Recursively explore child elements
       extractTextShapes(child);
     }
   }
 }
 
 void main() {
-  // Open the .pptx file
   var filename = "Luna_sample_module.pptx";
 
-  // Extract XML content of slide1.xml
   var slideXML = extractXMLFromZip(filename, "ppt/slides/slide2.xml");
   if (slideXML == null) {
     print("Error: slide1.xml not found in the .pptx file.");
     return;
   }
 
-  // Parse XML content to access the shape tree
   var doc = XmlDocument.parse(slideXML);
   var root = doc.rootElement;
   if (root.name.local == "sld") {
