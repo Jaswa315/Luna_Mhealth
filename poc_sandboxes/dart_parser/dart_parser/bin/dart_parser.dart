@@ -41,31 +41,27 @@ void extractTextShapes(XmlElement parentElement) {
 
         var txBody = child.findElements('p:txBody').firstOrNull;
         if (txBody != null) {
-          var t = txBody
-              .getElement('a:p')
-              ?.getElement('a:r')
-              ?.getElement('a:t')
-              ?.firstChild;
-          if (t != null) {
-            var textContent = t.value;
-            print("Text Box Content: $textContent");
+          var rList = txBody.getElement('a:p')?.findElements('a:r');
+          for (var r in rList!) {
+            var t = r.getElement('a:t')?.firstChild;
+            if (t != null) {
+              var textContent = t.value;
+              print("Text Box Content: $textContent");
 
-            for (var c in t.childElements) {
-              print(c.name);
+              var font = t.parent?.parent?.findElements("a:rPr").firstOrNull;
+              var fontElem = font?.getElement('a:latin');
+              var fontFamily = fontElem?.getAttribute("typeface");
+              var italics = font != null ? font.getAttribute("i") : "0";
+              var bold = font != null ? font.getAttribute("b") : "0";
+              var fontSize = font != null
+                  ? double.tryParse(font.getAttribute("sz") ?? "0.0") ?? 0.0
+                  : 0.0;
+
+              print("Position (x, y): ($xPos, $yPos)");
+              print("Position Ext (x, y): ($cX, $cY)");
+              print(
+                  "Font Family: $fontFamily, Font Size: $fontSize, Italics: $italics, Bolded: $bold");
             }
-
-            var font = t.parent?.parent?.findElements("a:rPr").firstOrNull;
-            var fontFamily = font != null ? font.getAttribute("typeface") : "";
-            var italics = font != null ? font.getAttribute("i") : "0";
-            var bold = font != null ? font.getAttribute("b") : "0";
-            var fontSize = font != null
-                ? double.tryParse(font.getAttribute("sz") ?? "0.0") ?? 0.0
-                : 0.0;
-
-            print("Position (x, y): ($xPos, $yPos)");
-            print("Position Ext (x, y): ($cX, $cY)");
-            print(
-                "Font Family: $fontFamily, Font Size: $fontSize, Italics: $italics, Bolded: $bold");
           }
         }
       }
