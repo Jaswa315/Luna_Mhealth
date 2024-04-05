@@ -14,9 +14,16 @@ void extractTextShapes(XmlElement parentElement) {
   for (var child in parentElement.children) {
     if (child is XmlElement) {
       if (child.name.local == 'sp') {
-        var off = child.getElement('p:spPr')?.getElement('a:xfrm')?.findElements('a:off').firstOrNull;           
-        var ext = child.getElement('p:spPr')?.getElement('a:xfrm')?.findElements('a:ext').firstOrNull;    
-        
+        var off = child
+            .getElement('p:spPr')
+            ?.getElement('a:xfrm')
+            ?.findElements('a:off')
+            .firstOrNull;
+        var ext = child
+            .getElement('p:spPr')
+            ?.getElement('a:xfrm')
+            ?.findElements('a:ext')
+            .firstOrNull;
 
         var xPos = off != null
             ? double.tryParse(off.getAttribute("x") ?? "0.0") ?? 0.0
@@ -47,20 +54,18 @@ void extractTextShapes(XmlElement parentElement) {
               print(c.name);
             }
 
-            
             var font = t.parent?.parent?.findElements("a:rPr").firstOrNull;
             var fontFamily = font != null ? font.getAttribute("typeface") : "";
-            var italics = font != null
-                ? font.getAttribute("i") : "0";
-            var bold = font != null
-                ? font.getAttribute("b") : "0";
+            var italics = font != null ? font.getAttribute("i") : "0";
+            var bold = font != null ? font.getAttribute("b") : "0";
             var fontSize = font != null
                 ? double.tryParse(font.getAttribute("sz") ?? "0.0") ?? 0.0
                 : 0.0;
 
             print("Position (x, y): ($xPos, $yPos)");
             print("Position Ext (x, y): ($cX, $cY)");
-            print("Font Family: $fontFamily, Font Size: $fontSize, Italics: $italics, Bolded: $bold");
+            print(
+                "Font Family: $fontFamily, Font Size: $fontSize, Italics: $italics, Bolded: $bold");
           }
         }
       }
