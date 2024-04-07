@@ -40,20 +40,33 @@ import 'package:luna_mhealth_mobile/utils/logging.dart';
 /// audioFileName);
 /// ```
 class ModuleStorage {
-  IStorageProvider storageProvider;
-  final String userPath;
+  IStorageProvider _storageProvider;
+  final String _userPath;
 
-  // CTOR.  Needs to handle userProfiles going forward.
-  // TODO: Add a defualt profile to the parameters, uses userName currently
+  /// Creates a new instance of the `ModuleStorage` class.
+  ///
+  /// Parameters:
+  /// - `provider`: An optional `IStorageProvider` implementation. If not provided,
+  /// it will create a default storage provider based on the configuration set in the
+  /// `app_settings.json` file under the key `StorageProviderType`.
+  /// - `userName`: An optional string representing the user's path for storing modules.
+  ///
+  /// Example:
+  /// ```dart
+  /// ModuleStorage({IStorageProvider? provider, String userName = ""})
+  ///   : storageProvider = provider ?? StorageProviderFactory.createProvider(GlobalConfiguration().getValue('StorageProviderType')),
+  ///     userPath = userName;
+  /// ```
   ModuleStorage({IStorageProvider? provider, String userName = ""})
-      : storageProvider = provider ??
+      : _storageProvider = provider ??
             StorageProviderFactory.createProvider(
                 GlobalConfiguration().getValue('StorageProviderType')),
-        userPath = userName;
+        _userPath = userName;
 
   Future<bool> updateModuleSchema(String moduleName, String jsonData) async {
     Archive? archive = await _getModuleArchive(moduleName);
-    return await LogManager().logFunction('ModuleStorage.updateModuleSchema', () async {
+    return await LogManager().logFunction('ModuleStorage.updateModuleSchema',
+        () async {
       if (archive == null) {
         return false;
       }
@@ -96,11 +109,23 @@ class ModuleStorage {
     });
   }
 
+  /// Loads all modules stored in the user's path.
+  ///
+  /// This method retrieves and loads all modules stored in the user's path. It iterates through the files within the user's path, extracts the module JSON data from each module archive, and deserializes it into `Module` objects.
+  ///
+  /// Returns:
+  /// - A list of `Module` objects representing all the modules stored in the user's path. If no modules are found or an error occurs during the process, an empty list is returned.
+  ///
+  /// Example:
+  /// ```dart
+  /// List<Module?> modules = await ModuleStorage().loadAllModules();
+  /// ```
   Future<List<Module?>> loadAllModules() async {
-    return await LogManager().logFunction('ModuleStorage.loadAllModules', () async {
+    return await LogManager().logFunction('ModuleStorage.loadAllModules',
+        () async {
       List<Module> modules = [];
-      List<Uint8List> modulesBytes = await storageProvider.getAllFiles(
-          container: userPath, recursiveSearch: false);
+      List<Uint8List> modulesBytes = await _storageProvider.getAllFiles(
+          container: _userPath, recursiveSearch: false);
 
       for (Uint8List moduleBytes in modulesBytes) {
         Archive? archive = await _getArchiveFromBytes(moduleBytes);
@@ -122,25 +147,27 @@ class ModuleStorage {
 
   Future<Uint8List?> getImageBytes(
       String moduleName, String imageFileName) async {
-    return await LogManager().logFunction('ModuleStorage.getImageBytes', () async {
+    return await LogManager().logFunction('ModuleStorage.getImageBytes',
+        () async {
       return _extractAssetFromModule(moduleName, "images/$imageFileName");
     });
   }
 
   Future<Uint8List?> getAudioBytes(
       String moduleName, String audioFileName) async {
-    return await LogManager().logFunction('ModuleStorage.getAudioBytes', () async {
+    return await LogManager().logFunction('ModuleStorage.getAudioBytes',
+        () async {
       return _extractAssetFromModule(moduleName, "audio/$audioFileName");
     });
   }
-  
+
   Future<Module> addModule(String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleStorage.addModule', () async {
       Module module = Module.fromJson(jsonDecode(jsonData));
       String moduleFileName = _getModuleFileName(moduleName);
       String fullModulePath = _getModuleFileNameWithPath(moduleName);
 
-      if (await storageProvider.isFileExists(fullModulePath)) {
+      if (await _storageProvider.isFileExists(fullModulePath)) {
         throw Exception("Module already exists: $moduleFileName");
       }
 
@@ -157,7 +184,8 @@ class ModuleStorage {
 
   Future<bool> addModuleImage(
       String moduleName, String imageFileName, Uint8List? imageBytes) async {
-    return await LogManager().logFunction('ModuleStorage.addModuleImage', () async {
+    return await LogManager().logFunction('ModuleStorage.addModuleImage',
+        () async {
       Archive? archive = await _getModuleArchive(moduleName);
 
       if (archive == null) {
@@ -174,7 +202,8 @@ class ModuleStorage {
 
   Future<bool> addModuleAudio(
       String moduleName, String audioFileName, Uint8List? audioBytes) async {
-    return await LogManager().logFunction('ModuleStorage.addModuleAudio', () async {
+    return await LogManager().logFunction('ModuleStorage.addModuleAudio',
+        () async {
       Archive? archive = await _getModuleArchive(moduleName);
 
       if (archive == null) {
@@ -190,33 +219,36 @@ class ModuleStorage {
   }
 
   Future<bool> removeModule(String moduleName) async {
-    return await LogManager().logFunction('ModuleStorage.removeModule', () async {
+    return await LogManager().logFunction('ModuleStorage.removeModule',
+        () async {
       // delete tempFiles
-      List<String> fileNames = await storageProvider.getAllFileNames(
+      List<String> fileNames = await _storageProvider.getAllFileNames(
           container: _getModuleTempFilePath(moduleName));
       for (String fileName in fileNames) {
-        storageProvider.deleteFile(fileName);
+        _storageProvider.deleteFile(fileName);
       }
 
       // delete module.luna file
-      return storageProvider.deleteFile(_getModuleFileNameWithPath(moduleName));
+      return _storageProvider
+          .deleteFile(_getModuleFileNameWithPath(moduleName));
     });
   }
 
   void clearAllTempFiles(String moduleName) async {
-    return await LogManager().logFunction('ModuleStorage.clearAllTempFiles', () async {
+    return await LogManager().logFunction('ModuleStorage.clearAllTempFiles',
+        () async {
       moduleName.trim().replaceAll(" ", "_");
       String modulePath = _getModuleFileName(moduleName);
 
-      List<String> imageFileNames = await storageProvider.getAllFileNames(
+      List<String> imageFileNames = await _storageProvider.getAllFileNames(
           container:
               "$modulePath/GlobalConfiguration().getValue('TempImageFolder')");
-      List<String> audioFileNames = await storageProvider.getAllFileNames(
+      List<String> audioFileNames = await _storageProvider.getAllFileNames(
           container:
               "$modulePath/GlobalConfiguration().getValue('TempAudioFolder')");
 
       for (String fileName in (imageFileNames + audioFileNames)) {
-        storageProvider.deleteFile(fileName);
+        _storageProvider.deleteFile(fileName);
       }
     });
   }
@@ -233,7 +265,7 @@ class ModuleStorage {
 
   Future<bool> _saveArchiveToFileSystem(
       String moduleName, Archive archive) async {
-    return storageProvider.saveFile(_getModuleFileNameWithPath(moduleName),
+    return _storageProvider.saveFile(_getModuleFileNameWithPath(moduleName),
         ZipEncoder().encode(archive) as Uint8List,
         createContainer: true);
   }
@@ -256,7 +288,7 @@ class ModuleStorage {
   Future<Archive?> _getModuleArchive(String moduleName) async {
     String modulePath = _getModuleFileNameWithPath(moduleName);
 
-    final zippedBytes = await storageProvider.loadFile(modulePath);
+    final zippedBytes = await _storageProvider.loadFile(modulePath);
     if (zippedBytes == null) {
       return null;
     }
@@ -270,17 +302,14 @@ class ModuleStorage {
 
   Future<bool> _updateOrAddAssetToArchive(
       Archive archive, String filePath, Uint8List fileData) async {
-    bool fileExists = archive.any((file) => file.name == filePath);
-
     ArchiveFile tempFile = ArchiveFile(filePath, fileData.length, fileData);
-
     archive.addFile(tempFile);
     return true;
   }
 
   String _getModuleTempFilePath(String moduleName) {
     moduleName.trim().replaceAll(" ", "_");
-    return userPath == '' ? "$moduleName" : '$userPath/$moduleName';
+    return _userPath == '' ? "$moduleName" : '$_userPath/$moduleName';
   }
 
   String _getModuleFileName(String moduleName) {
@@ -289,9 +318,9 @@ class ModuleStorage {
   }
 
   String _getModuleFileNameWithPath(String moduleName) {
-    return userPath == ''
+    return _userPath == ''
         ? _getModuleFileName(moduleName)
-        : '$userPath/${_getModuleFileName(moduleName)}';
+        : '$_userPath/${_getModuleFileName(moduleName)}';
   }
 
   String _getModuleJsonFileName(String moduleName) {
