@@ -1,19 +1,19 @@
 import 'package:archive/archive.dart';
-import 'presentation_ast.dart';
+import 'presentation_tree.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 
 class PresentationParser {
-  static late final String _fileName;
+  static late final File _file;
 
-  PresentationParser(String fileName) {
-    _fileName = fileName;
+  PresentationParser(File file) {
+    _file = file;
   }
 
   XmlDocument extractXMLFromZip(String xmlFilePath) {
-    var bytes = File(_fileName).readAsBytesSync();
+    var bytes = _file.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
     var file = archive.firstWhere((file) => file.name == xmlFilePath);
     return XmlDocument.parse(utf8.decode(file.content));
@@ -32,185 +32,177 @@ class PresentationParser {
     return xmlDocumentToJson(doc);
   }
 
-  AstNode parsePresentationToAst() {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
+  PrsNode parsePresentation() {
+    PresentationNode node = PresentationNode();
 
     var coreMap = jsonFromArchive("docProps/core.xml");
     var appMap = jsonFromArchive("docProps/app.xml");
 
-    attributes['title'] = coreMap['cp:coreProperties']['dc:title'];
-    attributes['author'] = coreMap['cp:coreProperties']['dc:creator'];
-    attributes['slide_count'] = appMap['Properties']['Slides'];
+    node.title = coreMap['cp:coreProperties']['dc:title'];
+    node.author = coreMap['cp:coreProperties']['dc:creator'];
+    node.slideCount = int.parse(appMap['Properties']['Slides']);
 
-    for (int i = 1; i <= int.parse(attributes['slide_count']); i++) {
-      AstNode slide = parseSlideToAst(i);
-      children.add(slide);
+    for (int i = 1; i <= node.slideCount; i++) {
+      PrsNode slide = parseSlide(i);
+      node.children.add(slide);
     }
 
-    return PresentationNode(children: children, attributes: attributes);
+    return node;
   }
 
-  AstNode parseSlideToAst(int slideNum) {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
+  PrsNode parseSlide(int slideNum) {
+    SlideNode node = SlideNode();
 
     var slideMap = jsonFromArchive("ppt/slides/slide$slideNum.xml");
 
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
 
-    attributes['slide_number'] = slideNum;
+    node.slideNum = slideNum;
 
     shapeTree.forEach((key, value) {
       if (key == 'p:pic') {
         var picList = shapeTree[key];
         picList.forEach((jsonMap) {
-          children.add(parseImageToAst(jsonMap, slideNum));
+          node.children.add(parseImage(jsonMap, slideNum));
         });
       }
       if (key == 'p:sp') {
         var shapeObj = shapeTree[key];
         if (shapeObj is Map<String, dynamic>) {
-          children.add(parseShapeToAst(shapeObj));
+          node.children.add(parseShape(shapeObj));
         } else if (shapeObj is List) {
           shapeObj.forEach((jsonMap) {
-            children.add(parseShapeToAst(jsonMap));
+            node.children.add(parseShape(jsonMap));
           });
         }
       }
     });
 
-    return SlideNode(attributes: attributes, children: children);
+    return node;
   }
 
-  AstNode parseImageToAst(Map<String, dynamic> json, int slideNumber) {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
+  PrsNode parseImage(Map<String, dynamic> json, int slideNumber) {
+    ImageNode node = ImageNode();
 
     var relsMap =
         jsonFromArchive("ppt/slides/_rels/slide$slideNumber.xml.rels");
 
-    attributes['name'] = json['p:nvPicPr']['p:cNvPr']['_name'];
-    attributes['alt_txt'] = json['p:nvPicPr']['p:cNvPr']['_descr'];
+    node.imageName = json['p:nvPicPr']['p:cNvPr']['_name'];
+    node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
     var relNode = relsMap['Relationships']['Relationship']
         .firstWhere((node) => node['_Id'] == relsLink, orElse: () => "");
-    attributes['path'] = relNode['_Target'];
+    node.path = relNode['_Target'];
 
-    children.add(parseShapeToAst(json['p:spPr']));
+    node.children.add(parseShape(json['p:spPr']));
 
-    return ImageNode(children: children, attributes: attributes);
+    return node;
   }
 
-  AstNode parseShapeToAst(Map<String, dynamic> json) {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
-
+  PrsNode parseShape(Map<String, dynamic> json) {
     if (json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
-      return parseTextBoxToAst(json);
+      return parseTextBox(json);
     }
 
     if (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title') {
       // title not finished yet
-      return TitleNode(children: [], attributes: {});
+      return PrsNode();
     }
 
     if (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body') {
       // title not finished yet
-      return BodyNode(children: [], attributes: {});
+      return PrsNode();
     }
 
-    attributes['Offset'] = {};
-    attributes['Offset']['x'] = json['a:xfrm']['a:off']['_x'];
-    attributes['Offset']['y'] = json['a:xfrm']['a:off']['_y'];
-    attributes['Size'] = {};
-    attributes['Size']['x'] = json['a:xfrm']['a:ext']['_cx'];
-    attributes['Size']['y'] = json['a:xfrm']['a:ext']['_cy'];
+    Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
+        double.parse(json['a:xfrm']['a:off']['_y']));
+
+    Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
+        double.parse(json['a:xfrm']['a:ext']['_cy']));
+
     String shape = json['a:prstGeom']['_prst'];
 
     switch (shape) {
       case 'rect':
-        return RectangleNode(children: children, attributes: attributes);
+        return ShapeNode(offset, size, ShapeGeometry.rectangle);
       case 'ellipse:':
-        return EllipseNode(children: children, attributes: attributes);
+        return ShapeNode(offset, size, ShapeGeometry.ellipse);
       case 'line':
-        return LineNode(children: children, attributes: attributes);
+        return ShapeNode(offset, size, ShapeGeometry.line);
       default:
         print('Invalid shape to parse: $shape');
-        return AstNode(children, attributes);
+        return PrsNode();
     }
   }
 
-  AstNode parseTextBoxToAst(Map<String, dynamic> json) {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
+  PrsNode parseTextBox(Map<String, dynamic> json) {
+    TextBoxNode node = TextBoxNode();
 
-    children.add(parseShapeToAst(json['p:spPr']));
-    children.add(parseTextBodyToAst(json['p:txBody']));
+    node.children.add(parseShape(json['p:spPr']));
+    node.children.add(parseTextBody(json['p:txBody']));
 
-    return TextBoxNode(children: children, attributes: attributes);
+    return node;
   }
 
-  AstNode parseTextBodyToAst(Map<String, dynamic> json) {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
+  PrsNode parseTextBody(Map<String, dynamic> json) {
+    TextBodyNode node = TextBodyNode();
 
-    attributes['wrap'] = json['a:bodyPr']?['_wrap'];
+    node.wrap = json['a:bodyPr']?['_wrap'];
     var pObj = json['a:p'];
     if (pObj is List) {
       pObj.forEach((pNode) {
-        children.add(parseTextParaToAst(pNode));
+        node.children.add(parseTextPara(pNode));
       });
     } else if (pObj is Map<String, dynamic>) {
-      children.add(parseTextParaToAst(pObj));
+      node.children.add(parseTextPara(pObj));
     }
 
-    return TextBodyNode(children: children, attributes: attributes);
+    return node;
   }
 
-  AstNode parseTextParaToAst(Map<String, dynamic> json) {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
+  PrsNode parseTextPara(Map<String, dynamic> json) {
+    TextParagraphNode node = TextParagraphNode();
 
-    attributes['alignment'] = json['a:pPr']?['align'];
+    node.alignment = json['a:pPr']?['align'];
     var rObj = json['a:r'];
     if (rObj is List) {
       rObj.forEach((rNode) {
-        children.add(parseTextToAst(rNode));
+        node.children.add(parseText(rNode));
       });
     } else if (rObj is Map<String, dynamic>) {
-      children.add(parseTextToAst(rObj));
+      node.children.add(parseText(rObj));
     }
 
-    return TextParagraphNode(children: children, attributes: attributes);
+    return node;
   }
 
-  AstNode parseTextToAst(Map<String, dynamic> json) {
-    Map<String, dynamic> attributes = {};
-    List<AstNode> children = [];
+  PrsNode parseText(Map<String, dynamic> json) {
+    TextNode node = TextNode();
 
-    attributes['italics'] = json['a:rPr']['_i'];
-    attributes['bold'] = json['a:rPr']['_b'];
-    attributes['underline'] = json['a:rPr']['_u'];
-    attributes['size'] = json['a:rPr']['_sz'];
-    attributes['color'] = json['a:rPr']['a:solidFill']?['a:schemeClr']?['_val'];
-    attributes['highlightColor'] =
-        json['a:rPr']['a:highligh']?['a:srgbClr']?['_val'];
-    attributes['text'] = json['a:t'];
+    node.italics = (json['a:rPr']['_i'] == '1') ? true : false;
+    node.bold = (json['a:rPr']['_b'] == '1') ? true : false;
+    node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);
+    String? sizeStr = json['a:rPr']['_sz'];
+    node.size = sizeStr != null ? int.parse(sizeStr) : null;
+    node.color = json['a:rPr']['a:solidFill']?['a:schemeClr']?['_val'];
+    node.highlightColor = json['a:rPr']['a:highlight']?['a:srgbClr']?['_val'];
+    node.text = json['a:t'];
 
-    return TextNode(children: children, attributes: attributes);
+    return node;
   }
 }
 
 void main() {
   var filename = "Luna_sample_module.pptx";
+  
+  File pptx = File(filename);
 
-  PresentationParser parse = PresentationParser(filename);
+  PresentationParser parse = PresentationParser(pptx);
 
-  AstNode ast = parse.parsePresentationToAst();
+  PrsNode prsTree = parse.parsePresentation();
 
-  Map<String, dynamic> astJson = ast.toJson();
-  String jsonOutput = JsonEncoder.withIndent('  ').convert(astJson);  
+  Map<String, dynamic> astJson = prsTree.toJson();
+  String jsonOutput = JsonEncoder.withIndent('  ').convert(astJson);
 
   File('module.json').writeAsStringSync(jsonOutput);
 }

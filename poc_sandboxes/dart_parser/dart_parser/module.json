@@ -1,920 +1,740 @@
 {
   "Presentation": {
-    "children": [
+    "title": "PowerPoint Presentation",
+    "author": "Jon Socha",
+    "slideCount": 3,
+    "slides": [
       {
         "Slide": {
-          "children": [
+          "slideNum": 1,
+          "shapes": [
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 2",
+                "path": "../media/image1.jpeg",
+                "altText": "simple illustration of a pregnant indigenous woman with the moon above her",
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "1205449",
-                          "y": "630225"
-                        },
-                        "Size": {
-                          "x": "2161102",
-                          "y": "2161102"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1205449.0,
+                        "y": 630225.0
+                      },
+                      "Size": {
+                        "x": 2161102.0,
+                        "y": 2161102.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 2",
-                  "alt_txt": "simple illustration of a pregnant indigenous woman with the moon above her",
-                  "path": "../media/image1.jpeg"
-                }
+                ]
               }
             },
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 4",
+                "path": "../media/image2.png",
+                "altText": "Free Clipart: Woman | fundacionacceso",
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "985388",
-                          "y": "3179830"
-                        },
-                        "Size": {
-                          "x": "1913018",
-                          "y": "2704131"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 985388.0,
+                        "y": 3179830.0
+                      },
+                      "Size": {
+                        "x": 1913018.0,
+                        "y": 2704131.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 4",
-                  "alt_txt": "Free Clipart: Woman | fundacionacceso",
-                  "path": "../media/image2.png"
-                }
+                ]
               }
             },
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 6",
+                "path": "../media/image3.png",
+                "altText": "Free Clipart: Question Mark | rejon",
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "2472507",
-                          "y": "3474932"
-                        },
-                        "Size": {
-                          "x": "1138989",
-                          "y": "1797072"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 2472507.0,
+                        "y": 3474932.0
+                      },
+                      "Size": {
+                        "x": 1138989.0,
+                        "y": 1797072.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 6",
-                  "alt_txt": "Free Clipart: Question Mark | rejon",
-                  "path": "../media/image3.png"
-                }
+                ]
               }
             },
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 11",
+                "path": "../media/image4.png",
+                "altText": null,
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "719871",
-                          "y": "6047874"
-                        },
-                        "Size": {
-                          "x": "3132258",
-                          "y": "1656881"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 719871.0,
+                        "y": 6047874.0
+                      },
+                      "Size": {
+                        "x": 3132258.0,
+                        "y": 1656881.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 11",
-                  "alt_txt": null,
-                  "path": "../media/image4.png"
-                }
+                ]
               }
             },
             {
               "TextBox": {
-                "children": [
+                "textGroups": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "1669805",
-                          "y": "46848"
-                        },
-                        "Size": {
-                          "x": "1191352",
-                          "y": "523220"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1669805.0,
+                        "y": 46848.0
+                      },
+                      "Size": {
+                        "x": 1191352.0,
+                        "y": 523220.0
+                      },
+                      "Shape": "rectangle"
                     }
                   },
                   {
                     "TextBody": {
-                      "children": [
+                      "wrap": "none",
+                      "textGroups": [
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": "1",
-                                    "underline": null,
-                                    "size": "2800",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "LUNA"
-                                  }
+                                  "italics": false,
+                                  "bold": true,
+                                  "underline": false,
+                                  "size": 2800,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "LUNA"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         }
-                      ],
-                      "attributes": {
-                        "wrap": "none"
-                      }
+                      ]
                     }
                   }
-                ],
-                "attributes": {}
+                ]
               }
             },
             {
               "TextBox": {
-                "children": [
+                "textGroups": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "985388",
-                          "y": "2788699"
-                        },
-                        "Size": {
-                          "x": "2852063",
-                          "y": "369332"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 985388.0,
+                        "y": 2788699.0
+                      },
+                      "Size": {
+                        "x": 2852063.0,
+                        "y": 369332.0
+                      },
+                      "Shape": "rectangle"
                     }
                   },
                   {
                     "TextBody": {
-                      "children": [
+                      "wrap": "none",
+                      "textGroups": [
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": "1800",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "Health for the whole family"
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 1800,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Health for the whole family"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         }
-                      ],
-                      "attributes": {
-                        "wrap": "none"
-                      }
+                      ]
                     }
                   }
-                ],
-                "attributes": {}
+                ]
               }
             },
             {
               "TextBox": {
-                "children": [
+                "textGroups": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "272298",
-                          "y": "5385649"
-                        },
-                        "Size": {
-                          "x": "2334293",
-                          "y": "400110"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 272298.0,
+                        "y": 5385649.0
+                      },
+                      "Size": {
+                        "x": 2334293.0,
+                        "y": 400110.0
+                      },
+                      "Shape": "rectangle"
                     }
                   },
                   {
                     "TextBody": {
-                      "children": [
+                      "wrap": "none",
+                      "textGroups": [
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": "1",
-                                    "bold": "1",
-                                    "underline": null,
-                                    "size": "2000",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "How to use this app"
-                                  }
+                                  "italics": true,
+                                  "bold": true,
+                                  "underline": false,
+                                  "size": 2000,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "How to use this app"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         }
-                      ],
-                      "attributes": {
-                        "wrap": "none"
-                      }
+                      ]
                     }
                   }
-                ],
-                "attributes": {}
+                ]
               }
             },
             {
               "TextBox": {
-                "children": [
+                "textGroups": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "1874107",
-                          "y": "7625088"
-                        },
-                        "Size": {
-                          "x": "2533066",
-                          "y": "584775"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1874107.0,
+                        "y": 7625088.0
+                      },
+                      "Size": {
+                        "x": 2533066.0,
+                        "y": 584775.0
+                      },
+                      "Shape": "rectangle"
                     }
                   },
                   {
                     "TextBody": {
-                      "children": [
+                      "wrap": "none",
+                      "textGroups": [
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": "3200",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "Start learning"
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 3200,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Start learning"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         }
-                      ],
-                      "attributes": {
-                        "wrap": "none"
-                      }
+                      ]
                     }
                   }
-                ],
-                "attributes": {}
+                ]
               }
             }
-          ],
-          "attributes": {
-            "slide_number": 1
-          }
+          ]
         }
       },
       {
         "Slide": {
-          "children": [
+          "slideNum": 2,
+          "shapes": [
             {
               "TextBox": {
-                "children": [
+                "textGroups": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "1036273",
-                          "y": "2956063"
-                        },
-                        "Size": {
-                          "x": "2499454",
-                          "y": "584775"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1036273.0,
+                        "y": 2956063.0
+                      },
+                      "Size": {
+                        "x": 2499454.0,
+                        "y": 584775.0
+                      },
+                      "Shape": "rectangle"
                     }
                   },
                   {
                     "TextBody": {
-                      "children": [
+                      "wrap": "square",
+                      "textGroups": [
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": "1",
-                                    "bold": "1",
-                                    "underline": "sng",
-                                    "size": "1000",
-                                    "color": "tx1",
-                                    "highlightColor": null,
-                                    "text": "Page"
-                                  }
+                                  "italics": true,
+                                  "bold": true,
+                                  "underline": true,
+                                  "size": 1000,
+                                  "color": "tx1",
+                                  "highlightColor": "00FF00",
+                                  "text": "Page"
                                 }
                               },
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": "1",
-                                    "bold": "1",
-                                    "underline": "sng",
-                                    "size": "3200",
-                                    "color": "tx1",
-                                    "highlightColor": null,
-                                    "text": ""
-                                  }
+                                  "italics": true,
+                                  "bold": true,
+                                  "underline": true,
+                                  "size": 3200,
+                                  "color": "tx1",
+                                  "highlightColor": null,
+                                  "text": ""
                                 }
                               },
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": "1",
-                                    "bold": null,
-                                    "underline": "sng",
-                                    "size": "3200",
-                                    "color": "accent1",
-                                    "highlightColor": null,
-                                    "text": "2"
-                                  }
+                                  "italics": true,
+                                  "bold": false,
+                                  "underline": true,
+                                  "size": 3200,
+                                  "color": "accent1",
+                                  "highlightColor": null,
+                                  "text": "2"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         }
-                      ],
-                      "attributes": {
-                        "wrap": "square"
-                      }
+                      ]
                     }
                   }
-                ],
-                "attributes": {}
+                ]
               }
             },
             {
               "TextBox": {
-                "children": [
+                "textGroups": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "1729819",
-                          "y": "2535810"
-                        },
-                        "Size": {
-                          "x": "1428160",
-                          "y": "307777"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1729819.0,
+                        "y": 2535810.0
+                      },
+                      "Size": {
+                        "x": 1428160.0,
+                        "y": 307777.0
+                      },
+                      "Shape": "rectangle"
                     }
                   },
                   {
                     "TextBody": {
-                      "children": [
+                      "wrap": "square",
+                      "textGroups": [
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": null,
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "TestText"
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": null,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "TestText"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         }
-                      ],
-                      "attributes": {
-                        "wrap": "square"
-                      }
+                      ]
                     }
                   }
-                ],
-                "attributes": {}
+                ]
               }
             }
-          ],
-          "attributes": {
-            "slide_number": 2
-          }
+          ]
         }
       },
       {
         "Slide": {
-          "children": [
+          "slideNum": 3,
+          "shapes": [
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 2",
+                "path": "../media/image1.jpeg",
+                "altText": "simple illustration of a pregnant indigenous woman with the moon above her",
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "1205449",
-                          "y": "630225"
-                        },
-                        "Size": {
-                          "x": "2161102",
-                          "y": "2161102"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1205449.0,
+                        "y": 630225.0
+                      },
+                      "Size": {
+                        "x": 2161102.0,
+                        "y": 2161102.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 2",
-                  "alt_txt": "simple illustration of a pregnant indigenous woman with the moon above her",
-                  "path": "../media/image1.jpeg"
-                }
+                ]
               }
             },
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 4",
+                "path": "../media/image2.png",
+                "altText": "Free Clipart: Woman | fundacionacceso",
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "985388",
-                          "y": "3179830"
-                        },
-                        "Size": {
-                          "x": "1913018",
-                          "y": "2704131"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 985388.0,
+                        "y": 3179830.0
+                      },
+                      "Size": {
+                        "x": 1913018.0,
+                        "y": 2704131.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 4",
-                  "alt_txt": "Free Clipart: Woman | fundacionacceso",
-                  "path": "../media/image2.png"
-                }
+                ]
               }
             },
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 6",
+                "path": "../media/image3.png",
+                "altText": "Free Clipart: Question Mark | rejon",
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "2472507",
-                          "y": "3474932"
-                        },
-                        "Size": {
-                          "x": "1138989",
-                          "y": "1797072"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 2472507.0,
+                        "y": 3474932.0
+                      },
+                      "Size": {
+                        "x": 1138989.0,
+                        "y": 1797072.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 6",
-                  "alt_txt": "Free Clipart: Question Mark | rejon",
-                  "path": "../media/image3.png"
-                }
+                ]
               }
             },
             {
               "Image": {
-                "children": [
+                "imageName": "Picture 11",
+                "path": "../media/image4.png",
+                "altText": null,
+                "shapes": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "719871",
-                          "y": "6047874"
-                        },
-                        "Size": {
-                          "x": "3132258",
-                          "y": "1656881"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 719871.0,
+                        "y": 6047874.0
+                      },
+                      "Size": {
+                        "x": 3132258.0,
+                        "y": 1656881.0
+                      },
+                      "Shape": "rectangle"
                     }
                   }
-                ],
-                "attributes": {
-                  "name": "Picture 11",
-                  "alt_txt": null,
-                  "path": "../media/image4.png"
-                }
+                ]
               }
             },
             {
               "TextBox": {
-                "children": [
+                "textGroups": [
                   {
-                    "Rectangle": {
-                      "children": [],
-                      "attributes": {
-                        "Offset": {
-                          "x": "64169",
-                          "y": "-37755"
-                        },
-                        "Size": {
-                          "x": "4507831",
-                          "y": "9694962"
-                        }
-                      }
+                    "rectangle": {
+                      "Offset": {
+                        "x": 64169.0,
+                        "y": -37755.0
+                      },
+                      "Size": {
+                        "x": 4507831.0,
+                        "y": 9694962.0
+                      },
+                      "Shape": "rectangle"
                     }
                   },
                   {
                     "TextBody": {
-                      "children": [
+                      "wrap": "square",
+                      "textGroups": [
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": "4400",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "Luna"
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 4400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Luna"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": "2400",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": ""
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": ""
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": "2400",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "Health for the Whole Family"
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Health for the Whole Family"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": "2400",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "How to use this app"
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "How to use this app"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [
+                            "alignment": null,
+                            "paragraphs": [
                               {
                                 "Text": {
-                                  "children": [],
-                                  "attributes": {
-                                    "italics": null,
-                                    "bold": null,
-                                    "underline": null,
-                                    "size": "2400",
-                                    "color": null,
-                                    "highlightColor": null,
-                                    "text": "Start learning"
-                                  }
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Start learning"
                                 }
                               }
-                            ],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            ]
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         },
                         {
                           "Paragraph": {
-                            "children": [],
-                            "attributes": {
-                              "alignment": null
-                            }
+                            "alignment": null,
+                            "paragraphs": []
                           }
                         }
-                      ],
-                      "attributes": {
-                        "wrap": "square"
-                      }
+                      ]
                     }
                   }
-                ],
-                "attributes": {}
+                ]
               }
             }
-          ],
-          "attributes": {
-            "slide_number": 3
-          }
+          ]
         }
       }
-    ],
-    "attributes": {
-      "title": "PowerPoint Presentation",
-      "author": "Jon Socha",
-      "slide_count": "3"
-    }
+    ]
   }
 }
