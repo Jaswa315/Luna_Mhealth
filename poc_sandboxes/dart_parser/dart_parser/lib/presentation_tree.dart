@@ -76,35 +76,22 @@ class SlideNode extends PrsNode {
 }
 
 class TextBoxNode extends PrsNode {
-<<<<<<< HEAD
-  // added for uid map to text box
-  static int _idCounter  = 0; // static counter
-  late final int uid;
-
 
   TextBoxNode() {
     name = 'textbox';
-    uid = _idCounter++; // assign and increment UID
-=======
-  TextBoxNode() {
-    name = 'textbox';
->>>>>>> main
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-<<<<<<< HEAD
-      'uid': uid.toString().padLeft(3, '0'), // convert to string with leading 0s
       
-=======
->>>>>>> main
       // todo, change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };
   }
 }
+
 
 class TextBodyNode extends PrsNode {
   late final String? wrap;
@@ -145,10 +132,12 @@ class TextNode extends PrsNode {
   late final bool bold;
   late final bool underline;
   late final int? size;
+  late final int uid;
   late final String? color;
   late final String? highlightColor;
   late final String? text;
-  TextNode() {
+
+  TextNode(this.uid) {
     name = 'text';
   }
 
@@ -156,6 +145,7 @@ class TextNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
+      'uid': uid.toString().padLeft(3, '0'), 
       'italics': italics,
       'bold': bold,
       'underline': underline,
