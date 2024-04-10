@@ -32,6 +32,7 @@ class PresentationParser {
     return xmlDocumentToJson(doc);
   }
 
+  // Changed the return type to PresentationNode
   PresentationNode parsePresentation() {
     PresentationNode node = PresentationNode();
 
