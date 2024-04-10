@@ -34,12 +34,7 @@ class PresentationParser {
     return xmlDocumentToJson(doc);
   }
 
-<<<<<<< HEAD
-  // Changed the return type to PresentationNode
-  PresentationNode parsePresentation() {
-=======
   PrsNode parsePresentation() {
->>>>>>> origin/main
     PresentationNode node = PresentationNode();
 
     var coreMap = jsonFromArchive("docProps/core.xml");

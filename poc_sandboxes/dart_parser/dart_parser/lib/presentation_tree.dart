@@ -76,10 +76,6 @@ class SlideNode extends PrsNode {
 }
 
 class TextBoxNode extends PrsNode {
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
   TextBoxNode() {
     name = 'textbox';
   }
@@ -88,10 +84,6 @@ class TextBoxNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-<<<<<<< HEAD
-      
-=======
->>>>>>> origin/main
       // todo, change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };
@@ -138,7 +130,7 @@ class TextNode extends PrsNode {
   late final bool bold;
   late final bool underline;
   late final int? size;
-  late final int uid;
+  late final int uid; // Unique ID that will be assigned to each unique Text Token in our PowerPoint
   late final String? color;
   late final String? highlightColor;
   late final String? text;

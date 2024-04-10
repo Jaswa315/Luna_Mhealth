@@ -1,10 +1,23 @@
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+/// Text Token Extractor
+/// Purpose: Given a Presentation Node token data PrsNode, extract just the unique ID and text tokens
+/// and store them in a map. This class MAY be turned into an "Extractor" object later
+/// which extracts and converts to CSV. this is just the logic to get minimum tokens we need first
 import 'dart:convert';
 import 'dart:io';
 import 'presentation_tree.dart';
 import 'presentation_parser.dart';
 
+
 // Map text tokens to their content
-Map<int, String> mapTextTokens(PresentationNode presentation) {
+Map<int, String> mapTextTokens(PrsNode presentation) {
   Map<int, String> textTokenMap = {};
 
   // Iterate through each slide in the presentation
@@ -40,7 +53,7 @@ void main() {
 
   // Use presentation_parser.dart to parse the pptx file into a tree of parse node
   PresentationParser parser = PresentationParser(pptxFile);
-  PresentationNode prsTree = parser.parsePresentation();
+  PrsNode prsTree = parser.parsePresentation();
 
   // Use the parsed tree to map the text tokens to their content and UID
   var textTokenMap = mapTextTokens(prsTree);
