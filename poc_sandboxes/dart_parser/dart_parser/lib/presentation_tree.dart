@@ -76,6 +76,7 @@ class SlideNode extends PrsNode {
 }
 
 class TextBoxNode extends PrsNode {
+<<<<<<< HEAD
   // added for uid map to text box
   static int _idCounter  = 0; // static counter
   late final int uid;
@@ -84,14 +85,21 @@ class TextBoxNode extends PrsNode {
   TextBoxNode() {
     name = 'textbox';
     uid = _idCounter++; // assign and increment UID
+=======
+  TextBoxNode() {
+    name = 'textbox';
+>>>>>>> main
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'type': name,
+<<<<<<< HEAD
       'uid': uid.toString().padLeft(3, '0'), // convert to string with leading 0s
       
+=======
+>>>>>>> main
       // todo, change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };

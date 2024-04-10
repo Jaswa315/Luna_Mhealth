@@ -1,0 +1,740 @@
+{
+  "Presentation": {
+    "title": "PowerPoint Presentation",
+    "author": "Jon Socha",
+    "slideCount": 3,
+    "slides": [
+      {
+        "Slide": {
+          "slideNum": 1,
+          "shapes": [
+            {
+              "Image": {
+                "imageName": "Picture 2",
+                "path": "../media/image1.jpeg",
+                "altText": "simple illustration of a pregnant indigenous woman with the moon above her",
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1205449.0,
+                        "y": 630225.0
+                      },
+                      "Size": {
+                        "x": 2161102.0,
+                        "y": 2161102.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Image": {
+                "imageName": "Picture 4",
+                "path": "../media/image2.png",
+                "altText": "Free Clipart: Woman | fundacionacceso",
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 985388.0,
+                        "y": 3179830.0
+                      },
+                      "Size": {
+                        "x": 1913018.0,
+                        "y": 2704131.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Image": {
+                "imageName": "Picture 6",
+                "path": "../media/image3.png",
+                "altText": "Free Clipart: Question Mark | rejon",
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 2472507.0,
+                        "y": 3474932.0
+                      },
+                      "Size": {
+                        "x": 1138989.0,
+                        "y": 1797072.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Image": {
+                "imageName": "Picture 11",
+                "path": "../media/image4.png",
+                "altText": null,
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 719871.0,
+                        "y": 6047874.0
+                      },
+                      "Size": {
+                        "x": 3132258.0,
+                        "y": 1656881.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "TextBox": {
+                "textGroups": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1669805.0,
+                        "y": 46848.0
+                      },
+                      "Size": {
+                        "x": 1191352.0,
+                        "y": 523220.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  },
+                  {
+                    "TextBody": {
+                      "wrap": "none",
+                      "textGroups": [
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": true,
+                                  "underline": false,
+                                  "size": 2800,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "LUNA"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "TextBox": {
+                "textGroups": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 985388.0,
+                        "y": 2788699.0
+                      },
+                      "Size": {
+                        "x": 2852063.0,
+                        "y": 369332.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  },
+                  {
+                    "TextBody": {
+                      "wrap": "none",
+                      "textGroups": [
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 1800,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Health for the whole family"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "TextBox": {
+                "textGroups": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 272298.0,
+                        "y": 5385649.0
+                      },
+                      "Size": {
+                        "x": 2334293.0,
+                        "y": 400110.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  },
+                  {
+                    "TextBody": {
+                      "wrap": "none",
+                      "textGroups": [
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": true,
+                                  "bold": true,
+                                  "underline": false,
+                                  "size": 2000,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "How to use this app"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "TextBox": {
+                "textGroups": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1874107.0,
+                        "y": 7625088.0
+                      },
+                      "Size": {
+                        "x": 2533066.0,
+                        "y": 584775.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  },
+                  {
+                    "TextBody": {
+                      "wrap": "none",
+                      "textGroups": [
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 3200,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Start learning"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "Slide": {
+          "slideNum": 2,
+          "shapes": [
+            {
+              "TextBox": {
+                "textGroups": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1036273.0,
+                        "y": 2956063.0
+                      },
+                      "Size": {
+                        "x": 2499454.0,
+                        "y": 584775.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  },
+                  {
+                    "TextBody": {
+                      "wrap": "square",
+                      "textGroups": [
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": true,
+                                  "bold": true,
+                                  "underline": true,
+                                  "size": 1000,
+                                  "color": "tx1",
+                                  "highlightColor": "00FF00",
+                                  "text": "Page"
+                                }
+                              },
+                              {
+                                "Text": {
+                                  "italics": true,
+                                  "bold": true,
+                                  "underline": true,
+                                  "size": 3200,
+                                  "color": "tx1",
+                                  "highlightColor": null,
+                                  "text": ""
+                                }
+                              },
+                              {
+                                "Text": {
+                                  "italics": true,
+                                  "bold": false,
+                                  "underline": true,
+                                  "size": 3200,
+                                  "color": "accent1",
+                                  "highlightColor": null,
+                                  "text": "2"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "TextBox": {
+                "textGroups": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1729819.0,
+                        "y": 2535810.0
+                      },
+                      "Size": {
+                        "x": 1428160.0,
+                        "y": 307777.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  },
+                  {
+                    "TextBody": {
+                      "wrap": "square",
+                      "textGroups": [
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": null,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "TestText"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "Slide": {
+          "slideNum": 3,
+          "shapes": [
+            {
+              "Image": {
+                "imageName": "Picture 2",
+                "path": "../media/image1.jpeg",
+                "altText": "simple illustration of a pregnant indigenous woman with the moon above her",
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 1205449.0,
+                        "y": 630225.0
+                      },
+                      "Size": {
+                        "x": 2161102.0,
+                        "y": 2161102.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Image": {
+                "imageName": "Picture 4",
+                "path": "../media/image2.png",
+                "altText": "Free Clipart: Woman | fundacionacceso",
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 985388.0,
+                        "y": 3179830.0
+                      },
+                      "Size": {
+                        "x": 1913018.0,
+                        "y": 2704131.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Image": {
+                "imageName": "Picture 6",
+                "path": "../media/image3.png",
+                "altText": "Free Clipart: Question Mark | rejon",
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 2472507.0,
+                        "y": 3474932.0
+                      },
+                      "Size": {
+                        "x": 1138989.0,
+                        "y": 1797072.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Image": {
+                "imageName": "Picture 11",
+                "path": "../media/image4.png",
+                "altText": null,
+                "shapes": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 719871.0,
+                        "y": 6047874.0
+                      },
+                      "Size": {
+                        "x": 3132258.0,
+                        "y": 1656881.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "TextBox": {
+                "textGroups": [
+                  {
+                    "rectangle": {
+                      "Offset": {
+                        "x": 64169.0,
+                        "y": -37755.0
+                      },
+                      "Size": {
+                        "x": 4507831.0,
+                        "y": 9694962.0
+                      },
+                      "Shape": "rectangle"
+                    }
+                  },
+                  {
+                    "TextBody": {
+                      "wrap": "square",
+                      "textGroups": [
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 4400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Luna"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": ""
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Health for the Whole Family"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "How to use this app"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": [
+                              {
+                                "Text": {
+                                  "italics": false,
+                                  "bold": false,
+                                  "underline": false,
+                                  "size": 2400,
+                                  "color": null,
+                                  "highlightColor": null,
+                                  "text": "Start learning"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        },
+                        {
+                          "Paragraph": {
+                            "alignment": null,
+                            "paragraphs": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
