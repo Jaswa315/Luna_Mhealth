@@ -76,7 +76,10 @@ class SlideNode extends PrsNode {
 }
 
 class TextBoxNode extends PrsNode {
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
   TextBoxNode() {
     name = 'textbox';
   }
@@ -85,7 +88,10 @@ class TextBoxNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
+<<<<<<< HEAD
       
+=======
+>>>>>>> origin/main
       // todo, change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };
