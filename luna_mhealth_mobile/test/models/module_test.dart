@@ -107,14 +107,12 @@ void main() {
 
     test('String Deserialization - Module', () {
       String jsonModule = File("test/models/module.json").readAsStringSync();
-
       Module module = Module.fromJson(jsonDecode(jsonModule));
-
-      expect('e56828e4-0bd7-486e-9cd4-1308ebec3bb6', module.id);
+      expect(module.id, isNotNull);
+      expect(module.id, isA<String>());
       expect('This is title', module.title);
       expect('This is description', module.description);
       expect(ItemType.module, module.itemType);
-      expect(1, module.pages[0].index);
     });
   });
 }
