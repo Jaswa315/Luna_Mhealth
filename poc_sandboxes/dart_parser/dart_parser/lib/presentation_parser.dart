@@ -147,8 +147,8 @@ class PresentationParser {
         return ShapeNode(offset, size, ShapeGeometry.rectangle);
       case 'ellipse':
         return ShapeNode(offset, size, ShapeGeometry.ellipse);
-      case 'line':
-        return ShapeNode(offset, size, ShapeGeometry.line);
+      // case 'line':
+      //   return ShapeNode(offset, size, ShapeGeometry.line);
       default:
         print('Invalid shape to parse: $shape');
         return PrsNode();
@@ -163,7 +163,7 @@ class PresentationParser {
     Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
-    double weight = json['a:ln']['_w'] != null ? double.parse(json['a:ln']['_w']) : 6350;
+    double weight = json['a:ln'] == null || json['a:ln']['_w'] == null ? 6350 : double.parse(json['a:ln']['_w']);
 
     String shape = json['a:prstGeom']['_prst'];
 

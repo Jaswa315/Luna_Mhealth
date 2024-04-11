@@ -84,9 +84,9 @@ void main() {
       PrsNode prsTree = parser.parsePresentation();
       Map<String, dynamic> astJson = prsTree.toJson();
 
-      String shapePath0 = astJson['presentation']['slides'][0]['shapes'][0]['path'];
+      String shapeType = astJson['presentation']['slides'][0]['shapes'][0]['type'];
 
-      expect(shapePath0, "../media/image1.png");
+      expect(shapeType, "line");
     });
 
     test('Parser - Multiple Connection Shapes', () async{
@@ -104,6 +104,23 @@ void main() {
       expect(shapeType0, "line");
       expect(shapeType1, "line");
       expect(shapeType2, "line");
+    });
+
+    test('Parser - Geometries', () async{
+      var filename = "Shapes-Geometries.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      String shapeType0 = astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String shapeType1 = astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String shapeType2 = astJson['presentation']['slides'][0]['shapes'][2]['type'];
+
+      expect(shapeType0, "line");
+      expect(shapeType1, "ellipse");
+      expect(shapeType2, "rectangle");
     });
 
     test('Parser - demo', () async{
