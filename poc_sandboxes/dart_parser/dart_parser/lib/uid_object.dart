@@ -1,18 +1,18 @@
 // This could be TextToken instead? Has a lot of potential !!!
   // UIDObject can be renamed later and can potentially store all translation mappings
 class UIDObject {
-  late int uid;
+  late int _uid;
 
   UIDObject(int id) {
-    uid = id;
+    _uid = id;
   }
 
   int getUID() {
-    return uid;
+    return _uid;
   }
 
   void setUID(int newID) {
-    uid = newID;
+    _uid = newID;
   }
 
   @override
