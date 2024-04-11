@@ -32,7 +32,7 @@ class Localization {
 
   // Walk the data tree and grab references to each Text Token node. 
   // Return the list of text token nodes. 
-  List<TextNode> gatherTextNodes(PrsNode presentation) {
+  List<TextNode> extractTextNodes(PrsNode presentation) {
     List<TextNode> textNodes = [];
     for (SlideNode slide in presentation.children.whereType<SlideNode>()) {
       for (TextBoxNode textBox in slide.children.whereType<TextBoxNode>()) {
@@ -107,7 +107,7 @@ void main() {
 
   // Iterate through the list of TextNodes and assign UIDs to unnasigned nodes.
   localizer._assignUIDs(nodes);
-  
+
   printTreeAsJSON(prsTree); // Print the updated presentation tree as JSON
 
 }
