@@ -6,77 +6,69 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// ignore_for_file: public_member_api_docs
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../enums/component_type.dart';
-import '../../providers/click_state_provider.dart';
 import '../component.dart';
 
+/// Represents an image component that can be rendered and clicked.
 class ImageComponent extends Component {
-  /// The path of the image.
+  /// The path to the image file.
   String imagePath;
-  Color _borderColor = Colors.transparent; // Internal state for border color
 
-  /// Creates a new instance of [ImageComponent].
-  ///
-  /// The [imagePath] parameter is required and specifies the path of the image.
-  /// The [type] parameter is required and specifies the type of the component.
-  /// The [x], [y], [width], and [height] parameters are optional and specify the position
-  /// and dimensions of the component.
+  /// The path to the directory containing the image file.
+  final String? directoryPath;
+
+  /// Constructs a new instance of [ImageComponent] with the given [imagePath], [x], [y], [width], and [height].
   ImageComponent({
     required this.imagePath,
-    required ComponentType type,
-    double x = 0.0,
-    double y = 0.0,
-    double width = 0.0,
-    double height = 0.0,
-  }) : super(type: type, x: x, y: y, width: width, height: height, name: '');
+    this.directoryPath,
+    required double x,
+    required double y,
+    required double width,
+    required double height,
+  }) : super(
+            type: ComponentType.image,
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            name: 'ImageComponent');
 
-  /// Renders the image component.
-  /// Returns an [Image.asset] widget with the specified image path, width, and height.
   @override
   Widget render() {
-    return Consumer<ClickStateProvider>(
-      builder: (context, clickStateProvider, child) {
-        return GestureDetector(
-          onTap: () {
-            //print("ImageComponent clicked! Current isBold: $_borderColor");
-            _borderColor = _updateBorderColor(); // Update internal state
-            clickStateProvider.clickState
-                .changeBorderColor(); // Notify Provider change
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: _borderColor, width: 5.0), // Use internal state
-            ),
-            child: Image.asset(
-              imagePath,
-              //width: width,
-              //height: height,
-            ),
-          ),
-        );
+    //print('ImageComponent.render: $imagePath');
+
+    String fullPath =
+        directoryPath != null ? '$directoryPath/$imagePath' : imagePath;
+    //print('ImageComponent.render: Full Path => $fullPath');
+    return Image(
+      image: FileImage(File(fullPath)),
+      fit: BoxFit.cover,
+      errorBuilder:
+          (BuildContext context, Object exception, StackTrace? stackTrace) {
+        return Icon(Icons.error); // Placeholder widget in case of an error
       },
+    );
+  }
+
+  /// Creates an [ImageComponent] from a JSON map.
+  static ImageComponent fromJson(Map<String, dynamic> json,
+      [String? directoryPath]) {
+    return ImageComponent(
+      imagePath: json['image_path'],
+      directoryPath: directoryPath,
+      x: json['position']['left'].toDouble(),
+      y: json['position']['top'].toDouble(),
+      width: json['position']['width'].toDouble(),
+      height: json['position']['height'].toDouble(),
     );
   }
 
   @override
   void onClick() {
-    print('Image clicked: $imagePath');
-  }
-
-  // Helper function to cycle border colors
-  Color _updateBorderColor() {
-    if (_borderColor == Colors.transparent) {
-      return Colors.blue;
-    } else if (_borderColor == Colors.blue) {
-      return Colors.red;
-    } else {
-      return Colors.transparent;
-    }
+    print('Image Component Clicked: $imagePath');
   }
 }

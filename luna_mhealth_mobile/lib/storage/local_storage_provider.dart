@@ -9,6 +9,8 @@
 /// LocalStorageProvider
 /// Purpose: Concrete local storage provider for file access.
 
+// ignore_for_file: public_member_api_docs
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:luna_mhealth_mobile/storage/istorage_provider.dart';
@@ -18,7 +20,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 /// LocalStorageProvider
 /// Use for file operations on local mobile appdata stores
 /// Usage: IStorageProvider myProvider = LocalStorageProvider();
-/// Do not use as a concrete object within Luna!!!
+/// ! Do not use as a concrete object within Luna!!!
 class LocalStorageProvider implements IStorageProvider {
   final PathProviderPlatform _pathPlatform;
 

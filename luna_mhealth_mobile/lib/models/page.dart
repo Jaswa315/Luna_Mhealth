@@ -8,7 +8,6 @@
 
 /// Represents a page in the application.
 /// A page can contain multiple components.
-// ignore_for_file: public_member_api_docs
 
 import 'dart:convert';
 import 'component.dart';
@@ -18,12 +17,14 @@ import 'component.dart';
 /// A page contains a list of components that can be added or removed.
 /// It can be converted to and from a JSON map.
 class Page {
-  int index;
+  /// The index of the page.
+  final int index;
   final List<Component> _components = [];
 
   /// Constructs a new instance of [Page] with the given [index].
   Page({required this.index});
 
+  /// Gets the list of components in the page.
   List<Component> get components => List.unmodifiable(_components);
 
   /// Adds a [component] to the page.
@@ -36,28 +37,27 @@ class Page {
     _components.remove(component);
   }
 
+  /// Creates a Page from a JSON map.
+  factory Page.fromJson(Map<String, dynamic> json, [String? directoryPath]) {
+    print('Page.fromJson: $json');
+    Page page = Page(index: json['slide_number'] as int);
+    print('Page.fromJson: Page => $page');
+
+    var elements = json['elements'] as List<dynamic>;
+    for (var elementJson in elements) {
+      Component? component = Component.fromJson(elementJson, directoryPath);
+      page.addComponent(component);
+    }
+
+    return page;
+  }
+
   /// Converts a Page into a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'index': index,
       'components': _components.map((c) => c.toJson()).toList(),
     };
-  }
-
-  /// Creates a Page from a JSON map.
-  factory Page.fromJson(Map<String, dynamic> json) {
-    var page = Page(index: json['index'] as int);
-
-    if (json['components'] != null) {
-      var componentsList =
-          List<Map<String, dynamic>>.from(json['components'] as List);
-      for (var compJson in componentsList) {
-        var component = Component.fromJson(compJson);
-        page.addComponent(component);
-      }
-    }
-
-    return page;
   }
 
   @override

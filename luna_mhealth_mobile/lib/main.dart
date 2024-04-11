@@ -3,17 +3,16 @@
 /// Each component is rendered based on its type.
 
 /// - [MyApp], the root widget of the application.
-/// - [ModuleView], the widget that displays the module and its pages.
 /// - [Module], a class representing a module with a title, description, and pages.
 /// - [slide_page.Page], a class representing a page within a module.
 /// - [TextComponent], a class representing a text component.
 /// - [ImageComponent], a class representing an image component.
 /// - [ComponentType], an enum representing the type of a component.
-
-// ignore_for_file: public_member_api_docs
+/// - [ClickStateProvider], a provider class that manages the state of a click event.
 
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:luna_mhealth_mobile/presentation/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 import 'enums/component_type.dart';
@@ -23,14 +22,6 @@ import 'models/page.dart' as slide_page;
 import 'models/text/text_component.dart';
 import 'providers/click_state_provider.dart';
 import 'utils/logging.dart';
-
-// void main() => runApp(MultiProvider(
-//       providers: [
-//         // ChangeNotifierProvider(create: (_) => ModuleProvider()),
-//         ChangeNotifierProvider(create: (_) => ClickStateProvider()),
-//       ],
-//       child: MyApp(),
-//     ));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,75 +37,23 @@ void main() async {
   ));
 }
 
+/// The root widget of the application.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ModuleView(),
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+      // home: Scaffold(
+      //   appBar: AppBar(
+      //     title: Center(
+      //       child: Text('Luna mHealth Mobile'),
+      //     ),
+      //   ),
+      //   body: Center(
+      //     child: Text('Hello World!'),
+      //   ),
+      // ),
     );
   }
 }
-
-class ModuleView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // sample data (will ultimately come from PPT parsed JSON file)
-    Module module = Module(title: 'Module #0', description: 'Demo');
-    slide_page.Page page = slide_page.Page(index: 0);
-    page.addComponent(TextComponent(
-        text: 'Hello world!!!', type: ComponentType.text, name: 'LUNA'));
-    page.addComponent(ImageComponent(
-        imagePath: 'assets/images/luna.png',
-        type: ComponentType.image,
-        width: 200,
-        height: 200));
-    module.addPage(page);
-
-    return Scaffold(
-      appBar: AppBar(title: Text(module.title)),
-      body: Center(
-        child: Column(
-          children:
-              page.components.map((component) => component.render()).toList(),
-        ),
-      ),
-    );
-  }
-}
-
-// class ModuleView extends StatefulWidget {
-//   @override
-//   _ModuleViewState createState() => _ModuleViewState();
-// }
-
-// class _ModuleViewState extends State<ModuleView> {
-//   // Sample data
-//   Module module = Module(title: 'Module #0', description: 'Demo');
-//   slide_page.Page page = slide_page.Page(index: 0);
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     page.addComponent(TextComponent(
-//         text: 'Hello, Luna!!!', type: ComponentType.text, name: ''));
-//     page.addComponent(ImageComponent(
-//         imagePath: 'assets/images/luna.png',
-//         type: ComponentType.image,
-//         width: 200,
-//         height: 200));
-//     module.addPage(page);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text(module.title)),
-//       body: Center(
-//         child: Column(
-//           children:
-//               page.components.map((component) => component.render()).toList(),
-//         ),
-//       ),
-//     );
-//   }
-// }
