@@ -4,6 +4,7 @@
     "title": "PowerPoint Presentation",
     "author": "Jon Socha",
     "slideCount": 3,
+    "section": [],
     "slides": [
       {
         "type": "slide",

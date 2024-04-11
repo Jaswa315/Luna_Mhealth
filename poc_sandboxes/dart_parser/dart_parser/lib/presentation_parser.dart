@@ -42,10 +42,18 @@ class PresentationParser {
     node.title = coreMap['cp:coreProperties']['dc:title'];
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
-    node.section = presentationMap['p:presentation']['p:extLst'] == null || presentationMap['p:presentation']['p:extLst']['p:ext'] is Map<String, dynamic>
-        ? []
-        : parseSection(presentationMap['p:presentation']['p:extLst']['p:ext'][0]
-            ['p14:sectionLst']['p14:section']);
+
+    if (presentationMap['p:presentation']['p:extLst'] == null ||
+        presentationMap['p:presentation']['p:extLst']['p:ext']
+            is Map<String, dynamic> ||
+        presentationMap['p:presentation']['p:extLst']['p:ext'][0]
+                ['p14:sectionLst'] ==
+            null) {
+      node.section = [];
+    } else {
+      node.section = parseSection(presentationMap['p:presentation']['p:extLst']
+          ['p:ext'][0]['p14:sectionLst']['p14:section']);
+    }
 
     for (int i = 1; i <= node.slideCount; i++) {
       PrsNode slide = parseSlide(i);
