@@ -35,5 +35,25 @@ void main() {
 
       expect(imagePath, "../media/image1.png");
     });
+
+    test('Parser - Multiple Pictures', () async{
+      var filename = "Image-Snorlaxes.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      String imagePath0 = astJson['presentation']['slides'][0]['shapes'][0]['path'];
+      String imagePath1 = astJson['presentation']['slides'][0]['shapes'][1]['path'];
+      String imagePath2 = astJson['presentation']['slides'][0]['shapes'][2]['path'];
+
+      expect(imagePath0, "../media/image1.png");
+      expect(imagePath1, "../media/image1.png");
+      expect(imagePath2, "../media/image1.png");
+    });
+
+
+
   });
 }
