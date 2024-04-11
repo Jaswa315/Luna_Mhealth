@@ -42,7 +42,10 @@ class PresentationParser {
     node.title = coreMap['cp:coreProperties']['dc:title'];
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
-    node.section = presentationMap['p:extLst'] == null ? [] : parseSection(presentationMap['p:extLst']['p:ext'][0]['p14:sectionLst']['p14:section']);
+    node.section = presentationMap['p:presentation']['p:extLst'] == null
+        ? []
+        : parseSection(presentationMap['p:presentation']['p:extLst']['p:ext'][0]
+            ['p14:sectionLst']['p14:section']);
 
     for (int i = 1; i <= node.slideCount; i++) {
       PrsNode slide = parseSlide(i);
@@ -52,13 +55,33 @@ class PresentationParser {
     return node;
   }
 
-  List parseSection(Map<String, dynamic> json){
+  List parseSection(List<dynamic> json) {
     List<dynamic> sectionWithSlide = [];
 
-    
+    int currentSlideNumber = 0;
+
+    json.forEach((section) {
+      sectionWithSlide.add(section['_name']);
+
+      // if sldIdLst is "", it means it has 0 slides in that section
+      // if sldId is Map, it only contains one slide in that section
+      // if sldId is List, it has at least 2 slides in that section
+
+      if (section['p14:sldIdLst'] == "") {
+      } else {
+        if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>){
+          sectionWithSlide.add(currentSlideNumber);
+          currentSlideNumber += 1;
+        }
+        else{
+          sectionWithSlide.add(currentSlideNumber);
+          List tmp = section['p14:sldIdLst']['p14:sldId'];
+          currentSlideNumber += tmp.length.toInt();
+        }
+      }
+    });
 
     return sectionWithSlide;
-
   }
 
   PrsNode parseSlide(int slideNum) {
@@ -133,7 +156,7 @@ class PresentationParser {
     if (json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
       return parseTextBox(json);
     }
-    
+
     if (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title') {
       // title not finished yet
       return PrsNode();
@@ -167,14 +190,15 @@ class PresentationParser {
   }
 
   PrsNode parseConnectionShape(Map<String, dynamic> json) {
-    
     Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
     Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
-    double weight = json['a:ln'] == null || json['a:ln']['_w'] == null ? 6350 : double.parse(json['a:ln']['_w']);
+    double weight = json['a:ln'] == null || json['a:ln']['_w'] == null
+        ? 6350
+        : double.parse(json['a:ln']['_w']);
 
     String shape = json['a:prstGeom']['_prst'];
 

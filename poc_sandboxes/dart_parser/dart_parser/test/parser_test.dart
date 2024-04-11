@@ -160,11 +160,10 @@ void main() {
       PrsNode prsTree = parser.parsePresentation();
       Map<String, dynamic> astJson = prsTree.toJson();
 
-      // String shapeType0 = astJson['presentation']['slides'][0]['shapes'][2]['type'];
-      // String shapeType1 = astJson['presentation']['slides'][1]['shapes'][2]['type'];
+      List<dynamic> section = astJson['presentation']['section'];
 
-      // expect(shapeType0, "rectangle");
-      // expect(shapeType1, "ellipse");
+      expect(section, ["Default Section", 0, "Section 2", 1, "Section 3"]);
+      
     });
 
   });
