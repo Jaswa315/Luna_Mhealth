@@ -18,7 +18,8 @@ class Localization {
   // This could be TextToken instead? Has a lot of potential !!!
   // UIDObject can be renamed later and can potentially store all translation mappings
   // KEEP IT SIMPLE FOR NOW! ONLY STORES UID OBJECT making it simple for CSV READING!
-  late Map<int, UIDObject> uidMap; // Map to store ID to Text mappings
+
+  late Map<int, UIDObject> uidMap; // Map to store unique ID keys to UID Objects
 
   late int _nextUID; // Global variable to track the next available UID
 
@@ -28,10 +29,9 @@ class Localization {
     uidMap = {};
   }
 
-// getTextNodes from PrsNode
 
-  // Walks the presentation tree and assigns UIDs to text nodes.
-  // Method to walk the tree and gather TextNodes
+  // Walk the data tree and grab references to each Text Token node. 
+  // Return the list of text token nodes. 
   List<TextNode> gatherTextNodes(PrsNode presentation) {
     List<TextNode> textNodes = [];
     for (SlideNode slide in presentation.children.whereType<SlideNode>()) {
@@ -51,23 +51,24 @@ class Localization {
     return textNodes;
   }
 
-  // Given a list of TextNodes, iterate all the TextNodes
-  // and assign UIDs to any text nodes that are not 0.
+  // Assign a UID to any textnode with unassigned UIDs. 
   void _assignUIDs(List<TextNode> textNodes) {
     for (TextNode textNode in textNodes) {
-      // If a TextNode is unmapped to a UID, map it
+      // If a TextNode is unmapped to a UID, map
       if (textNode.uid == null || textNode.uid == 0) {
         _mapText(textNode);
       }
     }
   }
 
-  // Maps a new textnode to a unique ID and stores it here
+  // Maps a new textnode to a unique ID and creates a UIDObject which belongs to the given text node.
   void _mapText(TextNode textNode) {
     UIDObject newUIDObj = UIDObject(_nextUID++);
     textNode.uid = newUIDObj.getUID(); // Create and assign new UIDObject
     uidMap[newUIDObj.getUID()] = newUIDObj;
     
+
+    // ** DEBUG. Logs to console what text node string and UID was assigned **
     // Check if textNode.text is not null before printing
     if (textNode.text != null) {
       String textToken = textNode.text!;
@@ -100,14 +101,15 @@ void main() {
 
   Localization localizer = Localization(); // Create localization object
 
-  // Modifying prsTree UID directly (Pass and modify by reference)
+  // Walk the PrsNode tree and get TextNodes in a list
   List<TextNode> nodes = localizer.gatherTextNodes(
       prsTree); // Assign UIDs to text nodes in the presentation tree
 
+  // Iterate through the list of TextNodes and assign UIDs to unnasigned nodes.
   localizer._assignUIDs(nodes);
+  
   printTreeAsJSON(prsTree); // Print the updated presentation tree as JSON
 
-  //localizer.printMap();
 }
 
 // Function to print the presentation tree as JSON to a file.
