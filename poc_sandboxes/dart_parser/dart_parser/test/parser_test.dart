@@ -76,7 +76,48 @@ void main() {
       expect(imagePath2, "../media/image1.png");
     });
 
+    test('Parser - Single Connection Shape', () async{
+      var filename = "Shapes-Connection.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
 
+      String shapePath0 = astJson['presentation']['slides'][0]['shapes'][0]['path'];
+
+      expect(shapePath0, "../media/image1.png");
+    });
+
+    test('Parser - Multiple Connection Shapes', () async{
+      var filename = "Shapes-Connections.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      String shapeType0 = astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String shapeType1 = astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String shapeType2 = astJson['presentation']['slides'][0]['shapes'][2]['type'];
+
+      expect(shapeType0, "line");
+      expect(shapeType1, "line");
+      expect(shapeType2, "line");
+    });
+
+    test('Parser - demo', () async{
+      var filename = "Luna_sample_module.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      String shapePath0 = astJson['presentation']['slides'][0]['shapes'][0]['path'];
+
+      expect(shapePath0, "../media/image1.png");
+    });
 
   });
 }

@@ -64,7 +64,7 @@ class PresentationParser {
         var picList = shapeTree[key];
         if (picList is Map<String, dynamic>) {
           node.children.add(parseImage(picList, slideNum));
-        } else if (picList is List){
+        } else if (picList is List) {
           picList.forEach((jsonMap) {
             node.children.add(parseImage(jsonMap, slideNum));
           });
@@ -77,6 +77,16 @@ class PresentationParser {
         } else if (shapeObj is List) {
           shapeObj.forEach((jsonMap) {
             node.children.add(parseShape(jsonMap));
+          });
+        }
+      }
+      if (key == 'p:cxnSp') {
+        var connectionShapeObj = shapeTree[key];
+        if (connectionShapeObj is Map<String, dynamic>) {
+          node.children.add(parseConnectionShape(connectionShapeObj['p:spPr']));
+        } else if (connectionShapeObj is List) {
+          connectionShapeObj.forEach((jsonMap) {
+            node.children.add(parseConnectionShape(jsonMap['p:spPr']));
           });
         }
       }
@@ -104,10 +114,15 @@ class PresentationParser {
   }
 
   PrsNode parseShape(Map<String, dynamic> json) {
+    // TODO: How to check if it's a shape with more flexibility?
+    if (json['p:nvSpPr']?['p:cNvSpPr'] == "") {
+      return parseShape(json['p:spPr']);
+    }
+
     if (json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
       return parseTextBox(json);
     }
-
+    
     if (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title') {
       // title not finished yet
       return PrsNode();
@@ -117,6 +132,7 @@ class PresentationParser {
       // title not finished yet
       return PrsNode();
     }
+    // }
 
     Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
@@ -129,10 +145,31 @@ class PresentationParser {
     switch (shape) {
       case 'rect':
         return ShapeNode(offset, size, ShapeGeometry.rectangle);
-      case 'ellipse:':
+      case 'ellipse':
         return ShapeNode(offset, size, ShapeGeometry.ellipse);
       case 'line':
         return ShapeNode(offset, size, ShapeGeometry.line);
+      default:
+        print('Invalid shape to parse: $shape');
+        return PrsNode();
+    }
+  }
+
+  PrsNode parseConnectionShape(Map<String, dynamic> json) {
+    
+    Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
+        double.parse(json['a:xfrm']['a:off']['_y']));
+
+    Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
+        double.parse(json['a:xfrm']['a:ext']['_cy']));
+
+    double weight = json['a:ln']['_w'] != null ? double.parse(json['a:ln']['_w']) : 6350;
+
+    String shape = json['a:prstGeom']['_prst'];
+
+    switch (shape) {
+      case 'line':
+        return ConnectionNode(offset, size, weight, ShapeGeometry.line);
       default:
         print('Invalid shape to parse: $shape');
         return PrsNode();
@@ -197,8 +234,8 @@ class PresentationParser {
 }
 
 void main() {
-  var filename = "Luna_sample_module.pptx";
-  
+  var filename = "./Luna_sample_module.pptx";
+
   File pptx = File(filename);
 
   PresentationParser parse = PresentationParser(pptx);

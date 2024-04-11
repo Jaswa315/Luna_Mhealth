@@ -178,6 +178,22 @@ class ShapeNode extends PrsNode {
   }
 }
 
+class ConnectionNode extends PrsNode {
+  late final Offset offset;
+  late final Size size;
+  late final double weight;
+  late final ShapeGeometry shape;
+
+  ConnectionNode(this.offset, this.size, this.weight, this.shape) {
+    name = shape.name;
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {'type': name, "offset": offset, "size": size, "weight": weight, "shape": shape.name};
+  }
+}
+
 class ImageNode extends PrsNode {
   late final String? imageName;
   late final String path;
