@@ -102,7 +102,7 @@ void main() {
   Localization localizer = Localization(); // Create localization object
 
   // Walk the PrsNode tree and get TextNodes in a list
-  List<TextNode> nodes = localizer.gatherTextNodes(
+  List<TextNode> nodes = localizer.extractTextNodes(
       prsTree); // Assign UIDs to text nodes in the presentation tree
 
   // Iterate through the list of TextNodes and assign UIDs to unnasigned nodes.
