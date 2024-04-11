@@ -22,5 +22,18 @@ void main() {
 
       expect(pptText, "Hello, World!");
     });
+
+    test('Parser - Single Picture', () async{
+      var filename = "Image-Snorlax.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      String imagePath = astJson['presentation']['slides'][0]['shapes'][0]['path'];
+
+      expect(imagePath, "../media/image1.png");
+    });
   });
 }

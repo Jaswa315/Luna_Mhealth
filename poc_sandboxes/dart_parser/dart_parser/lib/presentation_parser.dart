@@ -62,9 +62,13 @@ class PresentationParser {
     shapeTree.forEach((key, value) {
       if (key == 'p:pic') {
         var picList = shapeTree[key];
-        picList.forEach((jsonMap) {
-          node.children.add(parseImage(jsonMap, slideNum));
-        });
+        if (picList is Map<String, dynamic>) {
+          node.children.add(parseImage(picList, slideNum));
+        } else if (picList is List){
+          picList.forEach((jsonMap) {
+            node.children.add(parseImage(jsonMap, slideNum));
+          });
+        }
       }
       if (key == 'p:sp') {
         var shapeObj = shapeTree[key];
