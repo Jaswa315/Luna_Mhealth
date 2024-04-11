@@ -147,7 +147,6 @@ class PresentationParser {
   }
 
   PrsNode parseShape(Map<String, dynamic> json) {
-    // TODO: How to check if it's a shape with more flexibility?
     if (json['p:nvSpPr']?['p:cNvSpPr'] == "") {
       return parseShape(json['p:spPr']);
     }
@@ -180,8 +179,6 @@ class PresentationParser {
         return ShapeNode(offset, size, ShapeGeometry.rectangle);
       case 'ellipse':
         return ShapeNode(offset, size, ShapeGeometry.ellipse);
-      // case 'line':
-      //   return ShapeNode(offset, size, ShapeGeometry.line);
       default:
         print('Invalid shape to parse: $shape');
         return PrsNode();
@@ -268,7 +265,6 @@ class PresentationParser {
 }
 
 void main() {
-  // var filename = "Luna_sample_module.pptx";
   var filename = 'Luna_sample_module.pptx';
 
   File pptx = File(filename);
