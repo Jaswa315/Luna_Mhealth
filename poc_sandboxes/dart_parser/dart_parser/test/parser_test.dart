@@ -23,6 +23,29 @@ void main() {
       expect(pptText, "Hello, World!");
     });
 
+    test('Parser - Multiple Textboxes', () async {
+      var filename = "TxtBox-HelloWorlds.pptx";
+      File file = File("$assetsFolder/$filename");
+
+      PresentationParser parser = PresentationParser(file);
+
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      String pptText0 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];
+
+      String pptText1 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];
+
+      String pptText2 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];  
+
+      expect(pptText0, "Hello, World!");
+      expect(pptText1, "Hello, World!");
+      expect(pptText2, "Hello, World!");
+    });
+
     test('Parser - Single Picture', () async{
       var filename = "Image-Snorlax.pptx";
       File file = File("$assetsFolder/$filename");
