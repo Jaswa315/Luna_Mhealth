@@ -69,11 +69,10 @@ class PresentationParser {
 
       if (section['p14:sldIdLst'] == "") {
       } else {
-        if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>){
+        if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>) {
           sectionWithSlide.add(currentSlideNumber);
           currentSlideNumber += 1;
-        }
-        else{
+        } else {
           sectionWithSlide.add(currentSlideNumber);
           List tmp = section['p14:sldIdLst']['p14:sldId'];
           currentSlideNumber += tmp.length.toInt();
