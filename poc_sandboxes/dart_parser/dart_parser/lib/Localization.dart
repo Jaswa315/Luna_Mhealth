@@ -8,53 +8,79 @@
 
 import 'dart:convert'; // For JSON encoding
 import 'dart:io'; // For file operations
+import 'package:dart_parser/uid_object.dart';
+
 import 'presentation_tree.dart'; // Custom module for presentation tree
 import 'presentation_parser.dart'; // Custom module for presentation parsing
 
 /// Localization class for managing string mappings and UIDs.
 class Localization {
-  late Map<int, String> stringMapping; // Map to store string mappings
+  // This could be TextToken instead? Has a lot of potential !!!
+  // UIDObject can be renamed later and can potentially store all translation mappings
+  // KEEP IT SIMPLE FOR NOW! ONLY STORES UID OBJECT making it simple for CSV READING!
+  late Map<int, UIDObject> uidMap; // Map to store ID to Text mappings
+
   late int _nextUID; // Global variable to track the next available UID
 
   /// Constructor to initialize variables.
   Localization() {
-    stringMapping = {}; // Initialize string mapping
-    _nextUID = 0; // Initialize next UID
+    _nextUID = 1; // Initialize next UID
+    uidMap = {};
   }
 
-  /// Walks the presentation tree and assigns UIDs to text nodes.
-  void walkTreeAndAssignUIDs(PrsNode presentation) {
-    // Iterate through each slide in the presentation
+// getTextNodes from PrsNode
+
+  // Walks the presentation tree and assigns UIDs to text nodes.
+  // Method to walk the tree and gather TextNodes
+  List<TextNode> gatherTextNodes(PrsNode presentation) {
+    List<TextNode> textNodes = [];
     for (SlideNode slide in presentation.children.whereType<SlideNode>()) {
-      // Iterate through each text box in the slide
       for (TextBoxNode textBox in slide.children.whereType<TextBoxNode>()) {
-        // Parse all text segments
         for (TextBodyNode textBody
             in textBox.children.whereType<TextBodyNode>()) {
           for (TextParagraphNode paragraph
               in textBody.children.whereType<TextParagraphNode>()) {
             for (TextNode textNode
                 in paragraph.children.whereType<TextNode>()) {
-              textNode.uid = _nextUID++; // Assign UID to text node
-              if (textNode.text != null) {
-                mapString(textNode.uid, textNode.text!); // Map UID to string
-              }
+              textNodes.add(textNode); // Add TextNode reference to the list
             }
           }
         }
       }
     }
+    return textNodes;
   }
 
-  /// Maps UID to string.
-  void mapString(int id, String str) {
-    stringMapping[id] = str; // Add mapping to string mapping
+  // Given a list of TextNodes, iterate all the TextNodes
+  // and assign UIDs to any text nodes that are not 0.
+  void _assignUIDs(List<TextNode> textNodes) {
+    for (TextNode textNode in textNodes) {
+      // If a TextNode is unmapped to a UID, map it
+      if (textNode.uid == null || textNode.uid == 0) {
+        _mapText(textNode);
+      }
+    }
   }
 
-  /// Prints the string mapping.
+  // Maps a new textnode to a unique ID and stores it here
+  void _mapText(TextNode textNode) {
+    UIDObject newUIDObj = UIDObject(_nextUID++);
+    textNode.uid = newUIDObj.getUID(); // Create and assign new UIDObject
+    uidMap[newUIDObj.getUID()] = newUIDObj;
+    
+    // Check if textNode.text is not null before printing
+    if (textNode.text != null) {
+      String textToken = textNode.text!;
+
+      // just to debug and see tokens are separated correctly
+      print('Text: [$textToken ] assigned to [ $newUIDObj ]');
+    } 
+  }
+
+  // Prints the string mapping.
   void printMap() {
-    stringMapping.forEach((key, value) {
-      print('UID: $key, String: $value');
+    uidMap.forEach((key, value) {
+      print('UID: $value, String: We are not storing strings at the moment.');
     });
   }
 }
@@ -75,15 +101,16 @@ void main() {
   Localization localizer = Localization(); // Create localization object
 
   // Modifying prsTree UID directly (Pass and modify by reference)
-  localizer.walkTreeAndAssignUIDs(
+  List<TextNode> nodes = localizer.gatherTextNodes(
       prsTree); // Assign UIDs to text nodes in the presentation tree
 
+  localizer._assignUIDs(nodes);
   printTreeAsJSON(prsTree); // Print the updated presentation tree as JSON
 
-  localizer.printMap();
+  //localizer.printMap();
 }
 
-/// Function to print the presentation tree as JSON to a file.
+// Function to print the presentation tree as JSON to a file.
 void printTreeAsJSON(PrsNode prsTree) {
   Map<String, dynamic> astJson =
       prsTree.toJson(); // Convert presentation tree to JSON
