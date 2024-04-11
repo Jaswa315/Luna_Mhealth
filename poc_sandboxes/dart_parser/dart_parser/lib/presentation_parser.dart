@@ -172,7 +172,6 @@ class PresentationParser {
       // title not finished yet
       return PrsNode();
     }
-    // }
 
     Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
@@ -194,6 +193,7 @@ class PresentationParser {
   }
 
   PrsNode parseConnectionShape(Map<String, dynamic> json) {
+
     Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
@@ -201,7 +201,7 @@ class PresentationParser {
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
     double weight = json['a:ln'] == null || json['a:ln']['_w'] == null
-        ? 6350
+        ? ConnectionNode.defulatHalfLineWidth
         : double.parse(json['a:ln']['_w']);
 
     String shape = json['a:prstGeom']['_prst'];

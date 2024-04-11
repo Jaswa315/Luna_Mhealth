@@ -181,6 +181,7 @@ class ShapeNode extends PrsNode {
 }
 
 class ConnectionNode extends PrsNode {
+  static const double defulatHalfLineWidth = 6350;
   late final Offset offset;
   late final Size size;
   late final double weight;
