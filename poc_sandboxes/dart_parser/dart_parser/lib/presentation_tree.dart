@@ -39,6 +39,7 @@ class PresentationNode extends PrsNode {
   late final String title;
   late final String author;
   late final int slideCount;
+  late final List section;
 
   PresentationNode() {
     name = 'presentation';
@@ -52,6 +53,14 @@ class PresentationNode extends PrsNode {
         'title': title,
         'author': author,
         'slideCount': slideCount,
+        // TODO: should we combine section with the slides?
+        // For example, 
+        // slides[0] = "Default Section"
+        // slides[1] = actual slide 
+        // slides[2] = actual slide 
+        // slides[3] = "Section 2"
+        // ...
+        'section' : section,
         'slides': children.map((child) => child.toJson()).toList()
       }
     };

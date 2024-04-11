@@ -37,10 +37,12 @@ class PresentationParser {
 
     var coreMap = jsonFromArchive("docProps/core.xml");
     var appMap = jsonFromArchive("docProps/app.xml");
+    var presentationMap = jsonFromArchive("ppt/presentation.xml");
 
     node.title = coreMap['cp:coreProperties']['dc:title'];
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
+    node.section = presentationMap['p:extLst'] == null ? [] : parseSection(presentationMap['p:extLst']['p:ext'][0]['p14:sectionLst']['p14:section']);
 
     for (int i = 1; i <= node.slideCount; i++) {
       PrsNode slide = parseSlide(i);
@@ -48,6 +50,15 @@ class PresentationParser {
     }
 
     return node;
+  }
+
+  List parseSection(Map<String, dynamic> json){
+    List<dynamic> sectionWithSlide = [];
+
+    
+
+    return sectionWithSlide;
+
   }
 
   PrsNode parseSlide(int slideNum) {

@@ -140,5 +140,32 @@ void main() {
       expect(shapeType1, "ellipse");
     });
 
+    test('Parser - Single Section', () async{
+      var filename = "TxtBox-HelloWorld.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      List section = astJson['presentation']['section'];
+      expect(section, []);
+    });
+
+    test('Parser - Multiple Sections', () async{
+      var filename = "Sections.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+
+      // String shapeType0 = astJson['presentation']['slides'][0]['shapes'][2]['type'];
+      // String shapeType1 = astJson['presentation']['slides'][1]['shapes'][2]['type'];
+
+      // expect(shapeType0, "rectangle");
+      // expect(shapeType1, "ellipse");
+    });
+
   });
 }
