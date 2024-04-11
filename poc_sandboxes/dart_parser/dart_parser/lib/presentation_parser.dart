@@ -234,7 +234,8 @@ class PresentationParser {
 }
 
 void main() {
-  var filename = "./Luna_sample_module.pptx";
+  // var filename = "Luna_sample_module.pptx";
+  var filename = 'Luna_sample_module.pptx';
 
   File pptx = File(filename);
 
