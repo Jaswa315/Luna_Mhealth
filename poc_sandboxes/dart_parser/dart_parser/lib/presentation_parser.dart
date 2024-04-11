@@ -7,11 +7,9 @@ import 'package:xml2json/xml2json.dart';
 
 class PresentationParser {
   static late final File _file;
-  static int _textTokenCounter = 0; // Global counter to track UID for text tokens 
 
   PresentationParser(File file) {
     _file = file;
-    _textTokenCounter = 0; // Reset the counter when a new PresentationParser instance is created
   }
 
   XmlDocument extractXMLFromZip(String xmlFilePath) {
@@ -179,7 +177,7 @@ class PresentationParser {
   }
 
   PrsNode parseText(Map<String, dynamic> json) {
-    TextNode node = TextNode(_textTokenCounter++);
+    TextNode node = TextNode();
     node.italics = (json['a:rPr']['_i'] == '1') ? true : false;
     node.bold = (json['a:rPr']['_b'] == '1') ? true : false;
     node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);

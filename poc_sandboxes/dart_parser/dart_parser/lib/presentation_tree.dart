@@ -130,12 +130,12 @@ class TextNode extends PrsNode {
   late final bool bold;
   late final bool underline;
   late final int? size;
-  late final int uid; // Unique ID that will be assigned to each unique Text Token in our PowerPoint
   late final String? color;
   late final String? highlightColor;
   late final String? text;
+  late final int uid;
 
-  TextNode(this.uid) {
+  TextNode() {
     name = 'text';
   }
 
@@ -143,7 +143,7 @@ class TextNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'uid': uid.toString().padLeft(3, '0'), 
+      'uid': uid,
       'italics': italics,
       'bold': bold,
       'underline': underline,
