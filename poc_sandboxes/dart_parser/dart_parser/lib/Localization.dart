@@ -30,7 +30,7 @@ class Localization {
     _uidMap = {};
   }
 
-  // Given a Parse Tree, localize all the text tokens.
+  // Given a Parse Tree, map all the text tokens to a UID.
   // If at least one text token is localized, returns true.
   // Else false. Only one successful localize can ever be run as of now
   bool localize(PrsNode? data) {
