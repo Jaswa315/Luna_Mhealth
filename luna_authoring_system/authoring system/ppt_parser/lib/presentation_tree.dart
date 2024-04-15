@@ -1,3 +1,5 @@
+import 'package:dart_parser/uid_object.dart';
+
 enum ShapeGeometry { ellipse, rectangle, line }
 
 class Offset {
@@ -92,6 +94,7 @@ class TextBoxNode extends PrsNode {
   }
 }
 
+
 class TextBodyNode extends PrsNode {
   late final String? wrap;
 
@@ -126,17 +129,22 @@ class TextParagraphNode extends PrsNode {
   }
 }
 
+// A TextNode is one text token from powerpoint. There can be multiple 
+// text tokens in a text box. They are separated by text formatting.
 class TextNode extends PrsNode {
   // late final int? hyperlink;
   late final bool italics;
   late final bool bold;
   late final bool underline;
   late final int? size;
+  late int? uid; // This uid will be used as a key to reference Localized UIDObjects
   late final String? color;
   late final String? highlightColor;
   late final String? text;
+
   TextNode() {
     name = 'text';
+    uid = null;
   }
 
   @override
@@ -144,6 +152,7 @@ class TextNode extends PrsNode {
     return {
       // 'hyperlink': hyperlink,
       'type': name,
+      'uid': uid,
       'italics': italics,
       'bold': bold,
       'underline': underline,
