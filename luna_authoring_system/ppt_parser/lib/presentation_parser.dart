@@ -6,9 +6,9 @@ import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:path_provider/path_provider.dart';
 
-const String KEY_PICTURE = 'p:pic';
-const String KEY_SHAPE = 'p:sp';
-const String KEY_CONNECTION_SHAPE = 'p:cxnSp';
+const String keyPicture = 'p:pic';
+const String keyShape = 'p:sp';
+const String keyConnectionShape = 'p:cxnSp';
 
 class PresentationParser {
   static late final File _file;
@@ -107,7 +107,7 @@ class PresentationParser {
 
     shapeTree.forEach((key, value) {
       switch (key) {
-        case KEY_PICTURE:
+        case keyPicture:
           var picList = shapeTree[key];
           if (picList is Map<String, dynamic>) {
             node.children.add(parseImage(picList, slideNum));
@@ -116,7 +116,7 @@ class PresentationParser {
               node.children.add(parseImage(jsonMap, slideNum));
             });
           }
-        case KEY_SHAPE:
+        case keyShape:
           var shapeObj = shapeTree[key];
           if (shapeObj is Map<String, dynamic>) {
             node.children.add(parseShape(shapeObj));
@@ -125,7 +125,7 @@ class PresentationParser {
               node.children.add(parseShape(jsonMap));
             });
           }
-        case KEY_CONNECTION_SHAPE:
+        case keyConnectionShape:
           var connectionShapeObj = shapeTree[key];
           if (connectionShapeObj is Map<String, dynamic>) {
             node.children
