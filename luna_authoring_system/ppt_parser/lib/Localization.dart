@@ -8,7 +8,7 @@
 
 import 'dart:convert'; // For JSON encoding
 import 'dart:io'; // For file operations
-import 'package:dart_parser/uid_object.dart';
+import 'uid_object.dart';
 
 import 'presentation_tree.dart'; // Custom module for presentation tree
 import 'presentation_parser.dart'; // Custom module for presentation parsing

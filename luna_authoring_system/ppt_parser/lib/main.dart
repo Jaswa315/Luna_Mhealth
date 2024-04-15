@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ppt_parser/presentation_parser.dart';
+import 'presentation_parser.dart';
 
 void main(){
   runApp(MyApp());
