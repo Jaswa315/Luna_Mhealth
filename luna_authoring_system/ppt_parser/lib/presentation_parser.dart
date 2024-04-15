@@ -6,6 +6,10 @@ import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:path_provider/path_provider.dart';
 
+const String KEY_PICTURE = 'p:pic';
+const String KEY_SHAPE = 'p:sp';
+const String KEY_CONNECTION_SHAPE = 'p:cxnSp';
+
 class PresentationParser {
   static late final File _file;
 
@@ -102,35 +106,35 @@ class PresentationParser {
     node.slideNum = slideNum;
 
     shapeTree.forEach((key, value) {
-      if (key == 'p:pic') {
-        var picList = shapeTree[key];
-        if (picList is Map<String, dynamic>) {
-          node.children.add(parseImage(picList, slideNum));
-        } else if (picList is List) {
-          picList.forEach((jsonMap) {
-            node.children.add(parseImage(jsonMap, slideNum));
-          });
-        }
-      }
-      if (key == 'p:sp') {
-        var shapeObj = shapeTree[key];
-        if (shapeObj is Map<String, dynamic>) {
-          node.children.add(parseShape(shapeObj));
-        } else if (shapeObj is List) {
-          shapeObj.forEach((jsonMap) {
-            node.children.add(parseShape(jsonMap));
-          });
-        }
-      }
-      if (key == 'p:cxnSp') {
-        var connectionShapeObj = shapeTree[key];
-        if (connectionShapeObj is Map<String, dynamic>) {
-          node.children.add(parseConnectionShape(connectionShapeObj['p:spPr']));
-        } else if (connectionShapeObj is List) {
-          connectionShapeObj.forEach((jsonMap) {
-            node.children.add(parseConnectionShape(jsonMap['p:spPr']));
-          });
-        }
+      switch (key) {
+        case KEY_PICTURE:
+          var picList = shapeTree[key];
+          if (picList is Map<String, dynamic>) {
+            node.children.add(parseImage(picList, slideNum));
+          } else if (picList is List) {
+            picList.forEach((jsonMap) {
+              node.children.add(parseImage(jsonMap, slideNum));
+            });
+          }
+        case KEY_SHAPE:
+          var shapeObj = shapeTree[key];
+          if (shapeObj is Map<String, dynamic>) {
+            node.children.add(parseShape(shapeObj));
+          } else if (shapeObj is List) {
+            shapeObj.forEach((jsonMap) {
+              node.children.add(parseShape(jsonMap));
+            });
+          }
+        case KEY_CONNECTION_SHAPE:
+          var connectionShapeObj = shapeTree[key];
+          if (connectionShapeObj is Map<String, dynamic>) {
+            node.children
+                .add(parseConnectionShape(connectionShapeObj['p:spPr']));
+          } else if (connectionShapeObj is List) {
+            connectionShapeObj.forEach((jsonMap) {
+              node.children.add(parseConnectionShape(jsonMap['p:spPr']));
+            });
+          }
       }
     });
 
@@ -156,18 +160,20 @@ class PresentationParser {
   }
 
   PrsNode parseShape(Map<String, dynamic> json) {
-    
     // Textbox
-    if (json['p:nvSpPr']?['p:cNvSpPr'] != "" && json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
+    if (json['p:nvSpPr']?['p:cNvSpPr'] != "" &&
+        json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
       return parseTextBox(json);
     }
 
-    if (json['p:nvSpPr']?['p:nvPr'] != "" && json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title') {
+    if (json['p:nvSpPr']?['p:nvPr'] != "" &&
+        json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title') {
       // title not finished yet
       return PrsNode();
     }
 
-    if (json['p:nvSpPr']?['p:nvPr'] != "" && json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body') {
+    if (json['p:nvSpPr']?['p:nvPr'] != "" &&
+        json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body') {
       // body not finished yet
       return PrsNode();
     }
@@ -176,13 +182,12 @@ class PresentationParser {
     return parseGeometry(json['p:spPr']);
   }
 
-  PrsNode parseGeometry(Map<String, dynamic> json){
-
+  PrsNode parseGeometry(Map<String, dynamic> json) {
     Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
-    double.parse(json['a:xfrm']['a:off']['_y']));
+        double.parse(json['a:xfrm']['a:off']['_y']));
 
     Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
-    double.parse(json['a:xfrm']['a:ext']['_cy']));
+        double.parse(json['a:xfrm']['a:ext']['_cy']));
 
     String shape = json['a:prstGeom']['_prst'];
 
@@ -278,7 +283,6 @@ class PresentationParser {
   }
 
   static Future<void> parsePPT(String filename) async {
-    
     File pptx = File(filename);
 
     PresentationParser parse = PresentationParser(pptx);
@@ -288,14 +292,13 @@ class PresentationParser {
     Map<String, dynamic> astJson = prsTree.toJson();
     String jsonOutput = JsonEncoder.withIndent('  ').convert(astJson);
 
-
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String appDocPath = appDocDir.path;
 
     String filePath = '$appDocPath/module.json';
 
     File('$filePath').writeAsStringSync(jsonOutput);
-    
+
     print(filePath);
   }
 }
