@@ -80,8 +80,7 @@ class PresentationParser {
       // if sldId is Map, it only contains one slide in that section
       // if sldId is List, it has at least 2 slides in that section
 
-      if (section['p14:sldIdLst'] == "") {
-      } else {
+      if (section['p14:sldIdLst'] != "") {
         if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>) {
           sectionWithSlide.add(currentSlideNumber);
           currentSlideNumber += 1;

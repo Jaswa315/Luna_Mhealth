@@ -212,6 +212,18 @@ void main() {
 
     });
 
+    test('Parser - Empty PPT', () async {
+      var filename = "Empty.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      PrsNode prsTree = parser.parsePresentation();
+      Map<String, dynamic> astJson = prsTree.toJson();
+      int lenShapes = astJson['presentation']['slides'][0]['shapes'].length;
+
+      expect(lenShapes, 0);
+    });
+
     test('Parser - Demo', () async {
       var filename = "Luna_sample_module.pptx";
       File file = File("$assetsFolder/$filename");
