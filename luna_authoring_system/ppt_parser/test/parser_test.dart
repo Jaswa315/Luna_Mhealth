@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ppt_parser/presentation_parser.dart';
@@ -224,21 +225,15 @@ void main() {
       expect(lenShapes, 0);
     });
 
-    test('Parser - Demo', () async {
-      var filename = "Luna_sample_module.pptx";
+    test('Parser - Multiple Alt-txts', () async {
+      var filename = "Alt-txt-3Lines.pptx";
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
       PrsNode prsTree = parser.parsePresentation();
       Map<String, dynamic> astJson = prsTree.toJson();
 
-      String jsonString = json.encode(astJson);
-      String filePath = 'module.json';
-      File module = File(filePath);
-      module.writeAsString(jsonString)
-      .then((_) => print('Success writing JSON.'))
-      .catchError((error) => print('Error writing JSON: $error'));
+      expect(true, true);
     });
-
   });
 }

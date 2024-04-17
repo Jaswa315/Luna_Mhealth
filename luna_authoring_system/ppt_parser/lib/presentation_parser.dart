@@ -27,7 +27,10 @@ class PresentationParser {
   dynamic xmlDocumentToJson(XmlDocument document) {
     Xml2Json xml2json = Xml2Json();
 
-    xml2json.parse(document.toXmlString());
+    // "&#xA" is equivalent to Line Feed Character (\n)
+    String processedXml = document.toXmlString().replaceAll('&#xA;', '\\n');
+
+    xml2json.parse(processedXml);
 
     return jsonDecode(xml2json.toParkerWithAttrs());
   }
