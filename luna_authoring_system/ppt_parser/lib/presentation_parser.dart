@@ -283,24 +283,4 @@ class PresentationParser {
 
     return node;
   }
-
-  static Future<void> parsePPT(String filename) async {
-    File pptx = File(filename);
-
-    PresentationParser parse = PresentationParser(pptx);
-
-    PrsNode prsTree = parse.parsePresentation();
-
-    Map<String, dynamic> astJson = prsTree.toJson();
-    String jsonOutput = JsonEncoder.withIndent('  ').convert(astJson);
-
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-
-    String filePath = '$appDocPath/module.json';
-
-    File('$filePath').writeAsStringSync(jsonOutput);
-
-    print(filePath);
-  }
 }
