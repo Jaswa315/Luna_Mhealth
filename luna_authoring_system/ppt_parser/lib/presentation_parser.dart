@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
-import 'package:path_provider/path_provider.dart';
 
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
@@ -282,5 +281,24 @@ class PresentationParser {
     node.text = json['a:t'];
 
     return node;
+  }
+
+  static PrsNode extractPrsNode(String pptxPath) {
+    File file = File(pptxPath);
+    PresentationParser parser = PresentationParser(file);
+    PrsNode prsTree = parser.parsePresentation();
+    return prsTree;
+  }
+
+  static Map<String, dynamic> extractMap(String pptxPath){
+    PrsNode prsTree = extractPrsNode(pptxPath);
+    Map<String, dynamic> astJson = prsTree.toJson();
+    return astJson;
+  }
+
+  static void extractJSON(String pptxPath, String outputPath){
+    Map<String, dynamic> astJson = extractMap(pptxPath);
+    String jsonString = jsonEncode(astJson);
+    File(outputPath).writeAsStringSync(jsonString);
   }
 }
