@@ -235,5 +235,15 @@ void main() {
 
       expect(true, true);
     });
+
+    test('toJSON returns JSON file', () async {
+      var filename = "Luna_sample_module.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      parser.toJSON("./test_module.json");
+
+      expect(true, true);
+    });
   });
 }

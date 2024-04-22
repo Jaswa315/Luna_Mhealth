@@ -283,22 +283,21 @@ class PresentationParser {
     return node;
   }
 
-  static PrsNode extractPrsNode(String pptxPath) {
-    File file = File(pptxPath);
-    PresentationParser parser = PresentationParser(file);
-    PrsNode prsTree = parser.parsePresentation();
-    return prsTree;
+  Future<PrsNode> toPrsNode() async {
+    PresentationParser parser = PresentationParser(_file);
+    return parser.parsePresentation();
   }
 
-  static Map<String, dynamic> extractMap(String pptxPath){
-    PrsNode prsTree = extractPrsNode(pptxPath);
-    Map<String, dynamic> astJson = prsTree.toJson();
-    return astJson;
+  Future<Map<String, dynamic>> toMap() async {
+    PrsNode prsTree = await toPrsNode();
+    return prsTree.toJson();
   }
 
-  static void extractJSON(String pptxPath, String outputPath){
-    Map<String, dynamic> astJson = extractMap(pptxPath);
+  Future<File> toJSON(String outputPath) async {
+    Map<String, dynamic> astJson = await toMap();
     String jsonString = jsonEncode(astJson);
-    File(outputPath).writeAsStringSync(jsonString);
+    File outputFile = File(outputPath);
+    await outputFile.writeAsString(jsonString);
+    return outputFile;
   }
 }
