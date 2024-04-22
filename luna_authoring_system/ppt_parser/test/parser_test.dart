@@ -241,9 +241,11 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./test_module.json");
 
-      expect(true, true);
+      bool fileExists = json.existsSync();
+      
+      expect(fileExists, true);
     });
   });
 }
