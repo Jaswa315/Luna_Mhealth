@@ -1,4 +1,3 @@
-import 'uid_object.dart';
 
 enum ShapeGeometry { ellipse, rectangle, line }
 
