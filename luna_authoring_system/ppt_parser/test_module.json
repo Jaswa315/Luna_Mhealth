@@ -154,6 +154,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": true,
                                                 "underline": false,
@@ -193,6 +194,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
@@ -232,6 +234,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": true,
                                                 "bold": true,
                                                 "underline": false,
@@ -271,6 +274,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
@@ -316,6 +320,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": true,
                                                 "bold": true,
                                                 "underline": true,
@@ -326,6 +331,7 @@
                                             },
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": true,
                                                 "bold": true,
                                                 "underline": true,
@@ -336,6 +342,7 @@
                                             },
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": true,
                                                 "bold": false,
                                                 "underline": true,
@@ -375,6 +382,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
@@ -500,6 +508,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
@@ -516,6 +525,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
@@ -557,6 +567,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
@@ -603,6 +614,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
@@ -659,6 +671,7 @@
                                         "textgroups": [
                                             {
                                                 "type": "text",
+                                                "uid": null,
                                                 "italics": false,
                                                 "bold": false,
                                                 "underline": false,
