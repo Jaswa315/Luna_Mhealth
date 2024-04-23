@@ -226,7 +226,7 @@ void main() {
     });
 
     test('Language is denoted as [language-Region]', () async {
-      var filename = "A Texbox in English in South Korea Region.pptx";
+      var filename = "A Texbox written in English in South Korea Region.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String language = astJson['presentation']['slides'][0]['shapes'][0]
@@ -235,7 +235,7 @@ void main() {
       expect(language, "en-KR");
     });
 
-    test('Textboxes with different language has different languages', () async {
+    test('Textboxes with different language have different languages', () async {
       var filename = "Two Textboxes in English and Korean.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
