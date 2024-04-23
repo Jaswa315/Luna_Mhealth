@@ -140,25 +140,30 @@ void main() {
       var filename = "TextBox-HelloWorld.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      List section = astJson['presentation']['section'];
+      Map<String, dynamic> section = astJson['presentation']['section'];
 
-      expect(section, []);
+      expect(section, {
+        "Default Section": [0]
+      });
     });
 
     test('N Sections return a list of slides and section names', () async {
       var filename = "Sections.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      List<dynamic> section = astJson['presentation']['section'];
+      Map<String, dynamic> section = astJson['presentation']['section'];
 
       // Default Section : slide 1
       // Section 2: slide 2,3,4
       // Section 3:
+      // Section 4: slide 5,6,7
 
-      // sequence of unique id
-      //
-
-      expect(section, ["Default Section", 0, "Section 2", 1, "Section 3"]);
+      expect(section, {
+        "Default Section": [0],
+        "Section 2": [1, 2, 3],
+        "Section 3": [],
+        "Section 4": [4, 5, 6]
+      });
     });
 
     test('Geometries are parsed with correct types', () async {
@@ -228,7 +233,7 @@ void main() {
       File json = await parser.toJSON("./test_module.json");
 
       bool fileExists = json.existsSync();
-      
+
       expect(fileExists, true);
     });
   });

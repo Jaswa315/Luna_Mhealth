@@ -64,7 +64,10 @@ class PresentationParser {
         presentationMap['p:presentation']['p:extLst']['p:ext'][0]
                 ['p14:sectionLst'] ==
             null) {
-      node.section = [];
+      node.section = {
+        PresentationNode.defulatSection:
+            List<int>.generate(node.slideCount, (index) => index)
+      };
     } else {
       node.section = parseSection(presentationMap['p:presentation']['p:extLst']
           ['p:ext'][0]['p14:sectionLst']['p14:section']);
@@ -78,13 +81,14 @@ class PresentationParser {
     return node;
   }
 
-  List parseSection(List<dynamic> json) {
-    List<dynamic> sectionWithSlide = [];
+  Map<String, dynamic> parseSection(List<dynamic> json) {
+    Map<String, dynamic> sectionWithSlide = {};
 
     int currentSlideNumber = 0;
 
     json.forEach((section) {
-      sectionWithSlide.add(section['_name']);
+      String currentSection = section['_name'];
+      sectionWithSlide[currentSection] = [];
 
       // if sldIdLst is "", it means it has 0 slides in that section
       // if sldId is Map, it only contains one slide in that section
@@ -92,12 +96,13 @@ class PresentationParser {
 
       if (section['p14:sldIdLst'] != "") {
         if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>) {
-          sectionWithSlide.add(currentSlideNumber);
+          sectionWithSlide[currentSection].add(currentSlideNumber);
           currentSlideNumber += 1;
         } else {
-          sectionWithSlide.add(currentSlideNumber);
-          List tmp = section['p14:sldIdLst']['p14:sldId'];
-          currentSlideNumber += tmp.length.toInt();
+          List slideList = section['p14:sldIdLst']['p14:sldId'];
+          sectionWithSlide[currentSection] = List<int>.generate(
+              slideList.length.toInt(), (index) => index + currentSlideNumber);
+          currentSlideNumber += slideList.length.toInt();
         }
       }
     });
