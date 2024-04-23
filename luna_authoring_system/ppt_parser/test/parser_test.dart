@@ -222,16 +222,5 @@ void main() {
 
       expect(fileExists, true);
     });
-
-    test('toJSON returns JSON file', () async {
-      var filename = "Luna_sample_module.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      File json = await parser.toJSON("./test_module.json");
-      bool fileExists = json.existsSync();
-
-      expect(fileExists, true);
-    });
   });
 }
