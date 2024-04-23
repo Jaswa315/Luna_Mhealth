@@ -203,12 +203,13 @@ void main() {
       expect(lenShapes, 0);
     });
 
-    test('alt-txts with multiple lines is parsed without any error', () async {
+    test('alt-text with line breaks is parsed without any error', () async {
       var filename = "Alt-txt-3Lines.pptx";
 
       Map<String, dynamic> astJson = await toMapFromPath(filename);
+      String altText = astJson['presentation']['slides'][0]['shapes'][0]['alttext'];
 
-      expect(true, true);
+      expect(altText, "A group of people outside of a building\n\nDescription automatically generated");
     });
 
     test('toJSON returns JSON file', () async {
@@ -216,8 +217,6 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
       File json = await parser.toJSON("./test_module.json");
       bool fileExists = json.existsSync();
 
@@ -231,7 +230,6 @@ void main() {
       PresentationParser parser = PresentationParser(file);
 
       File json = await parser.toJSON("./test_module.json");
-
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
