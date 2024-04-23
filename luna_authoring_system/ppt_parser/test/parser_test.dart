@@ -226,7 +226,7 @@ void main() {
     });
 
     test('Language is denoted as [language-Region]', () async {
-      var filename = "A Texbox in English in Korean local machine.pptx";
+      var filename = "A Texbox in English in South Korea Region.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String language = astJson['presentation']['slides'][0]['shapes'][0]
