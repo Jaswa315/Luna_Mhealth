@@ -207,9 +207,11 @@ void main() {
       var filename = "Alt-txt-3Lines.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      String altText = astJson['presentation']['slides'][0]['shapes'][0]['alttext'];
+      String altText =
+          astJson['presentation']['slides'][0]['shapes'][0]['alttext'];
 
-      expect(altText, "A group of people outside of a building\n\nDescription automatically generated");
+      expect(altText,
+          "A group of people outside of a building\n\nDescription automatically generated");
     });
 
     test('toJSON returns JSON file', () async {
@@ -223,22 +225,27 @@ void main() {
       expect(fileExists, true);
     });
 
-    test('Language locale has the right content en-US', () async {
-      var filename = "TextBox-HelloWorld.pptx";
+    test('Language is denoted as [language-Region]', () async {
+      var filename = "A Texbox in English in Korean local machine.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      String language = astJson['presentation']['slides'][0]['shapes'][0]['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      expect(language, "en-US");
-    });
-
-    test('Language locale has the right content en-KR', () async {
-      var filename = "Alt-txt-3Lines.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String language = astJson['presentation']['slides'][0]['shapes'][1]['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+      String language = astJson['presentation']['slides'][0]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
 
       expect(language, "en-KR");
+    });
+
+    test('Textboxes with different language has different languages', () async {
+      var filename = "Two Textboxes in English and Korean.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+      String language2 = astJson['presentation']['slides'][0]['shapes'][1]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      expect(language1.substring(0, 2), "ko");
+      expect(language2.substring(0, 2), "en");
     });
   });
 }
