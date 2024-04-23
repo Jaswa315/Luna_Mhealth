@@ -205,8 +205,8 @@ void main() {
 
     test('alt-text with line breaks is parsed without any error', () async {
       var filename = "Alt-txt-3Lines.pptx";
-
       Map<String, dynamic> astJson = await toMapFromPath(filename);
+
       String altText = astJson['presentation']['slides'][0]['shapes'][0]['alttext'];
 
       expect(altText, "A group of people outside of a building\n\nDescription automatically generated");
@@ -220,7 +220,6 @@ void main() {
       File json = await parser.toJSON("./test_module.json");
       bool fileExists = json.existsSync();
 
-      expect(true, true);
       expect(fileExists, true);
     });
 
