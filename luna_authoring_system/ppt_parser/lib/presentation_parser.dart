@@ -1,10 +1,17 @@
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 import 'package:archive/archive.dart';
 import 'presentation_tree.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
-import 'package:path_provider/path_provider.dart';
 
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
@@ -285,23 +292,21 @@ class PresentationParser {
     return node;
   }
 
-  static Future<void> parsePPT(String filename) async {
-    File pptx = File(filename);
+  Future<PrsNode> toPrsNode() async {
+    PresentationParser parser = PresentationParser(_file);
+    return parser.parsePresentation();
+  }
 
-    PresentationParser parse = PresentationParser(pptx);
+  Future<Map<String, dynamic>> toMap() async {
+    PrsNode prsTree = await toPrsNode();
+    return prsTree.toJson();
+  }
 
-    PrsNode prsTree = parse.parsePresentation();
-
-    Map<String, dynamic> astJson = prsTree.toJson();
-    String jsonOutput = JsonEncoder.withIndent('  ').convert(astJson);
-
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-
-    String filePath = '$appDocPath/module.json';
-
-    File('$filePath').writeAsStringSync(jsonOutput);
-
-    print(filePath);
+  Future<File> toJSON(String outputPath) async {
+    Map<String, dynamic> astJson = await toMap();
+    String jsonString = jsonEncode(astJson);
+    File outputFile = File(outputPath);
+    await outputFile.writeAsString(jsonString);
+    return outputFile;
   }
 }
