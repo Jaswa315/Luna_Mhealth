@@ -35,11 +35,6 @@ class Localization {
   // Public getter for languageLocale
   String get languageLoca => languageLocale;
 
-  // Check if a node from the data is a TextNode that needs to be localized
-  bool isTextNode(PrsNode node) {
-    return node is TextNode;
-  }
-
   // Process each node, looking for text to localize
   void _walkPrsNode(PrsNode node) {
     if (node is TextNode) {
