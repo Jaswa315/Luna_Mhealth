@@ -149,6 +149,7 @@ class TextNode extends PrsNode {
   late int? uid; // This uid will be used as a key to reference Localized UIDObjects
   late final String? color;
   late final String? highlightColor;
+  late final String? language;
   late final String? text;
 
   TextNode() {
@@ -168,6 +169,7 @@ class TextNode extends PrsNode {
       'size': size,
       'color': color,
       'highlightcolor': highlightColor,
+      'language': language,
       'text': text
     };
   }

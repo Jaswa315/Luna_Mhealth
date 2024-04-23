@@ -4,7 +4,13 @@
         "title": "PowerPoint Presentation",
         "author": "Jon Socha",
         "slideCount": 3,
-        "section": [],
+        "section": {
+            "Default Section": [
+                0,
+                1,
+                2
+            ]
+        },
         "slides": [
             {
                 "type": "slide",
@@ -161,6 +167,7 @@
                                                 "size": 2800,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "LUNA"
                                             }
                                         ]
@@ -201,6 +208,7 @@
                                                 "size": 1800,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "Health for the whole family"
                                             }
                                         ]
@@ -241,6 +249,7 @@
                                                 "size": 2000,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "How to use this app"
                                             }
                                         ]
@@ -281,6 +290,7 @@
                                                 "size": 3200,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "Start learning"
                                             }
                                         ]
@@ -327,6 +337,7 @@
                                                 "size": 1000,
                                                 "color": "tx1",
                                                 "highlightcolor": "00FF00",
+                                                "language": "en-US",
                                                 "text": "Page"
                                             },
                                             {
@@ -338,6 +349,7 @@
                                                 "size": 3200,
                                                 "color": "tx1",
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": ""
                                             },
                                             {
@@ -349,6 +361,7 @@
                                                 "size": 3200,
                                                 "color": "accent1",
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "2"
                                             }
                                         ]
@@ -389,6 +402,7 @@
                                                 "size": null,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "TestText"
                                             }
                                         ]
@@ -515,6 +529,7 @@
                                                 "size": 4400,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "Luna"
                                             }
                                         ]
@@ -532,6 +547,7 @@
                                                 "size": 2400,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": ""
                                             }
                                         ]
@@ -574,6 +590,7 @@
                                                 "size": 2400,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "Health for the Whole Family"
                                             }
                                         ]
@@ -621,6 +638,7 @@
                                                 "size": 2400,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "How to use this app"
                                             }
                                         ]
@@ -678,6 +696,7 @@
                                                 "size": 2400,
                                                 "color": null,
                                                 "highlightcolor": null,
+                                                "language": "en-US",
                                                 "text": "Start learning"
                                             }
                                         ]

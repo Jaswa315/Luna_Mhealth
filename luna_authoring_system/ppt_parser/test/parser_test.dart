@@ -222,5 +222,23 @@ void main() {
 
       expect(fileExists, true);
     });
+
+    test('Language locale has the right content en-US', () async {
+      var filename = "TextBox-HelloWorld.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String language = astJson['presentation']['slides'][0]['shapes'][0]['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      expect(language, "en-US");
+    });
+
+    test('Language locale has the right content en-KR', () async {
+      var filename = "Alt-txt-3Lines.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String language = astJson['presentation']['slides'][0]['shapes'][1]['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      expect(language, "en-KR");
+    });
   });
 }

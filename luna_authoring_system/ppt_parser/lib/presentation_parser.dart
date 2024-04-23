@@ -291,6 +291,7 @@ class PresentationParser {
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
     node.color = json['a:rPr']['a:solidFill']?['a:schemeClr']?['_val'];
     node.highlightColor = json['a:rPr']['a:highlight']?['a:srgbClr']?['_val'];
+    node.language = json['a:rPr']['_lang'];
     node.text = json['a:t'];
 
     return node;
