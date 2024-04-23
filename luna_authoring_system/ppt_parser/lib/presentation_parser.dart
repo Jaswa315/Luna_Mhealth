@@ -11,7 +11,7 @@ const String keyShape = 'p:sp';
 const String keyConnectionShape = 'p:cxnSp';
 
 class PresentationParser {
-  static late final File _file;
+  late final File _file;
 
   PresentationParser(File file) {
     _file = file;

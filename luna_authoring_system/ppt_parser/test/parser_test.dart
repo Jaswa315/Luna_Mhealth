@@ -5,55 +5,50 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ppt_parser/presentation_parser.dart';
 import 'package:ppt_parser/presentation_tree.dart';
 
+const String assetsFolder = 'test/test_assets';
+
+Future<Map<String, dynamic>> toMapFromPath(String fileName) async {
+  File file = File("$assetsFolder/$fileName");
+  PresentationParser parser = PresentationParser(file);
+  return parser.toMap();
+}
+
 void main() {
-  final String assetsFolder = 'test/test_assets';
+  group('Tests for the PPTX Parser', () {
+    test('A Textbox has content', () async {
+      // Arrange
+      var filename = "TextBox-HelloWorld.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-  group('Parser Tests', () {
-    test('Parser - Single Textbox', () async {
-      var filename = "TxtBox-HelloWorld.pptx";
-      File file = File("$assetsFolder/$filename");
-
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
-
+      // Act
       String pptText = astJson['presentation']['slides'][0]['shapes'][0]
           ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];
 
+      // Assert
       expect(pptText, "Hello, World!");
     });
 
-    test('Parser - Multiple Textboxes', () async {
-      var filename = "TxtBox-HelloWorlds.pptx";
-      File file = File("$assetsFolder/$filename");
-
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+    test('N Textboxes have contents', () async {
+      var filename = "TextBoxes.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String pptText0 = astJson['presentation']['slides'][0]['shapes'][0]
           ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];
 
-      String pptText1 = astJson['presentation']['slides'][0]['shapes'][0]
+      String pptText1 = astJson['presentation']['slides'][0]['shapes'][1]
           ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];
 
-      String pptText2 = astJson['presentation']['slides'][0]['shapes'][0]
+      String pptText2 = astJson['presentation']['slides'][0]['shapes'][2]
           ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];
 
-      expect(pptText0, "Hello, World!");
-      expect(pptText1, "Hello, World!");
-      expect(pptText2, "Hello, World!");
+      expect(pptText0, "Thing1");
+      expect(pptText1, "Thing2");
+      expect(pptText2, "Thing3");
     });
 
-    test('Parser - Single Picture', () async {
+    test('An Image has image path', () async {
       var filename = "Image-Snorlax.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String imagePath =
           astJson['presentation']['slides'][0]['shapes'][0]['path'];
@@ -61,13 +56,9 @@ void main() {
       expect(imagePath, "../media/image1.png");
     });
 
-    test('Parser - Multiple Pictures', () async {
-      var filename = "Image-Snorlaxes.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+    test('N Images has image paths', () async {
+      var filename = "Images.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String imagePath0 =
           astJson['presentation']['slides'][0]['shapes'][0]['path'];
@@ -77,17 +68,13 @@ void main() {
           astJson['presentation']['slides'][0]['shapes'][2]['path'];
 
       expect(imagePath0, "../media/image1.png");
-      expect(imagePath1, "../media/image1.png");
-      expect(imagePath2, "../media/image1.png");
+      expect(imagePath1, "../media/image2.jpeg");
+      expect(imagePath2, "../media/image3.jpeg");
     });
 
-    test('Parser - Single Connection Shape', () async {
+    test('A Connection Shape is parsed as line', () async {
       var filename = "Shapes-Connection.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String shapeType =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -95,13 +82,9 @@ void main() {
       expect(shapeType, "line");
     });
 
-    test('Parser - Multiple Connection Shapes', () async {
+    test('N Connection Shapes are parsed as line', () async {
       var filename = "Shapes-Connections.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -115,13 +98,9 @@ void main() {
       expect(shapeType2, "line");
     });
 
-    test('Parser - Geometries', () async {
+    test('N Geometries have its own type', () async {
       var filename = "Shapes-Geometries.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -138,13 +117,9 @@ void main() {
       expect(shapeType3, "ellipse");
     });
 
-    test('Parser - Order', () async {
+    test('Z Order of shapes is preserved sequentially', () async {
       var filename = "Order.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][2]['type'];
@@ -155,31 +130,24 @@ void main() {
       expect(shapeType1, "ellipse");
     });
 
-    test('Parser - Single Section', () async {
-      var filename = "TxtBox-HelloWorld.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+    test('Section has empty list for single section', () async {
+      var filename = "TextBox-HelloWorld.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       List section = astJson['presentation']['section'];
+
       expect(section, []);
     });
 
-    test('Parser - Multiple Sections', () async {
+    test('N Sections return a list of slides and section names', () async {
       var filename = "Sections.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       List<dynamic> section = astJson['presentation']['section'];
 
       // Default Section : slide 1
       // Section 2: slide 2,3,4
-      // Section 3: 
+      // Section 3:
 
       // sequence of unique id
       //
@@ -187,22 +155,25 @@ void main() {
       expect(section, ["Default Section", 0, "Section 2", 1, "Section 3"]);
     });
 
-    test('Parser - Shapes: Vanilla, Picture, Text, Line', () async {
+    test('Geometries are parsed with correct types', () async {
       var filename = "Shapes-Pictures-Texts-Lines.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
+      String shapeType0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String shapeType1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String shapeType2 =
+          astJson['presentation']['slides'][0]['shapes'][2]['type'];
+      String shapeType3 =
+          astJson['presentation']['slides'][0]['shapes'][3]['type'];
+      String shapeType4 =
+          astJson['presentation']['slides'][0]['shapes'][4]['type'];
+      String shapeType5 =
+          astJson['presentation']['slides'][0]['shapes'][5]['type'];
+      String shapeType6 =
+          astJson['presentation']['slides'][0]['shapes'][6]['type'];
 
-      String shapeType0 = astJson['presentation']['slides'][0]['shapes'][0]['type'];
-      String shapeType1 = astJson['presentation']['slides'][0]['shapes'][1]['type'];
-      String shapeType2 = astJson['presentation']['slides'][0]['shapes'][2]['type'];
-      String shapeType3 = astJson['presentation']['slides'][0]['shapes'][3]['type'];
-      String shapeType4 = astJson['presentation']['slides'][0]['shapes'][4]['type'];
-      String shapeType5 = astJson['presentation']['slides'][0]['shapes'][5]['type'];
-      String shapeType6 = astJson['presentation']['slides'][0]['shapes'][6]['type'];
-      
       expect(shapeType0, "rectangle");
       expect(shapeType1, "rectangle");
       expect(shapeType2, "ellipse");
@@ -210,30 +181,37 @@ void main() {
       expect(shapeType4, "textbox");
       expect(shapeType5, "image");
       expect(shapeType6, "line");
-
     });
 
-    test('Parser - Empty PPT', () async {
+    test('Empty PPTX has 0 shapes', () async {
       var filename = "Empty.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      PrsNode prsTree = parser.parsePresentation();
-      Map<String, dynamic> astJson = prsTree.toJson();
       int lenShapes = astJson['presentation']['slides'][0]['shapes'].length;
 
       expect(lenShapes, 0);
     });
 
-    test('Parser - Multiple Alt-txts', () async {
+    test('alt-txts with multiple lines is parsed without any error', () async {
       var filename = "Alt-txt-3Lines.pptx";
+
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      expect(true, true);
+    });
+
+    test('toJSON returns JSON file', () async {
+      var filename = "Luna_sample_module.pptx";
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
       PrsNode prsTree = parser.parsePresentation();
       Map<String, dynamic> astJson = prsTree.toJson();
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
 
       expect(true, true);
+      expect(fileExists, true);
     });
   });
 }
