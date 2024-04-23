@@ -11,8 +11,8 @@ const String keyShape = 'p:sp';
 const String keyConnectionShape = 'p:cxnSp';
 
 class PresentationParser {
-  //removed Final so the localization_test and parser_test work
-  static late File _file;
+  //removed static so the localization_test and parser_test work
+  late final File _file;
 
   PresentationParser(File file) {
     _file = file;
