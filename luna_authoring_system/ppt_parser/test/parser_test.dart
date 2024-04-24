@@ -235,7 +235,8 @@ void main() {
       expect(language, "en-KR");
     });
 
-    test('Textboxes with different language have different languages', () async {
+    test('Textboxes with different language have different languages',
+        () async {
       var filename = "Two Textboxes in English and Korean.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
@@ -246,6 +247,70 @@ void main() {
 
       expect(language1.substring(0, 2), "ko");
       expect(language2.substring(0, 2), "en");
+    });
+  });
+
+  group('Future Developments', () {
+    //TODO: Title and body text parser
+    test('Title and body are in the textbox', () async {
+      var filename = "Title and body.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String shapeType0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String shapeType1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String shapeType2 =
+          astJson['presentation']['slides'][0]['shapes'][2]['type'];
+
+      expect(shapeType0, "line");
+      expect(shapeType1, "ellipse");
+      expect(shapeType2, "image");
+    });
+
+    //TODO: Shape txBody parsing
+    test('Texts in the shape are parsed into its property', () async {
+      var filename = "Title and body.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+    });
+
+    //TODO: Shape txBody parsing: empty text
+
+    test('Vanilla shapes with texts have text content', () async {
+      var filename = "Ellipse and rectangle shapes with textbox.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String shapeType0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String text0 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['textbox']['paragraphs'][0]['textgroups'][0]['text'];
+      String shapeType1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String text1 = astJson['presentation']['slides'][0]['shapes'][1]
+          ['textbox']['paragraphs'][0]['textgroups'][0]['text'];
+
+      expect(shapeType0, "ellipse");
+      expect(shapeType1, "rectangle");
+      expect(text0, "text1");
+      expect(text1, "text2");
+    });
+
+    test('connection shape and shape are parsed as a different object',
+        () async {
+      var filename =
+          "A Shape with Textbox - A vanilla shape - a connection shape.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String shapeType0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String shapeType1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String shapeType2 =
+          astJson['presentation']['slides'][0]['shapes'][2]['type'];
+
+      expect(shapeType0, "line");
+      expect(shapeType1, "ellipse");
+      expect(shapeType2, "rectangle");
     });
   });
 }
