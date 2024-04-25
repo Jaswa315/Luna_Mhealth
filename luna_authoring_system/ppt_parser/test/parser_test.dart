@@ -88,22 +88,6 @@ void main() {
       expect(shapeType, "line");
     });
 
-    test('N Connection Shapes are parsed as line', () async {
-      var filename = "Shapes-Connections.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String shapeType0 =
-          astJson['presentation']['slides'][0]['shapes'][0]['type'];
-      String shapeType1 =
-          astJson['presentation']['slides'][0]['shapes'][1]['type'];
-      String shapeType2 =
-          astJson['presentation']['slides'][0]['shapes'][2]['type'];
-
-      expect(shapeType0, "line");
-      expect(shapeType1, "line");
-      expect(shapeType2, "line");
-    });
-
     test('N Geometries have its own type', () async {
       var filename = "Shapes-Geometries.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -235,7 +219,7 @@ void main() {
       expect(language, "en-KR");
     });
 
-    test('Textboxes with different language have different languages',
+    test('Textboxes with different language have different [language-region]',
         () async {
       var filename = "Two Textboxes in English and Korean.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -275,6 +259,22 @@ void main() {
     });
 
     //TODO: Shape txBody parsing: empty text
+
+    test('N Connection Shapes are parsed as line', () async {
+      var filename = "Shapes-Connections.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String shapeType0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String shapeType1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String shapeType2 =
+          astJson['presentation']['slides'][0]['shapes'][2]['type'];
+
+      expect(shapeType0, "line");
+      expect(shapeType1, "curvedConnector3");
+      expect(shapeType2, "bentConnector3");
+    });
 
     test('Vanilla shapes with texts have text content', () async {
       var filename = "Ellipse and rectangle shapes with textbox.pptx";

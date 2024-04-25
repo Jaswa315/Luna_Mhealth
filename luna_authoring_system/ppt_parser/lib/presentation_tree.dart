@@ -10,22 +10,11 @@ import 'uid_object.dart';
 
 enum ShapeGeometry { ellipse, rectangle, line }
 
-class Offset {
+class Position {
   final double x;
   final double y;
 
-  Offset(this.x, this.y);
-
-  Map<String, dynamic> toJson() {
-    return {'x': x, 'y': y};
-  }
-}
-
-class Size {
-  final double x;
-  final double y;
-
-  Size(this.x, this.y);
+  Position(this.x, this.y);
 
   Map<String, dynamic> toJson() {
     return {'x': x, 'y': y};
@@ -188,8 +177,8 @@ class BodyNode extends PrsNode {
 }
 
 class ShapeNode extends PrsNode {
-  late final Offset offset;
-  late final Size size;
+  late final Position offset;
+  late final Position size;
   late final ShapeGeometry shape;
 
   ShapeNode(this.offset, this.size, this.shape) {
@@ -204,8 +193,8 @@ class ShapeNode extends PrsNode {
 
 class ConnectionNode extends PrsNode {
   static const double defulatHalfLineWidth = 6350;
-  late final Offset offset;
-  late final Size size;
+  late final Position offset;
+  late final Position size;
   late final double weight;
   late final ShapeGeometry shape;
 

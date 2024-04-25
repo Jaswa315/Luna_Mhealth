@@ -197,10 +197,10 @@ class PresentationParser {
   }
 
   PrsNode parseGeometry(Map<String, dynamic> json) {
-    Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
+    Position offset = Position(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
-    Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
+    Position size = Position(double.parse(json['a:xfrm']['a:ext']['_cx']),
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
     String shape = json['a:prstGeom']['_prst'];
@@ -217,10 +217,10 @@ class PresentationParser {
   }
 
   PrsNode parseConnectionShape(Map<String, dynamic> json) {
-    Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
+    Position offset = Position(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
-    Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
+    Position size = Position(double.parse(json['a:xfrm']['a:ext']['_cx']),
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
     double weight = json['a:ln'] == null || json['a:ln']['_w'] == null
