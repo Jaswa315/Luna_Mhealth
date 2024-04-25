@@ -1,14 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'dart:convert';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ppt_parser/presentation_parser.dart';
 import 'package:ppt_parser/presentation_tree.dart';
 import 'package:ppt_parser/localization.dart';
 import 'package:luna_mhealth_mobile/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:azure_application_insights/azure_application_insights.dart';
 
 const String assetsFolder = 'test/test_assets';
 const String outputFolder = 'test/output';
