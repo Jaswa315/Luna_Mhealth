@@ -67,7 +67,7 @@ class PresentationParser {
             null) {
       node.section = {
         PresentationNode.defulatSection:
-            List<int>.generate(node.slideCount, (index) => index)
+            List<int>.generate(node.slideCount, (index) => index + 1)
       };
     } else {
       node.section = parseSection(presentationMap['p:presentation']['p:extLst']
@@ -85,7 +85,7 @@ class PresentationParser {
   Map<String, dynamic> parseSection(List<dynamic> json) {
     Map<String, dynamic> sectionWithSlide = {};
 
-    int currentSlideNumber = 0;
+    int currentSlideNumber = 1;
 
     json.forEach((section) {
       String currentSection = section['_name'];

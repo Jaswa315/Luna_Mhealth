@@ -127,7 +127,7 @@ void main() {
       Map<String, dynamic> section = astJson['presentation']['section'];
 
       expect(section, {
-        "Default Section": [0]
+        "Default Section": [1]
       });
     });
 
@@ -143,10 +143,10 @@ void main() {
       // Section 4: slide 5,6,7
 
       expect(section, {
-        "Default Section": [0],
-        "Section 2": [1, 2, 3],
+        "Default Section": [1],
+        "Section 2": [2, 3, 4],
         "Section 3": [],
-        "Section 4": [4, 5, 6]
+        "Section 4": [5, 6, 7]
       });
     });
 
