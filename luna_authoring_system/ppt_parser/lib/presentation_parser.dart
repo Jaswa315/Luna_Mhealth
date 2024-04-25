@@ -225,7 +225,7 @@ class PresentationParser {
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
     double weight = json['a:ln'] == null || json['a:ln']['_w'] == null
-        ? ConnectionNode.defulatHalfLineWidth
+        ? ConnectionNode.defaultHalfLineWidth
         : double.parse(json['a:ln']['_w']);
 
     String shape = json['a:prstGeom']['_prst'];
