@@ -59,6 +59,7 @@ class PresentationParser {
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
 
+    // parse Section
     if (presentationMap['p:presentation']['p:extLst'] == null ||
         presentationMap['p:presentation']['p:extLst']['p:ext']
             is Map<String, dynamic> ||
@@ -72,6 +73,16 @@ class PresentationParser {
     } else {
       node.section = parseSection(presentationMap['p:presentation']['p:extLst']
           ['p:ext'][0]['p14:sectionLst']['p14:section']);
+    }
+
+    // parse Slide Id List
+    var slideIdList =
+        presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
+    if (slideIdList is Map<String, dynamic>) {
+      node.slideIdList = [int.parse(slideIdList["_id"])];
+    } else {
+      node.slideIdList =
+          slideIdList.map((slide) => int.parse(slide["_id"])).toList();
     }
 
     for (int i = 1; i <= node.slideCount; i++) {
@@ -112,7 +123,6 @@ class PresentationParser {
   }
 
   PrsNode parseSlide(int slideNum) {
-
     // TODO: have to store all the slide's hyperlink info.
     // probably in another function.
     // parseSlideRels (int slideNum)
