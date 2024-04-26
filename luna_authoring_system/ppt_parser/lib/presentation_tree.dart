@@ -34,6 +34,7 @@ class PrsNode {
 }
 
 class PresentationNode extends PrsNode {
+  late final String moudleId;
   late final String title;
   late final String author;
   late final int slideCount;
@@ -50,6 +51,7 @@ class PresentationNode extends PrsNode {
     return {
       name: {
         'type': name,
+        'moduleId': moudleId,
         'title': title,
         'author': author,
         'slideCount': slideCount,

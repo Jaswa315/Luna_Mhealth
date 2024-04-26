@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
+import 'package:crypto/crypto.dart';
 
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
@@ -48,7 +49,7 @@ class PresentationParser {
     return xmlDocumentToJson(doc);
   }
 
-  PrsNode parsePresentation() {
+  Future<PrsNode> parsePresentation() async {
     PresentationNode node = PresentationNode();
 
     var coreMap = jsonFromArchive("docProps/core.xml");
@@ -58,6 +59,7 @@ class PresentationParser {
     node.title = coreMap['cp:coreProperties']['dc:title'];
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
+    node.moudleId = await createModuleId();
 
     // parse Section
     if (presentationMap['p:presentation']['p:extLst'] == null ||
@@ -91,6 +93,11 @@ class PresentationParser {
     }
 
     return node;
+  }
+
+  Future<String> createModuleId() async {
+    var hash = md5.convert(await _file.readAsBytes());
+    return hash.toString();
   }
 
   Map<String, dynamic> parseSection(List<dynamic> json) {
