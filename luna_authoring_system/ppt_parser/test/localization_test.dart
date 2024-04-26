@@ -30,7 +30,7 @@ void main() {
     test('ModuleTextElements: A PPTX with 1 Text Box results in 1 token.',
         () async {
       ModuleTextElements module_data =
-          getElementsFromPPTX("TxtBox-HelloWorld.pptx");
+          getElementsFromPPTX("TextBox-HelloWorld.pptx");
       expect(module_data.elements.length, 1);
     });
 
@@ -38,7 +38,7 @@ void main() {
         'TextElement: A PPTX with 1 Text box has expected strings and assigned UID',
         () async {
       ModuleTextElements module_data =
-          getElementsFromPPTX("TxtBox-HelloWorld.pptx");
+          getElementsFromPPTX("TextBox-HelloWorld.pptx");
       TextElement? element = module_data.elements[1];
       expect(element?.uid, 1);
       expect(element?.originalText, "Hello, World!");
@@ -49,7 +49,7 @@ void main() {
         () async {
       // Setup the localization data
       ModuleTextElements module_data =
-          getElementsFromPPTX("TxtBox-HelloWorld.pptx");
+          getElementsFromPPTX("TextBox-HelloWorld.pptx");
       String csvFilePath = '$outputFolder/${module_data.languageLocale}.csv';
       // Call generateCSV with the test output directory path
       await module_data.generateCSV(module_data.languageLocale, outputFolder);
@@ -61,7 +61,7 @@ void main() {
     test('ModuleTextElements: A PPTX with 3 Text Boxes results in 13 tokens.',
         () async {
       ModuleTextElements module_data =
-          getElementsFromPPTX("TxtBox-HelloWorlds.pptx");
+          getElementsFromPPTX("Textboxes.pptx");
       expect(module_data.elements.length, 3);
     });
 
@@ -69,10 +69,10 @@ void main() {
         'TextElement: A PPTX with 3 Text boxes has properly assigned Text Element strings and UIDs.',
         () async {
       ModuleTextElements module_data =
-          getElementsFromPPTX("TxtBox-HelloWorlds.pptx");
+          getElementsFromPPTX("Textboxes.pptx");
       TextElement? element = module_data.elements[2];
       expect(element?.uid, 2);
-      expect(element?.originalText, "Hello, World!");
+      expect(element?.originalText, "Thing2");
     });
   });
 }
