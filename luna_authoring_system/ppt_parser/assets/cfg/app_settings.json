@@ -1,9 +1,4 @@
 {
-   "key1": "value1",
-   "key2": "value2",
-   "StorageProviderType": "Local",
-   "TempAudioFolder": "audio",
-   "TempImagesFolder": "images",
    "UseApplicationInsightsLogging": true,
    "UseDartLogging": true,
    "AppInsightsInstrumentationKey": "586044d7-f63e-49e2-9735-6e0f9d15884c",

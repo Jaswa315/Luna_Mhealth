@@ -21,8 +21,8 @@ void main() {
       LogManager.createInstance();
     });
 
-    Localization setUp(var filename) {
-      File file = File("$assetsFolder/$filename");
+    Localization getObjFromPPTX(var pptx_name) {
+      File file = File("$assetsFolder/$pptx_name");
       PresentationParser parser = PresentationParser(file);
       PrsNode prsTree = parser.parsePresentation();
       localizationData = Localization(prsTree, "en-US");
@@ -32,7 +32,7 @@ void main() {
     test(
         'Localization - 1 text token, Initialization, Size Test, and Lang Locale String Match',
         () async {
-      localizationData = setUp("TxtBox-HelloWorld.pptx");
+      localizationData = getObjFromPPTX("TxtBox-HelloWorld.pptx");
       expect(localizationData.elements.length, 1);
       expect(localizationData.elements[1]?.languageLocale, "en-US");
     });
@@ -48,7 +48,7 @@ void main() {
         'Localization generateCSV - creates a CSV file in the specified directory',
         () async {
       // Setup the localization data
-      localizationData = setUp("TxtBox-HelloWorld.pptx");
+      localizationData = getObjFromPPTX("TxtBox-HelloWorld.pptx");
       String csvFilePath =
           '$outputFolder/${localizationData.languageLocale}.csv';
       // Call generateCSV with the test output directory path
@@ -62,7 +62,7 @@ void main() {
     test(
         'Localization - 3 text tokens, Initialization, Size Test, and Lang Locale String Match',
         () async {
-      localizationData = setUp("TxtBox-HelloWorlds.pptx");
+      localizationData = getObjFromPPTX("TxtBox-HelloWorlds.pptx");
       expect(localizationData.elements.length, 3);
       expect(localizationData.elements[1]?.languageLocale, "en-US");
     });
