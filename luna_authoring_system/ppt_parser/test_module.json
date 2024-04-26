@@ -6,19 +6,23 @@
         "slideCount": 3,
         "section": {
             "Default Section": [
-                0,
                 1,
-                2
+                2,
+                3
             ]
         },
+        "slideIdList": [
+            292,
+            291,
+            290
+        ],
         "slides": [
             {
                 "type": "slide",
-                "slideNum": 1,
+                "slideId": "S292",
                 "shapes": [
                     {
                         "type": "image",
-                        "imagename": "Picture 2",
                         "path": "../media/image1.jpeg",
                         "alttext": "simple illustration of a pregnant indigenous woman with the moon above her",
                         "shapes": [
@@ -31,14 +35,12 @@
                                 "size": {
                                     "x": 2161102.0,
                                     "y": 2161102.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
                     {
                         "type": "image",
-                        "imagename": "Picture 4",
                         "path": "../media/image2.png",
                         "alttext": "Free Clipart: Woman | fundacionacceso",
                         "shapes": [
@@ -51,14 +53,12 @@
                                 "size": {
                                     "x": 1913018.0,
                                     "y": 2704131.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
                     {
                         "type": "image",
-                        "imagename": "Picture 6",
                         "path": "../media/image3.png",
                         "alttext": "Free Clipart: Question Mark | rejon",
                         "shapes": [
@@ -71,14 +71,12 @@
                                 "size": {
                                     "x": 1138989.0,
                                     "y": 1797072.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
                     {
                         "type": "image",
-                        "imagename": "Picture 11",
                         "path": "../media/image4.png",
                         "alttext": null,
                         "shapes": [
@@ -91,8 +89,7 @@
                                 "size": {
                                     "x": 3132258.0,
                                     "y": 1656881.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
@@ -106,8 +103,7 @@
                             "x": 4219074.0,
                             "y": 0.0
                         },
-                        "weight": 57150.0,
-                        "shape": "line"
+                        "weight": 57150.0
                     },
                     {
                         "type": "line",
@@ -119,8 +115,7 @@
                             "x": 4219074.0,
                             "y": 0.0
                         },
-                        "weight": 57150.0,
-                        "shape": "line"
+                        "weight": 57150.0
                     },
                     {
                         "type": "line",
@@ -132,8 +127,7 @@
                             "x": 4219074.0,
                             "y": 0.0
                         },
-                        "weight": 57150.0,
-                        "shape": "line"
+                        "weight": 57150.0
                     },
                     {
                         "type": "textbox",
@@ -147,8 +141,7 @@
                                 "size": {
                                     "x": 1191352.0,
                                     "y": 523220.0
-                                },
-                                "shape": "rectangle"
+                                }
                             },
                             {
                                 "type": "textbody",
@@ -188,8 +181,7 @@
                                 "size": {
                                     "x": 2852063.0,
                                     "y": 369332.0
-                                },
-                                "shape": "rectangle"
+                                }
                             },
                             {
                                 "type": "textbody",
@@ -229,8 +221,7 @@
                                 "size": {
                                     "x": 2334293.0,
                                     "y": 400110.0
-                                },
-                                "shape": "rectangle"
+                                }
                             },
                             {
                                 "type": "textbody",
@@ -270,8 +261,7 @@
                                 "size": {
                                     "x": 2533066.0,
                                     "y": 584775.0
-                                },
-                                "shape": "rectangle"
+                                }
                             },
                             {
                                 "type": "textbody",
@@ -303,7 +293,7 @@
             },
             {
                 "type": "slide",
-                "slideNum": 2,
+                "slideId": "S291",
                 "shapes": [
                     {
                         "type": "textbox",
@@ -317,8 +307,7 @@
                                 "size": {
                                     "x": 2499454.0,
                                     "y": 584775.0
-                                },
-                                "shape": "rectangle"
+                                }
                             },
                             {
                                 "type": "textbody",
@@ -382,8 +371,7 @@
                                 "size": {
                                     "x": 1428160.0,
                                     "y": 307777.0
-                                },
-                                "shape": "rectangle"
+                                }
                             },
                             {
                                 "type": "textbody",
@@ -415,11 +403,10 @@
             },
             {
                 "type": "slide",
-                "slideNum": 3,
+                "slideId": "S290",
                 "shapes": [
                     {
                         "type": "image",
-                        "imagename": "Picture 2",
                         "path": "../media/image1.jpeg",
                         "alttext": "simple illustration of a pregnant indigenous woman with the moon above her",
                         "shapes": [
@@ -432,14 +419,12 @@
                                 "size": {
                                     "x": 2161102.0,
                                     "y": 2161102.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
                     {
                         "type": "image",
-                        "imagename": "Picture 4",
                         "path": "../media/image2.png",
                         "alttext": "Free Clipart: Woman | fundacionacceso",
                         "shapes": [
@@ -452,14 +437,12 @@
                                 "size": {
                                     "x": 1913018.0,
                                     "y": 2704131.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
                     {
                         "type": "image",
-                        "imagename": "Picture 6",
                         "path": "../media/image3.png",
                         "alttext": "Free Clipart: Question Mark | rejon",
                         "shapes": [
@@ -472,14 +455,12 @@
                                 "size": {
                                     "x": 1138989.0,
                                     "y": 1797072.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
                     {
                         "type": "image",
-                        "imagename": "Picture 11",
                         "path": "../media/image4.png",
                         "alttext": null,
                         "shapes": [
@@ -492,8 +473,7 @@
                                 "size": {
                                     "x": 3132258.0,
                                     "y": 1656881.0
-                                },
-                                "shape": "rectangle"
+                                }
                             }
                         ]
                     },
@@ -509,8 +489,7 @@
                                 "size": {
                                     "x": 4507831.0,
                                     "y": 9694962.0
-                                },
-                                "shape": "rectangle"
+                                }
                             },
                             {
                                 "type": "textbody",
@@ -730,8 +709,7 @@
                             "x": 4219074.0,
                             "y": 0.0
                         },
-                        "weight": 57150.0,
-                        "shape": "line"
+                        "weight": 57150.0
                     },
                     {
                         "type": "line",
@@ -743,8 +721,7 @@
                             "x": 4219074.0,
                             "y": 0.0
                         },
-                        "weight": 57150.0,
-                        "shape": "line"
+                        "weight": 57150.0
                     },
                     {
                         "type": "line",
@@ -756,8 +733,7 @@
                             "x": 4219074.0,
                             "y": 0.0
                         },
-                        "weight": 57150.0,
-                        "shape": "line"
+                        "weight": 57150.0
                     }
                 ]
             }

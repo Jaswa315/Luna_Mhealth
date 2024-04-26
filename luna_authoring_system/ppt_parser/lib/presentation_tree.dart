@@ -188,7 +188,7 @@ class ShapeNode extends PrsNode {
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size, "shape": shape.name};
+    return {'type': name, "offset": offset, "size": size};
   }
 }
 
@@ -205,7 +205,7 @@ class ConnectionNode extends PrsNode {
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size, "weight": weight, "shape": shape.name};
+    return {'type': name, "offset": offset, "size": size, "weight": weight};
   }
 }
 
