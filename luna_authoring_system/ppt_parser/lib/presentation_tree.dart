@@ -9,22 +9,11 @@
 
 enum ShapeGeometry { ellipse, rectangle, line }
 
-class Offset {
+class Position {
   final double x;
   final double y;
 
-  Offset(this.x, this.y);
-
-  Map<String, dynamic> toJson() {
-    return {'x': x, 'y': y};
-  }
-}
-
-class Size {
-  final double x;
-  final double y;
-
-  Size(this.x, this.y);
+  Position(this.x, this.y);
 
   Map<String, dynamic> toJson() {
     return {'x': x, 'y': y};
@@ -48,7 +37,8 @@ class PresentationNode extends PrsNode {
   late final String title;
   late final String author;
   late final int slideCount;
-  late final List section;
+  late final Map<String, dynamic> section;
+  static const String defulatSection = "Default Section";
 
   PresentationNode() {
     name = 'presentation';
@@ -147,6 +137,7 @@ class TextNode extends PrsNode {
   late int? uid; // This uid will be used as a key to reference Localized UIDObjects
   late final String? color;
   late final String? highlightColor;
+  late final String? language;
   late final String? text;
 
   TextNode() {
@@ -166,6 +157,7 @@ class TextNode extends PrsNode {
       'size': size,
       'color': color,
       'highlightcolor': highlightColor,
+      'language': language,
       'text': text
     };
   }
@@ -184,8 +176,8 @@ class BodyNode extends PrsNode {
 }
 
 class ShapeNode extends PrsNode {
-  late final Offset offset;
-  late final Size size;
+  late final Position offset;
+  late final Position size;
   late final ShapeGeometry shape;
 
   ShapeNode(this.offset, this.size, this.shape) {
@@ -199,9 +191,9 @@ class ShapeNode extends PrsNode {
 }
 
 class ConnectionNode extends PrsNode {
-  static const double defulatHalfLineWidth = 6350;
-  late final Offset offset;
-  late final Size size;
+  static const double defaultHalfLineWidth = 6350;
+  late final Position offset;
+  late final Position size;
   late final double weight;
   late final ShapeGeometry shape;
 

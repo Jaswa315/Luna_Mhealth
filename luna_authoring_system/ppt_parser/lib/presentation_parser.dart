@@ -65,7 +65,10 @@ class PresentationParser {
         presentationMap['p:presentation']['p:extLst']['p:ext'][0]
                 ['p14:sectionLst'] ==
             null) {
-      node.section = [];
+      node.section = {
+        PresentationNode.defulatSection:
+            List<int>.generate(node.slideCount, (index) => index + 1)
+      };
     } else {
       node.section = parseSection(presentationMap['p:presentation']['p:extLst']
           ['p:ext'][0]['p14:sectionLst']['p14:section']);
@@ -79,13 +82,14 @@ class PresentationParser {
     return node;
   }
 
-  List parseSection(List<dynamic> json) {
-    List<dynamic> sectionWithSlide = [];
+  Map<String, dynamic> parseSection(List<dynamic> json) {
+    Map<String, dynamic> sectionWithSlide = {};
 
-    int currentSlideNumber = 0;
+    int currentSlideNumber = 1;
 
     json.forEach((section) {
-      sectionWithSlide.add(section['_name']);
+      String currentSection = section['_name'];
+      sectionWithSlide[currentSection] = [];
 
       // if sldIdLst is "", it means it has 0 slides in that section
       // if sldId is Map, it only contains one slide in that section
@@ -93,12 +97,13 @@ class PresentationParser {
 
       if (section['p14:sldIdLst'] != "") {
         if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>) {
-          sectionWithSlide.add(currentSlideNumber);
+          sectionWithSlide[currentSection].add(currentSlideNumber);
           currentSlideNumber += 1;
         } else {
-          sectionWithSlide.add(currentSlideNumber);
-          List tmp = section['p14:sldIdLst']['p14:sldId'];
-          currentSlideNumber += tmp.length.toInt();
+          List slideList = section['p14:sldIdLst']['p14:sldId'];
+          sectionWithSlide[currentSection] = List<int>.generate(
+              slideList.length.toInt(), (index) => index + currentSlideNumber);
+          currentSlideNumber += slideList.length.toInt();
         }
       }
     });
@@ -193,10 +198,10 @@ class PresentationParser {
   }
 
   PrsNode parseGeometry(Map<String, dynamic> json) {
-    Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
+    Position offset = Position(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
-    Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
+    Position size = Position(double.parse(json['a:xfrm']['a:ext']['_cx']),
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
     String shape = json['a:prstGeom']['_prst'];
@@ -213,14 +218,14 @@ class PresentationParser {
   }
 
   PrsNode parseConnectionShape(Map<String, dynamic> json) {
-    Offset offset = Offset(double.parse(json['a:xfrm']['a:off']['_x']),
+    Position offset = Position(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
-    Size size = Size(double.parse(json['a:xfrm']['a:ext']['_cx']),
+    Position size = Position(double.parse(json['a:xfrm']['a:ext']['_cx']),
         double.parse(json['a:xfrm']['a:ext']['_cy']));
 
     double weight = json['a:ln'] == null || json['a:ln']['_w'] == null
-        ? ConnectionNode.defulatHalfLineWidth
+        ? ConnectionNode.defaultHalfLineWidth
         : double.parse(json['a:ln']['_w']);
 
     String shape = json['a:prstGeom']['_prst'];
@@ -287,6 +292,7 @@ class PresentationParser {
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
     node.color = json['a:rPr']['a:solidFill']?['a:schemeClr']?['_val'];
     node.highlightColor = json['a:rPr']['a:highlight']?['a:srgbClr']?['_val'];
+    node.language = json['a:rPr']['_lang'];
     node.text = json['a:t'];
 
     return node;
