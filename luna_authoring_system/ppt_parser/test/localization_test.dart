@@ -1,66 +1,75 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:ppt_parser/presentation_parser.dart';
 import 'package:ppt_parser/presentation_tree.dart';
 import 'package:ppt_parser/localization.dart';
+import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:global_configuration/global_configuration.dart';
 
+const String assetsFolder = 'test/test_assets';
+const String outputFolder = 'test/output';
+
+// flutter test widget needs to be loaded
 void main() {
-  final String assetsFolder = 'test/test_assets';
+  TestWidgetsFlutterBinding.ensureInitialized();
+  GlobalConfiguration().loadFromAsset("app_settings");
+
   group('Localization and LocalizationElement Class Tests', () {
-    Localization setUp(var filename) {
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-      PrsNode prsTree = parser.parsePresentation();
-      Localization localization_data = Localization(prsTree, "en-US");
-      return localization_data;
-    }
+    late Localization localizationData;
 
     setUpAll(() {
-      // we will do a test directory for CSV in the future
-      // ** TO DO ** //
-      // final testDirectory = Directory(kApplicationDocumentsPath);
-      // USE SHAUN'S TESTS FOR REFERENCE!
+      LogManager.createInstance();
     });
 
-    late Localization localization_data;
+    Localization getObjFromPPTX(var pptx_name) {
+      File file = File("$assetsFolder/$pptx_name");
+      PresentationParser parser = PresentationParser(file);
+      PrsNode prsTree = parser.parsePresentation();
+      localizationData = Localization(prsTree, "en-US");
+      return localizationData;
+    }
 
     test(
-        'Localization - Size 1, Initialization, Size Test, and Lang Locale String Match',
+        'Localization - 1 text token, Initialization, Size Test, and Lang Locale String Match',
         () async {
-      localization_data = setUp("TxtBox-HelloWorld.pptx");
-      expect(localization_data.elements.length, 1);
-      expect(localization_data.elements[1]?.languageLocale, "en-US");
+      localizationData = getObjFromPPTX("TxtBox-HelloWorld.pptx");
+      expect(localizationData.elements.length, 1);
+      expect(localizationData.elements[1]?.languageLocale, "en-US");
     });
 
-    test('Localization Elements - Retrieve by Index 1 and check element data', () async {
-      LocalizationTextElement? element = localization_data.elements[1];
+    test('Localization Elements - Retrieve by Index 1 and check element data',
+        () async {
+      LocalizationTextElement? element = localizationData.elements[1];
       expect(element?.uid, 1);
       expect(element?.originalText, "Hello, World!");
     });
 
-    //   test(
-    //       'Localization CSV was generated',
-    //       () async {
-    //     localization_data.generateCSV('/test_assets/res.csv');
-    //     // Path to the file we expect to exist
-    //     var expectedFilePath = 'test_assets/res.csv';
-
-    //     // Use File class to check for existence
-    //     var file = File(expectedFilePath);
-    //     expect(await file.exists(), isTrue);
-    //   });
-
-    test('Localization - Size 3, Initialization, Size Test, and Lang Locale String Match', () async {
-      localization_data = setUp("TxtBox-HelloWorlds.pptx");
-      expect(localization_data.elements.length, 3);
-      expect(localization_data.elements[1]?.languageLocale, "en-US");
+    test(
+        'Localization generateCSV - creates a CSV file in the specified directory',
+        () async {
+      // Setup the localization data
+      localizationData = getObjFromPPTX("TxtBox-HelloWorld.pptx");
+      String csvFilePath =
+          '$outputFolder/${localizationData.languageLocale}.csv';
+      // Call generateCSV with the test output directory path
+      await localizationData.generateCSV(
+          localizationData.languageLocale, outputFolder);
+      // Assert that the CSV file was created in the specified directory
+      final csvFile = File(csvFilePath);
+      expect(await csvFile.exists(), isTrue);
     });
 
     test(
-        'Localization Elements - Retrieve Index 2 and check element data',
+        'Localization - 3 text tokens, Initialization, Size Test, and Lang Locale String Match',
         () async {
-      LocalizationTextElement? element = localization_data.elements[2];
+      localizationData = getObjFromPPTX("TxtBox-HelloWorlds.pptx");
+      expect(localizationData.elements.length, 3);
+      expect(localizationData.elements[1]?.languageLocale, "en-US");
+    });
+
+    test('Localization Elements - Retrieve Index 2 and check element data',
+        () async {
+      LocalizationTextElement? element = localizationData.elements[2];
       expect(element?.uid, 2);
       expect(element?.originalText, "Hello, World!");
     });
