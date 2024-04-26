@@ -222,7 +222,6 @@ class ImageNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'imagename': imageName,
       'path': path,
       'alttext': altText,
       'shapes': children.map((child) => child.toJson()).toList()
