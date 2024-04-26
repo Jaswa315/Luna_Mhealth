@@ -61,6 +61,7 @@ class PresentationNode extends PrsNode {
 
 class SlideNode extends PrsNode {
   late final int slideNum;
+  late final String slideId;
 
   SlideNode() {
     name = 'slide';
@@ -70,7 +71,7 @@ class SlideNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'slideNum': slideNum,
+      slideId: slideNum,
       'shapes': children.map((child) => child.toJson()).toList()
     };
   }

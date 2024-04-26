@@ -232,6 +232,81 @@ void main() {
       expect(language1.substring(0, 2), "ko");
       expect(language2.substring(0, 2), "en");
     });
+
+    //TODO: THIS THIS THIS THIS THIS THIS THIS THIS
+    test('Same slides from the same file have the same slide id', () async {
+      var filename1 = "Slide 1 and 2.pptx";
+      var filename2 = "Slide 2 and 1.pptx";
+      Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
+      Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
+
+      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
+      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      // expect(language1.substring(0, 2), "ko");
+    });
+
+    //TODO
+    test('Every slide has different slideId even if some slides are duplicated',
+        () async {
+      var filename = "Section with Duplicate Slides.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      // expect(language1.substring(0, 2), "ko");
+    });
+
+    //TODO
+    test('Hyperlink that goes to next slide uses jump=nextslide', () async {
+      var filename = "Two slides with next slide hyperlink text.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
+      
+      // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oi29500/a65b76db-6abc-4989-8cd1-baa9a3500f6f
+
+      // in text,
+      // json["a:rPr"]["a:hlinkClick"]["_action"] is "ppaction://hlinkshowjump?jump=nextslide";
+
+      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      // expect(language1.substring(0, 2), "ko");
+    });
+
+    //TODO
+    test('Hyperlink that goes to specific slide uses rId', () async {
+      var filename = "Two slides with designated hyperlink text.pptx";
+      var filename2 = "mixed.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
+
+      // We need mapping
+
+      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
+      // in text,
+      // json["a:rPr"]["a:hlinkClick"]["_action"] is "ppaction://hlinksldjump";
+      // json["a:rPr"]["a:hlinkClick"][]"_r:id"] is "rId2"
+
+      // in the slide1.xml.rels, >> parse at [parseSlide]
+      // where the hypertext lies,
+      // "ppt/slides/_rels/slide1.xml.rels"
+      // ["Relationships"]["Relationship"] is List, (or just Map) I assume.
+      // we have to check "_Target" where "_Id" is rId2
+      // In this case, hyperlink goes to slide 2,
+      // So, "_Target" is "slide2.xml"
+
+      // 1. So, for each text, we need to know which slide it is in.
+      // 2. we go to "ppt/slides/_rels/slide1.xml.rels", and check the "_Target".
+
+      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      // expect(language1.substring(0, 2), "ko");
+    });
   });
 
   group('Future Developments', () {

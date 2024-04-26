@@ -112,6 +112,12 @@ class PresentationParser {
   }
 
   PrsNode parseSlide(int slideNum) {
+
+    // TODO: have to store all the slide's hyperlink info.
+    // probably in another function.
+    // parseSlideRels (int slideNum)
+
+    var tmp1 = jsonFromArchive("ppt/slides/_rels/slide1.xml.rels");
     SlideNode node = SlideNode();
 
     var slideMap = jsonFromArchive("ppt/slides/slide$slideNum.xml");
