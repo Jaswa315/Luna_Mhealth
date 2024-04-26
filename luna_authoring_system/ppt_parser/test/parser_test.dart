@@ -233,18 +233,29 @@ void main() {
       expect(language2.substring(0, 2), "en");
     });
 
-    //TODO: THIS THIS THIS THIS THIS THIS THIS THIS
+    test('SlideIdList is stored in Presentation Node', () async {
+      var filename1 = "Slide 1 and 2.pptx";
+
+      Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
+
+      List<dynamic> pptx1slide1 = astJson1['presentation']['slideIdList'];
+
+      expect(pptx1slide1, [256, 257]);
+    });
+
     test('Same slides from the same file have the same slide id', () async {
       var filename1 = "Slide 1 and 2.pptx";
       var filename2 = "Slide 2 and 1.pptx";
       Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
       Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
 
-      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
-      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
-      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+      String pptx1slide1 = astJson1['presentation']['slides'][0]['slideId'];
+      String pptx1slide2 = astJson1['presentation']['slides'][1]['slideId'];
+      String pptx2slide1 = astJson2['presentation']['slides'][0]['slideId'];
+      String pptx2slide2 = astJson2['presentation']['slides'][1]['slideId'];
 
-      // expect(language1.substring(0, 2), "ko");
+      expect(pptx1slide1, pptx2slide2);
+      expect(pptx1slide2, pptx2slide1);
     });
 
     //TODO
@@ -265,7 +276,7 @@ void main() {
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
-      
+
       // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oi29500/a65b76db-6abc-4989-8cd1-baa9a3500f6f
 
       // in text,

@@ -54,6 +54,7 @@ class PresentationNode extends PrsNode {
         'author': author,
         'slideCount': slideCount,
         'section' : section,
+        'slideIdList': slideIdList,
         'slides': children.map((child) => child.toJson()).toList()
       }
     };
@@ -61,7 +62,6 @@ class PresentationNode extends PrsNode {
 }
 
 class SlideNode extends PrsNode {
-  late final int slideNum;
   late final String slideId;
 
   SlideNode() {
@@ -72,7 +72,7 @@ class SlideNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      slideId: slideNum,
+      'slideId': slideId,
       'shapes': children.map((child) => child.toJson()).toList()
     };
   }

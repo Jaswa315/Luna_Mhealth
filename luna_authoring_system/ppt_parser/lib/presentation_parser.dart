@@ -86,7 +86,7 @@ class PresentationParser {
     }
 
     for (int i = 1; i <= node.slideCount; i++) {
-      PrsNode slide = parseSlide(i);
+      PrsNode slide = parseSlide(i, node.slideIdList);
       node.children.add(slide);
     }
 
@@ -122,7 +122,7 @@ class PresentationParser {
     return sectionWithSlide;
   }
 
-  PrsNode parseSlide(int slideNum) {
+  PrsNode parseSlide(int slideNum, var slideIdList) {
     // TODO: have to store all the slide's hyperlink info.
     // probably in another function.
     // parseSlideRels (int slideNum)
@@ -134,7 +134,7 @@ class PresentationParser {
 
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
 
-    node.slideNum = slideNum;
+    node.slideId = 'S${slideIdList[slideNum - 1]}';
 
     shapeTree.forEach((key, value) {
       switch (key) {
