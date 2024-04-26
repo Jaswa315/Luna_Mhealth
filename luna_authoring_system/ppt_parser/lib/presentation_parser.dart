@@ -61,6 +61,20 @@ class PresentationParser {
     node.slideCount = int.parse(appMap['Properties']['Slides']);
     node.moudleId = await createModuleId();
 
+    // parse SlideIdList
+    var slideIdList =
+        presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
+    if (slideIdList is Map<String, dynamic>) {
+      node.slideIdList = {'S${slideIdList["_id"]}': 1};
+    } else {
+      node.slideIdList = {
+        for (var slide in slideIdList)
+          'S${slide["_id"]}': slideIdList.indexOf(slide) + 1
+      };
+    }
+
+    var slideIdKeys = node.slideIdList.keys.toList();
+
     // parse Section
     if (presentationMap['p:presentation']['p:extLst'] == null ||
         presentationMap['p:presentation']['p:extLst']['p:ext']
@@ -70,25 +84,15 @@ class PresentationParser {
             null) {
       node.section = {
         PresentationNode.defulatSection:
-            List<int>.generate(node.slideCount, (index) => index + 1)
+            List<String>.generate(node.slideCount, (index) => slideIdKeys[index])
       };
     } else {
       node.section = parseSection(presentationMap['p:presentation']['p:extLst']
-          ['p:ext'][0]['p14:sectionLst']['p14:section']);
-    }
-
-    // parse Slide Id List
-    var slideIdList =
-        presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
-    if (slideIdList is Map<String, dynamic>) {
-      node.slideIdList = [int.parse(slideIdList["_id"])];
-    } else {
-      node.slideIdList =
-          slideIdList.map((slide) => int.parse(slide["_id"])).toList();
+          ['p:ext'][0]['p14:sectionLst']['p14:section'], slideIdKeys);
     }
 
     for (int i = 1; i <= node.slideCount; i++) {
-      PrsNode slide = parseSlide(i, node.slideIdList);
+      PrsNode slide = parseSlide(i, slideIdKeys);
       node.children.add(slide);
     }
 
@@ -100,10 +104,10 @@ class PresentationParser {
     return hash.toString();
   }
 
-  Map<String, dynamic> parseSection(List<dynamic> json) {
+  Map<String, dynamic> parseSection(List<dynamic> json, List slideIdKeys) {
     Map<String, dynamic> sectionWithSlide = {};
 
-    int currentSlideNumber = 1;
+    int currentSlideNumber = 0;
 
     json.forEach((section) {
       String currentSection = section['_name'];
@@ -115,12 +119,12 @@ class PresentationParser {
 
       if (section['p14:sldIdLst'] != "") {
         if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>) {
-          sectionWithSlide[currentSection].add(currentSlideNumber);
+          sectionWithSlide[currentSection].add(slideIdKeys[currentSlideNumber]);
           currentSlideNumber += 1;
         } else {
           List slideList = section['p14:sldIdLst']['p14:sldId'];
-          sectionWithSlide[currentSection] = List<int>.generate(
-              slideList.length.toInt(), (index) => index + currentSlideNumber);
+          sectionWithSlide[currentSection] = List<String>.generate(
+              slideList.length.toInt(), (index) => slideIdKeys[index + currentSlideNumber]);
           currentSlideNumber += slideList.length.toInt();
         }
       }
@@ -141,7 +145,7 @@ class PresentationParser {
 
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
 
-    node.slideId = 'S${slideIdList[slideNum - 1]}';
+    node.slideId = slideIdList[slideNum - 1];
 
     shapeTree.forEach((key, value) {
       switch (key) {

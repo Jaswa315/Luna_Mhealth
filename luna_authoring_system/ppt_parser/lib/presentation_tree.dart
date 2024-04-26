@@ -39,7 +39,7 @@ class PresentationNode extends PrsNode {
   late final String author;
   late final int slideCount;
   late final Map<String, dynamic> section;
-  late final List<dynamic> slideIdList;
+  late final Map<String, int> slideIdList;
   static const String defulatSection = "Default Section";
 
   PresentationNode() {

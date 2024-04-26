@@ -7,16 +7,16 @@
         "slideCount": 3,
         "section": {
             "Default Section": [
-                1,
-                2,
-                3
+                "S292",
+                "S291",
+                "S290"
             ]
         },
-        "slideIdList": [
-            292,
-            291,
-            290
-        ],
+        "slideIdList": {
+            "S292": 1,
+            "S291": 2,
+            "S290": 3
+        },
         "slides": [
             {
                 "type": "slide",

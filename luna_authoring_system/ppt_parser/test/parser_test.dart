@@ -125,17 +125,22 @@ void main() {
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       Map<String, dynamic> section = astJson['presentation']['section'];
+      Map<String, dynamic> sectionIdList =
+          astJson['presentation']['slideIdList'];
+      List<String> keys = sectionIdList.keys.toList();
 
       expect(section, {
-        "Default Section": [1]
+        "Default Section": [keys[0]]
       });
     });
 
     test('N Sections return a list of slides and section names', () async {
       var filename = "Sections.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
-
       Map<String, dynamic> section = astJson['presentation']['section'];
+      Map<String, dynamic> sectionIdList =
+          astJson['presentation']['slideIdList'];
+      List<String> keys = sectionIdList.keys.toList();
 
       // Default Section : slide 1
       // Section 2: slide 2,3,4
@@ -143,10 +148,10 @@ void main() {
       // Section 4: slide 5,6,7
 
       expect(section, {
-        "Default Section": [1],
-        "Section 2": [2, 3, 4],
+        "Default Section": [keys[0]],
+        "Section 2": [keys[1], keys[2], keys[3]],
         "Section 3": [],
-        "Section 4": [5, 6, 7]
+        "Section 4": [keys[4], keys[5], keys[6]]
       });
     });
 
@@ -238,9 +243,9 @@ void main() {
 
       Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
 
-      List<dynamic> pptx1slide1 = astJson1['presentation']['slideIdList'];
+      Map<String, int> pptx1slide1 = astJson1['presentation']['slideIdList'];
 
-      expect(pptx1slide1, [256, 257]);
+      expect(pptx1slide1, {'S256': 1, 'S257': 2});
     });
 
     test('Same slides from the same file have the same slide id', () async {
@@ -262,16 +267,17 @@ void main() {
         () async {
       var filename = "Duplicated Slides.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
-      List<dynamic> slideIdList = astJson['presentation']['slideIdList'];
+      Map<String, int> slideIdList = astJson['presentation']['slideIdList'];
       int slideCount = astJson['presentation']['slideCount'];
 
-      Set<dynamic> uniqueId = slideIdList.toSet();
+      Set<dynamic> uniqueId = slideIdList.keys.toList().toSet();
       int uniqueCount = uniqueId.length;
 
       expect(uniqueCount, slideCount);
     });
+  });
 
-    //TODO
+  group('TODO', () {
     test('Hyperlink that goes to next slide uses jump=nextslide', () async {
       var filename = "Two slides with next slide hyperlink text.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -289,7 +295,6 @@ void main() {
       // expect(language1.substring(0, 2), "ko");
     });
 
-    //TODO
     test('Hyperlink that goes to specific slide uses rId', () async {
       var filename = "Two slides with designated hyperlink text.pptx";
       var filename2 = "mixed.pptx";
@@ -320,8 +325,7 @@ void main() {
       // expect(language1.substring(0, 2), "ko");
     });
   });
-
-  group('Future Developments', () {
+  group('Non MVP', () {
     //TODO: Title and body text parser
     test('Title and body are in the textbox', () async {
       var filename = "Title and body.pptx";
