@@ -258,16 +258,17 @@ void main() {
       expect(pptx1slide2, pptx2slide1);
     });
 
-    //TODO
     test('Every slide has different slideId even if some slides are duplicated',
         () async {
-      var filename = "Section with Duplicate Slides.pptx";
+      var filename = "Duplicated Slides.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
+      List<dynamic> slideIdList = astJson['presentation']['slideIdList'];
+      int slideCount = astJson['presentation']['slideCount'];
 
-      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
-      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+      Set<dynamic> uniqueId = slideIdList.toSet();
+      int uniqueCount = uniqueId.length;
 
-      // expect(language1.substring(0, 2), "ko");
+      expect(uniqueCount, slideCount);
     });
 
     //TODO
