@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ppt_parser/presentation_parser.dart';
 import 'package:ppt_parser/presentation_tree.dart';
-import 'package:ppt_parser/localization.dart';
+import 'package:ppt_parser/module_text_elements.dart';
 import 'package:luna_mhealth_mobile/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
 
@@ -14,62 +14,63 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
 
-  group('Localization and LocalizationElement Class Tests', () {
-    late Localization localizationData;
-
+  group('ModuleTextElements and TextElements Class Tests', () {
     setUpAll(() {
       LogManager.createInstance();
     });
 
-    Localization getObjFromPPTX(var pptx_name) {
+    ModuleTextElements getElementsFromPPTX(var pptx_name) {
       File file = File("$assetsFolder/$pptx_name");
       PresentationParser parser = PresentationParser(file);
       PrsNode prsTree = parser.parsePresentation();
-      localizationData = Localization(prsTree, "en-US");
-      return localizationData;
+      ModuleTextElements module_data = ModuleTextElements(prsTree, "en-US");
+      return module_data;
     }
 
-    test(
-        'Localization - 1 text token, Initialization, Size Test, and Lang Locale String Match',
+    test('ModuleTextElements: A PPTX with 1 Text Box results in 1 token.',
         () async {
-      localizationData = getObjFromPPTX("TxtBox-HelloWorld.pptx");
-      expect(localizationData.elements.length, 1);
-      expect(localizationData.elements[1]?.languageLocale, "en-US");
+      ModuleTextElements module_data =
+          getElementsFromPPTX("TxtBox-HelloWorld.pptx");
+      expect(module_data.elements.length, 1);
     });
 
-    test('Localization Elements - Retrieve by Index 1 and check element data',
+    test(
+        'TextElement: A PPTX with 1 Text box has expected strings and assigned UID',
         () async {
-      LocalizationTextElement? element = localizationData.elements[1];
+      ModuleTextElements module_data =
+          getElementsFromPPTX("TxtBox-HelloWorld.pptx");
+      TextElement? element = module_data.elements[1];
       expect(element?.uid, 1);
       expect(element?.originalText, "Hello, World!");
     });
 
     test(
-        'Localization generateCSV - creates a CSV file in the specified directory',
+        'ModuleTextElements generateCSV - creates a CSV file in the specified directory',
         () async {
       // Setup the localization data
-      localizationData = getObjFromPPTX("TxtBox-HelloWorld.pptx");
-      String csvFilePath =
-          '$outputFolder/${localizationData.languageLocale}.csv';
+      ModuleTextElements module_data =
+          getElementsFromPPTX("TxtBox-HelloWorld.pptx");
+      String csvFilePath = '$outputFolder/${module_data.languageLocale}.csv';
       // Call generateCSV with the test output directory path
-      await localizationData.generateCSV(
-          localizationData.languageLocale, outputFolder);
+      await module_data.generateCSV(module_data.languageLocale, outputFolder);
       // Assert that the CSV file was created in the specified directory
       final csvFile = File(csvFilePath);
       expect(await csvFile.exists(), isTrue);
     });
 
-    test(
-        'Localization - 3 text tokens, Initialization, Size Test, and Lang Locale String Match',
+    test('ModuleTextElements: A PPTX with 3 Text Boxes results in 13 tokens.',
         () async {
-      localizationData = getObjFromPPTX("TxtBox-HelloWorlds.pptx");
-      expect(localizationData.elements.length, 3);
-      expect(localizationData.elements[1]?.languageLocale, "en-US");
+      ModuleTextElements module_data =
+          getElementsFromPPTX("TxtBox-HelloWorlds.pptx");
+      expect(module_data.elements.length, 3);
     });
 
-    test('Localization Elements - Retrieve Index 2 and check element data',
+    test(
+        'TextElement: A PPTX with 3 Text boxes has properly assigned Text Element strings and UIDs.',
         () async {
-      LocalizationTextElement? element = localizationData.elements[2];
+      ModuleTextElements module_data =
+          getElementsFromPPTX("TxtBox-HelloWorlds.pptx");
+      TextElement? element = module_data.elements[2];
       expect(element?.uid, 2);
       expect(element?.originalText, "Hello, World!");
     });
