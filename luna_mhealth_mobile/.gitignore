@@ -28,7 +28,7 @@ assets/images/
 .classpath
 .project
 .settings/
-.vscode/*
+.vscode/
 
 # Flutter repo-specific
 /bin/cache/
