@@ -38,7 +38,6 @@ class PresentationNode extends PrsNode {
   late final String author;
   late final int slideCount;
   late final Map<String, dynamic> section;
-  late final Map<String, int> slideIdList;
   late final double x;
   late final double y;
   static const String defulatSection = "Default Section";
@@ -57,8 +56,6 @@ class PresentationNode extends PrsNode {
         'author': author,
         'slideCount': slideCount,
         'section': section,
-        'slideIdList': slideIdList,
-
         'slides': children.map((child) => child.toJson()).toList()
       }
     };

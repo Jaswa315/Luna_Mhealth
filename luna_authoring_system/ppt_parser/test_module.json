@@ -1,7 +1,7 @@
 {
     "presentation": {
         "type": "presentation",
-        "moduleId": "8a582259-d324-495d-a4ed-31e40832c76a",
+        "moduleId": "27e86426-9aab-4196-9c0b-3ee0d06b7158",
         "title": "PowerPoint Presentation",
         "author": "Jon Socha",
         "slideCount": 3,
@@ -11,11 +11,6 @@
                 "S291",
                 "S290"
             ]
-        },
-        "slideIdList": {
-            "S292": 1,
-            "S291": 2,
-            "S290": 3
         },
         "slides": [
             {

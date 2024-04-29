@@ -65,16 +65,14 @@ class PresentationParser {
     // parse SlideIdList
     var slideIdList =
         presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
+    List<String> parserdSlideIdList = [];
     if (slideIdList is Map<String, dynamic>) {
-      node.slideIdList = {'S${slideIdList["_id"]}': 1};
+      parserdSlideIdList = ['S${slideIdList["_id"]}'];
     } else {
-      node.slideIdList = {
-        for (var slide in slideIdList)
-          'S${slide["_id"]}': slideIdList.indexOf(slide) + 1
-      };
+      for (var slide in slideIdList) {
+        parserdSlideIdList.add('S${slide["_id"]}');
+      }
     }
-
-    var slideIdKeys = node.slideIdList.keys.toList();
 
     // parse Section
     if (presentationMap['p:presentation']['p:extLst'] == null ||
@@ -85,17 +83,17 @@ class PresentationParser {
             null) {
       node.section = {
         PresentationNode.defulatSection: List<String>.generate(
-            node.slideCount, (index) => slideIdKeys[index])
+            node.slideCount, (index) => parserdSlideIdList[index])
       };
     } else {
       node.section = parseSection(
           presentationMap['p:presentation']['p:extLst']['p:ext'][0]
               ['p14:sectionLst']['p14:section'],
-          slideIdKeys);
+          parserdSlideIdList);
     }
 
     for (int i = 1; i <= node.slideCount; i++) {
-      PrsNode slide = parseSlide(i, slideIdKeys);
+      PrsNode slide = parseSlide(i, parserdSlideIdList);
       node.children.add(slide);
     }
 
