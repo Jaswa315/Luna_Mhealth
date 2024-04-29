@@ -9,8 +9,6 @@
 /// LocalStorageProvider
 /// Purpose: Concrete local storage provider for file access.
 
-// ignore_for_file: public_member_api_docs
-
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:luna_mhealth_mobile/storage/istorage_provider.dart';
@@ -24,6 +22,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 class LocalStorageProvider implements IStorageProvider {
   final PathProviderPlatform _pathPlatform;
 
+  /// LocalStorageProvider CTOR
   LocalStorageProvider() : _pathPlatform = PathProviderPlatform.instance;
 
   /// LocalStorageProvider CTOR w/PathProviderPlatform
@@ -88,7 +87,8 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<String>> getAllFileNames({String container = '', bool recursiveSearch = true}) async {
+  Future<List<String>> getAllFileNames(
+      {String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";
@@ -109,7 +109,8 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<Uint8List>> getAllFiles({String container = '', bool recursiveSearch = true}) async {
+  Future<List<Uint8List>> getAllFiles(
+      {String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";

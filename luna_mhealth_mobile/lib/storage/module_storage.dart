@@ -10,12 +10,11 @@
 /// Purpose: Module Storage class for module file handling.  Operates on an
 /// IStorageProvider.  Handles unpacking, packing, and validation of modules
 
-// ignore_for_file: public_member_api_docs
-
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 import 'package:luna_mhealth_mobile/models/module.dart';
 import 'package:luna_mhealth_mobile/storage/istorage_provider.dart';
 import 'package:luna_mhealth_mobile/utils/logging.dart';
@@ -42,10 +41,13 @@ import 'package:luna_mhealth_mobile/utils/logging.dart';
 /// audioFileName);
 /// ```
 class ModuleStorage {
+  /// The storage provider for the module storage
   IStorageProvider storageProvider;
+
+  /// The user path for the module storage
   final String userPath;
 
-  // CTOR.  Needs to handle userProfiles going forward.
+  /// CTOR.  Needs to handle userProfiles going forward.
   // TODO: Add a defualt profile to the parameters, uses userName currently
   ModuleStorage({IStorageProvider? provider, String userName = ""})
       : storageProvider = provider ??
@@ -53,6 +55,7 @@ class ModuleStorage {
                 GlobalConfiguration().getValue('StorageProviderType')),
         userPath = userName;
 
+  /// Updates the Module.json file in a Module.luna archive package
   Future<bool> updateModuleSchema(String moduleName, String jsonData) async {
     Archive? archive = await _getModuleArchive(moduleName);
     return await LogManager().logFunction('ModuleStorage.updateModuleSchema',
@@ -99,6 +102,7 @@ class ModuleStorage {
     });
   }
 
+  /// Loads all Module objects from the storage provider
   Future<List<Module?>> loadAllModules() async {
     return await LogManager().logFunction('ModuleStorage.loadAllModules',
         () async {
@@ -110,11 +114,12 @@ class ModuleStorage {
         Archive? archive = await _getArchiveFromBytes(moduleBytes);
 
         if (archive != null) {
-          // Grab only asset file
           for (final ArchiveFile file in archive) {
-            if (file.isFile && file.name.contains(".json")) {
-              String jsonModule =
-                  utf8.decode(Uint8List.fromList(file.content as List<int>));
+            if (file.isFile &&
+                !file.name.startsWith(AppConstants.macosSystemFilePrefix) &&
+                file.name.endsWith(".json") &&
+                file.content.isNotEmpty) {
+              String jsonModule = utf8.decode(file.content as List<int>);
               modules.add(Module.fromJson(jsonDecode(jsonModule)));
             }
           }
@@ -124,14 +129,17 @@ class ModuleStorage {
     });
   }
 
+  /// Retrieves an image asset from a Module.luna archive package
   Future<Uint8List?> getImageBytes(
       String moduleName, String imageFileName) async {
     return await LogManager().logFunction('ModuleStorage.getImageBytes',
         () async {
-      return _extractAssetFromModule(moduleName, "images/$imageFileName");
+      return _extractAssetFromModule(
+          moduleName, "$moduleName/images/$imageFileName");
     });
   }
 
+  /// Retrieves an audio asset from a Module.luna archive package
   Future<Uint8List?> getAudioBytes(
       String moduleName, String audioFileName) async {
     return await LogManager().logFunction('ModuleStorage.getAudioBytes',
@@ -140,6 +148,7 @@ class ModuleStorage {
     });
   }
 
+  /// Adds a new Module to the storage provider
   Future<Module> addModule(String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleStorage.addModule', () async {
       Module module = Module.fromJson(jsonDecode(jsonData));
@@ -161,6 +170,23 @@ class ModuleStorage {
     });
   }
 
+  /// Adds a new Module file to the storage provider
+  Future<bool> addModuleFile(String moduleName, Uint8List fileData) async {
+    return await LogManager().logFunction('ModuleStorage.addModuleFile',
+        () async {
+      String moduleFileName = _getModuleFileName(moduleName);
+      String fullModulePath = _getModuleFileNameWithPath(moduleName);
+
+      if (await storageProvider.isFileExists(fullModulePath)) {
+        throw Exception("Module already exists: $moduleFileName");
+      }
+
+      return storageProvider.saveFile(fullModulePath, fileData,
+          createContainer: true);
+    });
+  }
+
+  /// Adds an image asset to a Module.luna archive package
   Future<bool> addModuleImage(
       String moduleName, String imageFileName, Uint8List? imageBytes) async {
     return await LogManager().logFunction('ModuleStorage.addModuleImage',
@@ -179,6 +205,7 @@ class ModuleStorage {
     });
   }
 
+  /// Adds an audio asset to a Module.luna archive package
   Future<bool> addModuleAudio(
       String moduleName, String audioFileName, Uint8List? audioBytes) async {
     return await LogManager().logFunction('ModuleStorage.addModuleAudio',
@@ -197,6 +224,7 @@ class ModuleStorage {
     });
   }
 
+  /// Removes a Module from the storage provider
   Future<bool> removeModule(String moduleName) async {
     return await LogManager().logFunction('ModuleStorage.removeModule',
         () async {
@@ -212,6 +240,14 @@ class ModuleStorage {
     });
   }
 
+  /// Clears all temporary files associated with a specific module.
+  ///
+  /// The [moduleName] parameter specifies the name of the module.
+  /// This method removes all temporary image and audio files associated with the module.
+  /// The image and audio files are stored in containers specified by the 'TempImageFolder'
+  /// and 'TempAudioFolder' values from the global configuration.
+  ///
+  /// Throws an exception if there is an error while deleting the files.
   Future<void> clearAllTempFiles(String moduleName) async {
     return LogManager().logFunction('ModuleStorage.clearAllTempFiles',
         () async {
@@ -231,11 +267,13 @@ class ModuleStorage {
     });
   }
 
+  /// Validates a Module package
   bool validateModule(String moduleName) {
     // ToDo: Hook up to future Validation Classes
     return true;
   }
 
+  /// Signs a Module package
   bool signModule(String moduleName) {
     // ToDo: Hook up to future Signing Classes
     return true;
