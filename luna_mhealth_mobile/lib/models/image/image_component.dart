@@ -10,7 +10,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:luna_mhealth_mobile/core/constants/constants.dart';
-import 'package:luna_mhealth_mobile/utils/module_handler.dart';
+import 'package:luna_mhealth_mobile/core/services/module_handler_service.dart';
 
 import '../../enums/component_type.dart';
 import '../component.dart';
