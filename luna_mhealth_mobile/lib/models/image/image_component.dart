@@ -6,9 +6,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:luna_mhealth_mobile/core/constants/constants.dart';
+import 'package:luna_mhealth_mobile/utils/module_handler.dart';
 
 import '../../enums/component_type.dart';
 import '../component.dart';
@@ -18,13 +20,9 @@ class ImageComponent extends Component {
   /// The path to the image file.
   String imagePath;
 
-  /// The path to the directory containing the image file.
-  final String? directoryPath;
-
   /// Constructs a new instance of [ImageComponent] with the given [imagePath], [x], [y], [width], and [height].
   ImageComponent({
     required this.imagePath,
-    this.directoryPath,
     required double x,
     required double y,
     required double width,
@@ -38,28 +36,30 @@ class ImageComponent extends Component {
             name: 'ImageComponent');
 
   @override
-  Widget render() {
-    //print('ImageComponent.render: $imagePath');
+  Future<Widget> render([String? title]) async {
+    String imageFileName = imagePath.split('/').last;
 
-    String fullPath =
-        directoryPath != null ? '$directoryPath/$imagePath' : imagePath;
-    //print('ImageComponent.render: Full Path => $fullPath');
-    return Image(
-      image: FileImage(File(fullPath)),
-      fit: BoxFit.cover,
-      errorBuilder:
-          (BuildContext context, Object exception, StackTrace? stackTrace) {
-        return Icon(Icons.error); // Placeholder widget in case of an error
+    return FutureBuilder<Uint8List?>(
+      future: ModuleHandler.getImageBytes(title!, imageFileName),
+      builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (snapshot.hasData && snapshot.data != null) {
+          return Image.memory(snapshot.data!);
+        }
+        return Text(AppConstants.noImageErrorMessage);
       },
     );
   }
 
   /// Creates an [ImageComponent] from a JSON map.
-  static ImageComponent fromJson(Map<String, dynamic> json,
-      [String? directoryPath]) {
+  static ImageComponent fromJson(Map<String, dynamic> json) {
     return ImageComponent(
       imagePath: json['image_path'],
-      directoryPath: directoryPath,
       x: json['position']['left'].toDouble(),
       y: json['position']['top'].toDouble(),
       width: json['position']['width'].toDouble(),

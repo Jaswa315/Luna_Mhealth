@@ -37,15 +37,13 @@ class Page {
     _components.remove(component);
   }
 
-  /// Creates a Page from a JSON map.
-  factory Page.fromJson(Map<String, dynamic> json, [String? directoryPath]) {
-    print('Page.fromJson: $json');
+  /// Converts a JSON map into a Page.
+  factory Page.fromJson(Map<String, dynamic> json) {
     Page page = Page(index: json['slide_number'] as int);
-    print('Page.fromJson: Page => $page');
 
     var elements = json['elements'] as List<dynamic>;
     for (var elementJson in elements) {
-      Component? component = Component.fromJson(elementJson, directoryPath);
+      Component? component = Component.fromJson(elementJson);
       page.addComponent(component);
     }
 

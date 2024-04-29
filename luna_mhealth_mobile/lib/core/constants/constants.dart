@@ -1,15 +1,16 @@
 /// A class that contains constants used in the application.
+// ignore_for_file: public_member_api_docs
+
 class AppConstants {
   /// App name
   static const String appName = 'Luna';
 
-  /// The name of the JSON file containing the IR module data.
-  static const String lunaIRModuleName = 'luna_ir.json';
+  /// The name of the module storage user.
+  static const String moduleStorageUserName = 'userProfile';
 
   /// Error messages
-  static const String noModuleErrorMessage = 'No modules to display.';
+  static const String noImageErrorMessage = 'No image to display.';
 
-  /// File locations
-  static const String testJsonFilePath =
-      'assets/test_data/test_slide_data.json';
+  /// The prefix for macOS system files.
+  static const String macosSystemFilePrefix = "__MACOSX";
 }

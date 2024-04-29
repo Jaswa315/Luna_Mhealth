@@ -6,16 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/// Represents a component in the Luna mHealth Mobile application.
-///
-/// A component is an abstract class that defines the common properties and methods
-/// for all UI components in the application. It provides information about the type,
-/// position, size, and rendering of a component.
-///
-/// Subclasses of [Component] should implement the [load] method to load any required
-/// assets and the [render] method to render the UI for the component.
-// ignore_for_file: public_member_api_docs, comment_references
-
 import 'package:flutter/widgets.dart';
 import 'package:luna_mhealth_mobile/enums/item_type.dart';
 
@@ -25,12 +15,9 @@ import 'interfaces/clickable.dart';
 import 'item.dart';
 import 'text/text_component.dart';
 
-/// Represents an abstract component in the application.
-/// A component is an item that can be rendered on the screen and interacted with.
-/// It extends the [Item] class and implements the [Clickable] interface.
-/// The position and size of the component are represented by a [Rect].
-/// Subclasses must implement the [render] method to render the UI for the component.
-/// The component can be converted from a JSON map using the fromJson] method.
+/// A class that represents a component in the UI.
+/// Components are the building blocks of the UI and can be of different types like text, image, etc.
+/// Components can be rendered on the screen.
 abstract class Component extends Item with ChangeNotifier implements Clickable {
   /// The type of the component.
   final ComponentType type;
@@ -56,14 +43,16 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
   /// Abstract method for rendering the UI.
   /// Should be implemented by subclasses to render the UI for the component.
   /// Returns a [Widget] that represents the rendered UI for the component.
-  Widget render();
+  Future<Widget> render();
 
-  static Component fromJson(Map<String, dynamic> json, [String? directoryPath]) {
-    print('Component.fromJson: $json');
-    ComponentType? type = typeMapping[json['type']];
+  /// Converts a JSON object to a Component object.
+  ///
+  /// This method takes a [json] object and returns a Component object based on the 'type' field in the JSON.
+  static Component fromJson(Map<String, dynamic> json) {
+    ComponentType? type = _typeMapping[json['type']];
     switch (type) {
       case ComponentType.image:
-        return ImageComponent.fromJson(json, directoryPath);
+        return ImageComponent.fromJson(json);
       case ComponentType.text:
         return TextComponent.fromJson(json);
       default:
@@ -72,7 +61,8 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
   }
 }
 
-const Map<int, ComponentType> typeMapping = {
+/// A mapping of component type IDs to ComponentType enum values.
+const Map<int, ComponentType> _typeMapping = {
   13: ComponentType.image,
   17: ComponentType.text,
 };

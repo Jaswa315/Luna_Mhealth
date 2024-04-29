@@ -41,19 +41,17 @@ class Module extends Item {
     required this.height,
   }) : super(id: id ?? Uuid().v4(), name: title, itemType: ItemType.module);
 
-  /// Creates a [Module] instance from a JSON map.
+  /// A factory method that creates a [Module] object from a JSON map.
   ///
-  /// The [json] parameter is a JSON map representing the module.
-  /// The 'slides' key in the [json] map should contain a list of page JSON maps.
-  /// The 'module_name' key in the [json] map should contain the title of the module.
-  /// The 'dimensions' key in the [json] map should contain a map with 'width' and 'height' keys representing the dimensions of the module.
-  factory Module.fromJson(Map<String, dynamic> json, [String? directoryPath]) {
-    print('Module.fromJson: $json');
-    final pages = (json['slides'] as List<dynamic>)
-        .map((slideJson) => Page.fromJson(slideJson, directoryPath))
-        .toList();
+  /// The [json] parameter is a map containing the JSON data for the module.
+  /// The method parses the JSON data and returns a new [Module] object.
+  factory Module.fromJson(Map<String, dynamic> json) {
+    print('Module.fromJson: ${json['module_name']}');
 
-    print('Module.fromJson: Pages => $pages');
+    // Parse the 'slides' JSON array and convert each slide to a [Page] object
+    final pages = (json['slides'] as List<dynamic>)
+        .map((slideJson) => Page.fromJson(slideJson))
+        .toList();
 
     return Module(
       title: json['module_name'] as String,
