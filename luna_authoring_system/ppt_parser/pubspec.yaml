@@ -45,6 +45,7 @@ dependencies:
 
   luna_mhealth_mobile:
     path: ../../luna_mhealth_mobile
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
