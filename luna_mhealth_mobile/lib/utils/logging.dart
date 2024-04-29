@@ -6,6 +6,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+// ignore_for_file: constant_identifier_names
+
 import 'dart:io';
 import 'package:azure_application_insights/azure_application_insights.dart';
 import 'package:device_info/device_info.dart';
@@ -83,15 +85,15 @@ abstract class ILunaLogger {
 /// You can use the [logFunction] method to wrap your calls with logging to capture
 /// result, elapsed duration, and device context properties.  Alternately, you can
 /// use [logTrace], [logEvent], and [logError] directly.
-/// 
+///
 /// Requirements:
-/// 
+///
 /// To have LogManager calls work correctly, the Flutter Widgets Binding must be
 /// initialized and the Global Configuration must be loaded at some point in the
 /// runtime.  This will normally happen from main.dart -> run
-/// 
+///
 /// Requirements usage:
-/// 
+///
 /// ```
 /// WidgetsFlutterBinding.ensureInitialized();
 /// await GlobalConfiguration().loadFromAsset("app_settings");
@@ -123,9 +125,10 @@ class LogManager {
   /// If [populateLoggers] is true, initializes loggers based on configuration.
   /// Returns the singleton instance of the LogManager.
   static Future<LogManager> createInstance(
-      [bool populateLoggers = true]) async {    
+      [bool populateLoggers = true]) async {
     if (populateLoggers) {
-      if (GlobalConfiguration().getValue<bool>('UseApplicationInsightsLogging')) {
+      if (GlobalConfiguration()
+          .getValue<bool>('UseApplicationInsightsLogging')) {
         ILunaLogger aiLogger = await ApplicationInsightsLogger.createInstance();
         _instance._loggers.add(aiLogger);
       }
@@ -278,9 +281,9 @@ class LogManager {
   /// await lm.logFunctionSync('testMethod', () async {
   ///    method();
   /// });
-  /// 
-  /// or 
-  /// 
+  ///
+  /// or
+  ///
   /// (wrapping public method)
   /// Future<Module> addModule(String moduleName, String jsonData) async {
   ///   return await LogManager().logFunction('addModule', () async {
@@ -332,9 +335,9 @@ class VersionManager {
   }
 }
 
-/// A simple console logger implementation that logs messages using the Dart 
+/// A simple console logger implementation that logs messages using the Dart
 /// logging package.
-/// 
+///
 /// /// Recommend not using directly.  Use LogManager instead.
 class DartLogger implements ILunaLogger {
   static final DartLogger _instance = DartLogger._internal();
@@ -411,9 +414,9 @@ class DartLogger implements ILunaLogger {
 }
 
 /// A logger implementation that logs messages to Azure Application Insights
-/// 
+///
 /// Note: Must call createInstance() before using the class.
-/// 
+///
 /// Recommend not using directly.  Use LogManager instead.
 class ApplicationInsightsLogger implements ILunaLogger {
   static final ApplicationInsightsLogger _instance =
@@ -425,7 +428,7 @@ class ApplicationInsightsLogger implements ILunaLogger {
   static bool _initialized = false;
 
   /// Factory constructor returning the singleton instance of [ApplicationInsightsLogger].
-  /// 
+  ///
   /// Will throw an [Exception] if createInstance() is not called first.
   factory ApplicationInsightsLogger() {
     if (!_initialized) {
@@ -439,8 +442,8 @@ class ApplicationInsightsLogger implements ILunaLogger {
   /// Initializes the logger with the provided HTTP client and processor.
   ///
   /// If [resetInstance] is `true`, the logger instance is reset with a new TelemetryContext.
-  /// 
-  /// [Client] and [BufferedProcessor] can be passed in to augment or mock default 
+  ///
+  /// [Client] and [BufferedProcessor] can be passed in to augment or mock default
   /// behaviors.
   static Future<ApplicationInsightsLogger> createInstance(
       {bool resetInstance = false,
@@ -522,8 +525,8 @@ class ApplicationInsightsLogger implements ILunaLogger {
   }
 
   /// Initializes the device context for telemetry data.
-  /// 
-  /// Will set Device Type, Model, osVersion, etc.  /// 
+  ///
+  /// Will set Device Type, Model, osVersion, etc.  ///
   Future<void> _initDeviceContext() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     DeviceContext deviceContext = _telemetryClient.context.device;

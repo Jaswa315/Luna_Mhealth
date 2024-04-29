@@ -86,7 +86,7 @@ void main() {
       module.addPage(page);
 
       final json = module.toJson();
-
+      // FIXME: fix the logic of creating a new file
       File("test/models/module.json").writeAsStringSync(module.toString());
 
       expect(json, isMap);
