@@ -275,6 +275,38 @@ void main() {
 
       expect(uniqueCount, slideCount);
     });
+
+    // TODO: getting offset of presentation
+    test('Multiple master slide ', () async {
+      var filename = "Luna content module + template.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String x = astJson['presentation'];
+
+      expect(x, 1);
+    });
+
+    // TODO: Units into percentages
+    // set units for numbers (Position, linewidth, etc.)
+    test('Multiple presentation size', () async {
+      var filename = "Slides with multiple size 2.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String x = astJson['presentation'];
+
+      expect(x, 1);
+    });
+
+    // TODO: Units into percentages
+    // set units for numbers (Position, linewidth, etc.)
+    test('Single Image - Position is translated into percentatage', () async {
+      var filename = "Image-Snorlax.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String x = astJson['presentation'];
+
+      expect(x, 1);
+    });
   });
 
   group('TODO', () {

@@ -12,7 +12,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
-import 'package:crypto/crypto.dart';
+import 'package:uuid/uuid.dart';
 
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
@@ -21,6 +21,7 @@ const String keyConnectionShape = 'p:cxnSp';
 class PresentationParser {
   //removed static so the localization_test and parser_test work
   late final File _file;
+  static const uuidGenerator = Uuid();
 
   PresentationParser(File file) {
     _file = file;
@@ -49,7 +50,7 @@ class PresentationParser {
     return xmlDocumentToJson(doc);
   }
 
-  Future<PrsNode> parsePresentation() async {
+  PrsNode parsePresentation() {
     PresentationNode node = PresentationNode();
 
     var coreMap = jsonFromArchive("docProps/core.xml");
@@ -59,7 +60,7 @@ class PresentationParser {
     node.title = coreMap['cp:coreProperties']['dc:title'];
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
-    node.moudleId = await createModuleId();
+    node.moudleId = uuidGenerator.v4();
 
     // parse SlideIdList
     var slideIdList =
@@ -83,12 +84,14 @@ class PresentationParser {
                 ['p14:sectionLst'] ==
             null) {
       node.section = {
-        PresentationNode.defulatSection:
-            List<String>.generate(node.slideCount, (index) => slideIdKeys[index])
+        PresentationNode.defulatSection: List<String>.generate(
+            node.slideCount, (index) => slideIdKeys[index])
       };
     } else {
-      node.section = parseSection(presentationMap['p:presentation']['p:extLst']
-          ['p:ext'][0]['p14:sectionLst']['p14:section'], slideIdKeys);
+      node.section = parseSection(
+          presentationMap['p:presentation']['p:extLst']['p:ext'][0]
+              ['p14:sectionLst']['p14:section'],
+          slideIdKeys);
     }
 
     for (int i = 1; i <= node.slideCount; i++) {
@@ -97,11 +100,6 @@ class PresentationParser {
     }
 
     return node;
-  }
-
-  Future<String> createModuleId() async {
-    var hash = md5.convert(await _file.readAsBytes());
-    return hash.toString();
   }
 
   Map<String, dynamic> parseSection(List<dynamic> json, List slideIdKeys) {
@@ -124,7 +122,8 @@ class PresentationParser {
         } else {
           List slideList = section['p14:sldIdLst']['p14:sldId'];
           sectionWithSlide[currentSection] = List<String>.generate(
-              slideList.length.toInt(), (index) => slideIdKeys[index + currentSlideNumber]);
+              slideList.length.toInt(),
+              (index) => slideIdKeys[index + currentSlideNumber]);
           currentSlideNumber += slideList.length.toInt();
         }
       }

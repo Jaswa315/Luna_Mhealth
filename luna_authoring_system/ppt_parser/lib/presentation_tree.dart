@@ -6,7 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 enum ShapeGeometry { ellipse, rectangle, line }
 
 class Position {
@@ -40,6 +39,8 @@ class PresentationNode extends PrsNode {
   late final int slideCount;
   late final Map<String, dynamic> section;
   late final Map<String, int> slideIdList;
+  late final double x;
+  late final double y;
   static const String defulatSection = "Default Section";
 
   PresentationNode() {
@@ -55,8 +56,9 @@ class PresentationNode extends PrsNode {
         'title': title,
         'author': author,
         'slideCount': slideCount,
-        'section' : section,
+        'section': section,
         'slideIdList': slideIdList,
+
         'slides': children.map((child) => child.toJson()).toList()
       }
     };
@@ -95,7 +97,6 @@ class TextBoxNode extends PrsNode {
   }
 }
 
-
 class TextBodyNode extends PrsNode {
   late final String? wrap;
 
@@ -130,7 +131,7 @@ class TextParagraphNode extends PrsNode {
   }
 }
 
-// A TextNode is one text token from powerpoint. There can be multiple 
+// A TextNode is one text token from powerpoint. There can be multiple
 // text tokens in a text box. They are separated by text formatting.
 class TextNode extends PrsNode {
   // late final int? hyperlink;
@@ -138,7 +139,8 @@ class TextNode extends PrsNode {
   late final bool bold;
   late final bool underline;
   late final int? size;
-  late int? uid; // This uid will be used as a key to reference Localized UIDObjects
+  late int?
+      uid; // This uid will be used as a key to reference Localized UIDObjects
   late final String? color;
   late final String? highlightColor;
   late final String? language;
