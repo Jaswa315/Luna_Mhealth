@@ -1,0 +1,32 @@
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+import '../models/image/image_component.dart';
+import '../models/text/text_component.dart';
+import 'component_factory.dart';
+import 'image_component_renderer.dart';
+import 'text_component_renderer.dart';
+
+/// A factory class for creating component renderers.
+class ComponentFactory {
+  static final Map<Type, ComponentRenderer> _renderers = {
+    ImageComponent: ImageComponentRenderer(),
+    TextComponent: TextComponentRenderer(),
+  };
+
+  /// Returns the renderer for the specified component type.
+  ///
+  /// Throws an exception if the component type is not supported.
+  static ComponentRenderer getRenderer(Type componentType) {
+    if (_renderers.containsKey(componentType)) {
+      return _renderers[componentType]!;
+    } else {
+      throw Exception('Unsupported component type');
+    }
+  }
+}
