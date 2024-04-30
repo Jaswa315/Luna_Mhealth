@@ -8,6 +8,9 @@
 
 enum ShapeGeometry { ellipse, rectangle, line }
 
+const double contentX = 4572000;
+const double contentY = 9144000;
+
 class Position {
   final double x;
   final double y;
@@ -15,7 +18,7 @@ class Position {
   Position(this.x, this.y);
 
   Map<String, dynamic> toJson() {
-    return {'x': x, 'y': y};
+    return {'x': x / contentX, 'y': y / contentY};
   }
 }
 
@@ -206,7 +209,7 @@ class ConnectionNode extends PrsNode {
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size, "weight": weight};
+    return {'type': name, "offset": offset, "size": size, "weight": weight / contentX};
   }
 }
 

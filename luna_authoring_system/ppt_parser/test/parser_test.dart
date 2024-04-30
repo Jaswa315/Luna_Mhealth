@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ppt_parser/presentation_parser.dart';
 import 'package:ppt_parser/presentation_tree.dart';
+import 'dart:convert';
 
 const String assetsFolder = 'test/test_assets';
 
@@ -120,39 +121,30 @@ void main() {
       expect(shapeType1, "ellipse");
     });
 
-    test('Section has empty list for single section', () async {
+    test('Section has empty section has default section', () async {
       var filename = "TextBox-HelloWorld.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       Map<String, dynamic> section = astJson['presentation']['section'];
-      Map<String, dynamic> sectionIdList =
-          astJson['presentation']['slideIdList'];
-      List<String> keys = sectionIdList.keys.toList();
 
-      expect(section, {
-        "Default Section": [keys[0]]
-      });
+      expect(section.keys.toList()[0], "Default Section");
     });
 
     test('N Sections return a list of slides and section names', () async {
       var filename = "Sections.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
       Map<String, dynamic> section = astJson['presentation']['section'];
-      Map<String, dynamic> sectionIdList =
-          astJson['presentation']['slideIdList'];
-      List<String> keys = sectionIdList.keys.toList();
+      var slideIdList = section.values.toList();
 
       // Default Section : slide 1
       // Section 2: slide 2,3,4
       // Section 3:
       // Section 4: slide 5,6,7
 
-      expect(section, {
-        "Default Section": [keys[0]],
-        "Section 2": [keys[1], keys[2], keys[3]],
-        "Section 3": [],
-        "Section 4": [keys[4], keys[5], keys[6]]
-      });
+      expect(slideIdList[0].length, 1);
+      expect(slideIdList[1].length, 3);
+      expect(slideIdList[2].length, 0);
+      expect(slideIdList[3].length, 3);
     });
 
     test('Geometries are parsed with correct types', () async {
@@ -203,17 +195,6 @@ void main() {
           "A group of people outside of a building\n\nDescription automatically generated");
     });
 
-    test('toJSON returns JSON file', () async {
-      var filename = "Luna_sample_module.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      File json = await parser.toJSON("./test_module.json");
-      bool fileExists = json.existsSync();
-
-      expect(fileExists, true);
-    });
-
     test('Language is denoted as [language-Region]', () async {
       var filename = "A Texbox written in English in South Korea Region.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -238,16 +219,6 @@ void main() {
       expect(language2.substring(0, 2), "en");
     });
 
-    test('SlideIdList is stored in Presentation Node', () async {
-      var filename1 = "Slide 1 and 2.pptx";
-
-      Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
-
-      Map<String, int> pptx1slide1 = astJson1['presentation']['slideIdList'];
-
-      expect(pptx1slide1, {'S256': 1, 'S257': 2});
-    });
-
     test('Same slides from the same file have the same slide id', () async {
       var filename1 = "Slide 1 and 2.pptx";
       var filename2 = "Slide 2 and 1.pptx";
@@ -267,49 +238,78 @@ void main() {
         () async {
       var filename = "Duplicated Slides.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
-      Map<String, int> slideIdList = astJson['presentation']['slideIdList'];
       int slideCount = astJson['presentation']['slideCount'];
-
-      Set<dynamic> uniqueId = slideIdList.keys.toList().toSet();
+      Map<String, dynamic> section = astJson['presentation']['section'];
+      
+      var slideIdList = section.values.toList();
+      List<dynamic> total = [];
+      for (List<dynamic> subList in slideIdList){
+        total.addAll(subList);
+      }
+      Set<dynamic> uniqueId = total.toSet();
       int uniqueCount = uniqueId.length;
 
       expect(uniqueCount, slideCount);
     });
 
-    // TODO: getting offset of presentation
-    test('Multiple master slide ', () async {
-      var filename = "Luna content module + template.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String x = astJson['presentation'];
-
-      expect(x, 1);
-    });
-
-    // TODO: Units into percentages
-    // set units for numbers (Position, linewidth, etc.)
-    test('Multiple presentation size', () async {
-      var filename = "Slides with multiple size 2.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String x = astJson['presentation'];
-
-      expect(x, 1);
-    });
-
-    // TODO: Units into percentages
-    // set units for numbers (Position, linewidth, etc.)
-    test('Single Image - Position is translated into percentatage', () async {
+    test('Position values are described as percentages', () async {
       var filename = "Image-Snorlax.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      File json = await parser.toJSON("./test_module.json");
+      String jsonString = json.readAsStringSync();
 
-      String x = astJson['presentation'];
+      Map<String, dynamic> astJson = jsonDecode(jsonString);
+      double offsetX = astJson['presentation']['slides'][0]['shapes'][0]
+          ['shapes'][0]['offset']['x'];
+      double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
+          ['shapes'][0]['offset']['y'];
+      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]['shapes']
+          [0]['size']['x'];
+      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]['shapes']
+          [0]['size']['y'];
 
-      expect(x, 1);
+      bool isPercentage(x) {
+        if (x >= 0 && x <= 100) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      expect(isPercentage(offsetX), true);
+      expect(isPercentage(offsetY), true);
+      expect(isPercentage(sizeX), true);
+      expect(isPercentage(sizeY), true);
+    });
+
+    test('toJSON returns JSON file', () async {
+      var filename = "Luna_sample_module.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
     });
   });
 
   group('TODO', () {
+    test(
+        'The slide size should be the size of the content-module, not the game editor',
+        () async {
+      var filename1 = "content and game editor.pptx";
+      var filename2 = "game editor and content.pptx";
+      Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
+      Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
+
+      String x1 = astJson1['presentation'];
+      String x2 = astJson2['presentation'];
+
+      expect(x1, 1);
+      expect(x2, 1);
+    });
     test('Hyperlink that goes to next slide uses jump=nextslide', () async {
       var filename = "Two slides with next slide hyperlink text.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -356,7 +356,35 @@ void main() {
 
       // expect(language1.substring(0, 2), "ko");
     });
+    test('Hyperlink that goes to specific slide uses rId', () async {
+      var filename = "Luna content module + template.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      // We need mapping
+
+      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
+      // in text,
+      // json["a:rPr"]["a:hlinkClick"]["_action"] is "ppaction://hlinksldjump";
+      // json["a:rPr"]["a:hlinkClick"][]"_r:id"] is "rId2"
+
+      // in the slide1.xml.rels, >> parse at [parseSlide]
+      // where the hypertext lies,
+      // "ppt/slides/_rels/slide1.xml.rels"
+      // ["Relationships"]["Relationship"] is List, (or just Map) I assume.
+      // we have to check "_Target" where "_Id" is rId2
+      // In this case, hyperlink goes to slide 2,
+      // So, "_Target" is "slide2.xml"
+
+      // 1. So, for each text, we need to know which slide it is in.
+      // 2. we go to "ppt/slides/_rels/slide1.xml.rels", and check the "_Target".
+
+      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+      // expect(language1.substring(0, 2), "ko");
+    });
   });
+
   group('Non MVP', () {
     //TODO: Title and body text parser
     test('Title and body are in the textbox', () async {

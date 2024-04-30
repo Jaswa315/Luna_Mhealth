@@ -92,6 +92,7 @@ class PresentationParser {
           parserdSlideIdList);
     }
 
+    // TODO: Branch if the slide is game editor
     for (int i = 1; i <= node.slideCount; i++) {
       PrsNode slide = _parseSlide(i, parserdSlideIdList);
       node.children.add(slide);
