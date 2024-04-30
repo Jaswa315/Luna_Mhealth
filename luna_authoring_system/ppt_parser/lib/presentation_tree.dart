@@ -22,12 +22,17 @@ class Position {
   }
 }
 
-class PrsNode {
+mixin ToJson {
+  Map<String, dynamic> toJson();
+}
+
+class PrsNode with ToJson {
   late String name;
   List<PrsNode> children = [];
 
   PrsNode();
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       name: {'children': children.map((child) => child.toJson()).toList()}
@@ -209,7 +214,12 @@ class ConnectionNode extends PrsNode {
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size, "weight": weight / contentX};
+    return {
+      'type': name,
+      "offset": offset,
+      "size": size,
+      "weight": weight / (contentX * contentY)
+    };
   }
 }
 
@@ -228,7 +238,7 @@ class ImageNode extends PrsNode {
       'type': name,
       'path': path,
       'alttext': altText,
-      'shapes': children.map((child) => child.toJson()).toList()
+      'position': children.map((child) => child.toJson()).toList()
     };
   }
 }
