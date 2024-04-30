@@ -3,8 +3,8 @@
   "name": "This is title2",
   "itemType": "module",
   "title": "This is title2",
-  "module_name": "This is module name2",
-  "dimensions": { "width": 12.7, "height": 25.4 },
+  "module_name": "This is title2",
+  "dimensions": { "width": 100, "height": 200 },
   "slides": [
     {
       "slide_number": 1,
