@@ -9,22 +9,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:luna_mhealth_mobile/main.dart';
+import 'package:luna_mhealth_mobile/presentation/pages/home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:luna_mhealth_mobile/providers/module_provider.dart';
+import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('MyApp smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ModuleProvider()),
+        //ChangeNotifierProvider(create: (_) => ClickStateProvider()),
+      ],
+      child: MyApp(),
+    ));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that the HomePage widget is present.
+    expect(find.byType(HomePage), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the AppBar text "Luna" is present.
+    expect(find.text(AppConstants.appName), findsOneWidget);
   });
 }
