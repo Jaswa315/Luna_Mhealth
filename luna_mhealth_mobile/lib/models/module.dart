@@ -48,7 +48,10 @@ class Module extends Item {
   factory Module.fromJson(Map<String, dynamic> json) {
     print('Module.fromJson: ${json['module_name']}');
 
-    // Parse the 'slides' JSON array and convert each slide to a [Page] object
+    if (json['slides'] == null) {
+      throw FormatException('Expected a "slides" field with an array value.');
+    }
+
     final pages = (json['slides'] as List<dynamic>)
         .map((slideJson) => Page.fromJson(slideJson))
         .toList();

@@ -1,1 +1,29 @@
-{"id":"6ca0539d-d378-495b-b7ba-4126baf78f76","name":"This is title","itemType":"module","title":"This is title","description":"This is description","pages":[{"index":1,"components":[]}]}
+{
+  "id": "6ca0539d-d378-495b-b7ba-4126baf78f76",
+  "name": "This is title",
+  "itemType": "module",
+  "title": "This is title",
+  "module_name": "This is module name",
+  "dimensions": { "width": 12.7, "height": 25.4 },
+  "slides": [
+    {
+      "slide_number": 1,
+      "elements": [
+        {
+          "type": 17,
+          "position": {
+            "left": 0,
+            "top": 0,
+            "width": 100,
+            "height": 100
+          },
+          "text": "This is text",
+          "text_properties": {
+            "font_size": 20.0
+          }
+        }
+      ]
+    }
+  ],
+  "pages": [{ "index": 1, "components": [] }]
+}

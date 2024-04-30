@@ -215,7 +215,7 @@ class ModuleStorage {
       if (archive == null) {
         return false;
       }
-      String filePath = "images/$imageFileName";
+      String filePath = "$moduleName/images/$imageFileName";
 
       if (await _updateOrAddAssetToArchive(archive, filePath, imageBytes!)) {
         return _saveArchiveToFileSystem(moduleName, archive);
