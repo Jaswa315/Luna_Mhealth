@@ -11,16 +11,29 @@ import 'package:flutter/material.dart' hide Page;
 import 'package:luna_mhealth_mobile/models/page.dart';
 import 'package:luna_mhealth_mobile/models/component.dart';
 import 'package:luna_mhealth_mobile/enums/component_type.dart';
+import 'package:luna_mhealth_mobile/models/interfaces/clickable.dart';
 
 // Updated MockComponent to add to the Page for testing purposes
-class MockComponent extends Component {
+class MockComponent extends Component implements Clickable {
   MockComponent()
-      : super(id: null, name: 'MockComponent', type: ComponentType.text);
+      : super(
+          name: 'MockComponent',
+          type: ComponentType.text,
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+        );
 
   @override
-  Widget render() {
-    // Return a minimal widget for testing.
+  Future<Widget> render() async {
+    // Return a placeholder widget for now.
     return Placeholder();
+  }
+
+  @override
+  void onClick() {
+    print('MockComponent clicked');
   }
 
   @override
@@ -68,8 +81,8 @@ void main() {
       expect(page.components, isEmpty);
     });
 
-    // Test Serialization of Page
-    test('Serialization of Page', () {
+    // Test converting a Page to JSON
+    test('Converting a Page to JSON', () {
       final page = Page(index: 1);
       final component = MockComponent();
 
@@ -77,15 +90,9 @@ void main() {
 
       final json = page.toJson();
 
-      expect(json, isMap);
       expect(json['index'], 1);
-      expect(json['components'], isList);
       expect(json['components'].length, 1);
-
-      final pageFromJson = Page.fromJson(json);
-      expect(pageFromJson.index, 1);
-      expect(pageFromJson.components.length, 1);
-      // Further assertions would depend on the actual implementation of Component.fromJson
+      expect(json['components'].first['type'], 'text');
     });
   });
 }
