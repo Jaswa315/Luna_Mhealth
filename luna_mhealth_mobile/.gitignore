@@ -17,6 +17,7 @@
 test_media/
 test_media_compressed/
 assets/images/
+assets/test_data/
 
 # IntelliJ related
 *.iml
