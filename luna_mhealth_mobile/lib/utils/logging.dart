@@ -78,7 +78,7 @@ abstract class ILunaLogger {
 
 /// [LogManager] provides logging functionality and management for the Luna application.
 ///
-/// The [LogManager] class is responsible for managing a list of [ILunaloggers]
+/// The [LogManager] class is responsible for managing a list of `ILunaloggers`
 /// and providing methods for logging events, errors, and traces.
 /// It also allows adding, removing, and clearing loggers from the list.
 ///
@@ -326,6 +326,7 @@ class LogManager {
 class VersionManager {
   static String _cachedVersion = "Unknown";
 
+/// Returns the current version of the application.
   Future<String> getAppVersion() async {
     if (_cachedVersion == "Unknown") {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
