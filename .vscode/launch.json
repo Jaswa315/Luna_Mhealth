@@ -1,0 +1,54 @@
+{
+   // Use IntelliSense to learn about possible attributes.
+   // Hover to view descriptions of existing attributes.
+   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+   "version": "0.2.0",
+   "configurations": [
+      {
+         "name": "luna_mhealth_mobile",
+         "cwd": "luna_mhealth_mobile",
+         "request": "launch",
+         "type": "dart"
+      },
+      {
+         "name": "luna_mhealth_mobile (profile mode)",
+         "cwd": "luna_mhealth_mobile",
+         "request": "launch",
+         "type": "dart",
+         "flutterMode": "profile"
+      },
+      {
+         "name": "luna_mhealth_mobile (release mode)",
+         "cwd": "luna_mhealth_mobile",
+         "request": "launch",
+         "type": "dart",
+         "flutterMode": "release"
+      },
+      {
+         "name": "flutter_blue_app",
+         "cwd": "poc_sandboxes/flutter_blue_app",
+         "request": "launch",
+         "type": "dart"
+      },
+      {
+         "name": "flutter_blue_app (profile mode)",
+         "cwd": "poc_sandboxes/flutter_blue_app",
+         "request": "launch",
+         "type": "dart",
+         "flutterMode": "profile"
+      },
+      {
+         "name": "flutter_blue_app (release mode)",
+         "cwd": "poc_sandboxes/flutter_blue_app",
+         "request": "launch",
+         "type": "dart",
+         "flutterMode": "release"
+      },
+      {
+         "name": "dart_parser",
+         "cwd": "poc_sandboxes/dart_parser/dart_parser",
+         "request": "launch",
+         "type": "dart"
+      }
+   ]
+}

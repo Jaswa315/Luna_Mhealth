@@ -535,7 +535,7 @@ class ApplicationInsightsLogger implements ILunaLogger {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceContext.id = androidInfo.androidId;
+      deviceContext.id = _obfuscateDeviceID(androidInfo.androidId);
       deviceContext.model = androidInfo.model;
       deviceContext.osVersion = androidInfo.version.toString();
       deviceContext.oemName = androidInfo.manufacturer;
@@ -543,7 +543,7 @@ class ApplicationInsightsLogger implements ILunaLogger {
       deviceContext.type = 'Android';
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceContext.id = iosInfo.identifierForVendor;
+      deviceContext.id = _obfuscateDeviceID(iosInfo.identifierForVendor);
       deviceContext.model = iosInfo.model;
       deviceContext.osVersion = iosInfo.systemVersion;
       deviceContext.oemName = iosInfo.name;
@@ -566,6 +566,14 @@ class ApplicationInsightsLogger implements ILunaLogger {
       }
       deviceContext.type = deviceType;
       deviceContext.oemName = deviceOemName;
+    }
+  }
+
+  String _obfuscateDeviceID(String deviceId) {
+    if (deviceId.length > 3) {
+      return deviceId.replaceRange(deviceId.length - 3, deviceId.length, 'XXX');
+    } else {
+      return "";
     }
   }
 }
