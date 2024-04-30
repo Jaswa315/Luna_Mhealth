@@ -35,7 +35,6 @@ class ModulePageBuilderService {
       int pageIndex,
       Size screenSize,
       Widget Function(page_model.Page, Size, double) buildSlide) {
-    print("ModulePageServices buildOrRetrieveCachedPage called");
     double scale = scaleUtilities.calculateScale(screenSize, module.width);
 
     if (!cachedPages.containsKey(pageIndex)) {

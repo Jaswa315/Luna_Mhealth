@@ -112,7 +112,6 @@ class _ModulePageState extends State<ModulePage> {
   }
 
   void _setupPageWidgets() {
-    print("ModulePage _setupPageWidgets called");
     final screenSize = MediaQuery.of(context).size;
     _cachedPagesWidgets = widget.module.pages
         .asMap()
