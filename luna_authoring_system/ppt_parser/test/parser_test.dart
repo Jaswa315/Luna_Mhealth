@@ -240,10 +240,10 @@ void main() {
       Map<String, dynamic> astJson = await toMapFromPath(filename);
       int slideCount = astJson['presentation']['slideCount'];
       Map<String, dynamic> section = astJson['presentation']['section'];
-      
+
       var slideIdList = section.values.toList();
       List<dynamic> total = [];
-      for (List<dynamic> subList in slideIdList){
+      for (List<dynamic> subList in slideIdList) {
         total.addAll(subList);
       }
       Set<dynamic> uniqueId = total.toSet();
@@ -292,96 +292,6 @@ void main() {
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
-    });
-  });
-
-  group('TODO', () {
-    test(
-        'The slide size should be the size of the content-module, not the game editor',
-        () async {
-      var filename1 = "content and game editor.pptx";
-      var filename2 = "game editor and content.pptx";
-      Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
-      Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
-
-      String x1 = astJson1['presentation'];
-      String x2 = astJson2['presentation'];
-
-      expect(x1, 1);
-      expect(x2, 1);
-    });
-    test('Hyperlink that goes to next slide uses jump=nextslide', () async {
-      var filename = "Two slides with next slide hyperlink text.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
-
-      // https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oi29500/a65b76db-6abc-4989-8cd1-baa9a3500f6f
-
-      // in text,
-      // json["a:rPr"]["a:hlinkClick"]["_action"] is "ppaction://hlinkshowjump?jump=nextslide";
-
-      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
-      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      // expect(language1.substring(0, 2), "ko");
-    });
-
-    test('Hyperlink that goes to specific slide uses rId', () async {
-      var filename = "Two slides with designated hyperlink text.pptx";
-      var filename2 = "mixed.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-      Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
-
-      // We need mapping
-
-      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
-      // in text,
-      // json["a:rPr"]["a:hlinkClick"]["_action"] is "ppaction://hlinksldjump";
-      // json["a:rPr"]["a:hlinkClick"][]"_r:id"] is "rId2"
-
-      // in the slide1.xml.rels, >> parse at [parseSlide]
-      // where the hypertext lies,
-      // "ppt/slides/_rels/slide1.xml.rels"
-      // ["Relationships"]["Relationship"] is List, (or just Map) I assume.
-      // we have to check "_Target" where "_Id" is rId2
-      // In this case, hyperlink goes to slide 2,
-      // So, "_Target" is "slide2.xml"
-
-      // 1. So, for each text, we need to know which slide it is in.
-      // 2. we go to "ppt/slides/_rels/slide1.xml.rels", and check the "_Target".
-
-      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
-      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      // expect(language1.substring(0, 2), "ko");
-    });
-    test('Hyperlink that goes to specific slide uses rId', () async {
-      var filename = "Luna content module + template.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      // We need mapping
-
-      // presentationMap > p:presentation > p:sldIdLst > p;sldId > List
-      // in text,
-      // json["a:rPr"]["a:hlinkClick"]["_action"] is "ppaction://hlinksldjump";
-      // json["a:rPr"]["a:hlinkClick"][]"_r:id"] is "rId2"
-
-      // in the slide1.xml.rels, >> parse at [parseSlide]
-      // where the hypertext lies,
-      // "ppt/slides/_rels/slide1.xml.rels"
-      // ["Relationships"]["Relationship"] is List, (or just Map) I assume.
-      // we have to check "_Target" where "_Id" is rId2
-      // In this case, hyperlink goes to slide 2,
-      // So, "_Target" is "slide2.xml"
-
-      // 1. So, for each text, we need to know which slide it is in.
-      // 2. we go to "ppt/slides/_rels/slide1.xml.rels", and check the "_Target".
-
-      // String language1 = astJson['presentation']['slides'][0]['shapes'][0]
-      //     ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      // expect(language1.substring(0, 2), "ko");
     });
   });
 
