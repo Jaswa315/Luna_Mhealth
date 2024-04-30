@@ -121,7 +121,7 @@ void main() {
       expect(shapeType1, "ellipse");
     });
 
-    test('Section has empty section has default section', () async {
+    test('Section has default section if the pptx file has no section', () async {
       var filename = "TextBox-HelloWorld.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
