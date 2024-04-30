@@ -63,4 +63,24 @@ class Module extends Item {
       height: (json['dimensions']['height'] as num).toDouble(),
     );
   }
+
+  /// Converts the [Module] object to a JSON map.
+  ///
+  /// Returns a map representing the JSON data for the module.
+  Map<String, dynamic> toJson() {
+    final json = <String, dynamic>{
+      'module_name': title,
+      'dimensions': {
+        'width': width,
+        'height': height,
+      },
+      'slides': pages.map((page) => page.toJson()).toList(),
+    };
+    return json;
+  }
+
+  @override
+  String toString() {
+    return 'Module: $title';
+  }
 }
