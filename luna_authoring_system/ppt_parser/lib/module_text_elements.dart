@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'presentation_tree.dart';
-import 'package:luna_mhealth_mobile/utils/logging.dart'; // Adjust the path based on actual location
+import 'package:luna_mhealth_mobile/utils/logging.dart';
 
 /// The Text Element class is created for every text node from presentations. The node's data and translation can be stored in here.
 class TextElement {
