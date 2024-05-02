@@ -127,7 +127,7 @@ class ContentDirectoryGenerator {
         // create the folder for our new language under resources
         newLanguageDirectory.createSync(recursive: true);
         // generate the associated CSV file
-        File pptxFile = _getPPTXDirectory("$moduleDataLocation/pptx");
+        File pptxFile = _getPPTXPath("$moduleDataLocation/pptx");
         PresentationParser parser = PresentationParser(pptxFile);
         PrsNode prsTree = parser.parsePresentation();
         ModuleTextElements moduleData =
@@ -161,7 +161,7 @@ class ContentDirectoryGenerator {
   ///
   /// Throws [FileSystemException] if no PowerPoint files are found in the directory, ensuring
   /// that the calling function can handle this absence appropriately.
-  File _getPPTXDirectory(String pptxDirectoryPath) {
+  File _getPPTXPath(String pptxDirectoryPath) {
     // Create a directory object
     Directory pptxDir = Directory(pptxDirectoryPath);
 
