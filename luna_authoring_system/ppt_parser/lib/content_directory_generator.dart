@@ -127,7 +127,7 @@ class ContentDirectoryGenerator {
         // create the folder for our new language under resources
         newLanguageDirectory.createSync(recursive: true);
         // generate the associated CSV file
-        File pptxFile = _getFirstPptxFile("$moduleDataLocation/pptx");
+        File pptxFile = _getPPTXDirectory("$moduleDataLocation/pptx");
         PresentationParser parser = PresentationParser(pptxFile);
         PrsNode prsTree = parser.parsePresentation();
         ModuleTextElements moduleData =
@@ -143,9 +143,11 @@ class ContentDirectoryGenerator {
     return true;
   }
 
-  /// Retrieves the first PowerPoint file from a specified directory.
+  /// Given the content module data directory folder, 
+  /// retrieves th PowerPoint file.
+  /// 
   /// This is a private helper method that makes it easy to retrieve
-  /// the first powerpoint under the pptx/ folder in a content data directory.
+  /// the powerpoint under the pptx/ folder in a content data directory.
   /// The intent was to separate some logic from the public methods above to
   /// prevent methods from being too long.
   ///
@@ -159,7 +161,7 @@ class ContentDirectoryGenerator {
   ///
   /// Throws [FileSystemException] if no PowerPoint files are found in the directory, ensuring
   /// that the calling function can handle this absence appropriately.
-  File _getFirstPptxFile(String pptxDirectoryPath) {
+  File _getPPTXDirectory(String pptxDirectoryPath) {
     // Create a directory object
     Directory pptxDir = Directory(pptxDirectoryPath);
 
