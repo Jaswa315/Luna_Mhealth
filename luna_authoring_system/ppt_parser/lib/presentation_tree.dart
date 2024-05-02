@@ -8,8 +8,10 @@
 
 enum ShapeGeometry { ellipse, rectangle, line }
 
-const double contentX = 4572000;
-const double contentY = 9144000;
+const double emuToPointFactor = 12700;
+
+double slideWidth = 0;
+double slideHeight = 0;
 
 class Position {
   final double x;
@@ -18,7 +20,7 @@ class Position {
   Position(this.x, this.y);
 
   Map<String, dynamic> toJson() {
-    return {'x': x / contentX, 'y': y / contentY};
+    return {'x': x / slideWidth, 'y': y / slideHeight};
   }
 }
 
@@ -218,7 +220,7 @@ class ConnectionNode extends PrsNode {
       'type': name,
       "offset": offset,
       "size": size,
-      "weight": weight / (contentX * contentY)
+      "weight": weight / emuToPointFactor
     };
   }
 }

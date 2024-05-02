@@ -61,6 +61,10 @@ class PresentationParser {
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
     node.moudleId = uuidGenerator.v4();
+    slideHeight =
+        double.parse(presentationMap['p:presentation']['p:sldSz']['_cx']);
+    slideWidth =
+        double.parse(presentationMap['p:presentation']['p:sldSz']['_cy']);
 
     // parse SlideIdList
     var slideIdList =
