@@ -8,6 +8,7 @@
 
 enum ShapeGeometry { ellipse, rectangle, line }
 
+// From MS-ODRAW 1.1 Glossary
 const double emuToPointFactor = 12700;
 
 double slideWidth = 0;
