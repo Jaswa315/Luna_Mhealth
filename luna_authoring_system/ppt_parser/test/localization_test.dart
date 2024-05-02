@@ -19,27 +19,27 @@ void main() {
       LogManager.createInstance();
     });
 
-    ModuleTextElements getElementsFromPPTX(var pptx_name) {
+    Future<ModuleTextElements> getElementsFromPPTX(var pptx_name) async {
       File file = File("$assetsFolder/$pptx_name");
       PresentationParser parser = PresentationParser(file);
-      PrsNode prsTree = parser.parsePresentation();
-      ModuleTextElements module_data = ModuleTextElements(prsTree, "en-US");
-      return module_data;
+      PrsNode prsTree = await parser.toPrsNode();
+      ModuleTextElements moduleData = ModuleTextElements(prsTree, "en-US");
+      return moduleData;
     }
 
     test('ModuleTextElements: A PPTX with 1 Text Box results in 1 token.',
         () async {
-      ModuleTextElements module_data =
-          getElementsFromPPTX("TextBox-HelloWorld.pptx");
-      expect(module_data.elements.length, 1);
+      ModuleTextElements moduleData =
+          await getElementsFromPPTX("TextBox-HelloWorld.pptx");
+      expect(moduleData.elements.length, 1);
     });
 
     test(
         'TextElement: A PPTX with 1 Text box has expected strings and assigned UID',
         () async {
-      ModuleTextElements module_data =
-          getElementsFromPPTX("TextBox-HelloWorld.pptx");
-      TextElement? element = module_data.elements[1];
+      ModuleTextElements moduleData =
+          await getElementsFromPPTX("TextBox-HelloWorld.pptx");
+      TextElement? element = moduleData.elements[1];
       expect(element?.uid, 1);
       expect(element?.originalText, "Hello, World!");
     });
@@ -48,11 +48,11 @@ void main() {
         'ModuleTextElements generateCSV - creates a CSV file in the specified directory',
         () async {
       // Setup the localization data
-      ModuleTextElements module_data =
-          getElementsFromPPTX("TextBox-HelloWorld.pptx");
-      String csvFilePath = '$outputFolder/${module_data.languageLocale}.csv';
+      ModuleTextElements moduleData =
+          await getElementsFromPPTX("TextBox-HelloWorld.pptx");
+      String csvFilePath = '$outputFolder/${moduleData.languageLocale}.csv';
       // Call generateCSV with the test output directory path
-      await module_data.generateCSV(module_data.languageLocale, outputFolder);
+      await moduleData.generateCSV(moduleData.languageLocale, outputFolder);
       // Assert that the CSV file was created in the specified directory
       final csvFile = File(csvFilePath);
       expect(await csvFile.exists(), isTrue);
@@ -60,17 +60,17 @@ void main() {
 
     test('ModuleTextElements: A PPTX with 3 Text Boxes results in 13 tokens.',
         () async {
-      ModuleTextElements module_data =
-          getElementsFromPPTX("Textboxes.pptx");
-      expect(module_data.elements.length, 3);
+      ModuleTextElements moduleData =
+          await getElementsFromPPTX("Textboxes.pptx");
+      expect(moduleData.elements.length, 3);
     });
 
     test(
         'TextElement: A PPTX with 3 Text boxes has properly assigned Text Element strings and UIDs.',
         () async {
-      ModuleTextElements module_data =
-          getElementsFromPPTX("Textboxes.pptx");
-      TextElement? element = module_data.elements[2];
+      ModuleTextElements moduleData =
+          await getElementsFromPPTX("Textboxes.pptx");
+      TextElement? element = moduleData.elements[2];
       expect(element?.uid, 2);
       expect(element?.originalText, "Thing2");
     });
