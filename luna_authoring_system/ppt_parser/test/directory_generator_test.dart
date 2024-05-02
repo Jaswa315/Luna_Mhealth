@@ -35,11 +35,6 @@ void main() {
     await cleanUpGeneratedFilesAfterTest(targetRoot);
   });
 
-  tearDown(() async {
-    // Clean up after each test but keep the root directory
-    await cleanUpGeneratedFilesAfterTest(targetRoot);
-  });
-
   group(
       'Content Directory Generator Tests: Initial Directory Structure is as Expected',
       () {
@@ -66,6 +61,7 @@ void main() {
               .existsSync(),
           isTrue,
           reason: 'The resources directory should exist.');
+      await cleanUpGeneratedFilesAfterTest(targetRoot);
     });
 
     test(
@@ -76,11 +72,11 @@ void main() {
       bool success = await generator.initializeDirectory(
           powerpointLocation, "en_US", targetRoot);
       expect(success, true);
-      expect(
-          File(path.join(targetRoot, 'TextBox-HelloWorld', 'pptx',
-                  'TextBox-HelloWorld.pptx'))
-              .existsSync(),
-          isTrue);
+      bool val = await File(path.join(targetRoot, 'TextBox-HelloWorld', 'pptx',
+              'TextBox-HelloWorld.pptx'))
+          .existsSync();
+      expect(val, isTrue);
+      await cleanUpGeneratedFilesAfterTest(targetRoot);
     });
 
     test(
@@ -96,11 +92,12 @@ void main() {
 
       String csvFilePath = path.join(targetRoot, pptxName, 'module',
           'resources', language, '$language.csv');
-      File csvFile = File(csvFilePath);
+      File csvFile = await File(csvFilePath);
 
       bool fileExists = await csvFile.exists();
       expect(fileExists, isTrue,
           reason: 'CSV file should exist at $csvFilePath');
+      await cleanUpGeneratedFilesAfterTest(targetRoot);
     });
   });
 }
