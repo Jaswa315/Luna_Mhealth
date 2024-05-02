@@ -42,7 +42,7 @@ class ContentDirectoryGenerator {
       if (!targetRootDir.existsSync()) {
         LogManager().logTrace(
             'The target root directory does not exist: $targetRoot',
-            LunaSeverityLevel.Critical);
+            LunaSeverityLevel.Verbose);
         return false; // Return false immediately if the root does not exist
       }
 
@@ -53,18 +53,18 @@ class ContentDirectoryGenerator {
       }
 
       // create the content module data directory under the root
-      bool success = await _initializeFolders(pptxName, targetRoot);
+      bool success = await _initializeFolder(pptxName, targetRoot);
       if (!success) {
         LogManager().logTrace(
             'Did not create module directory structure folders',
-            LunaSeverityLevel.Information);
+            LunaSeverityLevel.Verbose);
         return false;
       }
 
       // Attempt to copy the PPTX file and handle failure
       if (!(await _copyPPTXtoPPTXFolder(pptxLocation, pptxName, targetRoot))) {
         LogManager().logTrace(
-            'Failed to copy the PPTX file.', LunaSeverityLevel.Information);
+            'Failed to copy the PPTX file.', LunaSeverityLevel.Verbose);
         return false; // Exit if the copying fails
       }
 
@@ -106,7 +106,7 @@ class ContentDirectoryGenerator {
           moduleDataLocation)) {
         LogManager().logTrace(
             'Directory structure is not valid for: $moduleDataLocation',
-            LunaSeverityLevel.Critical);
+            LunaSeverityLevel.Verbose);
         return false;
       }
 
@@ -119,7 +119,7 @@ class ContentDirectoryGenerator {
       if (newLanguageDirectory.existsSync()) {
         LogManager().logTrace(
             'Language directory already exists for: $newLanguage at $newLanguagePath',
-            LunaSeverityLevel.Critical);
+            LunaSeverityLevel.Verbose);
         return false; // Return false because the language already exists
       }
 
@@ -227,7 +227,7 @@ class ContentDirectoryGenerator {
       if (!Directory(requiredPath).existsSync()) {
         LogManager().logTrace(
             'Required directory does not exist: $requiredPath',
-            LunaSeverityLevel.Critical);
+            LunaSeverityLevel.Verbose);
         return false; // Return false if any required directory is missing
       }
     }
@@ -242,7 +242,7 @@ class ContentDirectoryGenerator {
     if (pptxFiles.length != 1) {
       LogManager().logTrace(
           'Expected exactly one PPTX file in the pptx directory, found ${pptxFiles.length}: ${requiredPaths[0]}',
-          LunaSeverityLevel.Critical);
+          LunaSeverityLevel.Verbose);
       return false;
     }
 
@@ -307,14 +307,14 @@ class ContentDirectoryGenerator {
     final file = File(fullPath);
     if (!file.existsSync()) {
       LogManager().logTrace('The specified PPTX does not exist: $fullPath',
-          LunaSeverityLevel.Critical);
+          LunaSeverityLevel.Verbose);
       return null;
     }
 
     // Ensure the file is a .pptx file
     if (path.extension(fullPath).toLowerCase() != '.pptx') {
       LogManager().logTrace('The specified file is not a .pptx file: $fullPath',
-          LunaSeverityLevel.Critical);
+          LunaSeverityLevel.Verbose);
       return null;
     }
 
@@ -336,7 +336,7 @@ class ContentDirectoryGenerator {
   ///
   /// Usage example: Initializing folders for a module called "HelloWorld" would set up directories
   /// for storing its PowerPoint file and resources.
-  Future<bool> _initializeFolders(String folderName, String root) async {
+  Future<bool> _initializeFolder(String folderName, String root) async {
     // Construct the path for the main directory under the root
     String mainFolderPath = path.join(root, folderName);
     Directory mainFolder = Directory(mainFolderPath);
@@ -377,10 +377,10 @@ class ContentDirectoryGenerator {
           LunaSeverityLevel.Information);
 
       return true; // Return true if all directories were created successfully
-    } catch (e) {
+    } catch (e, stacktrace) {
       // Handle and log any exceptions that occur during directory creation
-      LogManager().logTrace(
-          'Failed to initialize folders: $e', LunaSeverityLevel.Error);
+      LogManager().logError(
+          'Failed to initialize folders: $e', stacktrace, false);
       return false; // Return false if there was an error during the creation process
     }
   }

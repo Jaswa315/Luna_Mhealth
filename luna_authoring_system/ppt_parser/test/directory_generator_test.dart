@@ -97,7 +97,7 @@ void main() {
       bool fileExists = await csvFile.exists();
       expect(fileExists, isTrue,
           reason: 'CSV file should exist at $csvFilePath');
-      await cleanUpGeneratedFilesAfterTest(targetRoot);
+      // await cleanUpGeneratedFilesAfterTest(targetRoot);
     });
   });
 }
