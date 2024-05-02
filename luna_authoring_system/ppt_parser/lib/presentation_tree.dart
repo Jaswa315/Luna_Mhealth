@@ -6,8 +6,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 enum ShapeGeometry { ellipse, rectangle, line }
+
+// From MS-ODRAW 1.1 Glossary
+const double emuToPointFactor = 12700;
+
+double slideWidth = 0;
+double slideHeight = 0;
 
 class Position {
   final double x;
@@ -16,16 +21,21 @@ class Position {
   Position(this.x, this.y);
 
   Map<String, dynamic> toJson() {
-    return {'x': x, 'y': y};
+    return {'x': x / slideWidth, 'y': y / slideHeight};
   }
 }
 
-class PrsNode {
+mixin ToJson {
+  Map<String, dynamic> toJson();
+}
+
+class PrsNode with ToJson {
   late String name;
   List<PrsNode> children = [];
 
   PrsNode();
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       name: {'children': children.map((child) => child.toJson()).toList()}
@@ -34,10 +44,13 @@ class PrsNode {
 }
 
 class PresentationNode extends PrsNode {
+  late final String moudleId;
   late final String title;
   late final String author;
   late final int slideCount;
   late final Map<String, dynamic> section;
+  late final double x;
+  late final double y;
   static const String defulatSection = "Default Section";
 
   PresentationNode() {
@@ -49,10 +62,11 @@ class PresentationNode extends PrsNode {
     return {
       name: {
         'type': name,
+        'moduleId': moudleId,
         'title': title,
         'author': author,
         'slideCount': slideCount,
-        'section' : section,
+        'section': section,
         'slides': children.map((child) => child.toJson()).toList()
       }
     };
@@ -60,7 +74,7 @@ class PresentationNode extends PrsNode {
 }
 
 class SlideNode extends PrsNode {
-  late final int slideNum;
+  late final String slideId;
 
   SlideNode() {
     name = 'slide';
@@ -70,7 +84,7 @@ class SlideNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'slideNum': slideNum,
+      'slideId': slideId,
       'shapes': children.map((child) => child.toJson()).toList()
     };
   }
@@ -90,7 +104,6 @@ class TextBoxNode extends PrsNode {
     };
   }
 }
-
 
 class TextBodyNode extends PrsNode {
   late final String? wrap;
@@ -126,7 +139,7 @@ class TextParagraphNode extends PrsNode {
   }
 }
 
-// A TextNode is one text token from powerpoint. There can be multiple 
+// A TextNode is one text token from powerpoint. There can be multiple
 // text tokens in a text box. They are separated by text formatting.
 class TextNode extends PrsNode {
   // late final int? hyperlink;
@@ -134,7 +147,8 @@ class TextNode extends PrsNode {
   late final bool bold;
   late final bool underline;
   late final int? size;
-  late int? uid; // This uid will be used as a key to reference Localized UIDObjects
+  late int?
+      uid; // This uid will be used as a key to reference Localized UIDObjects
   late final String? color;
   late final String? highlightColor;
   late final String? language;
@@ -186,7 +200,7 @@ class ShapeNode extends PrsNode {
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size, "shape": shape.name};
+    return {'type': name, "offset": offset, "size": size};
   }
 }
 
@@ -203,7 +217,12 @@ class ConnectionNode extends PrsNode {
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size, "weight": weight, "shape": shape.name};
+    return {
+      'type': name,
+      "offset": offset,
+      "size": size,
+      "weight": weight / emuToPointFactor
+    };
   }
 }
 
@@ -220,10 +239,9 @@ class ImageNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'imagename': imageName,
       'path': path,
       'alttext': altText,
-      'shapes': children.map((child) => child.toJson()).toList()
+      'position': children.map((child) => child.toJson()).toList()
     };
   }
 }

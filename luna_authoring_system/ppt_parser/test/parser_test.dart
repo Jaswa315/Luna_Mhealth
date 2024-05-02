@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ppt_parser/presentation_parser.dart';
 import 'package:ppt_parser/presentation_tree.dart';
+import 'dart:convert';
 
 const String assetsFolder = 'test/test_assets';
 
@@ -120,34 +121,30 @@ void main() {
       expect(shapeType1, "ellipse");
     });
 
-    test('Section has empty list for single section', () async {
+    test('Section has default section if the pptx file has no section', () async {
       var filename = "TextBox-HelloWorld.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       Map<String, dynamic> section = astJson['presentation']['section'];
 
-      expect(section, {
-        "Default Section": [1]
-      });
+      expect(section.keys.toList()[0], "Default Section");
     });
 
     test('N Sections return a list of slides and section names', () async {
       var filename = "Sections.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
-
       Map<String, dynamic> section = astJson['presentation']['section'];
+      var slideIdList = section.values.toList();
 
       // Default Section : slide 1
       // Section 2: slide 2,3,4
       // Section 3:
       // Section 4: slide 5,6,7
 
-      expect(section, {
-        "Default Section": [1],
-        "Section 2": [2, 3, 4],
-        "Section 3": [],
-        "Section 4": [5, 6, 7]
-      });
+      expect(slideIdList[0].length, 1);
+      expect(slideIdList[1].length, 3);
+      expect(slideIdList[2].length, 0);
+      expect(slideIdList[3].length, 3);
     });
 
     test('Geometries are parsed with correct types', () async {
@@ -198,17 +195,6 @@ void main() {
           "A group of people outside of a building\n\nDescription automatically generated");
     });
 
-    test('toJSON returns JSON file', () async {
-      var filename = "Luna_sample_module.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      File json = await parser.toJSON("./test_module.json");
-      bool fileExists = json.existsSync();
-
-      expect(fileExists, true);
-    });
-
     test('Language is denoted as [language-Region]', () async {
       var filename = "A Texbox written in English in South Korea Region.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -232,9 +218,84 @@ void main() {
       expect(language1.substring(0, 2), "ko");
       expect(language2.substring(0, 2), "en");
     });
+
+    test('Same slides from the same file have the same slide id', () async {
+      var filename1 = "Slide 1 and 2.pptx";
+      var filename2 = "Slide 2 and 1.pptx";
+      Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
+      Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
+
+      String pptx1slide1 = astJson1['presentation']['slides'][0]['slideId'];
+      String pptx1slide2 = astJson1['presentation']['slides'][1]['slideId'];
+      String pptx2slide1 = astJson2['presentation']['slides'][0]['slideId'];
+      String pptx2slide2 = astJson2['presentation']['slides'][1]['slideId'];
+
+      expect(pptx1slide1, pptx2slide2);
+      expect(pptx1slide2, pptx2slide1);
+    });
+
+    test('Every slide has different slideId even if some slides are duplicated',
+        () async {
+      var filename = "Duplicated Slides.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      int slideCount = astJson['presentation']['slideCount'];
+      Map<String, dynamic> section = astJson['presentation']['section'];
+
+      var slideIdList = section.values.toList();
+      List<dynamic> total = [];
+      for (List<dynamic> subList in slideIdList) {
+        total.addAll(subList);
+      }
+      Set<dynamic> uniqueId = total.toSet();
+      int uniqueCount = uniqueId.length;
+
+      expect(uniqueCount, slideCount);
+    });
+
+    test('Position values are described as percentages', () async {
+      var filename = "Image-Snorlax.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+      File json = await parser.toJSON("./test_module.json");
+      String jsonString = json.readAsStringSync();
+
+      Map<String, dynamic> astJson = jsonDecode(jsonString);
+      double offsetX = astJson['presentation']['slides'][0]['shapes'][0]
+          ['position'][0]['offset']['x'];
+      double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
+          ['position'][0]['offset']['y'];
+      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]['position']
+          [0]['size']['x'];
+      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]['position']
+          [0]['size']['y'];
+
+      bool isPercentage(x) {
+        if (x >= 0 && x <= 100) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      expect(isPercentage(offsetX), true);
+      expect(isPercentage(offsetY), true);
+      expect(isPercentage(sizeX), true);
+      expect(isPercentage(sizeY), true);
+    });
+
+    test('toJSON returns JSON file', () async {
+      var filename = "Luna_sample_module.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+    });
   });
 
-  group('Future Developments', () {
+  group('Non MVP', () {
     //TODO: Title and body text parser
     test('Title and body are in the textbox', () async {
       var filename = "Title and body.pptx";

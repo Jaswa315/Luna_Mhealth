@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
+import 'package:uuid/uuid.dart';
 
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
@@ -20,19 +21,20 @@ const String keyConnectionShape = 'p:cxnSp';
 class PresentationParser {
   //removed static so the localization_test and parser_test work
   late final File _file;
+  static const uuidGenerator = Uuid();
 
   PresentationParser(File file) {
     _file = file;
   }
 
-  XmlDocument extractXMLFromZip(String xmlFilePath) {
+  XmlDocument _extractXMLFromZip(String xmlFilePath) {
     var bytes = _file.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
     var file = archive.firstWhere((file) => file.name == xmlFilePath);
     return XmlDocument.parse(utf8.decode(file.content));
   }
 
-  dynamic xmlDocumentToJson(XmlDocument document) {
+  dynamic _xmlDocumentToJson(XmlDocument document) {
     Xml2Json xml2json = Xml2Json();
 
     // "&#xA" is equivalent to Line Feed Character (\n)
@@ -44,11 +46,11 @@ class PresentationParser {
   }
 
   dynamic jsonFromArchive(String filePath) {
-    XmlDocument doc = extractXMLFromZip(filePath);
-    return xmlDocumentToJson(doc);
+    XmlDocument doc = _extractXMLFromZip(filePath);
+    return _xmlDocumentToJson(doc);
   }
 
-  PrsNode parsePresentation() {
+  PrsNode _parsePresentation() {
     PresentationNode node = PresentationNode();
 
     var coreMap = jsonFromArchive("docProps/core.xml");
@@ -58,7 +60,25 @@ class PresentationParser {
     node.title = coreMap['cp:coreProperties']['dc:title'];
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
+    node.moudleId = uuidGenerator.v4();
+    slideWidth =
+        double.parse(presentationMap['p:presentation']['p:sldSz']['_cx']);
+    slideHeight =
+        double.parse(presentationMap['p:presentation']['p:sldSz']['_cy']);
 
+    // parse SlideIdList
+    var slideIdList =
+        presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
+    List<String> parserdSlideIdList = [];
+    if (slideIdList is Map<String, dynamic>) {
+      parserdSlideIdList = ['S${slideIdList["_id"]}'];
+    } else {
+      for (var slide in slideIdList) {
+        parserdSlideIdList.add('S${slide["_id"]}');
+      }
+    }
+
+    // parse Section
     if (presentationMap['p:presentation']['p:extLst'] == null ||
         presentationMap['p:presentation']['p:extLst']['p:ext']
             is Map<String, dynamic> ||
@@ -66,26 +86,29 @@ class PresentationParser {
                 ['p14:sectionLst'] ==
             null) {
       node.section = {
-        PresentationNode.defulatSection:
-            List<int>.generate(node.slideCount, (index) => index + 1)
+        PresentationNode.defulatSection: List<String>.generate(
+            node.slideCount, (index) => parserdSlideIdList[index])
       };
     } else {
-      node.section = parseSection(presentationMap['p:presentation']['p:extLst']
-          ['p:ext'][0]['p14:sectionLst']['p14:section']);
+      node.section = _parseSection(
+          presentationMap['p:presentation']['p:extLst']['p:ext'][0]
+              ['p14:sectionLst']['p14:section'],
+          parserdSlideIdList);
     }
 
+    // TODO: Branch if the slide is game editor
     for (int i = 1; i <= node.slideCount; i++) {
-      PrsNode slide = parseSlide(i);
+      PrsNode slide = _parseSlide(i, parserdSlideIdList);
       node.children.add(slide);
     }
 
     return node;
   }
 
-  Map<String, dynamic> parseSection(List<dynamic> json) {
+  Map<String, dynamic> _parseSection(List<dynamic> json, List slideIdKeys) {
     Map<String, dynamic> sectionWithSlide = {};
 
-    int currentSlideNumber = 1;
+    int currentSlideNumber = 0;
 
     json.forEach((section) {
       String currentSection = section['_name'];
@@ -97,12 +120,13 @@ class PresentationParser {
 
       if (section['p14:sldIdLst'] != "") {
         if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>) {
-          sectionWithSlide[currentSection].add(currentSlideNumber);
+          sectionWithSlide[currentSection].add(slideIdKeys[currentSlideNumber]);
           currentSlideNumber += 1;
         } else {
           List slideList = section['p14:sldIdLst']['p14:sldId'];
-          sectionWithSlide[currentSection] = List<int>.generate(
-              slideList.length.toInt(), (index) => index + currentSlideNumber);
+          sectionWithSlide[currentSection] = List<String>.generate(
+              slideList.length.toInt(),
+              (index) => slideIdKeys[index + currentSlideNumber]);
           currentSlideNumber += slideList.length.toInt();
         }
       }
@@ -111,43 +135,45 @@ class PresentationParser {
     return sectionWithSlide;
   }
 
-  PrsNode parseSlide(int slideNum) {
+  PrsNode _parseSlide(int slideNum, var slideIdList) {
+    // TODO: store slide's hyperlink info.
+
     SlideNode node = SlideNode();
 
     var slideMap = jsonFromArchive("ppt/slides/slide$slideNum.xml");
 
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
 
-    node.slideNum = slideNum;
+    node.slideId = slideIdList[slideNum - 1];
 
     shapeTree.forEach((key, value) {
       switch (key) {
         case keyPicture:
           var picList = shapeTree[key];
           if (picList is Map<String, dynamic>) {
-            node.children.add(parseImage(picList, slideNum));
+            node.children.add(_parseImage(picList, slideNum));
           } else if (picList is List) {
             picList.forEach((jsonMap) {
-              node.children.add(parseImage(jsonMap, slideNum));
+              node.children.add(_parseImage(jsonMap, slideNum));
             });
           }
         case keyShape:
           var shapeObj = shapeTree[key];
           if (shapeObj is Map<String, dynamic>) {
-            node.children.add(parseShape(shapeObj));
+            node.children.add(_parseShape(shapeObj));
           } else if (shapeObj is List) {
             shapeObj.forEach((jsonMap) {
-              node.children.add(parseShape(jsonMap));
+              node.children.add(_parseShape(jsonMap));
             });
           }
         case keyConnectionShape:
           var connectionShapeObj = shapeTree[key];
           if (connectionShapeObj is Map<String, dynamic>) {
             node.children
-                .add(parseConnectionShape(connectionShapeObj['p:spPr']));
+                .add(_parseConnectionShape(connectionShapeObj['p:spPr']));
           } else if (connectionShapeObj is List) {
             connectionShapeObj.forEach((jsonMap) {
-              node.children.add(parseConnectionShape(jsonMap['p:spPr']));
+              node.children.add(_parseConnectionShape(jsonMap['p:spPr']));
             });
           }
       }
@@ -156,7 +182,7 @@ class PresentationParser {
     return node;
   }
 
-  PrsNode parseImage(Map<String, dynamic> json, int slideNumber) {
+  PrsNode _parseImage(Map<String, dynamic> json, int slideNumber) {
     ImageNode node = ImageNode();
 
     var relsMap =
@@ -169,16 +195,16 @@ class PresentationParser {
         .firstWhere((node) => node['_Id'] == relsLink, orElse: () => "");
     node.path = relNode['_Target'];
 
-    node.children.add(parseGeometry(json['p:spPr']));
+    node.children.add(_parseGeometry(json['p:spPr']));
 
     return node;
   }
 
-  PrsNode parseShape(Map<String, dynamic> json) {
+  PrsNode _parseShape(Map<String, dynamic> json) {
     // Textbox
     if (json['p:nvSpPr']?['p:cNvSpPr'] != "" &&
         json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
-      return parseTextBox(json);
+      return _parseTextBox(json);
     }
 
     if (json['p:nvSpPr']?['p:nvPr'] != "" &&
@@ -194,10 +220,10 @@ class PresentationParser {
     }
 
     // Vanilla Shape (Ellipse/Oval, Rectangle)
-    return parseGeometry(json['p:spPr']);
+    return _parseGeometry(json['p:spPr']);
   }
 
-  PrsNode parseGeometry(Map<String, dynamic> json) {
+  PrsNode _parseGeometry(Map<String, dynamic> json) {
     Position offset = Position(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
@@ -217,7 +243,7 @@ class PresentationParser {
     }
   }
 
-  PrsNode parseConnectionShape(Map<String, dynamic> json) {
+  PrsNode _parseConnectionShape(Map<String, dynamic> json) {
     Position offset = Position(double.parse(json['a:xfrm']['a:off']['_x']),
         double.parse(json['a:xfrm']['a:off']['_y']));
 
@@ -239,48 +265,48 @@ class PresentationParser {
     }
   }
 
-  PrsNode parseTextBox(Map<String, dynamic> json) {
+  PrsNode _parseTextBox(Map<String, dynamic> json) {
     TextBoxNode node = TextBoxNode();
 
-    node.children.add(parseGeometry(json['p:spPr']));
-    node.children.add(parseTextBody(json['p:txBody']));
+    node.children.add(_parseGeometry(json['p:spPr']));
+    node.children.add(_parseTextBody(json['p:txBody']));
 
     return node;
   }
 
-  PrsNode parseTextBody(Map<String, dynamic> json) {
+  PrsNode _parseTextBody(Map<String, dynamic> json) {
     TextBodyNode node = TextBodyNode();
 
     node.wrap = json['a:bodyPr']?['_wrap'];
     var pObj = json['a:p'];
     if (pObj is List) {
       pObj.forEach((pNode) {
-        node.children.add(parseTextPara(pNode));
+        node.children.add(_parseTextPara(pNode));
       });
     } else if (pObj is Map<String, dynamic>) {
-      node.children.add(parseTextPara(pObj));
+      node.children.add(_parseTextPara(pObj));
     }
 
     return node;
   }
 
-  PrsNode parseTextPara(Map<String, dynamic> json) {
+  PrsNode _parseTextPara(Map<String, dynamic> json) {
     TextParagraphNode node = TextParagraphNode();
 
     node.alignment = json['a:pPr']?['align'];
     var rObj = json['a:r'];
     if (rObj is List) {
       rObj.forEach((rNode) {
-        node.children.add(parseText(rNode));
+        node.children.add(_parseText(rNode));
       });
     } else if (rObj is Map<String, dynamic>) {
-      node.children.add(parseText(rObj));
+      node.children.add(_parseText(rObj));
     }
 
     return node;
   }
 
-  PrsNode parseText(Map<String, dynamic> json) {
+  PrsNode _parseText(Map<String, dynamic> json) {
     TextNode node = TextNode();
 
     // Hyperlinks comes here
@@ -300,7 +326,7 @@ class PresentationParser {
 
   Future<PrsNode> toPrsNode() async {
     PresentationParser parser = PresentationParser(_file);
-    return parser.parsePresentation();
+    return parser._parsePresentation();
   }
 
   Future<Map<String, dynamic>> toMap() async {
