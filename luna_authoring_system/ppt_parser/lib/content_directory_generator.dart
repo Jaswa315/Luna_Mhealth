@@ -35,8 +35,8 @@ class ContentDirectoryGenerator {
   /// Throws [FileSystemException] if any file operations fail, or if the specified PowerPoint file does not exist.
   Future<bool> initializeDirectory(
       String pptxLocation, String defaultLanguage, String targetRoot) async {
-    await LogManager().logFunction('ContentDirectoryGenerator.initializeDirectory',
-        () async {
+    await LogManager()
+        .logFunction('ContentDirectoryGenerator.initializeDirectory', () async {
       // Check if the target root directory exists
       final Directory targetRootDir = Directory(targetRoot);
       if (!targetRootDir.existsSync()) {
@@ -99,7 +99,8 @@ class ContentDirectoryGenerator {
   /// Throws [FileSystemException] if file operations fail, such as during CSV generation or directory creation
   Future<bool> addLanguage(
       String moduleDataLocation, String newLanguage) async {
-    await LogManager().logFunction('ContentDirectoryGenerator.addLanguage', () async {
+    await LogManager().logFunction('ContentDirectoryGenerator.addLanguage',
+        () async {
       // Validate the existing directory structure
       if (!await _isValidContentModuleDataDirectoryStructure(
           moduleDataLocation)) {
@@ -127,7 +128,7 @@ class ContentDirectoryGenerator {
         // create the folder for our new language under resources
         newLanguageDirectory.createSync(recursive: true);
         // generate the associated CSV file
-        File pptxFile = _getPPTXPath("$moduleDataLocation/pptx");
+        File pptxFile = _getFirstFoundPPTXFile("$moduleDataLocation/pptx");
         PresentationParser parser = PresentationParser(pptxFile);
         PrsNode prsTree = parser.parsePresentation();
         ModuleTextElements moduleData =
@@ -143,9 +144,9 @@ class ContentDirectoryGenerator {
     return true;
   }
 
-  /// Given the content module data directory folder, 
+  /// Given the content module data directory folder,
   /// retrieves th PowerPoint file.
-  /// 
+  ///
   /// This is a private helper method that makes it easy to retrieve
   /// the powerpoint under the pptx/ folder in a content data directory.
   /// The intent was to separate some logic from the public methods above to
@@ -161,7 +162,7 @@ class ContentDirectoryGenerator {
   ///
   /// Throws [FileSystemException] if no PowerPoint files are found in the directory, ensuring
   /// that the calling function can handle this absence appropriately.
-  File _getPPTXPath(String pptxDirectoryPath) {
+  File _getFirstFoundPPTXFile(String pptxDirectoryPath) {
     // Create a directory object
     Directory pptxDir = Directory(pptxDirectoryPath);
 
@@ -171,7 +172,9 @@ class ContentDirectoryGenerator {
     // Find the first .pptx file
     FileSystemEntity pptxFile =
         files.firstWhere((file) => file.path.endsWith('.pptx'), orElse: () {
-      LogManager().logTrace("No PPTX file found found under given directory $pptxDirectoryPath", LunaSeverityLevel.Error);
+      LogManager().logTrace(
+          "No PPTX file found found under given directory $pptxDirectoryPath",
+          LunaSeverityLevel.Error);
       throw const FileSystemException("No PPTX file found");
     });
 
@@ -222,7 +225,9 @@ class ContentDirectoryGenerator {
 
     for (String requiredPath in requiredPaths) {
       if (!Directory(requiredPath).existsSync()) {
-        LogManager().logTrace('Required directory does not exist: $requiredPath', LunaSeverityLevel.Critical);
+        LogManager().logTrace(
+            'Required directory does not exist: $requiredPath',
+            LunaSeverityLevel.Critical);
         return false; // Return false if any required directory is missing
       }
     }
@@ -236,7 +241,8 @@ class ContentDirectoryGenerator {
 
     if (pptxFiles.length != 1) {
       LogManager().logTrace(
-          'Expected exactly one PPTX file in the pptx directory, found ${pptxFiles.length}: ${requiredPaths[0]}', LunaSeverityLevel.Critical);
+          'Expected exactly one PPTX file in the pptx directory, found ${pptxFiles.length}: ${requiredPaths[0]}',
+          LunaSeverityLevel.Critical);
       return false;
     }
 
@@ -264,8 +270,9 @@ class ContentDirectoryGenerator {
     Directory targetDirectory = Directory(targetForPPTXCopy);
 
     if (!targetDirectory.existsSync()) {
-      LogManager()
-          .logTrace('Target directory does not exist: $targetForPPTXCopy', LunaSeverityLevel.Critical);
+      LogManager().logTrace(
+          'Target directory does not exist: $targetForPPTXCopy',
+          LunaSeverityLevel.Critical);
       return false;
     }
 
@@ -274,17 +281,19 @@ class ContentDirectoryGenerator {
     try {
       await File(pptxLocation).copy(newPptxFile.path);
       LogManager().logTrace(
-          'Successfully copied the PPTX file to: ${newPptxFile.path}', LunaSeverityLevel.Information);
+          'Successfully copied the PPTX file to: ${newPptxFile.path}',
+          LunaSeverityLevel.Information);
       return true;
     } catch (e) {
-      LogManager().logTrace('Failed to copy the PPTX file: $e', LunaSeverityLevel.Error);
+      LogManager().logTrace(
+          'Failed to copy the PPTX file: $e', LunaSeverityLevel.Error);
       return false;
     }
   }
 
   /// Checks if a specified .pptx file exists at a given path and extracts the file name without its extension.
   /// This is a helper function used in initialize directory to retrieve the PPTX file name from the given pptx path
-  /// 
+  ///
   /// This method verifies the existence of a file at the given path and ensures that it has a '.pptx'
   /// extension. It is particularly used to validate and handle PowerPoint files which are central to
   /// initializing the content directory structure.
@@ -297,13 +306,15 @@ class ContentDirectoryGenerator {
   String? _findPptxFileName(String fullPath) {
     final file = File(fullPath);
     if (!file.existsSync()) {
-      LogManager().logTrace('The specified PPTX does not exist: $fullPath', LunaSeverityLevel.Critical);
+      LogManager().logTrace('The specified PPTX does not exist: $fullPath',
+          LunaSeverityLevel.Critical);
       return null;
     }
 
     // Ensure the file is a .pptx file
     if (path.extension(fullPath).toLowerCase() != '.pptx') {
-      LogManager().logTrace('The specified file is not a .pptx file: $fullPath', LunaSeverityLevel.Critical);
+      LogManager().logTrace('The specified file is not a .pptx file: $fullPath',
+          LunaSeverityLevel.Critical);
       return null;
     }
 
@@ -332,35 +343,44 @@ class ContentDirectoryGenerator {
 
     // Log the path to check what is being evaluated
     LogManager().logTrace(
-        'Checking existence of directory at: ${mainFolder.path} (absolute path: ${mainFolder.absolute.path})', LunaSeverityLevel.Information);
+        'Checking existence of directory at: ${mainFolder.path} (absolute path: ${mainFolder.absolute.path})',
+        LunaSeverityLevel.Information);
 
     // Check if the folder already exists
     if (mainFolder.existsSync()) {
-      LogManager().logTrace('The folder "${mainFolder.path}" already exists at "${root}".', LunaSeverityLevel.Critical);
+      LogManager().logTrace(
+          'The folder "${mainFolder.path}" already exists at "${root}".',
+          LunaSeverityLevel.Critical);
       return false; // If it exists, return false immediately
     }
 
     // If it does not exist, create the folder and its subdirectories
     try {
       // Attempt to create the main folder
-      LogManager().logTrace('Creating directory at: ${mainFolder.path}', LunaSeverityLevel.Information);
+      LogManager().logTrace('Creating directory at: ${mainFolder.path}',
+          LunaSeverityLevel.Information);
       mainFolder.createSync(recursive: true);
-      LogManager().logTrace('Successfully created directory at: ${mainFolder.path}', LunaSeverityLevel.Information);
+      LogManager().logTrace(
+          'Successfully created directory at: ${mainFolder.path}',
+          LunaSeverityLevel.Information);
 
       // Create the 'pptx' subdirectory
       String pptxPath = path.join(mainFolderPath, 'pptx');
       Directory(pptxPath).createSync(recursive: true);
-      LogManager().logTrace('Created pptx directory at: $pptxPath', LunaSeverityLevel.Information);
+      LogManager().logTrace('Created pptx directory at: $pptxPath',
+          LunaSeverityLevel.Information);
 
       // Create the 'module/resources' subdirectory
       String resourcesPath = path.join(mainFolderPath, 'module', 'resources');
       Directory(resourcesPath).createSync(recursive: true);
-      LogManager().logTrace('Created resources directory at: $resourcesPath', LunaSeverityLevel.Information);
+      LogManager().logTrace('Created resources directory at: $resourcesPath',
+          LunaSeverityLevel.Information);
 
       return true; // Return true if all directories were created successfully
     } catch (e) {
       // Handle and log any exceptions that occur during directory creation
-      LogManager().logTrace('Failed to initialize folders: $e', LunaSeverityLevel.Error);
+      LogManager().logTrace(
+          'Failed to initialize folders: $e', LunaSeverityLevel.Error);
       return false; // Return false if there was an error during the creation process
     }
   }
