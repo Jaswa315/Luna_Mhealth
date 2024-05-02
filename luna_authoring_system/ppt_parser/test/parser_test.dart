@@ -261,12 +261,12 @@ void main() {
 
       Map<String, dynamic> astJson = jsonDecode(jsonString);
       double offsetX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['shapes'][0]['offset']['x'];
+          ['position'][0]['offset']['x'];
       double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['shapes'][0]['offset']['y'];
-      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]['shapes']
+          ['position'][0]['offset']['y'];
+      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]['position']
           [0]['size']['x'];
-      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]['shapes']
+      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]['position']
           [0]['size']['y'];
 
       bool isPercentage(x) {
