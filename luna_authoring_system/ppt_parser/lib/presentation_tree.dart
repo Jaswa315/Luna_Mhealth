@@ -91,6 +91,8 @@ class SlideNode extends PrsNode {
 }
 
 class TextBoxNode extends PrsNode {
+  late final String? audioPath;
+
   TextBoxNode() {
     name = 'textbox';
   }
@@ -99,6 +101,7 @@ class TextBoxNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
+      if (audioPath != null) "audiopath": audioPath,
       // todo, change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };
@@ -193,14 +196,20 @@ class ShapeNode extends PrsNode {
   late final Position offset;
   late final Position size;
   late final ShapeGeometry shape;
+  late final String? audioPath;
 
-  ShapeNode(this.offset, this.size, this.shape) {
+  ShapeNode(this.offset, this.size, this.shape, this.audioPath) {
     name = shape.name;
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size};
+    return {
+      'type': name,
+      "offset": offset,
+      "size": size,
+      if (audioPath != null) "audiopath": audioPath
+    };
   }
 }
 
@@ -230,6 +239,7 @@ class ImageNode extends PrsNode {
   late final String? imageName;
   late final String path;
   late final String? altText;
+  late final String? audioPath;
 
   ImageNode() {
     name = 'image';
@@ -241,6 +251,7 @@ class ImageNode extends PrsNode {
       'type': name,
       'path': path,
       'alttext': altText,
+      if (audioPath != null) "audiopath": audioPath,
       'position': children.map((child) => child.toJson()).toList()
     };
   }

@@ -121,7 +121,8 @@ void main() {
       expect(shapeType1, "ellipse");
     });
 
-    test('Section has default section if the pptx file has no section', () async {
+    test('Section has default section if the pptx file has no section',
+        () async {
       var filename = "TextBox-HelloWorld.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
@@ -264,10 +265,10 @@ void main() {
           ['position'][0]['offset']['x'];
       double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
           ['position'][0]['offset']['y'];
-      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]['position']
-          [0]['size']['x'];
-      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]['position']
-          [0]['size']['y'];
+      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]
+          ['position'][0]['size']['x'];
+      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]
+          ['position'][0]['size']['y'];
 
       bool isPercentage(x) {
         if (x >= 0 && x <= 100) {
@@ -293,7 +294,29 @@ void main() {
 
       expect(fileExists, true);
     });
+    test('Audio is parsed for each shapes', () async {
+      var filename = "Audios in Shapes.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String audioPath0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['audiopath'];
+      String audioPath1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['audiopath'];
+      String audioPath2 =
+          astJson['presentation']['slides'][0]['shapes'][2]['audiopath'];
+      String audioPath3 =
+          astJson['presentation']['slides'][0]['shapes'][3]['audiopath'];
+
+      // mp3 is media
+      expect(audioPath0.contains('media'), true);
+      // wav is audio
+      expect(audioPath1.contains('audio'), true);
+      expect(audioPath2.contains('audio'), true);
+      expect(audioPath3.contains('audio'), true);
+    });
   });
+
+  group('TODO', () {});
 
   group('Non MVP', () {
     //TODO: Title and body text parser
