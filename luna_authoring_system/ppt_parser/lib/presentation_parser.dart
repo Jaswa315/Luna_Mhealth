@@ -215,7 +215,8 @@ class PresentationParser {
     }
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
-    node.hyperlink = _getHyperlink(json['p:nvPicPr']['p:cNvPr']?['a:hlinkClick']);
+    node.hyperlink =
+        _getHyperlink(json['p:nvPicPr']['p:cNvPr']?['a:hlinkClick']);
 
     node.children.add(_parseVanillaShape(json));
 
