@@ -130,7 +130,7 @@ class ContentDirectoryGenerator {
         // generate the associated CSV file
         File pptxFile = _getFirstFoundPPTXFile("$moduleDataLocation/pptx");
         PresentationParser parser = PresentationParser(pptxFile);
-        PrsNode prsTree = parser.parsePresentation();
+        PrsNode prsTree = await parser.toPrsNode();
         ModuleTextElements moduleData =
             ModuleTextElements(prsTree, newLanguage);
         await moduleData.generateCSV(newLanguage, newLanguagePath);
