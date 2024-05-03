@@ -22,6 +22,7 @@ class PresentationParser {
   // removed static so the localization_test and parser_test work
   late final File _file;
   static const uuidGenerator = Uuid();
+  // for audio and hyperlink
   Map<String, dynamic>? slideRelationship;
   int? slideIndex;
   int? slideCount;
