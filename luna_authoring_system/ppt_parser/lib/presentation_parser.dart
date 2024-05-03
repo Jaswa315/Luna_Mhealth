@@ -104,7 +104,7 @@ class PresentationParser {
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
       slideRelationship = _parseSlideRels(i);
-      PrsNode slide = _parseSlide(i, parserdSlideIdList);
+      PrsNode slide = _parseSlide(parserdSlideIdList);
       node.children.add(slide);
     }
 
@@ -157,24 +157,24 @@ class PresentationParser {
     return sectionWithSlide;
   }
 
-  PrsNode _parseSlide(int slideNum, var slideIdList) {
+  PrsNode _parseSlide(var slideIdList) {
     SlideNode node = SlideNode();
 
-    var slideMap = jsonFromArchive("ppt/slides/slide$slideNum.xml");
+    var slideMap = jsonFromArchive("ppt/slides/slide$slideIndex.xml");
 
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
 
-    node.slideId = slideIdList[slideNum - 1];
+    node.slideId = slideIdList[slideIndex! - 1];
 
     shapeTree.forEach((key, value) {
       switch (key) {
         case keyPicture:
           var picList = shapeTree[key];
           if (picList is Map<String, dynamic>) {
-            node.children.add(_parseImage(picList, slideNum));
+            node.children.add(_parseImage(picList));
           } else if (picList is List) {
             for (var jsonMap in picList) {
-              node.children.add(_parseImage(jsonMap, slideNum));
+              node.children.add(_parseImage(jsonMap));
             }
           }
         case keyShape:
@@ -202,7 +202,7 @@ class PresentationParser {
     return node;
   }
 
-  PrsNode _parseImage(Map<String, dynamic> json, int slideNum) {
+  PrsNode _parseImage(Map<String, dynamic> json) {
     ImageNode node = ImageNode();
 
     node.imageName = json['p:nvPicPr']['p:cNvPr']['_name'];
