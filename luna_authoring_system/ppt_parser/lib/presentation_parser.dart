@@ -24,6 +24,7 @@ class PresentationParser {
   static const uuidGenerator = Uuid();
   Map<String, dynamic>? slideRelationship;
   int? slideIndex;
+  int? slideCount;
 
   PresentationParser(File file) {
     _file = file;
@@ -63,12 +64,13 @@ class PresentationParser {
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
     node.moudleId = uuidGenerator.v4();
+    slideCount = node.slideCount;
+
     slideWidth =
         double.parse(presentationMap['p:presentation']['p:sldSz']['_cx']);
     slideHeight =
         double.parse(presentationMap['p:presentation']['p:sldSz']['_cy']);
 
-    // parse SlideIdList
     var slideIdList =
         presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
     List<String> parserdSlideIdList = [];
@@ -80,7 +82,6 @@ class PresentationParser {
       }
     }
 
-    // parse Section
     if (presentationMap['p:presentation']['p:extLst'] == null ||
         presentationMap['p:presentation']['p:extLst']['p:ext']
             is Map<String, dynamic> ||
@@ -88,7 +89,7 @@ class PresentationParser {
                 ['p14:sectionLst'] ==
             null) {
       node.section = {
-        PresentationNode.defulatSection: List<String>.generate(
+        PresentationNode.defaultSection: List<String>.generate(
             node.slideCount, (index) => parserdSlideIdList[index])
       };
     } else {
@@ -109,7 +110,7 @@ class PresentationParser {
     return node;
   }
 
-  Map<String, dynamic>? _parseSlideRels(int slideNum) {
+  Map<String, dynamic> _parseSlideRels(int slideNum) {
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
     var rIdList = relsMap['Relationships']['Relationship'];
     Map<String, dynamic>? rIdToTarget = {};
@@ -213,6 +214,7 @@ class PresentationParser {
     }
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
+    node.hyperlink = _getHyperlink(json['p:nvPicPr']['p:cNvPr']?['a:hlinkClick']);
 
     node.children.add(_parseVanillaShape(json));
 
@@ -258,9 +260,11 @@ class PresentationParser {
 
     switch (shape) {
       case 'rect':
-        return ShapeNode(offset, size, ShapeGeometry.rectangle, audioPath);
+        return ShapeNode(offset, size, ShapeGeometry.rectangle, audioPath,
+            _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']));
       case 'ellipse':
-        return ShapeNode(offset, size, ShapeGeometry.ellipse, audioPath);
+        return ShapeNode(offset, size, ShapeGeometry.ellipse, audioPath,
+            _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']));
       default:
         //change it into logTrace
         print('Invalid shape to parse: $shape');
@@ -296,6 +300,9 @@ class PresentationParser {
     String? audioPath = slideRelationship?[json['p:nvSpPr']?['p:cNvPr']
         ?['a:hlinkClick']?['a:snd']?['_r:embed']];
     node.audioPath = audioPath;
+    node.hyperlink =
+        _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']);
+
     node.children.add(_parseVanillaShape(json));
     node.children.add(_parseTextBody(json['p:txBody']));
 
@@ -337,8 +344,6 @@ class PresentationParser {
   PrsNode _parseText(Map<String, dynamic> json) {
     TextNode node = TextNode();
 
-    // Hyperlinks comes here
-    // node.hyperlink = (json['a:rPr']['a:hlinkClick'] == null) ? null : json['a:rPr']['a:hlinkClick']['_r:id'];
     node.italics = (json['a:rPr']['_i'] == '1') ? true : false;
     node.bold = (json['a:rPr']['_b'] == '1') ? true : false;
     node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);
@@ -348,8 +353,31 @@ class PresentationParser {
     node.highlightColor = json['a:rPr']['a:highlight']?['a:srgbClr']?['_val'];
     node.language = json['a:rPr']['_lang'];
     node.text = json['a:t'];
+    node.hyperlink = _getHyperlink(json['a:rPr']?['a:hlinkClick']);
 
     return node;
+  }
+
+  int? _getHyperlink(Map<String, dynamic>? json) {
+    switch (json?['_action']) {
+      case 'ppaction://hlinkshowjump?jump=nextslide':
+        // PPTX does nothing for hyperlinks that goes to next slide at the last slide.
+        return slideIndex == slideCount ? null : (slideIndex ?? 0) + 1;
+      case 'ppaction://hlinkshowjump?jump=previousslide':
+        // PPTX does nothing for hyperlinks that goes to previous slide at the first slide.
+        return slideIndex == 1 ? null : (slideIndex ?? 0) - 1;
+      case "ppaction://hlinkshowjump?jump=firstslide":
+        return 1;
+      case "ppaction://hlinkshowjump?jump=lastslide":
+        return slideCount;
+      case 'ppaction://hlinksldjump':
+        RegExp regExp = RegExp(r'slide(.*?)\.');
+        return int.parse(
+            regExp.firstMatch(slideRelationship?[json?['_r:id']])?.group(1) ??
+                "1");
+      default:
+        return null;
+    }
   }
 
   Future<PrsNode> toPrsNode() async {

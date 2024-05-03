@@ -1,7 +1,7 @@
 {
     "presentation": {
         "type": "presentation",
-        "moduleId": "86bcce34-3db3-4fb7-a090-562f2f3d8bcd",
+        "moduleId": "f52093c3-a13a-47c1-b855-ec1270183dd8",
         "title": "PowerPoint Presentation",
         "author": "Jon Socha",
         "slideCount": 70,
@@ -154,6 +154,7 @@
                         "type": "image",
                         "path": "../media/image3.png",
                         "alttext": "Free Clipart: Woman | fundacionacceso",
+                        "hyperlink": 2,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -172,6 +173,7 @@
                         "type": "image",
                         "path": "../media/image4.png",
                         "alttext": "Free Clipart: Question Mark | rejon",
+                        "hyperlink": 2,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -190,6 +192,7 @@
                         "type": "image",
                         "path": "../media/image5.png",
                         "alttext": null,
+                        "hyperlink": 3,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -526,6 +529,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 3,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -544,6 +548,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 1,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -580,6 +585,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 3,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -598,6 +604,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 1,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1035,6 +1042,7 @@
                         "type": "image",
                         "path": "../media/image9.png",
                         "alttext": "A person in a yellow dress\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1053,6 +1061,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 1,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1335,6 +1344,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 3,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1353,6 +1363,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 3,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1407,6 +1418,7 @@
                         "type": "image",
                         "path": "../media/image11.png",
                         "alttext": "A red and white triangle sign with a black exclamation mark\n\nDescription automatically generated",
+                        "hyperlink": 6,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1425,6 +1437,7 @@
                         "type": "image",
                         "path": "../media/image12.png",
                         "alttext": "A person holding a baby\n\nDescription automatically generated",
+                        "hyperlink": 6,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1443,6 +1456,7 @@
                         "type": "image",
                         "path": "../media/image9.png",
                         "alttext": "A person in a yellow dress\n\nDescription automatically generated",
+                        "hyperlink": 5,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1461,6 +1475,7 @@
                         "type": "image",
                         "path": "../media/image11.png",
                         "alttext": "A red and white triangle sign with a black exclamation mark\n\nDescription automatically generated",
+                        "hyperlink": 5,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1641,6 +1656,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1659,6 +1675,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1713,6 +1730,7 @@
                         "type": "image",
                         "path": "../media/image13.png",
                         "alttext": "A cartoon of a ambulance\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1731,6 +1749,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1749,6 +1768,7 @@
                         "type": "image",
                         "path": "../media/image15.png",
                         "alttext": "Free birth child faith vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1767,6 +1787,7 @@
                         "type": "image",
                         "path": "../media/image15.png",
                         "alttext": "Free birth child faith vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1936,6 +1957,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -1990,6 +2012,7 @@
                         "type": "image",
                         "path": "../media/image13.png",
                         "alttext": "A cartoon of a ambulance\n\nDescription automatically generated",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2008,6 +2031,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2026,6 +2050,7 @@
                         "type": "image",
                         "path": "../media/image11.png",
                         "alttext": "A red and white triangle sign with a black exclamation mark\n\nDescription automatically generated",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2044,6 +2069,7 @@
                         "type": "image",
                         "path": "../media/image12.png",
                         "alttext": "A person holding a baby\n\nDescription automatically generated",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2062,6 +2088,7 @@
                         "type": "image",
                         "path": "../media/image12.png",
                         "alttext": "A person holding a baby\n\nDescription automatically generated",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2080,6 +2107,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2231,6 +2259,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 5,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2303,6 +2332,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2321,6 +2351,7 @@
                         "type": "image",
                         "path": "../media/image17.png",
                         "alttext": "Free headache woman sad illustration",
+                        "hyperlink": 9,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2339,6 +2370,7 @@
                         "type": "image",
                         "path": "../media/image18.png",
                         "alttext": "Free fatigue work work from home illustration",
+                        "hyperlink": 11,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2357,6 +2389,7 @@
                         "type": "image",
                         "path": "../media/image19.png",
                         "alttext": "A cartoon of a person with lightning bolts\n\nDescription automatically generated",
+                        "hyperlink": 12,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2375,6 +2408,7 @@
                         "type": "image",
                         "path": "../media/image20.png",
                         "alttext": null,
+                        "hyperlink": 14,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2393,6 +2427,7 @@
                         "type": "image",
                         "path": "../media/image21.png",
                         "alttext": null,
+                        "hyperlink": 10,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2411,6 +2446,7 @@
                         "type": "image",
                         "path": "../media/image22.jpeg",
                         "alttext": "Vértigos, mareos, enfermedades y Consciencia - Consciencia y Energía",
+                        "hyperlink": 13,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2429,6 +2465,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2845,6 +2882,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2899,6 +2937,7 @@
                         "type": "image",
                         "path": "../media/image23.png",
                         "alttext": "Treatments for Mood Disorders | Abnormal Psychology",
+                        "hyperlink": 16,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2917,6 +2956,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2935,6 +2975,7 @@
                         "type": "image",
                         "path": "../media/image24.png",
                         "alttext": "Free birth child female vector",
+                        "hyperlink": 17,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2953,6 +2994,7 @@
                         "type": "image",
                         "path": "../media/image25.png",
                         "alttext": "Stomach Ache PNG Transparent Images - PNG All",
+                        "hyperlink": 15,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2971,6 +3013,7 @@
                         "type": "image",
                         "path": "../media/image26.png",
                         "alttext": null,
+                        "hyperlink": 18,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -2989,6 +3032,7 @@
                         "type": "image",
                         "path": "../media/image27.jpeg",
                         "alttext": "Primary Intestinal Lymphangiectasia - wikidoc",
+                        "hyperlink": 19,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3007,6 +3051,7 @@
                         "type": "image",
                         "path": "../media/image28.jpeg",
                         "alttext": "Terapia por insuficiencia acomodativa - Tu Optometrista",
+                        "hyperlink": 20,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3025,6 +3070,7 @@
                         "type": "image",
                         "path": "../media/image29.png",
                         "alttext": "Free glasses frequency glasses frame vector",
+                        "hyperlink": 20,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3061,6 +3107,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3477,6 +3524,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3531,6 +3579,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3567,6 +3616,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 30,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3603,6 +3653,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -3951,6 +4002,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4023,6 +4075,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 30,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4059,6 +4112,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4077,6 +4131,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4425,6 +4480,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4461,6 +4517,7 @@
                         "type": "image",
                         "path": "../media/image33.png",
                         "alttext": null,
+                        "hyperlink": 24,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4479,6 +4536,7 @@
                         "type": "image",
                         "path": "../media/image34.jpeg",
                         "alttext": "Free Diabetes Blood photo and picture",
+                        "hyperlink": 34,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4497,6 +4555,7 @@
                         "type": "image",
                         "path": "../media/image35.png",
                         "alttext": null,
+                        "hyperlink": 67,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4533,6 +4592,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4551,6 +4611,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4877,6 +4938,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4949,6 +5011,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -4967,6 +5030,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5315,6 +5379,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5351,6 +5416,7 @@
                         "type": "image",
                         "path": "../media/image34.jpeg",
                         "alttext": "Free Diabetes Blood photo and picture",
+                        "hyperlink": 34,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5369,6 +5435,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 30,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5405,6 +5472,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5423,6 +5491,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5771,6 +5840,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5789,6 +5859,7 @@
                         "type": "image",
                         "path": "../media/image39.png",
                         "alttext": "Free belly stomach pain pains illustration",
+                        "hyperlink": 63,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5861,6 +5932,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 7,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -5879,6 +5951,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -6215,6 +6288,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -6269,6 +6343,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -6287,6 +6362,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 30,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -6341,6 +6417,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -6779,6 +6856,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -6797,6 +6875,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -6815,6 +6894,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7163,6 +7243,7 @@
                         "type": "image",
                         "path": "../media/image39.png",
                         "alttext": "Free belly stomach pain pains illustration",
+                        "hyperlink": 63,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7217,6 +7298,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7235,6 +7317,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7253,6 +7336,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7561,6 +7645,7 @@
                         "type": "image",
                         "path": "../media/image39.png",
                         "alttext": "Free belly stomach pain pains illustration",
+                        "hyperlink": 63,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7633,6 +7718,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7651,6 +7737,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -7669,6 +7756,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8017,6 +8105,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 30,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8107,6 +8196,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8125,6 +8215,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8143,6 +8234,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8491,6 +8583,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 30,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8617,6 +8710,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8635,6 +8729,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 8,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8653,6 +8748,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8925,6 +9021,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 5,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -8997,6 +9094,7 @@
                         "type": "image",
                         "path": "../media/image33.png",
                         "alttext": null,
+                        "hyperlink": 22,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9015,6 +9113,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 30,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9033,6 +9132,7 @@
                         "type": "image",
                         "path": "../media/image34.jpeg",
                         "alttext": "Free Diabetes Blood photo and picture",
+                        "hyperlink": 34,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9051,6 +9151,7 @@
                         "type": "image",
                         "path": "../media/image50.png",
                         "alttext": "Free beer bottle heineken2 illustration",
+                        "hyperlink": 26,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9069,6 +9170,7 @@
                         "type": "image",
                         "path": "../media/image51.jpeg",
                         "alttext": "Free sex love embrace illustration",
+                        "hyperlink": 38,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9087,6 +9189,7 @@
                         "type": "image",
                         "path": "../media/image52.jpeg",
                         "alttext": "Free cough disease cold illustration",
+                        "hyperlink": 42,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9105,6 +9208,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9469,6 +9573,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 24,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9487,6 +9592,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9541,6 +9647,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9559,6 +9666,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 23,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9577,6 +9685,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 25,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -9613,6 +9722,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10031,6 +10141,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10049,6 +10160,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 24,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10067,6 +10179,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 25,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10265,6 +10378,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10783,6 +10897,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10837,6 +10952,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10855,6 +10971,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 23,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10873,6 +10990,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 25,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -10963,6 +11081,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -11452,6 +11571,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -11470,6 +11590,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 24,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -11488,6 +11609,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 23,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -11578,6 +11700,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -11978,6 +12101,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 28,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12050,6 +12174,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12068,6 +12193,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 27,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12086,6 +12212,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 29,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12104,6 +12231,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12176,6 +12304,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12612,6 +12741,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12630,6 +12760,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 28,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12648,6 +12779,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 29,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -12720,6 +12852,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13195,6 +13328,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13267,6 +13401,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13285,6 +13420,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 27,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13303,6 +13439,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 29,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13375,6 +13512,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13870,6 +14008,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13888,6 +14027,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 27,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13906,6 +14046,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 28,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -13978,6 +14119,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -14406,6 +14548,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 32,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -14478,6 +14621,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -14496,6 +14640,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 31,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -14514,6 +14659,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 33,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -14532,6 +14678,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -14604,6 +14751,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15020,6 +15168,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15038,6 +15187,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 32,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15056,6 +15206,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 33,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15218,6 +15369,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15690,6 +15842,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15744,6 +15897,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15762,6 +15916,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 31,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15780,6 +15935,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 33,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -15888,6 +16044,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -16468,6 +16625,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -16486,6 +16644,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 31,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -16504,6 +16663,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 32,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -16576,6 +16736,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17384,6 +17545,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 36,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17456,6 +17618,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17474,6 +17637,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 35,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17492,6 +17656,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 37,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17510,6 +17675,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17582,6 +17748,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17720,6 +17887,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17738,6 +17906,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 36,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17756,6 +17925,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 37,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -17900,6 +18070,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -18353,6 +18524,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -18407,6 +18579,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -18425,6 +18598,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 35,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -18443,6 +18617,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 37,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -18605,6 +18780,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19044,6 +19220,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19062,6 +19239,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 35,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19080,6 +19258,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 36,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19206,6 +19385,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19596,6 +19776,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 40,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19650,6 +19831,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19668,6 +19850,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 39,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19686,6 +19869,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 41,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19704,6 +19888,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -19758,6 +19943,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20199,6 +20385,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20217,6 +20404,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 40,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20235,6 +20423,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 41,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20343,6 +20532,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20776,6 +20966,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20830,6 +21021,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20848,6 +21040,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 39,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20866,6 +21059,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 41,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -20974,6 +21168,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -21439,6 +21634,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -21457,6 +21653,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 39,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -21475,6 +21672,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 40,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -21529,6 +21727,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22252,6 +22451,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 44,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22306,6 +22506,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22324,6 +22525,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 43,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22342,6 +22544,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 45,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22360,6 +22563,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22414,6 +22618,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22552,6 +22757,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22570,6 +22776,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 44,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22588,6 +22795,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 45,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -22732,6 +22940,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23185,6 +23394,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23239,6 +23449,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23257,6 +23468,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 43,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23275,6 +23487,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 45,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23383,6 +23596,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23870,6 +24084,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23888,6 +24103,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 43,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23906,6 +24122,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 44,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -23960,6 +24177,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24337,6 +24555,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 6,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24391,6 +24610,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 47,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24409,6 +24629,7 @@
                         "type": "image",
                         "path": "../media/image21.png",
                         "alttext": null,
+                        "hyperlink": 48,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24427,6 +24648,7 @@
                         "type": "image",
                         "path": "../media/image19.png",
                         "alttext": "A cartoon of a person with lightning bolts\n\nDescription automatically generated",
+                        "hyperlink": 49,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24463,6 +24685,7 @@
                         "type": "image",
                         "path": "../media/image98.png",
                         "alttext": null,
+                        "hyperlink": 50,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24481,6 +24704,7 @@
                         "type": "image",
                         "path": "../media/image99.png",
                         "alttext": null,
+                        "hyperlink": 51,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24499,6 +24723,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24823,6 +25048,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24895,6 +25121,7 @@
                         "type": "image",
                         "path": "../media/image26.png",
                         "alttext": null,
+                        "hyperlink": 52,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24913,6 +25140,7 @@
                         "type": "image",
                         "path": "../media/image27.jpeg",
                         "alttext": "Primary Intestinal Lymphangiectasia - wikidoc",
+                        "hyperlink": 54,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24931,6 +25159,7 @@
                         "type": "image",
                         "path": "../media/image20.png",
                         "alttext": null,
+                        "hyperlink": 55,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24949,6 +25178,7 @@
                         "type": "image",
                         "path": "../media/image17.png",
                         "alttext": "Free headache woman sad illustration",
+                        "hyperlink": 9,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24967,6 +25197,7 @@
                         "type": "image",
                         "path": "../media/image44.png",
                         "alttext": null,
+                        "hyperlink": 53,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -24985,6 +25216,7 @@
                         "type": "image",
                         "path": "../media/image100.png",
                         "alttext": null,
+                        "hyperlink": 56,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -25003,6 +25235,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -25427,6 +25660,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -25499,6 +25733,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -25535,6 +25770,7 @@
                         "type": "image",
                         "path": "../media/image11.png",
                         "alttext": "A red and white triangle sign with a black exclamation mark\n\nDescription automatically generated",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -25571,6 +25807,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -25991,6 +26228,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26027,6 +26265,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26393,6 +26632,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26411,6 +26651,7 @@
                         "type": "image",
                         "path": "../media/image11.png",
                         "alttext": "A red and white triangle sign with a black exclamation mark\n\nDescription automatically generated",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26429,6 +26670,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26483,6 +26725,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26809,6 +27052,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 46,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26827,6 +27071,7 @@
                         "type": "image",
                         "path": "../media/image35.png",
                         "alttext": null,
+                        "hyperlink": 67,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26845,6 +27090,7 @@
                         "type": "image",
                         "path": "../media/image99.png",
                         "alttext": null,
+                        "hyperlink": 51,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -26881,6 +27127,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -27225,6 +27472,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 47,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -27261,6 +27509,7 @@
                         "type": "image",
                         "path": "../media/image33.png",
                         "alttext": null,
+                        "hyperlink": 22,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -27297,6 +27546,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -27647,6 +27897,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 47,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -27665,6 +27916,7 @@
                         "type": "image",
                         "path": "../media/image39.png",
                         "alttext": "Free belly stomach pain pains illustration",
+                        "hyperlink": 63,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -27737,6 +27989,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -28105,6 +28358,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -28123,6 +28377,7 @@
                         "type": "image",
                         "path": "../media/image11.png",
                         "alttext": "A red and white triangle sign with a black exclamation mark\n\nDescription automatically generated",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -28141,6 +28396,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 47,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -28213,6 +28469,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -28585,6 +28842,7 @@
                         "type": "image",
                         "path": "../media/image39.png",
                         "alttext": "Free belly stomach pain pains illustration",
+                        "hyperlink": 63,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -28657,6 +28915,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 47,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -28693,6 +28952,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29089,6 +29349,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 47,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29107,6 +29368,7 @@
                         "type": "image",
                         "path": "../media/image39.png",
                         "alttext": "Free belly stomach pain pains illustration",
+                        "hyperlink": 63,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29179,6 +29441,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29562,6 +29825,7 @@
                         "type": "image",
                         "path": "../media/image30.png",
                         "alttext": "Free blood pressure measuring machine blood pressure health vector",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29580,6 +29844,7 @@
                         "type": "image",
                         "path": "../media/image11.png",
                         "alttext": "A red and white triangle sign with a black exclamation mark\n\nDescription automatically generated",
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29598,6 +29863,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 47,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29652,6 +29918,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -29988,6 +30255,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 6,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30060,6 +30328,7 @@
                         "type": "image",
                         "path": "../media/image100.png",
                         "alttext": null,
+                        "hyperlink": 63,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30078,6 +30347,7 @@
                         "type": "image",
                         "path": "../media/image35.png",
                         "alttext": null,
+                        "hyperlink": 67,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30096,6 +30366,7 @@
                         "type": "image",
                         "path": "../media/image98.png",
                         "alttext": null,
+                        "hyperlink": 59,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30114,6 +30385,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30346,6 +30618,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 61,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30418,6 +30691,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 60,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30436,6 +30710,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 62,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30508,6 +30783,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30905,6 +31181,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30977,6 +31254,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -30995,6 +31273,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 62,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -31175,6 +31454,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -31710,6 +31990,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -31728,6 +32009,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 60,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -31746,6 +32028,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 62,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -31818,6 +32101,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32198,6 +32482,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 21,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32270,6 +32555,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32288,6 +32574,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 60,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32378,6 +32665,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32844,6 +33132,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 65,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32916,6 +33205,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 64,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32934,6 +33224,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 66,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -32970,6 +33261,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -33396,6 +33688,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -33414,6 +33707,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 65,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -33432,6 +33726,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 66,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -33450,6 +33745,7 @@
                         "type": "image",
                         "path": "../media/image25.png",
                         "alttext": "Stomach Ache PNG Transparent Images - PNG All",
+                        "hyperlink": 15,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -33558,6 +33854,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34075,6 +34372,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34093,6 +34391,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 64,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34111,6 +34410,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 66,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34201,6 +34501,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34678,6 +34979,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34696,6 +34998,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 64,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34714,6 +35017,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 65,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -34786,6 +35090,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35214,6 +35519,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 69,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35286,6 +35592,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 68,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35304,6 +35611,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 70,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35376,6 +35684,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35840,6 +36149,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35858,6 +36168,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 69,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35876,6 +36187,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 70,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -35984,6 +36296,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -36476,6 +36789,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -36494,6 +36808,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 68,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -36512,6 +36827,7 @@
                         "type": "image",
                         "path": "../media/image54.png",
                         "alttext": "Free anatomy brain cross-section vector",
+                        "hyperlink": 70,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -36602,6 +36918,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -37089,6 +37406,7 @@
                         "type": "image",
                         "path": "../media/image16.png",
                         "alttext": "Free arrows right next vector",
+                        "hyperlink": 58,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -37107,6 +37425,7 @@
                         "type": "image",
                         "path": "../media/image53.png",
                         "alttext": "Free symptoms aedes aegypti disease illustration",
+                        "hyperlink": 68,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -37125,6 +37444,7 @@
                         "type": "image",
                         "path": "../media/image14.jpeg",
                         "alttext": "Free doctor female doctor secretary illustration",
+                        "hyperlink": 69,
                         "position": [
                             {
                                 "type": "rectangle",
@@ -37197,6 +37517,7 @@
                         "type": "image",
                         "path": "../media/image1.jfif",
                         "alttext": "A drawing of a hut and a person\n\nDescription automatically generated",
+                        "hyperlink": 4,
                         "position": [
                             {
                                 "type": "rectangle",

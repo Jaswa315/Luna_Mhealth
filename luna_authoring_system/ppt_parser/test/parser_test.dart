@@ -316,7 +316,111 @@ void main() {
     });
   });
 
-  group('TODO', () {});
+  group('TODO', () {
+    test('5 types of hyperlinks in Vanilla Shape are in hyperlink property',
+        () async {
+      var filename = "Hyperlinks-Shape.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      int hyperlink0 =
+          astJson['presentation']['slides'][1]['shapes'][0]['hyperlink'];
+      int hyperlink1 =
+          astJson['presentation']['slides'][1]['shapes'][1]['hyperlink'];
+      int hyperlink2 =
+          astJson['presentation']['slides'][1]['shapes'][2]['hyperlink'];
+      int hyperlink3 =
+          astJson['presentation']['slides'][1]['shapes'][3]['hyperlink'];
+      int hyperlink4 =
+          astJson['presentation']['slides'][1]['shapes'][4]['hyperlink'];
+      int hyperlink5 =
+          astJson['presentation']['slides'][1]['shapes'][5]['hyperlink'];
+
+      expect(hyperlink0, 1);
+      expect(hyperlink1, 4);
+      expect(hyperlink2, 1);
+      expect(hyperlink3, 4);
+      expect(hyperlink4, 3);
+      expect(hyperlink5, 3);
+    });
+
+    test('5 types of hyperlinks in Text are in hyperlink property', () async {
+      var filename = "Hyperlinks-Text.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      int hyperlink0 = astJson['presentation']['slides'][1]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][1]['hyperlink'];
+      int hyperlink1 = astJson['presentation']['slides'][1]['shapes'][1]
+          ['children'][1]['paragraphs'][0]['textgroups'][1]['hyperlink'];
+      int hyperlink2 = astJson['presentation']['slides'][1]['shapes'][2]
+          ['children'][1]['paragraphs'][0]['textgroups'][1]['hyperlink'];
+      int hyperlink3 = astJson['presentation']['slides'][1]['shapes'][3]
+          ['children'][1]['paragraphs'][0]['textgroups'][1]['hyperlink'];
+      int hyperlink4 = astJson['presentation']['slides'][1]['shapes'][4]
+          ['children'][1]['paragraphs'][0]['textgroups'][1]['hyperlink'];
+
+      expect(hyperlink0, 3);
+      expect(hyperlink1, 1);
+      expect(hyperlink2, 1);
+      expect(hyperlink3, 1);
+      expect(hyperlink4, 7);
+    });
+
+    test('5 types of hyperlinks in TextBox are in hyperlink property',
+        () async {
+      var filename = "Hyperlinks-TextBox.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      int hyperlink0 =
+          astJson['presentation']['slides'][1]['shapes'][0]['hyperlink'];
+      int hyperlink1 =
+          astJson['presentation']['slides'][1]['shapes'][1]['hyperlink'];
+      int hyperlink2 =
+          astJson['presentation']['slides'][1]['shapes'][2]['hyperlink'];
+      int hyperlink3 =
+          astJson['presentation']['slides'][1]['shapes'][3]['hyperlink'];
+      int hyperlink4 =
+          astJson['presentation']['slides'][1]['shapes'][4]['hyperlink'];
+
+      expect(hyperlink0, 4);
+      expect(hyperlink1, 1);
+      expect(hyperlink2, 3);
+      expect(hyperlink3, 1);
+      expect(hyperlink4, 4);
+    });
+
+    test('5 types of hyperlinks in Image are in hyperlink property', () async {
+      var filename = "Hyperlinks-Image.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      int hyperlink0 =
+          astJson['presentation']['slides'][1]['shapes'][0]['hyperlink'];
+      int hyperlink1 =
+          astJson['presentation']['slides'][1]['shapes'][1]['hyperlink'];
+      int hyperlink2 =
+          astJson['presentation']['slides'][1]['shapes'][2]['hyperlink'];
+      int hyperlink3 =
+          astJson['presentation']['slides'][1]['shapes'][3]['hyperlink'];
+      int hyperlink4 =
+          astJson['presentation']['slides'][1]['shapes'][4]['hyperlink'];
+
+      expect(hyperlink0, 1);
+      expect(hyperlink1, 4);
+      expect(hyperlink2, 3);
+      expect(hyperlink3, 1);
+      expect(hyperlink4, 3);
+    });
+
+    test('Edgecases of hyperlinks are not parsed', () async {
+      var filename = "Hyperlinks-Edgecases.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      int? hyperlink0 = astJson['presentation']['slides'][0]['hyperlink'];
+      int? hyperlink1 = astJson['presentation']['slides'][1]['hyperlink'];
+
+      expect(hyperlink0, null);
+      expect(hyperlink1, null);
+    });
+  });
 
   group('Non MVP', () {
     //TODO: Title and body text parser
