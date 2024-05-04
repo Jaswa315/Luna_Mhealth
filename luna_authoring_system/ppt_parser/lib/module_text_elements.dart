@@ -10,12 +10,15 @@ class TextElement {
   /// The original text to be localized.
   String originalText;
 
+  /// The language locale of the original text element.
+  String originalLanguageLocale;
+
   /// The translated text. Initially the same as [originalText].
   String translatedText;
 
   /// Creates a [TextElement] with a unique identifier [uid],
   /// the original text [originalText]
-  TextElement(this.uid, this.originalText): 
+  TextElement(this.uid, this.originalText, this.originalLanguageLocale): 
       translatedText = originalText; // Sets localizedText to start with originalText
 }
 
@@ -61,7 +64,7 @@ class ModuleTextElements {
 
         if (textNode.text != null) {
           _elements[textNode.uid!] = TextElement(
-              textNode.uid!, textNode.text!);
+              textNode.uid!, textNode.text!, textNode.language!);
         } else {
           LogManager().logTrace(
               'Skipping TextNode due to null Text', LunaSeverityLevel.Warning);

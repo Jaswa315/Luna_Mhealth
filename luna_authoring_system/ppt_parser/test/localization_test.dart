@@ -66,13 +66,14 @@ void main() {
     });
 
     test(
-        'TextElement: A PPTX with 3 Text boxes has properly assigned Text Element strings and UIDs.',
+        'TextElement: A PPTX with 3 Text boxes has properly assigned Text Element strings, language, and UIDs.',
         () async {
       ModuleTextElements moduleData =
           await getElementsFromPPTX("Textboxes.pptx");
       TextElement? element = moduleData.elements[2];
       expect(element?.uid, 2);
       expect(element?.originalText, "Thing2");
+      expect(element?.originalLanguageLocale, "en-US");
     });
   });
 }
