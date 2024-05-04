@@ -51,7 +51,7 @@ class PresentationNode extends PrsNode {
   late final Map<String, dynamic> section;
   late final double x;
   late final double y;
-  static const String defulatSection = "Default Section";
+  static const String defaultSection = "Default Section";
 
   PresentationNode() {
     name = 'presentation';
@@ -91,6 +91,9 @@ class SlideNode extends PrsNode {
 }
 
 class TextBoxNode extends PrsNode {
+  late final String? audioPath;
+  late final int? hyperlink;
+
   TextBoxNode() {
     name = 'textbox';
   }
@@ -99,6 +102,8 @@ class TextBoxNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
+      if (audioPath != null) "audiopath": audioPath,
+      if (hyperlink != null) "hyperlink": hyperlink,
       // todo, change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };
@@ -153,6 +158,7 @@ class TextNode extends PrsNode {
   late final String? highlightColor;
   late final String? language;
   late final String? text;
+  late final int? hyperlink;
 
   TextNode() {
     name = 'text';
@@ -172,7 +178,8 @@ class TextNode extends PrsNode {
       'color': color,
       'highlightcolor': highlightColor,
       'language': language,
-      'text': text
+      'text': text,
+      if (hyperlink != null) "hyperlink": hyperlink,
     };
   }
 }
@@ -193,14 +200,23 @@ class ShapeNode extends PrsNode {
   late final Position offset;
   late final Position size;
   late final ShapeGeometry shape;
+  late final String? audioPath;
+  late final int? hyperlink;
 
-  ShapeNode(this.offset, this.size, this.shape) {
+  ShapeNode(
+      this.offset, this.size, this.shape, this.audioPath, this.hyperlink) {
     name = shape.name;
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': name, "offset": offset, "size": size};
+    return {
+      'type': name,
+      "offset": offset,
+      "size": size,
+      if (audioPath != null) "audiopath": audioPath,
+      if (hyperlink != null) "hyperlink": hyperlink
+    };
   }
 }
 
@@ -230,6 +246,8 @@ class ImageNode extends PrsNode {
   late final String? imageName;
   late final String path;
   late final String? altText;
+  late final String? audioPath;
+  late final int? hyperlink;
 
   ImageNode() {
     name = 'image';
@@ -241,6 +259,8 @@ class ImageNode extends PrsNode {
       'type': name,
       'path': path,
       'alttext': altText,
+      if (audioPath != null) "audiopath": audioPath,
+      if (hyperlink != null) "hyperlink": hyperlink,
       'position': children.map((child) => child.toJson()).toList()
     };
   }
