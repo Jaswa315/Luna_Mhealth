@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
 import 'package:luna_mhealth_mobile/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
+import '../lib/enums/language_enums.dart';
 
 const String assetsFolder = 'test/test_assets';
 const String targetRoot = 'test/output/directory_tests';
@@ -12,92 +13,65 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
 
-  Future<void> cleanUpGeneratedFilesAfterTest(String directoryPath) async {
-    Directory directory = Directory(directoryPath);
-    // Check if the directory exists
-    if (directory.existsSync()) {
-      // List all contents
-      var contents = directory.listSync();
-      // Iterate and delete each item within
-      for (var fileOrDir in contents) {
-        if (fileOrDir is File) {
-          fileOrDir.deleteSync();
-        } else if (fileOrDir is Directory) {
-          fileOrDir.deleteSync(recursive: true);
-        }
-      }
+  setUpAll(() {
+    LogManager.createInstance();
+  });
+
+  tearDownAll(() async {
+    if (await Directory(targetRoot).exists()) {
+      await Directory(targetRoot).delete(recursive: true);
     }
+  });
+
+  // Helper function to create and return the test directory path
+  Future<String> prepareTestDirectory(String testId) async {
+    String testDirectory = path.join(targetRoot, testId);
+    if (await Directory(testDirectory).exists()) {
+      await Directory(testDirectory).delete(recursive: true);
+    }
+    await Directory(testDirectory).create(recursive: true);
+    return testDirectory;
   }
 
-  setUp(() async {
-    // Ensuring the directory exists before each test and is clean
-    await Directory(targetRoot).create(recursive: true);
-    await cleanUpGeneratedFilesAfterTest(targetRoot);
+  test(
+      'Content Directory Generator: Initializing a directory has the inputted language directory with a CSV file',
+      () async {
+    String testDirectory = await prepareTestDirectory('test3');
+    ContentDirectoryGenerator generator = ContentDirectoryGenerator();
+    String pptxName = "TextBox-HelloWorld";
+    String powerpointLocation = "$assetsFolder/$pptxName.pptx";
+    String language = Language.EN_US.code;
+    bool success = await generator.initializeDirectory(
+        powerpointLocation, language, testDirectory);
+    expect(success, true);
+    String csvFilePath = await path.join(testDirectory, pptxName, 'module', 'resources', language, '$language.csv');
+    File CSV = await File(csvFilePath);
+    bool res = await CSV.exists();
+    expect(res, isTrue, reason: 'CSV file should exist at $csvFilePath');
+    await Future.delayed(Duration(seconds: 2));
+  });
+  test('Initializes directory structure as expected', () async {
+    String testDirectory = await prepareTestDirectory('test1');
+    ContentDirectoryGenerator generator = ContentDirectoryGenerator();
+    String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
+    String language = Language.EN_US.code;
+    bool success = await generator.initializeDirectory(
+        powerpointLocation, language, testDirectory);
+    expect(success, true);
   });
 
-  group(
-      'Content Directory Generator Tests: Initial Directory Structure is as Expected',
-      () {
-    setUpAll(() {
-      LogManager.createInstance();
-    });
-
-    test('Initializes directory structure as expected', () async {
-      ContentDirectoryGenerator generator = ContentDirectoryGenerator();
-      String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
-      bool success = await generator.initializeDirectory(
-          powerpointLocation, "en_US", targetRoot);
-      expect(success, true);
-
-      String contentDataFolder = "$targetRoot/TextBox-HelloWorld";
-      expect(
-          Directory(path.join(contentDataFolder, 'pptx')).existsSync(), isTrue,
-          reason: 'The pptx directory should exist.');
-      expect(Directory(path.join(contentDataFolder, 'module')).existsSync(),
-          isTrue,
-          reason: 'The module directory should exist.');
-      expect(
-          Directory(path.join(contentDataFolder, 'module', 'resources'))
-              .existsSync(),
-          isTrue,
-          reason: 'The resources directory should exist.');
-      await cleanUpGeneratedFilesAfterTest(targetRoot);
-    });
-
-    test(
-        'Initializing a directory copies given the PowerPoint to [arbitrary_root]/module_name/pptx',
-        () async {
-      ContentDirectoryGenerator generator = ContentDirectoryGenerator();
-      String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
-      bool success = await generator.initializeDirectory(
-          powerpointLocation, "en_US", targetRoot);
-      expect(success, true);
-      bool val = await File(path.join(targetRoot, 'TextBox-HelloWorld', 'pptx',
-              'TextBox-HelloWorld.pptx'))
-          .existsSync();
-      expect(val, isTrue);
-      await cleanUpGeneratedFilesAfterTest(targetRoot);
-    });
-
-    test(
-        'Content Directory Generator: Initializing a directory has the inputted language directory with a CSV file',
-        () async {
-      ContentDirectoryGenerator generator = ContentDirectoryGenerator();
-      String pptxName = "TextBox-HelloWorld";
-      String powerpointLocation = "$assetsFolder/$pptxName.pptx";
-      String language = "en-US";
-      bool success = await generator.initializeDirectory(
-          powerpointLocation, language, targetRoot);
-      expect(success, true);
-
-      String csvFilePath = path.join(targetRoot, pptxName, 'module',
-          'resources', language, '$language.csv');
-      File csvFile = await File(csvFilePath);
-
-      bool fileExists = await csvFile.exists();
-      expect(fileExists, isTrue,
-          reason: 'CSV file should exist at $csvFilePath');
-      // await cleanUpGeneratedFilesAfterTest(targetRoot);
-    });
+  test(
+      'Initializing a directory copies given the PowerPoint to specific location',
+      () async {
+    String testDirectory = await prepareTestDirectory('test2');
+    ContentDirectoryGenerator generator = ContentDirectoryGenerator();
+    String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
+    String language = Language.EN_US.code;
+    bool success = await generator.initializeDirectory(
+        powerpointLocation, language, testDirectory);
+    expect(success, true);
+    bool val = await File(path.join(testDirectory, 'TextBox-HelloWorld', 'pptx', 'TextBox-HelloWorld.pptx')).exists();
+    expect(val, isTrue);
   });
+
 }

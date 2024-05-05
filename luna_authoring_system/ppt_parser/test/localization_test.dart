@@ -5,6 +5,7 @@ import 'package:ppt_parser/presentation_tree.dart';
 import 'package:ppt_parser/module_text_elements.dart';
 import 'package:luna_mhealth_mobile/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
+import '../lib/enums/language_enums.dart';
 
 const String assetsFolder = 'test/test_assets';
 const String outputFolder = 'test/output';
@@ -15,15 +16,25 @@ void main() {
   GlobalConfiguration().loadFromAsset("app_settings");
 
   group('ModuleTextElements and TextElements Class Tests', () {
-    setUpAll(() {
+    setUpAll(() async {
       LogManager.createInstance();
+      // Ensure the output directory exists
+      await Directory(outputFolder).create(recursive: true);
+    });
+
+    tearDownAll(() async {
+      // Clean up and remove the output directory after tests are done
+      if (await Directory(outputFolder).exists()) {
+        await Directory(outputFolder).delete(recursive: true);
+      }
     });
 
     Future<ModuleTextElements> getElementsFromPPTX(var pptx_name) async {
       File file = File("$assetsFolder/$pptx_name");
       PresentationParser parser = PresentationParser(file);
       PrsNode prsTree = await parser.toPrsNode();
-      ModuleTextElements moduleData = ModuleTextElements(prsTree, "en-US");
+      String defaultLanguageWeUseForTests = Language.EN_US.code;
+      ModuleTextElements moduleData = ModuleTextElements(prsTree, defaultLanguageWeUseForTests);
       return moduleData;
     }
 
@@ -73,7 +84,7 @@ void main() {
       TextElement? element = moduleData.elements[2];
       expect(element?.uid, 2);
       expect(element?.originalText, "Thing2");
-      expect(element?.originalLanguageLocale, "en-US");
+      expect(element?.originalLanguageLocale, Language.EN_US.code);
     });
   });
 }
