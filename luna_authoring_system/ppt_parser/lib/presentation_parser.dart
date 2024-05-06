@@ -257,8 +257,8 @@ class PresentationParser {
     }
 
     if (json['p:nvSpPr']?['p:nvPr'] != "" &&
-        (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body' ||
-            json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title')) {
+        ['body', 'title']
+            .contains(json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'])) {
       return _parseTextBox(json);
     }
 
