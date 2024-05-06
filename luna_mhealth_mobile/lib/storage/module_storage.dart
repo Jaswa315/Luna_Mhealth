@@ -11,6 +11,7 @@
 /// IStorageProvider.  Handles unpacking, packing, and validation of modules
 
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -325,5 +326,19 @@ class ModuleStorage {
 
   String _getModuleJsonFileName(String moduleName) {
     return '${moduleName.trim().replaceAll(" ", "_")}.json';
+  }
+
+  // Reads a file and returns its contents as a byte array.
+  // Returns [Uint8List] containing the bytes read from the file.
+  // Returns an empty [Uint8List] if the file does not exist, cannot be read, 
+  // or an error occurs during reading.
+  Future<Uint8List> readFileAsBytes(String filePath) async {
+    try {
+      File file = File(filePath);
+      return await file.readAsBytes();
+    } catch (e) {
+      print("Failed to read file: $e");
+      return Uint8List(0);
+    }
   }
 }

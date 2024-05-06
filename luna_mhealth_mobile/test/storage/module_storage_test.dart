@@ -30,6 +30,27 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
   
+  group('ModuleStorage Tests', () {
+    // Test to verify if the 'readFileAsBytes' method correctly returns a non-empty byte array for existing files
+    test('readFileAsBytes returns valid byte data', () async {
+      ModuleStorage storage = ModuleStorage();
+      String path = 'test/storage/testassets/eggypeggy.csv';
+      Uint8List bytes = await storage.readFileAsBytes(path);
+      // Check if the returned data is of type Uint8List
+      expect(bytes, isA<Uint8List>());
+      // Ensure that the byte array is not empty, indicating the file was read successfully
+      expect(bytes.isNotEmpty, isTrue);
+    });
+
+    // Test to verify if the 'readFileAsBytes' method correctly handles cases where the file does not exist
+    test('readFileAsBytes handles non-existing file', () async {
+      ModuleStorage storage = ModuleStorage();
+      String path = 'non_existent_file.csv';
+      Uint8List bytes = await storage.readFileAsBytes(path);
+      // Verify that the byte array is empty
+      expect(bytes.isEmpty, isTrue);
+    });
+  });
 
   group('LocalStorageProvider Tests', () {
     late IStorageProvider storageProvider;
@@ -311,6 +332,8 @@ void main() {
       expect(result, true);
       expect(!moduleFileNames.contains("$testModuleName.luna"), true);
     });
+
+    
 
     tearDown(() async {
       // clear out all files in the test folder
