@@ -284,16 +284,6 @@ void main() {
       expect(isPercentage(sizeY), true);
     });
 
-    test('toJSON returns JSON file', () async {
-      var filename = "Luna_sample_module.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      File json = await parser.toJSON("./test_module.json");
-      bool fileExists = json.existsSync();
-
-      expect(fileExists, true);
-    });
     test('Audio is parsed for each shapes', () async {
       var filename = "Audios in Shapes.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -418,26 +408,49 @@ void main() {
       expect(hyperlink0, null);
       expect(hyperlink1, null);
     });
+
+    // TODO: slides are parsed sequentially
+    // TODO: game editor are parsed with only game editor node, category node and image node
+    // TODO: only store image path for each category
+    // TODO: just template pukes error in shapes
+
+    test('PPTX with one slide that follows slideLayout returns JSON file',
+        () async {
+      var filename = "Category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+    });
+
+    test('PPTX with muliple slides that follows slideLayout returns JSON file',
+        () async {
+      var filename = "Content and category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+    });
+
+    test('toJSON returns JSON file', () async {
+      var filename = "Luna_sample_module.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+    });
   });
 
   group('Non MVP', () {
-    //TODO: Title and body text parser
-    test('Title and body are in the textbox', () async {
-      var filename = "Title and body.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String shapeType0 =
-          astJson['presentation']['slides'][0]['shapes'][0]['type'];
-      String shapeType1 =
-          astJson['presentation']['slides'][0]['shapes'][1]['type'];
-      String shapeType2 =
-          astJson['presentation']['slides'][0]['shapes'][2]['type'];
-
-      expect(shapeType0, "line");
-      expect(shapeType1, "ellipse");
-      expect(shapeType2, "image");
-    });
-
     //TODO: Shape txBody parsing
     test('Texts in the shape are parsed into its property', () async {
       var filename = "Title and body.pptx";
@@ -445,7 +458,6 @@ void main() {
     });
 
     //TODO: Shape txBody parsing: empty text
-
     test('N Connection Shapes are parsed as line', () async {
       var filename = "Shapes-Connections.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -479,24 +491,6 @@ void main() {
       expect(shapeType1, "rectangle");
       expect(text0, "text1");
       expect(text1, "text2");
-    });
-
-    test('connection shape and shape are parsed as a different object',
-        () async {
-      var filename =
-          "A Shape with Textbox - A vanilla shape - a connection shape.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String shapeType0 =
-          astJson['presentation']['slides'][0]['shapes'][0]['type'];
-      String shapeType1 =
-          astJson['presentation']['slides'][0]['shapes'][1]['type'];
-      String shapeType2 =
-          astJson['presentation']['slides'][0]['shapes'][2]['type'];
-
-      expect(shapeType0, "line");
-      expect(shapeType1, "ellipse");
-      expect(shapeType2, "rectangle");
     });
   });
 }

@@ -28,6 +28,8 @@ class PresentationParser {
   Map<String, dynamic>? slideRelationship;
   int? slideIndex;
   int? slideCount;
+  // for slides made upon a slideLayout
+  Map<String, dynamic>? placeholderToPosition;
 
   PresentationParser(File file) {
     _file = file;
@@ -114,6 +116,7 @@ class PresentationParser {
       slideRelationship = _parseSlideRels(i);
       PrsNode slide = _parseSlide(parserdSlideIdList);
       node.children.add(slide);
+      placeholderToPosition = null;
     }
 
     return node;
@@ -122,32 +125,43 @@ class PresentationParser {
   Map<String, dynamic> _parseSlideRels(int slideNum) {
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
     var rIdList = relsMap['Relationships']['Relationship'];
-
     Map<String, dynamic> rIdToTarget = {};
 
-    if (rIdList is Map<String, dynamic>) {
-      if (rIdList['_Type'] == keySlideLayoutSchema) {
+    _processDynamicCollection(rIdList, (para) {
+      rIdToTarget[para['_Id']] = para['_Target'];
+      if (para['_Type'] == keySlideLayoutSchema) {
         RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
-        _parseSlideLayout(
-            int.parse(regex.firstMatch(rIdList['_Target'])?.group(0) ?? "1"));
+        placeholderToPosition = _parseSlideLayout(
+            int.parse(regex.firstMatch(para['_Target'])?.group(0) ?? "1"));
       }
-      rIdToTarget[rIdList['_Id']] = rIdList['_Target'];
-    } else {
-      rIdList.forEach((element) {
-        if (element['_Type'] == keySlideLayoutSchema) {
-          RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
-          _parseSlideLayout(
-              int.parse(regex.firstMatch(element['_Target'])?.group(0) ?? "1"));
-        }
-        rIdToTarget[element['_Id']] = element['_Target'];
-      });
-    }
+    });
 
     return rIdToTarget;
   }
 
-  Map<String, dynamic> _parseSlideLayout(int slideNum) {
-    return {"": 1};
+  Map<String, dynamic> _parseSlideLayout(int slideIndex) {
+    // Branch if it's a Category Game Editor
+    Map<String, dynamic> phToP = {};
+    var slideLayoutMap =
+        jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
+    var shapeTree = slideLayoutMap['p:sldLayout']['p:cSld']['p:spTree'];
+
+    shapeTree.forEach((key, value) {
+      if (key == keyShape) {
+        _processDynamicCollection(shapeTree[key], (para) {
+          var ph = para['p:nvSpPr']?['p:nvPr']?['p:ph'];
+          var spPr = para['p:spPr'];
+          if (ph != null &&
+              ph.containsKey('_idx') &&
+              (spPr != "" && spPr['a:xfrm'] != null) &&
+              (ph['_type'] == null ||
+                  ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
+            phToP[ph['_idx']] = _parsePosition(para);
+          }
+        });
+      }
+    });
+    return phToP;
   }
 
   Map<String, dynamic> _parseSection(List<dynamic> json, List slideIdKeys) {
@@ -204,7 +218,7 @@ class PresentationParser {
         case keyConnectionShape:
           var connectionShapeObj = shapeTree[key];
           _processDynamicCollection(connectionShapeObj, (para) {
-            node.children.add(_parseConnectionShape(para['p:spPr']));
+            node.children.add(_parseConnectionShape(para));
           });
       }
     });
@@ -241,41 +255,62 @@ class PresentationParser {
     }
 
     if (json['p:nvSpPr']?['p:nvPr'] != "" &&
-        json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title') {
-      // title not finished yet
-      return PrsNode();
-    }
-
-    if (json['p:nvSpPr']?['p:nvPr'] != "" &&
-        json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body') {
-      // body not finished yet
-      return PrsNode();
+        (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body' ||
+            json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title')) {
+      return _parseTextBox(json);
     }
 
     // Vanilla Shape (Ellipse/Oval, Rectangle)
     return _parseVanillaShape(json);
   }
 
+  List<Position> _parsePosition(Map<String, dynamic> json) {
+    // check if it has own position.
+    // if it does not have nvPr, look up in placeholder in slideLayout.
+
+    var nvPr = json['p:nvPicPr']?['p:nvPr'] ??
+        json['p:nvSpPr']?['p:nvPr'] ??
+        json['p:nvCxnSpPr']?['p:nvPr'];
+
+    if (placeholderToPosition != null &&
+        nvPr != "" &&
+        nvPr.containsKey('p:ph')) {
+      // this shape follows slideLayout
+      String phIdx = nvPr['p:ph']['_idx'];
+      return placeholderToPosition?[phIdx];
+    } else {
+      Position offset = Position(
+          double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
+          double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
+
+      Position size = Position(
+          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
+          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
+      return [offset, size];
+    }
+  }
+
   PrsNode _parseVanillaShape(Map<String, dynamic> json) {
-    Position offset = Position(
-        double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
-        double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
-
-    Position size = Position(
-        double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
-        double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
-
-    String shape = json['p:spPr']['a:prstGeom']['_prst'];
-
+    List<Position> position = _parsePosition(json);
+    String shape =
+        json['p:spPr'] == "" ? 'rect' : json['p:spPr']['a:prstGeom']['_prst'];
     String? audioPath = slideRelationship?[json['p:nvSpPr']?['p:cNvPr']
         ?['a:hlinkClick']?['a:snd']?['_r:embed']];
 
     switch (shape) {
       case 'rect':
-        return ShapeNode(offset, size, ShapeGeometry.rectangle, audioPath,
+        return ShapeNode(
+            position[0],
+            position[1],
+            ShapeGeometry.rectangle,
+            audioPath,
             _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']));
       case 'ellipse':
-        return ShapeNode(offset, size, ShapeGeometry.ellipse, audioPath,
+        return ShapeNode(
+            position[0],
+            position[1],
+            ShapeGeometry.ellipse,
+            audioPath,
             _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']));
       default:
         //change it into logTrace
@@ -285,21 +320,19 @@ class PresentationParser {
   }
 
   PrsNode _parseConnectionShape(Map<String, dynamic> json) {
-    Position offset = Position(double.parse(json['a:xfrm']['a:off']['_x']),
-        double.parse(json['a:xfrm']['a:off']['_y']));
+    List<Position> position = _parsePosition(json);
 
-    Position size = Position(double.parse(json['a:xfrm']['a:ext']['_cx']),
-        double.parse(json['a:xfrm']['a:ext']['_cy']));
+    double weight =
+        json['p:spPr']['a:ln'] == null || json['p:spPr']['a:ln']['_w'] == null
+            ? ConnectionNode.defaultHalfLineWidth
+            : double.parse(json['p:spPr']['a:ln']['_w']);
 
-    double weight = json['a:ln'] == null || json['a:ln']['_w'] == null
-        ? ConnectionNode.defaultHalfLineWidth
-        : double.parse(json['a:ln']['_w']);
-
-    String shape = json['a:prstGeom']['_prst'];
+    String shape = json['p:spPr']['a:prstGeom']['_prst'];
 
     switch (shape) {
       case 'line':
-        return ConnectionNode(offset, size, weight, ShapeGeometry.line);
+        return ConnectionNode(
+            position[0], position[1], weight, ShapeGeometry.line);
       default:
         print('Invalid shape to parse: $shape');
         return PrsNode();
@@ -324,7 +357,7 @@ class PresentationParser {
   PrsNode _parseTextBody(Map<String, dynamic> json) {
     TextBodyNode node = TextBodyNode();
 
-    node.wrap = json['a:bodyPr']?['_wrap'];
+    node.wrap = json['a:bodyPr'] == "" ? "rect" : json['a:bodyPr']?['_wrap'];
     var pObj = json['a:p'];
     _processDynamicCollection(pObj, (para) {
       node.children.add(_parseTextPara(para));
