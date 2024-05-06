@@ -7,6 +7,7 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:archive/archive.dart';
+import 'package:path/path.dart';
 import 'presentation_tree.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -14,6 +15,7 @@ import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:uuid/uuid.dart';
 
+// From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
 const String keyConnectionShape = 'p:cxnSp';
@@ -140,7 +142,7 @@ class PresentationParser {
   }
 
   Map<String, dynamic> _parseSlideLayout(int slideIndex) {
-    // Branch if it's a Category Game Editor
+    // TODO: Branch if it's a Category Game Editor
     Map<String, dynamic> phToP = {};
     var slideLayoutMap =
         jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
@@ -248,19 +250,14 @@ class PresentationParser {
   }
 
   PrsNode _parseShape(Map<String, dynamic> json) {
-    // Textbox
-    if (json['p:nvSpPr']?['p:cNvSpPr'] != "" &&
-        json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
+    // Check if a Textbox has placeholder that follows slidelayout
+    if (json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1' ||
+        ['body', 'title']
+            .contains(json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'])) {
       return _parseTextBox(json);
     }
 
-    if (json['p:nvSpPr']?['p:nvPr'] != "" &&
-        (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body' ||
-            json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title')) {
-      return _parseTextBox(json);
-    }
-
-    // Vanilla Shape (Ellipse/Oval, Rectangle)
+    // Vanilla Shape (Ellipse, Rectangle)
     return _parseVanillaShape(json);
   }
 
