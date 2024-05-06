@@ -251,9 +251,14 @@ class PresentationParser {
 
   PrsNode _parseShape(Map<String, dynamic> json) {
     // Check if a Textbox has placeholder that follows slidelayout
-    if (json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1' ||
-        ['body', 'title']
-            .contains(json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'])) {
+    if (json['p:nvSpPr']?['p:cNvSpPr'] != "" &&
+        json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
+      return _parseTextBox(json);
+    }
+
+    if (json['p:nvSpPr']?['p:nvPr'] != "" &&
+        (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'body' ||
+            json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] == 'title')) {
       return _parseTextBox(json);
     }
 
