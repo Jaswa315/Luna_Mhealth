@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ppt_parser/module_text_strings.dart';
+import 'package:ppt_parser/module_text.dart';
 
 void main() {
   group('ModuleTextStrings Tests', () {
