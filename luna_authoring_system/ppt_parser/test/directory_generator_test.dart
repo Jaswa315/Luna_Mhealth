@@ -33,17 +33,38 @@ void main() {
     return testDirectory;
   }
 
-  test('Content Directory Generator: Initializing a directory has the inputted language directory with a CSV file', () async {
+  test(
+      'Content Directory Generator: Initializing a directory has the inputted language directory with a CSV file',
+      () async {
     String testDirectory = await prepareTestDirectory('test3');
     ContentDirectoryGenerator generator = ContentDirectoryGenerator();
     String pptxName = "TextBox-HelloWorld";
     String powerpointLocation = "$assetsFolder/$pptxName.pptx";
     Locale locale = Locale('en', 'US'); // Using Locale
     bool success = await generator.initializeDirectory(
-        powerpointLocation, locale.toLanguageTag(), testDirectory); // Convert Locale to a BCP-47 language tag
+        powerpointLocation,
+        locale.toLanguageTag(),
+        testDirectory); // Convert Locale to a BCP-47 language tag
     expect(success, true);
-    String csvFilePath = path.join(testDirectory, pptxName, 'module', 'resources', locale.toLanguageTag(), '${locale.toLanguageTag()}.csv');
-    expect(await File(csvFilePath).exists(), isTrue, reason: 'CSV file should exist at $csvFilePath');
+    String csvFilePath = path.join(testDirectory, pptxName, 'module',
+        'resources', locale.toLanguageTag(), '${locale.toLanguageTag()}.csv');
+    expect(await File(csvFilePath).exists(), isTrue,
+        reason: 'CSV file should exist at $csvFilePath');
+  });
+  test(
+      'Initializing a directory copies given the PowerPoint to specific location',
+      () async {
+    String testDirectory = await prepareTestDirectory('test2');
+    ContentDirectoryGenerator generator = ContentDirectoryGenerator();
+    String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
+    Locale locale = Locale('en', 'US');
+    bool success = await generator.initializeDirectory(
+        powerpointLocation, locale.toLanguageTag(), testDirectory);
+    expect(success, true);
+    bool val = await File(path.join(testDirectory, 'TextBox-HelloWorld', 'pptx',
+            'TextBox-HelloWorld.pptx'))
+        .exists();
+    expect(val, isTrue);
   });
 
   test('Initializes directory structure as expected', () async {
@@ -55,21 +76,4 @@ void main() {
         powerpointLocation, locale.toLanguageTag(), testDirectory);
     expect(success, true);
   });
-
-  test(
-      'Initializing a directory copies given the PowerPoint to specific location',
-      () async {
-    String testDirectory = await prepareTestDirectory('test2');
-    ContentDirectoryGenerator generator = ContentDirectoryGenerator();
-    String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
-    Locale locale = Locale('en', 'US');
-    bool success = await generator.initializeDirectory(
-        powerpointLocation, locale.toLanguageTag(), testDirectory);
-    expect(success, true);
-    bool val = await File(path.join(testDirectory, 'TextBox-HelloWorld', 'pptx', 'TextBox-HelloWorld.pptx')).exists();
-    expect(val, isTrue);
-    await Future.delayed(Duration(seconds: 1)); // This is to prevent val from being false, as tearDown may
-    // destroy directory before power point existence check is finished.
-  });
-
 }
