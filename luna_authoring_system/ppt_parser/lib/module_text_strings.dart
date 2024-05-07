@@ -4,6 +4,9 @@ import 'dart:typed_data';
 
 // Handles localization tasks by managing a map of localized strings indexed by UIDs.
 // This class is responsible for parsing CSV data into a map for efficient lookup of localized strings.
+// The primary task of ModuleTextStrings is to parse CSV data to map UIDs to their corresponding localized strings and 
+// provide a method (getString) to retrieve these strings based on their UIDs. 
+// This is important for displaying the correct localized text in the application based on user settings or system locale.
 class ModuleTextStrings {
   final Map<int, String> _localizedStrings = {};
 
