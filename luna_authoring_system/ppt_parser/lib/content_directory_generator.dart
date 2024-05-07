@@ -1,3 +1,10 @@
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:ppt_parser/module_text_elements.dart';
@@ -38,7 +45,7 @@ class ContentDirectoryGenerator {
     await LogManager()
         .logFunction('ContentDirectoryGenerator.initializeDirectory', () async {
       // Check if the target root directory exists
-      final Directory targetRootDir = Directory(targetRoot);
+      final Directory targetRootDir = await Directory(targetRoot);
       if (!targetRootDir.existsSync()) {
         LogManager().logTrace(
             'The target root directory does not exist: $targetRoot',
@@ -47,7 +54,7 @@ class ContentDirectoryGenerator {
       }
 
       // Use the new method to find the PPTX file name. This will be the content module data folder name.
-      String? pptxName = _findPptxFileName(pptxLocation);
+      String? pptxName = await _findPptxFileName(pptxLocation);
       if (pptxName == null) {
         return false;
       }
@@ -112,8 +119,8 @@ class ContentDirectoryGenerator {
 
       // Construct the path for the new language directory under module/resources
       String newLanguagePath =
-          path.join(moduleDataLocation, 'module', 'resources', newLanguage);
-      Directory newLanguageDirectory = Directory(newLanguagePath);
+          await path.join(moduleDataLocation, 'module', 'resources', newLanguage);
+      Directory newLanguageDirectory = await Directory(newLanguagePath);
 
       // Check if the directory for the new language already exists
       if (newLanguageDirectory.existsSync()) {
@@ -126,13 +133,13 @@ class ContentDirectoryGenerator {
       // If you reach this point, no directory exists, and you can proceed with creation
       try {
         // create the folder for our new language under resources
-        newLanguageDirectory.createSync(recursive: true);
+        await newLanguageDirectory.create(recursive: true);
         // generate the associated CSV file
-        File pptxFile = _getFirstFoundPPTXFile("$moduleDataLocation/pptx");
+        File pptxFile = await _getFirstFoundPPTXFile("$moduleDataLocation/pptx");
         PresentationParser parser = PresentationParser(pptxFile);
         PrsNode prsTree = await parser.toPrsNode();
         ModuleTextElements moduleData =
-            ModuleTextElements(prsTree, newLanguage);
+            await ModuleTextElements(prsTree, newLanguage);
         await moduleData.generateCSV(newLanguage, newLanguagePath);
         return true; // Return true to indicate the operation was successful
       } catch (e) {
