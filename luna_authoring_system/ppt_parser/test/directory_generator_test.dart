@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
 import 'package:luna_mhealth_mobile/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
-import '../lib/enums/language_enums.dart';
+import 'dart:ui'; // Import dart:ui to access the Locale class
 
 const String assetsFolder = 'test/test_assets';
 const String targetRoot = 'test/output/directory_tests';
@@ -33,30 +33,26 @@ void main() {
     return testDirectory;
   }
 
-  test(
-      'Content Directory Generator: Initializing a directory has the inputted language directory with a CSV file',
-      () async {
+  test('Content Directory Generator: Initializing a directory has the inputted language directory with a CSV file', () async {
     String testDirectory = await prepareTestDirectory('test3');
     ContentDirectoryGenerator generator = ContentDirectoryGenerator();
     String pptxName = "TextBox-HelloWorld";
     String powerpointLocation = "$assetsFolder/$pptxName.pptx";
-    String language = Language.EN_US.code;
+    Locale locale = Locale('en', 'US'); // Using Locale
     bool success = await generator.initializeDirectory(
-        powerpointLocation, language, testDirectory);
+        powerpointLocation, locale.toLanguageTag(), testDirectory); // Convert Locale to a BCP-47 language tag
     expect(success, true);
-    String csvFilePath = await path.join(testDirectory, pptxName, 'module', 'resources', language, '$language.csv');
-    File CSV = await File(csvFilePath);
-    bool res = await CSV.exists();
-    expect(res, isTrue, reason: 'CSV file should exist at $csvFilePath');
-    await Future.delayed(Duration(seconds: 2));
+    String csvFilePath = path.join(testDirectory, pptxName, 'module', 'resources', locale.toLanguageTag(), '${locale.toLanguageTag()}.csv');
+    expect(await File(csvFilePath).exists(), isTrue, reason: 'CSV file should exist at $csvFilePath');
   });
+
   test('Initializes directory structure as expected', () async {
     String testDirectory = await prepareTestDirectory('test1');
     ContentDirectoryGenerator generator = ContentDirectoryGenerator();
     String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
-    String language = Language.EN_US.code;
+    Locale locale = Locale('en', 'US');
     bool success = await generator.initializeDirectory(
-        powerpointLocation, language, testDirectory);
+        powerpointLocation, locale.toLanguageTag(), testDirectory);
     expect(success, true);
   });
 
@@ -66,12 +62,14 @@ void main() {
     String testDirectory = await prepareTestDirectory('test2');
     ContentDirectoryGenerator generator = ContentDirectoryGenerator();
     String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
-    String language = Language.EN_US.code;
+    Locale locale = Locale('en', 'US');
     bool success = await generator.initializeDirectory(
-        powerpointLocation, language, testDirectory);
+        powerpointLocation, locale.toLanguageTag(), testDirectory);
     expect(success, true);
     bool val = await File(path.join(testDirectory, 'TextBox-HelloWorld', 'pptx', 'TextBox-HelloWorld.pptx')).exists();
     expect(val, isTrue);
+    await Future.delayed(Duration(seconds: 1)); // This is to prevent val from being false, as tearDown may
+    // destroy directory before power point existence check is finished.
   });
 
 }
