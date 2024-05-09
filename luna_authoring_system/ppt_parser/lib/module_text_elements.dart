@@ -1,10 +1,3 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import 'dart:io';
 import 'presentation_tree.dart';
 import 'package:luna_mhealth_mobile/utils/logging.dart';
@@ -30,6 +23,7 @@ class TextElement {
 }
 
 /// ModuleTextElements stores all the text nodes of a module. A CSV of all text nodes can be generated
+@Deprecated("Were splitting functionalities of this class and no longer using this, due to the lack of clarity in ModuleTextElements/improper name-to-functionality.") 
 class ModuleTextElements {
   /// A private map to store each [TextElement] by its UID.
   final Map<int, TextElement> _elements = {};
@@ -43,6 +37,7 @@ class ModuleTextElements {
   /// Constructs a [ModuleTextElements] object and processes the [PrsNode] data
   /// to identify text nodes for localization.
   ModuleTextElements(PrsNode data, this._targetLanguageLocale) {
+    
     _walkPrsNode(data);
   }
 

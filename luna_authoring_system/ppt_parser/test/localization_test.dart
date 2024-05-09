@@ -10,6 +10,7 @@ import 'dart:ui'; // Import dart:ui to access the Locale class
 const String assetsFolder = 'test/test_assets';
 const String outputFolder = 'test/output';
 
+//// This test file is deprecated.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
