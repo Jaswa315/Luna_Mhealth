@@ -20,6 +20,9 @@ class CSVGenerator {
     List<TextNode> _elements = [];
     _walkPrsTreeRecursively(_elements, data);
     String csvFileName = "${language.toLanguageTag()}.csv";
+    
+
+    // TODO: File creation on disk is slow , reconsider
     String tempDirPath = Directory.systemTemp.path;
     String filePath = path.join(tempDirPath, csvFileName);
     List<String> lines = ['textID,originalText,translatedText'];

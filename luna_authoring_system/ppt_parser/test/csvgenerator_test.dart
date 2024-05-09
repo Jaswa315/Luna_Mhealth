@@ -9,6 +9,9 @@ import 'package:path/path.dart' as path;
 
 const String assetsFolder = 'test/test_assets';
 const String outputFolder = 'test/output';
+
+// TODO: We want to make IR in memory for future tests instead of putting PPTX
+// TODO: Add Instrumentation later instead of too early, to declutter and make refactoring easier.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -25,6 +28,7 @@ void main() {
         await Directory(outputFolder).delete(recursive: true);
       }
     });
+
 
     Future<PrsNode> getPresentationData(var pptx_name) async {
       File file = File("$assetsFolder/$pptx_name");
@@ -105,4 +109,6 @@ void main() {
       expect(columns[2], 'Hello, World!');
     });
   });
+
 }
+

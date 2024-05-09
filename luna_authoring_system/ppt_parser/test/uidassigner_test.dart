@@ -5,6 +5,9 @@ import 'package:ppt_parser/presentation_tree.dart';
 import 'package:ppt_parser/textnode_uniqueid_assigner.dart';
 
 const String assetsFolder = 'test/test_assets';
+
+// TODO: We want to make IR in memory for future tests instead of putting PPTX
+// TODO: Add Instrumentation later instead of too early, to declutter and make refactoring easier.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
