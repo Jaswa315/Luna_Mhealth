@@ -4,6 +4,11 @@ import 'presentation_tree.dart';
 import 'package:path/path.dart' as path;
 
 /// The CSVGenerator class allows creation of CSV Files from a Presentation Data Tree as input
+/// 
+/// CSVGenerator simply walks a Presentation Tree, and for every text node will create a CSV
+/// column with UID, Original Text, and Translated Text fields. This is so we can generate translation CSVs
+/// to send out to translators. The CSV name is the language locale as string provided in parameters of the 
+/// createCSVFromPrsDataTextNodes method.
 class CSVGenerator {
   CSVGenerator();
 

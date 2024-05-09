@@ -3,6 +3,9 @@ import 'presentation_tree.dart';
 
 /// PrsNodeUniqueIDAssigner class can take presentation trees and assign unique IDs to the
 /// presentation data text nodes in place. 
+/// 
+/// This class should only be used to update a Presentation Tree for all text nodes to have unique IDs,
+/// which is a preprocessing step done before generating translation CSVs to send out to translators
 class PrsTreeTextNodeUIDAssigner {
   PrsTreeTextNodeUIDAssigner();
 
