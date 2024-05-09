@@ -1,0 +1,84 @@
+{
+  "module_name": "Luna_sample_module_2",
+  "dimensions": { "width": 12.7, "height": 25.4 },
+  "slides": [
+    {
+      "slide_number": 1,
+      "title": null,
+      "elements": [
+        {
+          "type": 13,
+          "position": {
+            "left": 3.3485,
+            "top": 1.7506,
+            "width": 6.0031,
+            "height": 6.0031
+          },
+          "image_path": "media/parsed_images/slide_1/Picture 2.png",
+          "image_properties": {
+            "content_type": "image/jpeg",
+            "file_size": [512, 512],
+            "dpi": [72, 72]
+          }
+        },
+        {
+          "type": 13,
+          "position": {
+            "left": 2.7372,
+            "top": 8.8329,
+            "width": 5.3139,
+            "height": 7.5115
+          },
+          "image_path": "media/parsed_images/slide_1/Picture 4.png",
+          "image_properties": {
+            "content_type": "image/png",
+            "file_size": [566, 800],
+            "dpi": [72, 72]
+          }
+        },
+        {
+          "type": 17,
+          "position": {
+            "left": 0.7564,
+            "top": 14.9601,
+            "width": 6.4841,
+            "height": 1.1114
+          },
+          "text": "How to use this app",
+          "text_properties": {
+            "font_name": "Times New Roman",
+            "font_size": 26.0,
+            "font_bold": true,
+            "font_italic": true,
+            "font_underline": null,
+            "font_color": ""
+          }
+        }
+      ]
+    },
+    {
+      "slide_number": 2,
+      "title": null,
+      "elements": [
+        {
+          "type": 17,
+          "position": {
+            "left": 2.4296,
+            "top": 7.8409,
+            "width": 6.9429,
+            "height": 1.6244
+          },
+          "text": "Sample 2 | Page 2",
+          "text_properties": {
+            "font_name": null,
+            "font_size": 48.0,
+            "font_bold": true,
+            "font_italic": true,
+            "font_underline": true,
+            "font_color": ""
+          }
+        }
+      ]
+    }
+  ]
+}

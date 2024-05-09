@@ -6,100 +6,73 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/// Represents a text component that can be rendered and clicked.
-/// Extends the [Component] class and implements the [Clickable] interface.
-// ignore_for_file: public_member_api_docs
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../enums/component_type.dart';
-import '../../providers/click_state_provider.dart';
 import '../component.dart';
-import '../interfaces/clickable.dart';
 
+/// Represents a text component that can be used in the Luna mHealth Mobile app.
+///
+/// This class extends the [Component] class and provides additional functionality
+/// specific to text components.
 class TextComponent extends Component {
+  /// The text to display in the text component.
   String text;
-  double fontSize;
-  FontStyle fontStyle;
-  Color color;
-  TextAlign alignment;
 
-  /// Constructs a [TextComponent] with the given parameters.
-  ///
-  /// The [text] parameter is required and represents the text to be displayed.
-  /// The [type] parameter represents the type of the component.
-  /// The [fontSize] parameter represents the font size of the text.
-  /// The [fontStyle] parameter represents the font style of the text.
-  /// The [color] parameter represents the color of the text.
-  /// The [alignment] parameter represents the alignment of the text.
-  /// The [x], [y], [width], [height], and [name] parameters represent the position, size, and name of the component.
+  /// The font size of the text.
+  double fontSize;
+
+  /// The font style of the text.
+  FontStyle fontStyle;
+
+  /// The color of the text.
+  Color color;
+
+  /// Constructs a new instance of [TextComponent] with the given parameters.
   TextComponent({
     required this.text,
-    required ComponentType type,
-    required String name,
     this.fontSize = 16.0,
     this.fontStyle = FontStyle.normal,
     this.color = Colors.black,
-    this.alignment = TextAlign.start,
-    double x = 0.0,
-    double y = 0.0,
-    double width = 0.0,
-    double height = 0.0,
-  }) : super(type: type, name: name, x: x, y: y, width: width, height: height);
-
-  /// Renders the text component.
-  /// Returns a [Container] widget containing the text.
-  // @override
-  // Widget render() {
-  //   return Consumer<ClickStateProvider>(
-  //     builder: (context, clickStateProvider, child) {
-  //       return GestureDetector(
-  //         onTap: () {
-  //           print("TextComponent clicked! Current isBold: $_isBold");
-  //           _isBold = !_isBold; // Update internal state
-  //           clickStateProvider.clickState
-  //               .toggleBold(); // Notify Provider change
-  //         },
-  //         child: Container(
-  //           padding: EdgeInsets.all(10.0),
-  //           child: Text(
-  //             text,
-  //             style: TextStyle(
-  //               fontSize: fontSize,
-  //               fontStyle: fontStyle,
-  //               color: color,
-  //               fontWeight: clickStateProvider.clickState.isBold
-  //                   ? FontWeight.bold
-  //                   : FontWeight.normal,
-  //             ),
-  //             textAlign: alignment,
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+    required double x,
+    required double y,
+    required double width,
+    required double height,
+  }) : super(
+          type: ComponentType.text,
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+          name: 'TextComponent',
+        );
 
   @override
-  Widget render() {
-    return Consumer<ClickStateProvider>(
-      builder: (context, clickStateProvider, child) {
-        return GestureDetector(
-          onTap: () {
-            clickStateProvider.clickState.changeText(); // Change the text
-          },
-          child: Container(
-            padding: EdgeInsets.all(10.0),
-            child: Text(
-              clickStateProvider.clickState.text, // Use the text from the state
-              style: TextStyle(
-                  fontSize: fontSize, fontStyle: fontStyle, color: color),
-              textAlign: alignment,
-            ),
-          ),
-        );
-      },
+  Future<Widget> render() {
+    return Future.value(
+      Text(
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontStyle: fontStyle,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  /// Converts a JSON object to a [TextComponent] instance.
+  ///
+  /// The [json] parameter is a JSON object that contains the data for the [TextComponent].
+  /// Returns a new instance of [TextComponent] with the data from the JSON object.
+  static TextComponent fromJson(Map<String, dynamic> json) {
+    return TextComponent(
+      text: json['text'],
+      fontSize: json['text_properties']?['font_size']?.toDouble() ?? 16.0,
+      x: json['position']['left'].toDouble(),
+      y: json['position']['top'].toDouble(),
+      width: json['position']['width'].toDouble(),
+      height: json['position']['height'].toDouble(),
     );
   }
 

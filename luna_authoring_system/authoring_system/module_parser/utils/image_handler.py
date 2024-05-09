@@ -1,8 +1,9 @@
 import os
 import shutil
+from ...config import BASE_IMAGE_DIR
 
 class ImageHandler:
-    def __init__(self, base_image_dir='../../data/parsed_images'):
+    def __init__(self, base_image_dir=BASE_IMAGE_DIR):
         self.base_image_dir = base_image_dir
         os.makedirs(self.base_image_dir, exist_ok=True)
 

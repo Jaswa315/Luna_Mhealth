@@ -13,106 +13,138 @@ import 'package:luna_mhealth_mobile/models/page.dart';
 import 'dart:io';
 import 'dart:convert';
 
+const String kTestAssetsPath = 'test/storage/testassets';
 void main() {
   group('Module Class Tests', () {
     // Test initialization of the Module
     test('Module is created with expected properties', () {
       final module = Module(
-        id: '1',
         title: 'This is title',
-        description: 'This is description',
+        pages: [],
+        width: 100.0,
+        height: 200.0,
       );
 
       expect(module.id, isNotNull); // ID is auto-generated if not provided
       expect(module.title, 'This is title');
-      expect(module.description, 'This is description');
-      expect(module.itemType, ItemType.module);
-      expect(module.pages, isEmpty); // Initially, no pages should be present
-    });
-
-    // Test adding a Page to the Module
-    test('Adding a Page to the Module', () {
-      final module = Module(
-        title: 'This is title',
-        description: 'This is description',
-      );
-      final page = Page(index: 1);
-
-      module.addPage(page);
-
-      expect(module.pages.length, 1);
-      expect(module.pages.first, page);
-    });
-
-    // Test removing a Page from the Module
-    test('Removing a Page from the Module', () {
-      final module = Module(
-        title: 'This is title',
-        description: 'This is description',
-      );
-      final page = Page(index: 1);
-
-      module.addPage(page);
-      module.removePage(page);
-
       expect(module.pages, isEmpty);
+      expect(module.width, 100.0);
+      expect(module.height, 200.0);
+      expect(module.itemType, ItemType.module);
     });
 
-    // Test finding a Page by index
-    test('Finding a Page by index', () {
+    // Test initialization of the Module with ID
+    test('Module is created with provided ID', () {
       final module = Module(
+        id: '1',
         title: 'This is title',
-        description: 'This is description',
+        pages: [],
+        width: 100.0,
+        height: 200.0,
       );
-      final page = Page(index: 1);
-      final page2 = Page(index: 2);
 
-      module.addPage(page);
-      module.addPage(page2);
-
-      expect(module.findPageByIndex(1), page);
-      expect(module.findPageByIndex(2), page2);
-      expect(module.findPageByIndex(3), isNull); // No page at index 3
+      expect(module.id, '1');
+      expect(module.title, 'This is title');
+      expect(module.pages, isEmpty);
+      expect(module.width, 100.0);
+      expect(module.height, 200.0);
+      expect(module.itemType, ItemType.module);
     });
 
-    // Test Serialization of Module
-    test('Serialization of Module', () {
+    // Test deserialization of Module from JSON
+    test('Deserialization of Module from JSON', () {
+      final json = {
+        'module_name': 'This is title',
+        'slides': [],
+        'dimensions': {'width': 100, 'height': 200},
+      };
+
+      final module = Module.fromJson(json);
+
+      expect(module.id, isNotNull); // ID is auto-generated
+      expect(module.title, 'This is title');
+      expect(module.pages, isEmpty);
+      expect(module.width, 100.0);
+      expect(module.height, 200.0);
+      expect(module.itemType, ItemType.module);
+    });
+
+    // Test deserialization of Module from JSON with slides
+    test('Deserialization of Module from JSON with slides', () {
+      final String jsonModule =
+          File("$kTestAssetsPath/module.json").readAsStringSync();
+
+      final module = Module.fromJson(jsonDecode(jsonModule));
+
+      expect(module.id, isNotNull); // ID is auto-generated
+      expect(module.title, 'This is title');
+      expect(module.pages.length, 1);
+      expect(module.pages[0].index, 1);
+      expect(module.width, 100.0);
+      expect(module.height, 200.0);
+      expect(module.itemType, ItemType.module);
+    });
+
+    // Test deserialization of Module from JSON without slides
+    test('Deserialization of Module from JSON without slides', () {
+      final json = {
+        'module_name': 'This is title',
+        'dimensions': {'width': 100, 'height': 200},
+      };
+
+      expect(
+        () => Module.fromJson(json),
+        throwsA(isA<FormatException>().having(
+          (e) => e.message,
+          'message',
+          'Expected a "slides" field with an array value.',
+        )),
+      );
+    });
+
+    // Test serialization of Module to JSON
+    test('Serialization of Module to JSON', () {
       final module = Module(
         title: 'This is title',
-        description: 'This is description',
+        pages: [
+          Page(index: 1),
+          Page(index: 2),
+        ],
+        width: 100.0,
+        height: 200.0,
       );
-      final page = Page(index: 1);
-
-      module.addPage(page);
 
       final json = module.toJson();
 
-      File("test/models/module.json").writeAsStringSync(module.toString());
-
       expect(json, isMap);
-      expect(json['id'], module.id);
-      expect(json['title'], 'This is title');
-      expect(json['description'], 'This is description');
-      expect(json['itemType'], 'module');
-      expect(json['pages'], isList);
-      expect(json['pages'].length, 1);
-
-      final moduleFromJson = Module.fromJson(json);
-      expect(moduleFromJson.id, module.id);
-      expect(moduleFromJson.title, 'This is title');
-      expect(moduleFromJson.description, 'This is description');
-      expect(moduleFromJson.itemType, ItemType.module);
-      expect(moduleFromJson.pages.first.index, 1);
+      expect(json['module_name'], 'This is title');
+      expect(json['slides'], isList);
+      expect(json['slides'].length, 2);
+      expect(json['slides'][0]['index'], 1);
+      expect(json['slides'][1]['index'], 2);
+      expect(json['dimensions'], isMap);
+      expect(json['dimensions']['width'], 100);
+      expect(json['dimensions']['height'], 200);
     });
 
+    // Test string deserialization of Module
     test('String Deserialization - Module', () {
-      String jsonModule = File("test/models/module.json").readAsStringSync();
-      Module module = Module.fromJson(jsonDecode(jsonModule));
-      expect(module.id, isNotNull);
-      expect(module.id, isA<String>());
-      expect('This is title', module.title);
-      expect('This is description', module.description);
-      expect(ItemType.module, module.itemType);
+      final jsonString = '''
+        {
+          "module_name": "This is title",
+          "slides": [],
+          "dimensions": {"width": 100, "height": 200}
+        }
+      ''';
+
+      final module = Module.fromJson(jsonDecode(jsonString));
+
+      expect(module.id, isNotNull); // ID is auto-generated
+      expect(module.title, 'This is title');
+      expect(module.pages, isEmpty);
+      expect(module.width, 100.0);
+      expect(module.height, 200.0);
+      expect(module.itemType, ItemType.module);
     });
   });
 }

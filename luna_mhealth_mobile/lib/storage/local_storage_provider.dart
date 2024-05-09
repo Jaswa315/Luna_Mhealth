@@ -18,10 +18,11 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 /// LocalStorageProvider
 /// Use for file operations on local mobile appdata stores
 /// Usage: IStorageProvider myProvider = LocalStorageProvider();
-/// Do not use as a concrete object within Luna!!!
+/// ! Do not use as a concrete object within Luna!!!
 class LocalStorageProvider implements IStorageProvider {
   final PathProviderPlatform _pathPlatform;
 
+  /// LocalStorageProvider CTOR
   LocalStorageProvider() : _pathPlatform = PathProviderPlatform.instance;
 
   /// LocalStorageProvider CTOR w/PathProviderPlatform
@@ -86,7 +87,8 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<String>> getAllFileNames({String container = '', bool recursiveSearch = true}) async {
+  Future<List<String>> getAllFileNames(
+      {String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";
@@ -107,7 +109,8 @@ class LocalStorageProvider implements IStorageProvider {
   }
 
   @override
-  Future<List<Uint8List>> getAllFiles({String container = '', bool recursiveSearch = true}) async {
+  Future<List<Uint8List>> getAllFiles(
+      {String container = '', bool recursiveSearch = true}) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final folderPath = "${directory.path}/$container";

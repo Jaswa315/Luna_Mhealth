@@ -19,5 +19,8 @@ enum ShapeType {
   circle,
 
   /// Represents a triangle shape.
-  triangle
+  triangle,
+
+  /// Represents a divider shape.
+  divider
 }

@@ -18,24 +18,32 @@ Ensure Python 3.x is installed on your system. Additional dependencies are requi
 pip install -r requirements.txt
 ```
 
-## Errors
+## Onboarding Issues
 
-No module named 'pptx'
+- No module named 'pptx' error: This error occurs when the 'python-pptx' library is not installed. To resolve this, run the following command:
+
+```bash
+pip install python-pptx
+```
 
 # Usage
 
 ## Parsing PowerPoint Files
-Navigate to the `module_parser` directory and execute the `main.py` script, specifying the path to your PowerPoint file and the desired output location for the JSON module:
+Navigate to the `luna_authoring_system` directory in your terminal:
 
 ```bash
-python main.py -i <input_file> -o <output_dir>
+cd /path/to/luna_authoring_system
 ```
+Replace `/path/to/luna_authoring_system` with the actual path to the `luna_authoring_system` directory on your system.
 
 ## Example
-
+Run the module parser with the following command:
 ```bash
-python3 main.py ../../samples/Luna_sample_module.pptx -o ../../data/parsed_ir_module/parsed_output.json
+python3 -m authoring_system.module_parser.main samples/Luna_sample_module.pptx -o data/parsed_ir_module/parsed_output.json
 ```
+This command tells Python to run the `main.py` script in the `authoring_system.module_parser` package. The `samples/Luna_sample_module.pptx` argument is the path to the input file, and the `-o data/parsed_ir_module/parsed_output.json` argument specifies the output file.
+
+Make sure to replace `samples/Luna_sample_module.pptx` and `data/parsed_ir_module/parsed_output.json` with the paths to your actual input and output files.
 
 ## Validating Modules
 Instructions on using the `module_validator` component will be added here.

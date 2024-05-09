@@ -1,0 +1,16 @@
+/// A class that contains constants used in the application.
+// ignore_for_file: public_member_api_docs
+
+class AppConstants {
+  /// App name
+  static const String appName = 'Luna';
+
+  /// The name of the module storage user.
+  static const String moduleStorageUserName = 'userProfile';
+
+  /// Error messages
+  static const String noImageErrorMessage = 'No image to display.';
+
+  /// The prefix for macOS system files.
+  static const String macosSystemFilePrefix = "__MACOSX";
+}
