@@ -14,16 +14,21 @@ class PrsTreeTextNodeUIDAssigner {
   /// If the data was already assigned at all or there are no text nodes, an empty Map is returned
   /// Otherwise, if we traverse the data and assign successfully, all updated textnodes mappings will be returned
   /// [data] is the presentation tree with presentation data.
-  Map<int, String>? walkPrsTreeAndAssignUIDs(PrsNode data) {
+  Map<int, String> walkPrsTreeAndAssignUIDs(PrsNode data) {
     List<TextNode> textNodes = _walkPrsTreeAndGetTextNodes(data);
     // If any nodes have UID assigned, this PrsNode tree is not eligible to have their UIDs mapped.
     // Also if there is no text nodes, no UID assignments need to be done.
-    if (textNodes.isEmpty || !_validateThatAllTextNodesUIDsAreUnassigned(textNodes)) {
+    if (textNodes.isEmpty) {
+      // TODO: Log a verbose.
+      return {};
+    }
+    if(!_validateThatAllTextNodesUIDsAreUnassigned(textNodes)) {
+      // TODO: Log a verbose.
       return {};
     }
     // If we get here, the PrsNode is valid and no uids in it are assigned
     // So lets traverse the textnodes and assign uid values to them.
-    Map<int, String> updatedNodes = _assignUIDsToTextNodes(textNodes);
+    Map<int, String> updatedNodes = _assignUIDToEveryTextNode(textNodes);
     return updatedNodes;
   }
 
@@ -38,10 +43,6 @@ class PrsTreeTextNodeUIDAssigner {
   void _walkPrsTreeRecursively(List<TextNode> textNodes, PrsNode node) {
     if (node is TextNode) {
       var textNode = node;
-      // We found an assigned UID. This means the whole PrsNode tree is invalid,
-      // because we only want to work with unassigned clean PrsNode trees that have no assigned UID
-      // textnodes.
-      // Return false and empty the text nodes.
       textNodes.add(textNode);
     }
     for (PrsNode child in node.children) {
@@ -49,8 +50,9 @@ class PrsTreeTextNodeUIDAssigner {
     }
   }
 
-  /// Assign a unique ID to every text node.
-  Map<int, String> _assignUIDsToTextNodes(List<TextNode> textNodes) {
+  /// Assign a unique ID to every text node in the [textNodes] list.
+  /// The IDs are being assigned in-place to every TextNode object.
+  Map<int, String> _assignUIDToEveryTextNode(List<TextNode> textNodes) {
     Map<int, String> updatedNodes = {};
     int nextUniqueID = 1;
     for (TextNode node in textNodes) {
