@@ -262,7 +262,7 @@ class PresentationParser {
     node.hyperlink =
         _getHyperlink(json['p:nvPicPr']['p:cNvPr']?['a:hlinkClick']);
 
-    node.children.add(_parseVanillaShape(json));
+    node.children.add(_parseBasicShape(json));
 
     return node;
   }
@@ -280,8 +280,8 @@ class PresentationParser {
       return _parseTextBox(json);
     }
 
-    // Vanilla Shape (Ellipse, Rectangle)
-    return _parseVanillaShape(json);
+    // Basic Shape (Ellipse, Rectangle)
+    return _parseBasicShape(json);
   }
 
   List<Position> _parsePosition(Map<String, dynamic> json) {
@@ -310,7 +310,7 @@ class PresentationParser {
     }
   }
 
-  PrsNode _parseVanillaShape(Map<String, dynamic> json) {
+  PrsNode _parseBasicShape(Map<String, dynamic> json) {
     List<Position> position = _parsePosition(json);
     String shape =
         json['p:spPr'] == "" ? 'rect' : json['p:spPr']['a:prstGeom']['_prst'];
@@ -368,7 +368,7 @@ class PresentationParser {
     node.hyperlink =
         _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']);
 
-    node.children.add(_parseVanillaShape(json));
+    node.children.add(_parseBasicShape(json));
     node.children.add(_parseTextBody(json['p:txBody']));
 
     return node;
