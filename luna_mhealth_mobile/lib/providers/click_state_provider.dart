@@ -6,9 +6,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// ignore_for_file: public_member_api_docs
-
 import 'package:flutter/foundation.dart';
+
 import '../models/click_state.dart';
 
 /// A provider class that manages the state of a click event.

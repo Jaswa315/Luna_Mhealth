@@ -6,6 +6,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+// ignore_for_file: constant_identifier_names
+
 import 'dart:io';
 import 'package:azure_application_insights/azure_application_insights.dart';
 import 'package:device_info/device_info.dart';
@@ -76,7 +78,7 @@ abstract class ILunaLogger {
 
 /// [LogManager] provides logging functionality and management for the Luna application.
 ///
-/// The [LogManager] class is responsible for managing a list of [ILunaloggers]
+/// The [LogManager] class is responsible for managing a list of `ILunaloggers`
 /// and providing methods for logging events, errors, and traces.
 /// It also allows adding, removing, and clearing loggers from the list.
 ///
@@ -324,6 +326,7 @@ class LogManager {
 class VersionManager {
   static String _cachedVersion = "Unknown";
 
+/// Returns the current version of the application.
   Future<String> getAppVersion() async {
     if (_cachedVersion == "Unknown") {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();

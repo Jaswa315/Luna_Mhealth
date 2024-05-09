@@ -55,13 +55,11 @@ class ClickState with ChangeNotifier {
   /// current color is blue, it changes it to red. Otherwise, it changes it to
   /// transparent. It also notifies listeners of the state change.
   void changeBorderColor() {
-    if (_borderColor == Colors.transparent) {
-      _borderColor = Colors.blue;
-    } else if (_borderColor == Colors.blue) {
-      _borderColor = Colors.red;
-    } else {
-      _borderColor = Colors.transparent;
-    }
+    _borderColor = _borderColor == Colors.transparent
+        ? Colors.blue
+        : _borderColor == Colors.blue
+            ? Colors.red
+            : Colors.transparent;
     print("ClickState.changeBorderColor() - borderColor is now: $_borderColor");
     notifyListeners();
   }

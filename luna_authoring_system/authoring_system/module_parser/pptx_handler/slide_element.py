@@ -1,3 +1,5 @@
+from ...enums import ShapeType
+
 class SlideElement:
     def __init__(self, type, text=None, text_properties=None, image_path=None, image_properties=None, position=None):
         self.type = type
@@ -13,10 +15,10 @@ class SlideElement:
             'position': self.position
         }
 
-        if self.type == 13:  # Assuming 13 is for images
+        if self.type == ShapeType.IMAGE.value:
             element_dict['image_path'] = self.image_path
             element_dict['image_properties'] = self.image_properties
-        elif self.type == 17:  # Assuming 17 is for text
+        elif self.type == ShapeType.TEXT.value:
             element_dict['text'] = self.text
             element_dict['text_properties'] = self.text_properties
 

@@ -1,6 +1,6 @@
 import argparse
 import json
-from pptx_handler.presentation_parser import parse_pptx_to_json
+from authoring_system.module_parser.pptx_handler.presentation_parser import parse_pptx_to_json
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Parse PowerPoint presentations to JSON")

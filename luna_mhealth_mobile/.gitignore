@@ -17,6 +17,7 @@
 test_media/
 test_media_compressed/
 assets/images/
+assets/test_data/
 
 # IntelliJ related
 *.iml
@@ -28,7 +29,7 @@ assets/images/
 .classpath
 .project
 .settings/
-.vscode/*
+.vscode/
 
 # Flutter repo-specific
 /bin/cache/

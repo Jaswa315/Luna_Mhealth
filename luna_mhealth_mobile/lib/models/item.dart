@@ -15,7 +15,6 @@ import '../enums/item_type.dart';
 
 /// Represents an item in the application.
 /// An item has an [id], [name], and [itemType].
-/// It can be converted to and from a JSON map using the [toJson] and [fromJson] methods.
 
 class Item {
   final String id;

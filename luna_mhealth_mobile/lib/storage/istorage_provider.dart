@@ -10,6 +10,8 @@
 /// Purpose: Storage provider interface for file access.  Powers local stoarge,
 /// and cloud storage instances.
 
+// ignore_for_file: public_member_api_docs
+
 import 'dart:typed_data';
 
 import 'package:luna_mhealth_mobile/storage/local_storage_provider.dart';
@@ -45,7 +47,8 @@ abstract class IStorageProvider {
   /// or optional container.  Supports recursive lookup.
   /// container: the file subfolder or container
   /// returns: list of strings
-  Future<List<String>> getAllFileNames({String container, bool recursiveSearch});
+  Future<List<String>> getAllFileNames(
+      {String container, bool recursiveSearch});
 
   /// getAllFiles: Get a list of files under the root path
   /// or optional container.  Supports recursive lookup.
