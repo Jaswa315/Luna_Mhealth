@@ -89,6 +89,18 @@ class PresentationParser {
     }
   }
 
+  dynamic _getNullableValue(dynamic map, List<String> keys) {
+    dynamic value = map;
+    for (var key in keys) {
+      if (value == null || value == "") {
+        return null;
+      }
+      value = value[key];
+    }
+
+    return (value == null || value == "") ? null : value;
+  }
+
   PrsNode _parsePresentation() {
     PresentationNode node = PresentationNode();
 
@@ -169,11 +181,11 @@ class PresentationParser {
     shapeTree.forEach((key, value) {
       if (key == keyShape) {
         _processDynamicCollection(shapeTree[key], (para) {
-          var ph = para['p:nvSpPr']?['p:nvPr']?['p:ph'];
+          var ph = _getNullableValue(para, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
           var spPr = para['p:spPr'];
           if (ph != null &&
               ph.containsKey('_idx') &&
-              (spPr != "" && spPr['a:xfrm'] != null) &&
+              (_getNullableValue(spPr, ['a:xfrm']) != null) &&
               (ph['_type'] == null ||
                   ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
             phToP[ph['_idx']] = _parsePosition(para);
@@ -253,14 +265,15 @@ class PresentationParser {
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
     String audioRelsLink = "";
-    if (json['p:nvPicPr']['p:nvPr'] != "" &&
-        json['p:nvPicPr']['p:nvPr']?['a:audioFile'] != null) {
-      audioRelsLink = json['p:nvPicPr']['p:nvPr']?['a:audioFile']?['_r:link'];
+    if (_getNullableValue(json['p:nvPicPr'], ['p:nvPr', 'a:audioFile']) !=
+        null) {
+      audioRelsLink = _getNullableValue(
+          json['p:nvPicPr'], ['p:nvPr', 'a:audioFile', '_r:link']);
     }
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
-    node.hyperlink =
-        _getHyperlink(json['p:nvPicPr']['p:cNvPr']?['a:hlinkClick']);
+    node.hyperlink = _getHyperlink(
+        _getNullableValue(json['p:nvPicPr'], ['p:cNvPr', 'a:hlinkClick']));
 
     node.children.add(_parseBasicShape(json));
 
@@ -269,14 +282,12 @@ class PresentationParser {
 
   PrsNode _parseShape(Map<String, dynamic> json) {
     // Check if a Textbox has placeholder that follows slidelayout
-    if (json['p:nvSpPr']?['p:cNvSpPr'] != "" &&
-        json['p:nvSpPr']?['p:cNvSpPr']?['_txBox'] == '1') {
+    if (_getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) == '1') {
       return _parseTextBox(json);
     }
 
-    if (json['p:nvSpPr']?['p:nvPr'] != "" &&
-        ['body', 'title']
-            .contains(json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'])) {
+    if (['body', 'title'].contains(
+        _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph' '_type']))) {
       return _parseTextBox(json);
     }
 
@@ -288,13 +299,12 @@ class PresentationParser {
     // check if it has own position.
     // if it does not have nvPr, look up in placeholder in slideLayout.
 
-    var nvPr = json['p:nvPicPr']?['p:nvPr'] ??
-        json['p:nvSpPr']?['p:nvPr'] ??
-        json['p:nvCxnSpPr']?['p:nvPr'];
+    var nvPr = _getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
+        _getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
+        _getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
 
     if (placeholderToPosition != null &&
-        nvPr != "" &&
-        nvPr.containsKey('p:ph')) {
+        _getNullableValue(nvPr, ['p:ph']) != null) {
       // this shape follows slideLayout
       String phIdx = nvPr['p:ph']['_idx'];
       return placeholderToPosition?[phIdx];
@@ -312,10 +322,11 @@ class PresentationParser {
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
     List<Position> position = _parsePosition(json);
-    String shape =
-        json['p:spPr'] == "" ? 'rect' : json['p:spPr']['a:prstGeom']['_prst'];
-    String? audioPath = slideRelationship?[json['p:nvSpPr']?['p:cNvPr']
-        ?['a:hlinkClick']?['a:snd']?['_r:embed']];
+    String shape = _getNullableValue(json, ['p:spPr']) == null
+        ? 'rect'
+        : json['p:spPr']['a:prstGeom']['_prst'];
+    String? audioPath = slideRelationship?[_getNullableValue(
+        json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
 
     switch (shape) {
       case 'rect':
@@ -324,14 +335,16 @@ class PresentationParser {
             position[1],
             ShapeGeometry.rectangle,
             audioPath,
-            _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']));
+            _getHyperlink(_getNullableValue(
+                json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick'])));
       case 'ellipse':
         return ShapeNode(
             position[0],
             position[1],
             ShapeGeometry.ellipse,
             audioPath,
-            _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']));
+            _getHyperlink(_getNullableValue(
+                json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick'])));
       default:
         //change it into logTrace
         print('Invalid shape to parse: $shape');
@@ -362,11 +375,11 @@ class PresentationParser {
   PrsNode _parseTextBox(Map<String, dynamic> json) {
     TextBoxNode node = TextBoxNode();
 
-    String? audioPath = slideRelationship?[json['p:nvSpPr']?['p:cNvPr']
-        ?['a:hlinkClick']?['a:snd']?['_r:embed']];
+    String? audioPath = slideRelationship?[_getNullableValue(
+        json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
     node.audioPath = audioPath;
-    node.hyperlink =
-        _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']);
+    node.hyperlink = _getHyperlink(
+        _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
 
     node.children.add(_parseBasicShape(json));
     node.children.add(_parseTextBody(json['p:txBody']));
@@ -377,7 +390,9 @@ class PresentationParser {
   PrsNode _parseTextBody(Map<String, dynamic> json) {
     TextBodyNode node = TextBodyNode();
 
-    node.wrap = json['a:bodyPr'] == "" ? "rect" : json['a:bodyPr']?['_wrap'];
+    node.wrap = _getNullableValue(json, ['a:bodyPr']) == null
+        ? "rect"
+        : _getNullableValue(json, ['a:bodyPr', '_wrap']);
     var pObj = json['a:p'];
     _processDynamicCollection(pObj, (para) {
       node.children.add(_parseTextPara(para));
@@ -389,7 +404,7 @@ class PresentationParser {
   PrsNode _parseTextPara(Map<String, dynamic> json) {
     TextParagraphNode node = TextParagraphNode();
 
-    node.alignment = json['a:pPr']?['align'];
+    node.alignment = _getNullableValue(json, ['a:pPr', 'align']);
     var rObj = json['a:r'];
     _processDynamicCollection(rObj, (para) {
       node.children.add(_parseText(para));
@@ -406,11 +421,14 @@ class PresentationParser {
     node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);
     String? sizeStr = json['a:rPr']['_sz'];
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
-    node.color = json['a:rPr']['a:solidFill']?['a:schemeClr']?['_val'];
-    node.highlightColor = json['a:rPr']['a:highlight']?['a:srgbClr']?['_val'];
+    node.color = _getNullableValue(
+        json['a:rPr'], ['a:solidFill', 'a:schemeClr', '_val']);
+    node.highlightColor =
+        _getNullableValue(json['a:rPr'], ['a:highlight', 'a:srgbClr', '_val']);
     node.language = json['a:rPr']['_lang'];
     node.text = json['a:t'];
-    node.hyperlink = _getHyperlink(json['a:rPr']?['a:hlinkClick']);
+    node.hyperlink =
+        _getHyperlink(_getNullableValue(json, ['a:rPr', 'a:hlinkClick']));
 
     return node;
   }
