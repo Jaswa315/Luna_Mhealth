@@ -37,6 +37,24 @@ class PresentationParser {
     _file = file;
   }
 
+  Future<PrsNode> toPrsNode() async {
+    PresentationParser parser = PresentationParser(_file);
+    return parser._parsePresentation();
+  }
+
+  Future<Map<String, dynamic>> toMap() async {
+    PrsNode prsTree = await toPrsNode();
+    return prsTree.toJson();
+  }
+
+  Future<File> toJSON(String outputPath) async {
+    Map<String, dynamic> astJson = await toMap();
+    String jsonString = jsonEncode(astJson);
+    File outputFile = File(outputPath);
+    await outputFile.writeAsString(jsonString);
+    return outputFile;
+  }
+
   XmlDocument _extractXMLFromZip(String xmlFilePath) {
     var bytes = _file.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
@@ -417,23 +435,5 @@ class PresentationParser {
       default:
         return null;
     }
-  }
-
-  Future<PrsNode> toPrsNode() async {
-    PresentationParser parser = PresentationParser(_file);
-    return parser._parsePresentation();
-  }
-
-  Future<Map<String, dynamic>> toMap() async {
-    PrsNode prsTree = await toPrsNode();
-    return prsTree.toJson();
-  }
-
-  Future<File> toJSON(String outputPath) async {
-    Map<String, dynamic> astJson = await toMap();
-    String jsonString = jsonEncode(astJson);
-    File outputFile = File(outputPath);
-    await outputFile.writeAsString(jsonString);
-    return outputFile;
   }
 }
