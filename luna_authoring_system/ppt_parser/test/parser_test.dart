@@ -262,13 +262,13 @@ void main() {
 
       Map<String, dynamic> astJson = jsonDecode(jsonString);
       double offsetX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['offset']['x'];
+          ['children'][0]['transform']['offset']['x'];
       double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['offset']['y'];
+          ['children'][0]['transform']['offset']['y'];
       double sizeX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['size']['x'];
+          ['children'][0]['transform']['size']['x'];
       double sizeY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['size']['y'];
+          ['children'][0]['transform']['size']['y'];
 
       bool isPercentage(x) {
         if (x >= 0 && x <= 100) {
@@ -474,7 +474,7 @@ void main() {
       expect(shapeType2, "bentConnector3");
     });
 
-    test('Vanilla shapes with texts have text content', () async {
+    test('Basic shapes with texts have text content', () async {
       var filename = "Ellipse and rectangle shapes with textbox.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 

@@ -7,7 +7,6 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:archive/archive.dart';
-import 'package:path/path.dart';
 import 'presentation_tree.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -31,7 +30,7 @@ class PresentationParser {
   int? slideIndex;
   int? slideCount;
   // for slides made upon a slideLayout
-  Map<String, dynamic>? placeholderToPosition;
+  Map<String, dynamic>? placeholderToTransform;
 
   PresentationParser(File file) {
     _file = file;
@@ -148,7 +147,7 @@ class PresentationParser {
       slideRelationship = _parseSlideRels(i);
       PrsNode slide = _parseSlide(parserdSlideIdList);
       node.children.add(slide);
-      placeholderToPosition = null;
+      placeholderToTransform = null;
     }
 
     return node;
@@ -163,7 +162,7 @@ class PresentationParser {
       rIdToTarget[para['_Id']] = para['_Target'];
       if (para['_Type'] == keySlideLayoutSchema) {
         RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
-        placeholderToPosition = _parseSlideLayout(
+        placeholderToTransform = _parseSlideLayout(
             int.parse(regex.firstMatch(para['_Target'])?.group(0) ?? "1"));
       }
     });
@@ -188,7 +187,7 @@ class PresentationParser {
               (_getNullableValue(spPr, ['a:xfrm']) != null) &&
               (ph['_type'] == null ||
                   ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
-            phToP[ph['_idx']] = _parsePosition(para);
+            phToP[ph['_idx']] = _parseTransform(para);
           }
         });
       }
@@ -209,12 +208,15 @@ class PresentationParser {
       // if sldId is Map, it only contains one slide in that section
       // if sldId is List, it has at least 2 slides in that section
 
-      if (section['p14:sldIdLst'] != "") {
-        if (section['p14:sldIdLst']['p14:sldId'] is Map<String, dynamic>) {
+      var sectionData =
+          _getNullableValue(section, ['p14:sldIdLst', 'p14:sldId']);
+
+      if (sectionData != null) {
+        if (sectionData is Map<String, dynamic>) {
           sectionWithSlide[currentSection].add(slideIdKeys[currentSlideNumber]);
           currentSlideNumber += 1;
         } else {
-          List slideList = section['p14:sldIdLst']['p14:sldId'];
+          List slideList = sectionData;
           sectionWithSlide[currentSection] = List<String>.generate(
               slideList.length.toInt(),
               (index) => slideIdKeys[index + currentSlideNumber]);
@@ -265,11 +267,9 @@ class PresentationParser {
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
     String audioRelsLink = "";
-    if (_getNullableValue(json['p:nvPicPr'], ['p:nvPr', 'a:audioFile']) !=
-        null) {
-      audioRelsLink = _getNullableValue(
-          json['p:nvPicPr'], ['p:nvPr', 'a:audioFile', '_r:link']);
-    }
+    audioRelsLink = _getNullableValue(
+            json['p:nvPicPr'], ['p:nvPr', 'a:audioFile', '_r:link']) ??
+        "";
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
     node.hyperlink = _getHyperlink(
@@ -295,33 +295,34 @@ class PresentationParser {
     return _parseBasicShape(json);
   }
 
-  List<Position> _parsePosition(Map<String, dynamic> json) {
-    // check if it has own position.
+  Transform _parseTransform(Map<String, dynamic> json) {
+    // check if it has own transform.
     // if it does not have nvPr, look up in placeholder in slideLayout.
 
     var nvPr = _getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
         _getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
         _getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
 
-    if (placeholderToPosition != null &&
+    if (placeholderToTransform != null &&
         _getNullableValue(nvPr, ['p:ph']) != null) {
       // this shape follows slideLayout
       String phIdx = nvPr['p:ph']['_idx'];
-      return placeholderToPosition?[phIdx];
+      return placeholderToTransform?[phIdx];
     } else {
-      Position offset = Position(
+      Transform node = Transform();
+      node.offset = Point2D(
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
 
-      Position size = Position(
+      node.size = Point2D(
           double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
           double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
-      return [offset, size];
+      return node;
     }
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    List<Position> position = _parsePosition(json);
+    Transform transform = _parseTransform(json);
     String shape = _getNullableValue(json, ['p:spPr']) == null
         ? 'rect'
         : json['p:spPr']['a:prstGeom']['_prst'];
@@ -331,16 +332,14 @@ class PresentationParser {
     switch (shape) {
       case 'rect':
         return ShapeNode(
-            position[0],
-            position[1],
+            transform,
             ShapeGeometry.rectangle,
             audioPath,
             _getHyperlink(_getNullableValue(
                 json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick'])));
       case 'ellipse':
         return ShapeNode(
-            position[0],
-            position[1],
+            transform,
             ShapeGeometry.ellipse,
             audioPath,
             _getHyperlink(_getNullableValue(
@@ -353,7 +352,7 @@ class PresentationParser {
   }
 
   PrsNode _parseConnectionShape(Map<String, dynamic> json) {
-    List<Position> position = _parsePosition(json);
+    Transform transform = _parseTransform(json);
 
     double weight =
         json['p:spPr']['a:ln'] == null || json['p:spPr']['a:ln']['_w'] == null
@@ -364,8 +363,7 @@ class PresentationParser {
 
     switch (shape) {
       case 'line':
-        return ConnectionNode(
-            position[0], position[1], weight, ShapeGeometry.line);
+        return ConnectionNode(transform, weight, ShapeGeometry.line);
       default:
         print('Invalid shape to parse: $shape');
         return PrsNode();
@@ -375,9 +373,8 @@ class PresentationParser {
   PrsNode _parseTextBox(Map<String, dynamic> json) {
     TextBoxNode node = TextBoxNode();
 
-    String? audioPath = slideRelationship?[_getNullableValue(
+    node.audioPath = slideRelationship?[_getNullableValue(
         json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
-    node.audioPath = audioPath;
     node.hyperlink = _getHyperlink(
         _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
 
