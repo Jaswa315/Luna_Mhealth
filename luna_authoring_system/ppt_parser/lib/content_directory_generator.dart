@@ -1,15 +1,6 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import 'dart:io';
+import 'dart:ui';
 import 'package:path/path.dart' as path;
-import 'package:ppt_parser/module_text_elements.dart';
-import 'package:ppt_parser/presentation_parser.dart';
-import 'package:ppt_parser/presentation_tree.dart';
 import 'package:luna_mhealth_mobile/utils/logging.dart';
 
 // Content Directory Generator provides tools and methods to generate the proper
@@ -41,7 +32,7 @@ class ContentDirectoryGenerator {
   ///
   /// Throws [FileSystemException] if any file operations fail, or if the specified PowerPoint file does not exist.
   Future<bool> initializeDirectory(
-      String pptxLocation, String defaultLanguage, String targetRoot) async {
+      String pptxLocation, Locale defaultLanguage, String targetRoot) async {
     await LogManager()
         .logFunction('ContentDirectoryGenerator.initializeDirectory', () async {
       // Check if the target root directory exists
@@ -87,8 +78,6 @@ class ContentDirectoryGenerator {
   ///   the required 'pptx', 'module', and 'resources' directories exist.
   /// - Checks if a directory for the new language already exists under 'module/resources'. If it exists, the method
   ///   returns `false` to indicate that the language directory could not be added because it already exists.
-  /// - If the directory does not exist, it creates a new directory for the language and generates a CSV file
-  ///   for language-specific content based on a PowerPoint presentation.
   ///
   /// The first step of this method is validating that the given moduleDataLocation parameter
   /// is valid. It needs to be the content module data name, which has pptx/ and resources/ under it
@@ -99,13 +88,13 @@ class ContentDirectoryGenerator {
   /// [newLanguage] is the name of the new language directory to be added (e.g., 'en-US').
   /// This will be the name of the language folder under resources/
   ///
-  /// Returns a [Future<bool>] that completes with `true` if the language directory and CSV were successfully created,
+  /// Returns a [Future<bool>] that completes with `true` if the language directory was successfully created,
   /// or `false` if any step of the process fails, including if the directory structure is not valid or if the
   /// language directory already exists.
   ///
-  /// Throws [FileSystemException] if file operations fail, such as during CSV generation or directory creation
+  /// Throws [FileSystemException] if file operations fail, such as during or directory creation
   Future<bool> addLanguage(
-      String moduleDataLocation, String newLanguage) async {
+      String moduleDataLocation, Locale newLanguage) async {
     await LogManager().logFunction('ContentDirectoryGenerator.addLanguage',
         () async {
       // Validate the existing directory structure
@@ -117,30 +106,25 @@ class ContentDirectoryGenerator {
         return false;
       }
 
+      String languageLocaleAsString = newLanguage.toLanguageTag();
+
       // Construct the path for the new language directory under module/resources
       String newLanguagePath =
-          await path.join(moduleDataLocation, 'module', 'resources', newLanguage);
+          await path.join(moduleDataLocation, 'module', 'resources', languageLocaleAsString);
       Directory newLanguageDirectory = await Directory(newLanguagePath);
 
       // Check if the directory for the new language already exists
       if (newLanguageDirectory.existsSync()) {
         LogManager().logTrace(
-            'Language directory already exists for: $newLanguage at $newLanguagePath',
+            'Language directory already exists for: $languageLocaleAsString at $newLanguagePath',
             LunaSeverityLevel.Verbose);
         return false; // Return false because the language already exists
       }
 
-      // If you reach this point, no directory exists, and you can proceed with creation
+      // If you reach this point, no directory exists, and you can proceed with directory creation
       try {
         // create the folder for our new language under resources
         await newLanguageDirectory.create(recursive: true);
-        // generate the associated CSV file
-        File pptxFile = await _getFirstFoundPPTXFile("$moduleDataLocation/pptx");
-        PresentationParser parser = PresentationParser(pptxFile);
-        PrsNode prsTree = await parser.toPrsNode();
-        ModuleTextElements moduleData =
-            await ModuleTextElements(prsTree, newLanguage);
-        await moduleData.generateCSV(newLanguage, newLanguagePath);
         return true; // Return true to indicate the operation was successful
       } catch (e) {
         LogManager().logTrace('Failed to create the language directory: $e',
@@ -150,45 +134,7 @@ class ContentDirectoryGenerator {
     });
     return true;
   }
-
-  /// Given the content module data directory folder,
-  /// retrieves th PowerPoint file.
-  ///
-  /// This is a private helper method that makes it easy to retrieve
-  /// the powerpoint under the pptx/ folder in a content data directory.
-  /// The intent was to separate some logic from the public methods above to
-  /// prevent methods from being too long.
-  ///
-  /// This method scans the given directory for files ending with '.pptx' and returns the first one it finds.
-  /// It's used primarily to select the PowerPoint file needed for content generation in the case where
-  /// only one file should be present in the directory.
-  ///
-  /// [pptxDirectoryPath] specifies the directory path where PowerPoint files are stored.
-  ///
-  /// Returns a [File] object representing the first '.pptx' file found in the directory.
-  ///
-  /// Throws [FileSystemException] if no PowerPoint files are found in the directory, ensuring
-  /// that the calling function can handle this absence appropriately.
-  File _getFirstFoundPPTXFile(String pptxDirectoryPath) {
-    // Create a directory object
-    Directory pptxDir = Directory(pptxDirectoryPath);
-
-    // Get the list of files in the directory
-    List<FileSystemEntity> files = pptxDir.listSync();
-
-    // Find the first .pptx file
-    FileSystemEntity pptxFile =
-        files.firstWhere((file) => file.path.endsWith('.pptx'), orElse: () {
-      LogManager().logTrace(
-          "No PPTX file found found under given directory $pptxDirectoryPath",
-          LunaSeverityLevel.Error);
-      throw const FileSystemException("No PPTX file found");
-    });
-
-    return File(
-        pptxFile.path); // Return the File object for the first .pptx file
-  }
-
+  
   /// Validates the structure of a directory intended for content module data.
   ///
   /// This method checks if all the necessary subdirectories exist within the specified directory,
@@ -210,7 +156,7 @@ class ContentDirectoryGenerator {
   ///     module/
   ///       resources/
   ///         en-US/
-  ///           en-US.csv
+  ///          
   /// ```
   ///
   /// Example of an invalid directory structure:
@@ -392,3 +338,4 @@ class ContentDirectoryGenerator {
     }
   }
 }
+

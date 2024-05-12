@@ -34,22 +34,16 @@ void main() {
   }
 
   test(
-      'Content Directory Generator: Initializing a directory has the inputted language directory with a CSV file',
+      'Content Directory Generator: Initializing a directory has the expected language directory',
       () async {
     String testDirectory = await prepareTestDirectory('test3');
     ContentDirectoryGenerator generator = ContentDirectoryGenerator();
     String pptxName = "TextBox-HelloWorld";
     String powerpointLocation = "$assetsFolder/$pptxName.pptx";
     Locale locale = Locale('en', 'US'); // Using Locale
-    bool success = await generator.initializeDirectory(
-        powerpointLocation,
-        locale.toLanguageTag(),
-        testDirectory); // Convert Locale to a BCP-47 language tag
+    bool success = await generator.initializeDirectory(powerpointLocation,
+        locale, testDirectory); // Convert Locale to a BCP-47 language tag
     expect(success, true);
-    String csvFilePath = path.join(testDirectory, pptxName, 'module',
-        'resources', locale.toLanguageTag(), '${locale.toLanguageTag()}.csv');
-    expect(await File(csvFilePath).exists(), isTrue,
-        reason: 'CSV file should exist at $csvFilePath');
   });
   test(
       'Initializing a directory copies given the PowerPoint to specific location',
@@ -59,7 +53,7 @@ void main() {
     String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
     Locale locale = Locale('en', 'US');
     bool success = await generator.initializeDirectory(
-        powerpointLocation, locale.toLanguageTag(), testDirectory);
+        powerpointLocation, locale, testDirectory);
     expect(success, true);
     bool val = await File(path.join(testDirectory, 'TextBox-HelloWorld', 'pptx',
             'TextBox-HelloWorld.pptx'))
@@ -73,7 +67,7 @@ void main() {
     String powerpointLocation = "$assetsFolder/TextBox-HelloWorld.pptx";
     Locale locale = Locale('en', 'US');
     bool success = await generator.initializeDirectory(
-        powerpointLocation, locale.toLanguageTag(), testDirectory);
+        powerpointLocation, locale, testDirectory);
     expect(success, true);
   });
 }
