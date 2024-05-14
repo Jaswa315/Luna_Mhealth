@@ -7,13 +7,13 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
-import 'package:luna_mhealth_mobile/core/services/module_handler_service.dart';
+import '../../../../luna_core/lib/storage/module_resource_factory.dart';
 
-import '../../models/module.dart';
-import '../../models/page.dart' as page_model;
-import '../../renderers/irenderer.dart';
-import '../../renderers/renderer_factory.dart';
-import '../../utils/scale_utilities.dart';
+import '../../../../luna_core/lib/models/module.dart';
+import '../../../../luna_core/lib/models/page.dart' as page_model;
+import '../../../../luna_core/lib/renderers/irenderer.dart';
+import '../../../../luna_core/lib/renderers/renderer_factory.dart';
+import '../../../../luna_core/lib/utils/scale_utilities.dart';
 
 /// A class that provides services for managing module pages.
 class ModulePageBuilderService {
@@ -38,7 +38,7 @@ class ModulePageBuilderService {
       Widget Function(page_model.Page, Size, double) buildSlide) {
     double scale = scaleUtilities.calculateScale(screenSize, module.width);
 
-    ModuleHandler.imageModuleName = module.title;
+    ModuleResourceFactory.imageModuleName = module.title;
 
     if (!cachedPages.containsKey(pageIndex)) {
       cachedPages[pageIndex] =

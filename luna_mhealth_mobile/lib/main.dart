@@ -8,8 +8,8 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_mhealth_mobile/presentation/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/module_provider.dart';
-import 'utils/logging.dart';
+import 'providers/module_ui_picker.dart';
+import '../../luna_core/lib/utils/logging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ void main() async {
       .then((_) {
     runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ModuleProvider()),
+        ChangeNotifierProvider(create: (_) => ModuleUIPicker()),
         //ChangeNotifierProvider(create: (_) => ClickStateProvider()),
       ],
       child: MyApp(),

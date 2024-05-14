@@ -8,7 +8,7 @@
 
 import 'package:flutter/foundation.dart';
 
-import '../models/click_state.dart';
+import '../../../luna_core/lib/models/click_state.dart';
 
 /// A provider class that manages the state of a click event.
 class ClickStateProvider with ChangeNotifier {

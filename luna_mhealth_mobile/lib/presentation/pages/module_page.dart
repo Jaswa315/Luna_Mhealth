@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import '../../core/controllers/navigation_controller.dart';
 import '../../core/services/page_builder_service.dart';
 import '../../core/services/page_persistence_service.dart';
-import '../../models/module.dart';
-import '../../models/page.dart' as page_model;
+import '../../../../luna_core/lib/models/module.dart';
+import '../../../../luna_core/lib/models/page.dart' as page_model;
 import '../widgets/module_page_navigation.dart';
 
 /// A page that displays the content of a module.
