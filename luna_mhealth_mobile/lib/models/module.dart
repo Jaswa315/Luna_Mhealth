@@ -46,8 +46,6 @@ class Module extends Item {
   /// The [json] parameter is a map containing the JSON data for the module.
   /// The method parses the JSON data and returns a new [Module] object.
   factory Module.fromJson(Map<String, dynamic> json) {
-    print('Module.fromJson: ${json['module_name']}');
-
     if (json['slides'] == null) {
       throw FormatException('Expected a "slides" field with an array value.');
     }

@@ -33,7 +33,6 @@ class ClickState with ChangeNotifier {
   /// state change.
   void toggleBold() {
     _isBold = !_isBold;
-    print("ClickState.toggleBold() - isBold is now: $_isBold");
     notifyListeners();
   }
 
@@ -44,7 +43,6 @@ class ClickState with ChangeNotifier {
   /// the state change.
   void changeText() {
     _text = _text == "Hello, World!" ? "Updated Text" : "Hello, World!";
-    print("ClickState.changeText() - text is now: $_text");
     notifyListeners();
   }
 
@@ -60,7 +58,6 @@ class ClickState with ChangeNotifier {
         : _borderColor == Colors.blue
             ? Colors.red
             : Colors.transparent;
-    print("ClickState.changeBorderColor() - borderColor is now: $_borderColor");
     notifyListeners();
   }
 }

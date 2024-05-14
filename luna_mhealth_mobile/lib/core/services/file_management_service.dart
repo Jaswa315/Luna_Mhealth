@@ -8,7 +8,6 @@
 
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 
 /// A service class that provides file management functionality.
 class FileManagementService {
@@ -21,7 +20,6 @@ class FileManagementService {
       }
       return pickedFile;
     } catch (e) {
-      debugPrint('Error selecting and storing file: $e');
       rethrow;
     }
   }

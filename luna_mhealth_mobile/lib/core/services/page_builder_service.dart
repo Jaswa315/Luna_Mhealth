@@ -7,11 +7,12 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
+import 'package:luna_mhealth_mobile/core/services/module_handler_service.dart';
 
 import '../../models/module.dart';
 import '../../models/page.dart' as page_model;
-import '../../renderers/component_factory.dart';
-import '../../renderers/component_renderer.dart';
+import '../../renderers/irenderer.dart';
+import '../../renderers/renderer_factory.dart';
 import '../../utils/scale_utilities.dart';
 
 /// A class that provides services for managing module pages.
@@ -37,6 +38,8 @@ class ModulePageBuilderService {
       Widget Function(page_model.Page, Size, double) buildSlide) {
     double scale = scaleUtilities.calculateScale(screenSize, module.width);
 
+    ModuleHandler.imageModuleName = module.title;
+
     if (!cachedPages.containsKey(pageIndex)) {
       cachedPages[pageIndex] =
           buildSlide(module.pages[pageIndex], screenSize, scale);
@@ -44,30 +47,28 @@ class ModulePageBuilderService {
     return cachedPages[pageIndex];
   }
 
-  /// Builds a page using the given [page], [screenSize], [scale], and [moduleTitle].
+  /// Builds a page using the given [page], [screenSize], and [scale].
   ///
   /// The [page] parameter represents the page model to be built.
   /// The [screenSize] parameter represents the size of the screen.
   /// The [scale] parameter represents the scaling factor.
-  /// The [moduleTitle] parameter represents the title of the module.
   ///
   /// Returns a [Widget] representing the built page.
-  Widget buildPage(
-      page_model.Page page, Size screenSize, double scale, String moduleTitle) {
+  Widget buildPage(page_model.Page page, Size screenSize, double scale) {
     return SingleChildScrollView(
       child: Container(
         width: screenSize.width,
         height: screenSize.height,
         child: Stack(
           children: page.components.map((component) {
-            ComponentRenderer renderer =
-                ComponentFactory.getRenderer(component.runtimeType);
+            IRenderer renderer =
+                RendererFactory.getRenderer(component.runtimeType);
             return Positioned(
               left: component.bounds.left * scale,
               top: component.bounds.top * scale,
               width: component.bounds.width * scale,
               height: component.bounds.height * scale,
-              child: renderer.renderComponent(component, scale, moduleTitle),
+              child: renderer.renderComponent(component, scale),
             );
           }).toList(),
         ),
