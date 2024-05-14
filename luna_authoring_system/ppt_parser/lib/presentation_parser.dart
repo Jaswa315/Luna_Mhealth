@@ -20,6 +20,8 @@ const String keyShape = 'p:sp';
 const String keyConnectionShape = 'p:cxnSp';
 const String keySlideLayoutSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout";
+const String keyLunaCategoryContainer = 'luna_category_container';
+const String keyLunaCategoryPicture = 'luna_category_picture';
 
 class PresentationParser {
   // removed static so the localization_test and parser_test work
@@ -31,6 +33,8 @@ class PresentationParser {
   int? slideCount;
   // for slides made upon a slideLayout
   Map<String, dynamic>? placeholderToTransform;
+  List<dynamic> categoryContainerTransform = [];
+  List<dynamic> categoryImageTransform = [];
 
   PresentationParser(File file) {
     _file = file;
@@ -120,9 +124,9 @@ class PresentationParser {
 
     var slideIdList =
         presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
-    List<String> parserdSlideIdList = [];
+    List<String> parsedSlideIdList = [];
     _processDynamicCollection(slideIdList, (para) {
-      parserdSlideIdList.add('S${para["_id"]}');
+      parsedSlideIdList.add('S${para["_id"]}');
     });
 
     if (presentationMap['p:presentation']['p:extLst'] == null ||
@@ -133,21 +137,25 @@ class PresentationParser {
             null) {
       node.section = {
         PresentationNode.defaultSection: List<String>.generate(
-            node.slideCount, (index) => parserdSlideIdList[index])
+            node.slideCount, (index) => parsedSlideIdList[index])
       };
     } else {
       node.section = _parseSection(
           presentationMap['p:presentation']['p:extLst']['p:ext'][0]
               ['p14:sectionLst']['p14:section'],
-          parserdSlideIdList);
+          parsedSlideIdList);
     }
 
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
       slideRelationship = _parseSlideRels(i);
-      PrsNode slide = _parseSlide(parserdSlideIdList);
+      PrsNode slide = categoryContainerTransform.isEmpty
+          ? _parseSlide(parsedSlideIdList)
+          : _parseCategoryGameEditor(parsedSlideIdList);
       node.children.add(slide);
       placeholderToTransform = null;
+      categoryContainerTransform = [];
+      categoryImageTransform = [];
     }
 
     return node;
@@ -171,7 +179,6 @@ class PresentationParser {
   }
 
   Map<String, dynamic> _parseSlideLayout(int slideIndex) {
-    // TODO: Branch if it's a Category Game Editor
     Map<String, dynamic> phToP = {};
     var slideLayoutMap =
         jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
@@ -180,6 +187,16 @@ class PresentationParser {
     shapeTree.forEach((key, value) {
       if (key == keyShape) {
         _processDynamicCollection(shapeTree[key], (para) {
+          var descr =
+              _getNullableValue(para, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+          switch (descr) {
+            case keyLunaCategoryContainer:
+              categoryContainerTransform.add(_parseTransform(para));
+              break;
+            case keyLunaCategoryPicture:
+              categoryImageTransform.add(_parseTransform(para));
+          }
+
           var ph = _getNullableValue(para, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
           var spPr = para['p:spPr'];
           if (ph != null &&
@@ -230,11 +247,8 @@ class PresentationParser {
 
   PrsNode _parseSlide(var slideIdList) {
     SlideNode node = SlideNode();
-
     var slideMap = jsonFromArchive("ppt/slides/slide$slideIndex.xml");
-
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
-
     node.slideId = slideIdList[slideIndex! - 1];
 
     shapeTree.forEach((key, value) {
@@ -260,6 +274,70 @@ class PresentationParser {
     return node;
   }
 
+  PrsNode _parseCategoryGameEditor(var slideIdList) {
+    CategoryGameEditorNode node = CategoryGameEditorNode();
+    var slideMap = jsonFromArchive("ppt/slides/slide$slideIndex.xml");
+    var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
+    node.slideId = slideIdList[slideIndex! - 1];
+
+    for (int i = 0; i < categoryContainerTransform.length; i++) {
+      node.children.add(CategoryNode());
+    }
+
+    shapeTree.forEach((key, value) {
+      switch (key) {
+        case keyPicture:
+          var picList = shapeTree[key];
+          _processDynamicCollection(picList, (para) {
+            var element = _parseImage(para);
+            ShapeNode? shapeElement = element.children[0] as ShapeNode;
+            int? index = _addToCategory(element);
+            categoryImageTransform.any((item) =>
+                    item.offset.x == shapeElement.transform.offset.x &&
+                    item.offset.y == shapeElement.transform.offset.y &&
+                    item.size.x == shapeElement.transform.size.x &&
+                    item.size.y == shapeElement.transform.size.y)
+                ? (node.children[index ?? 0] as CategoryNode).categoryImage =
+                    element as ImageNode
+                : node.children[index ?? 0].children.add(element);
+          });
+        case keyShape:
+          var shapeObj = shapeTree[key];
+          _processDynamicCollection(shapeObj, (para) {
+            var element = _parseShape(para);
+            (node.children[_addToCategory(element) ?? 0] as CategoryNode)
+                .categoryName = element as ShapeNode;
+          });
+      }
+    });
+
+    return node;
+  }
+
+  int? _addToCategory(var element) {
+    ShapeNode shapeElement =
+        element is ShapeNode ? element : element.children[0] as ShapeNode;
+
+    var centerX =
+        shapeElement.transform.offset.x + shapeElement.transform.size.x / 2;
+    var centerY =
+        shapeElement.transform.offset.y + shapeElement.transform.size.y / 2;
+
+    for (int i = 0; i < categoryContainerTransform.length; i++) {
+      if (categoryContainerTransform[i].offset.x <= centerX &&
+          centerX <=
+              categoryContainerTransform[i].offset.x +
+                  categoryContainerTransform[i].size.x &&
+          categoryContainerTransform[i].offset.y <= centerY &&
+          centerY <=
+              categoryContainerTransform[i].offset.y +
+                  categoryContainerTransform[i].size.y) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   PrsNode _parseImage(Map<String, dynamic> json) {
     ImageNode node = ImageNode();
 
@@ -281,11 +359,11 @@ class PresentationParser {
   }
 
   PrsNode _parseShape(Map<String, dynamic> json) {
-    // Check if a Textbox has placeholder that follows slidelayout
     if (_getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) == '1') {
       return _parseTextBox(json);
     }
 
+    // Check if a Textbox has placeholder that follows slidelayout
     if (['body', 'title'].contains(
         _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph' '_type']))) {
       return _parseTextBox(json);
@@ -322,28 +400,31 @@ class PresentationParser {
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    Transform transform = _parseTransform(json);
     String shape = _getNullableValue(json, ['p:spPr']) == null
         ? 'rect'
         : json['p:spPr']['a:prstGeom']['_prst'];
-    String? audioPath = slideRelationship?[_getNullableValue(
+
+    ShapeNode node = ShapeNode();
+
+    node.transform = _parseTransform(json);
+
+    node.audioPath = slideRelationship?[_getNullableValue(
         json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
+
+    if (_getNullableValue(json, ['p:txBody']) != null) {
+      node.children.add(_parseTextBody(json['p:txBody']));
+    }
+
+    node.hyperlink = _getHyperlink(
+        _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
 
     switch (shape) {
       case 'rect':
-        return ShapeNode(
-            transform,
-            ShapeGeometry.rectangle,
-            audioPath,
-            _getHyperlink(_getNullableValue(
-                json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick'])));
+        node.shape = ShapeGeometry.rectangle;
+        return node;
       case 'ellipse':
-        return ShapeNode(
-            transform,
-            ShapeGeometry.ellipse,
-            audioPath,
-            _getHyperlink(_getNullableValue(
-                json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick'])));
+        node.shape = ShapeGeometry.ellipse;
+        return node;
       default:
         //change it into logTrace
         print('Invalid shape to parse: $shape');

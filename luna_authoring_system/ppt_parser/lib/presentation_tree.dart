@@ -160,7 +160,6 @@ class TextParagraphNode extends PrsNode {
 // A TextNode is one text token from powerpoint. There can be multiple
 // text tokens in a text box. They are separated by text formatting.
 class TextNode extends PrsNode {
-  // late final int? hyperlink;
   late final bool italics;
   late final bool bold;
   late final bool underline;
@@ -215,17 +214,16 @@ class ShapeNode extends PrsNode {
   late final String? audioPath;
   late final int? hyperlink;
 
-  ShapeNode(this.transform, this.shape, this.audioPath, this.hyperlink) {
-    name = shape.name;
-  }
+  ShapeNode();
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': name,
+      'type': shape.name,
       'transform': transform.toJson(),
       if (audioPath != null) 'audiopath': audioPath,
-      if (hyperlink != null) 'hyperlink': hyperlink
+      if (hyperlink != null) 'hyperlink': hyperlink,
+      'children': children.map((child) => child.toJson()).toList()
     };
   }
 }
@@ -274,9 +272,11 @@ class ImageNode extends PrsNode {
   }
 }
 
-class GameEditorNode extends PrsNode {
-  GameEditorNode() {
-    name = 'gameeditor';
+class CategoryGameEditorNode extends PrsNode {
+  late final String slideId;
+
+  CategoryGameEditorNode() {
+    name = 'categorygameeditor';
   }
 
   @override
@@ -289,7 +289,8 @@ class GameEditorNode extends PrsNode {
 }
 
 class CategoryNode extends PrsNode {
-  late final String? category;
+  ShapeNode? categoryName;
+  ImageNode? categoryImage;
 
   CategoryNode() {
     name = 'category';
@@ -299,8 +300,9 @@ class CategoryNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'category': category,
-      'image': children.map((child) => child.toJson()).toList()
+      'category': categoryName?.toJson(),
+      'categoryImage': categoryImage?.toJson(),
+      'children': children.map((child) => child.toJson()).toList()
     };
   }
 }
