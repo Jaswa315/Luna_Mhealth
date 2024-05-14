@@ -11,6 +11,7 @@
 /// IStorageProvider.  Handles unpacking, packing, and validation of modules
 
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:global_configuration/global_configuration.dart';
