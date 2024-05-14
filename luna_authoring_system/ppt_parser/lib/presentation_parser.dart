@@ -13,7 +13,7 @@ import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:uuid/uuid.dart';
-// import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:luna_mhealth_mobile/utils/logging.dart';
 
 // From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
@@ -427,7 +427,8 @@ class PresentationParser {
         node.shape = ShapeGeometry.ellipse;
         return node;
       default:
-        // LogManager().logTrace('Invalid shape to parse: $shape', LunaSeverityLevel.Error);
+        LogManager().logTrace(
+            'Invalid shape to parse: $shape', LunaSeverityLevel.Error);
         return PrsNode();
     }
   }
@@ -446,7 +447,8 @@ class PresentationParser {
       case 'line':
         return ConnectionNode(transform, weight, ShapeGeometry.line);
       default:
-        // LogManager().logTrace('Invalid shape to parse: $shape', LunaSeverityLevel.Error);
+        LogManager().logTrace(
+            'Invalid shape to parse: $shape', LunaSeverityLevel.Error);
         return PrsNode();
     }
   }
