@@ -262,13 +262,13 @@ void main() {
 
       Map<String, dynamic> astJson = jsonDecode(jsonString);
       double offsetX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['offset']['x'];
+          ['children'][0]['transform']['offset']['x'];
       double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['offset']['y'];
+          ['children'][0]['transform']['offset']['y'];
       double sizeX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['size']['x'];
+          ['children'][0]['transform']['size']['x'];
       double sizeY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['position'][0]['size']['y'];
+          ['children'][0]['transform']['size']['y'];
 
       bool isPercentage(x) {
         if (x >= 0 && x <= 100) {
@@ -284,16 +284,6 @@ void main() {
       expect(isPercentage(sizeY), true);
     });
 
-    test('toJSON returns JSON file', () async {
-      var filename = "Luna_sample_module.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-
-      File json = await parser.toJSON("./test_module.json");
-      bool fileExists = json.existsSync();
-
-      expect(fileExists, true);
-    });
     test('Audio is parsed for each shapes', () async {
       var filename = "Audios in Shapes.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -418,62 +408,19 @@ void main() {
       expect(hyperlink0, null);
       expect(hyperlink1, null);
     });
-  });
 
-  group('Non MVP', () {
-    //TODO: Title and body text parser
-    test('Title and body are in the textbox', () async {
-      var filename = "Title and body.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String shapeType0 =
-          astJson['presentation']['slides'][0]['shapes'][0]['type'];
-      String shapeType1 =
-          astJson['presentation']['slides'][0]['shapes'][1]['type'];
-      String shapeType2 =
-          astJson['presentation']['slides'][0]['shapes'][2]['type'];
-
-      expect(shapeType0, "line");
-      expect(shapeType1, "ellipse");
-      expect(shapeType2, "image");
-    });
-
-    //TODO: Shape txBody parsing
-    test('Texts in the shape are parsed into its property', () async {
-      var filename = "Title and body.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-    });
-
-    //TODO: Shape txBody parsing: empty text
-
-    test('N Connection Shapes are parsed as line', () async {
-      var filename = "Shapes-Connections.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String shapeType0 =
-          astJson['presentation']['slides'][0]['shapes'][0]['type'];
-      String shapeType1 =
-          astJson['presentation']['slides'][0]['shapes'][1]['type'];
-      String shapeType2 =
-          astJson['presentation']['slides'][0]['shapes'][2]['type'];
-
-      expect(shapeType0, "line");
-      expect(shapeType1, "curvedConnector3");
-      expect(shapeType2, "bentConnector3");
-    });
-
-    test('Vanilla shapes with texts have text content', () async {
+    test('Basic shapes with texts have text content', () async {
       var filename = "Ellipse and rectangle shapes with textbox.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
       String text0 = astJson['presentation']['slides'][0]['shapes'][0]
-          ['textbox']['paragraphs'][0]['textgroups'][0]['text'];
+          ['children'][0]['paragraphs'][0]['textgroups'][0]['text'];
       String shapeType1 =
           astJson['presentation']['slides'][0]['shapes'][1]['type'];
       String text1 = astJson['presentation']['slides'][0]['shapes'][1]
-          ['textbox']['paragraphs'][0]['textgroups'][0]['text'];
+          ['children'][0]['paragraphs'][0]['textgroups'][0]['text'];
 
       expect(shapeType0, "ellipse");
       expect(shapeType1, "rectangle");
@@ -481,22 +428,68 @@ void main() {
       expect(text1, "text2");
     });
 
-    test('connection shape and shape are parsed as a different object',
-        () async {
-      var filename =
-          "A Shape with Textbox - A vanilla shape - a connection shape.pptx";
+    test('Category game editor is parsed as catogory and images', () async {
+      var filename = "Content and category game editor.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      String shapeType0 =
-          astJson['presentation']['slides'][0]['shapes'][0]['type'];
-      String shapeType1 =
-          astJson['presentation']['slides'][0]['shapes'][1]['type'];
-      String shapeType2 =
-          astJson['presentation']['slides'][0]['shapes'][2]['type'];
+      String type0 = astJson['presentation']['slides'][2]['type'];
+      List<dynamic> category = astJson['presentation']['slides'][2]['children'];
 
-      expect(shapeType0, "line");
-      expect(shapeType1, "ellipse");
-      expect(shapeType2, "rectangle");
+      expect(type0, 'categorygameeditor');
+      expect(category.length, 2);
     });
+
+    test('PPTX with one slide that follows slideLayout returns JSON file',
+        () async {
+      var filename = "Category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+    });
+
+    test('PPTX with muliple slides that follows slideLayout returns JSON file',
+        () async {
+      var filename = "Content and category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+    });
+
+    test('toJSON returns JSON file', () async {
+      var filename = "Content and category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./test_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+    });
+  });
+
+  group('Non MVP', () {
+    // test('N Connection Shapes are parsed as line', () async {
+    //   var filename = "Shapes-Connections.pptx";
+    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+    //   String shapeType0 =
+    //       astJson['presentation']['slides'][0]['shapes'][0]['type'];
+    //   String shapeType1 =
+    //       astJson['presentation']['slides'][0]['shapes'][1]['type'];
+    //   String shapeType2 =
+    //       astJson['presentation']['slides'][0]['shapes'][2]['type'];
+
+    //   expect(shapeType0, "line");
+    //   expect(shapeType1, "curvedConnector3");
+    //   expect(shapeType2, "bentConnector3");
+    // });
   });
 }

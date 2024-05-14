@@ -14,19 +14,32 @@ const double emuToPointFactor = 12700;
 double slideWidth = 0;
 double slideHeight = 0;
 
-class Position {
+mixin ToJson {
+  Map<String, dynamic> toJson();
+}
+
+class Point2D with ToJson {
   final double x;
   final double y;
 
-  Position(this.x, this.y);
+  Point2D(this.x, this.y);
 
+  @override
   Map<String, dynamic> toJson() {
     return {'x': x / slideWidth, 'y': y / slideHeight};
   }
 }
 
-mixin ToJson {
-  Map<String, dynamic> toJson();
+class Transform with ToJson {
+  late final Point2D offset;
+  late final Point2D size;
+
+  Transform();
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {'offset': offset.toJson(), 'size': size.toJson()};
+  }
 }
 
 class PrsNode with ToJson {
@@ -51,7 +64,7 @@ class PresentationNode extends PrsNode {
   late final Map<String, dynamic> section;
   late final double x;
   late final double y;
-  static const String defaultSection = "Default Section";
+  static const String defaultSection = 'Default Section';
 
   PresentationNode() {
     name = 'presentation';
@@ -102,8 +115,8 @@ class TextBoxNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      if (audioPath != null) "audiopath": audioPath,
-      if (hyperlink != null) "hyperlink": hyperlink,
+      if (audioPath != null) 'audiopath': audioPath,
+      if (hyperlink != null) 'hyperlink': hyperlink,
       // todo, change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };
@@ -147,7 +160,6 @@ class TextParagraphNode extends PrsNode {
 // A TextNode is one text token from powerpoint. There can be multiple
 // text tokens in a text box. They are separated by text formatting.
 class TextNode extends PrsNode {
-  // late final int? hyperlink;
   late final bool italics;
   late final bool bold;
   late final bool underline;
@@ -179,7 +191,7 @@ class TextNode extends PrsNode {
       'highlightcolor': highlightColor,
       'language': language,
       'text': text,
-      if (hyperlink != null) "hyperlink": hyperlink,
+      if (hyperlink != null) 'hyperlink': hyperlink,
     };
   }
 }
@@ -197,37 +209,32 @@ class BodyNode extends PrsNode {
 }
 
 class ShapeNode extends PrsNode {
-  late final Position offset;
-  late final Position size;
+  late final Transform transform;
   late final ShapeGeometry shape;
   late final String? audioPath;
   late final int? hyperlink;
 
-  ShapeNode(
-      this.offset, this.size, this.shape, this.audioPath, this.hyperlink) {
-    name = shape.name;
-  }
+  ShapeNode();
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': name,
-      "offset": offset,
-      "size": size,
-      if (audioPath != null) "audiopath": audioPath,
-      if (hyperlink != null) "hyperlink": hyperlink
+      'type': shape.name,
+      'transform': transform.toJson(),
+      if (audioPath != null) 'audiopath': audioPath,
+      if (hyperlink != null) 'hyperlink': hyperlink,
+      'children': children.map((child) => child.toJson()).toList()
     };
   }
 }
 
 class ConnectionNode extends PrsNode {
   static const double defaultHalfLineWidth = 6350;
-  late final Position offset;
-  late final Position size;
+  late final Transform transform;
   late final double weight;
   late final ShapeGeometry shape;
 
-  ConnectionNode(this.offset, this.size, this.weight, this.shape) {
+  ConnectionNode(this.transform, this.weight, this.shape) {
     name = shape.name;
   }
 
@@ -235,9 +242,8 @@ class ConnectionNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      "offset": offset,
-      "size": size,
-      "weight": weight / emuToPointFactor
+      'transform': transform.toJson(),
+      'weight': weight / emuToPointFactor
     };
   }
 }
@@ -259,9 +265,44 @@ class ImageNode extends PrsNode {
       'type': name,
       'path': path,
       'alttext': altText,
-      if (audioPath != null) "audiopath": audioPath,
-      if (hyperlink != null) "hyperlink": hyperlink,
-      'position': children.map((child) => child.toJson()).toList()
+      if (audioPath != null) 'audiopath': audioPath,
+      if (hyperlink != null) 'hyperlink': hyperlink,
+      'children': children.map((child) => child.toJson()).toList()
+    };
+  }
+}
+
+class CategoryGameEditorNode extends PrsNode {
+  late final String slideId;
+
+  CategoryGameEditorNode() {
+    name = 'categorygameeditor';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': name,
+      'children': children.map((child) => child.toJson()).toList()
+    };
+  }
+}
+
+class CategoryNode extends PrsNode {
+  ShapeNode? categoryName;
+  ImageNode? categoryImage;
+
+  CategoryNode() {
+    name = 'category';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': name,
+      'category': categoryName?.toJson(),
+      'categoryImage': categoryImage?.toJson(),
+      'children': children.map((child) => child.toJson()).toList()
     };
   }
 }
