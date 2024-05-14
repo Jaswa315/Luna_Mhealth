@@ -18,6 +18,9 @@ import '../../storage/module_storage.dart';
 
 /// An archive handler that provides methods to handle Luna files.
 class ModuleHandler {
+  /// The name of the image module.
+  static late String imageModuleName;
+
   /// The module storage instance.
   static ModuleStorage moduleStorage =
       ModuleStorage(userName: AppConstants.moduleStorageUserName);
@@ -46,47 +49,23 @@ class ModuleHandler {
   /// Adds a module with the given name and JSON data.
   static Future<Module> addModule(String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleHandler.addModule', () async {
-      try {
-        return await moduleStorage.addModule(moduleName, jsonData);
-      } catch (e) {
-        print("Error adding module: $e");
-        rethrow;
-      }
+      return moduleStorage.addModule(moduleName, jsonData);
     });
   }
 
   /// Adds a module file with the given name and file data.
   static Future<bool> addModuleFile(
       String moduleName, Uint8List fileData) async {
-    return await LogManager().logFunction('ModuleHandler.addModuleFile',
-        () async {
-      try {
-        return await moduleStorage.addModuleFile(moduleName, fileData);
-      } catch (e) {
-        print("Error adding module file: $e");
-        return false;
-      }
-    });
+    return moduleStorage.addModuleFile(moduleName, fileData);
   }
 
   /// Gets the image with the given name from the stored module.
-  static Future<Uint8List?> getImageBytes(
-      String moduleName, String imageFileName) async {
-    try {
-      return await moduleStorage.getImageBytes(moduleName, imageFileName);
-    } catch (e) {
-      print("Error getting image: $e");
-      return null;
-    }
+  static Future<Uint8List?> getImageBytes(String imageFileName) async {
+    return moduleStorage.getImageBytes(imageModuleName, imageFileName);
   }
 
   /// Loads all modules from storage.
   static Future<List<Module>> _getAllModulesFromStorage() async {
-    try {
-      return await moduleStorage.loadAllModules() as List<Module>;
-    } catch (e) {
-      print("Error loading modules: $e");
-      return [];
-    }
+    return await moduleStorage.loadAllModules() as List<Module>;
   }
 }

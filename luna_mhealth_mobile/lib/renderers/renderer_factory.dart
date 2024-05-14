@@ -8,13 +8,13 @@
 
 import '../models/image/image_component.dart';
 import '../models/text/text_component.dart';
-import 'component_factory.dart';
 import 'image_component_renderer.dart';
+import 'irenderer.dart';
 import 'text_component_renderer.dart';
 
 /// A factory class for creating component renderers.
-class ComponentFactory {
-  static final Map<Type, ComponentRenderer> _renderers = {
+class RendererFactory {
+  static final Map<Type, IRenderer> _renderers = {
     ImageComponent: ImageComponentRenderer(),
     TextComponent: TextComponentRenderer(),
   };
@@ -22,7 +22,7 @@ class ComponentFactory {
   /// Returns the renderer for the specified component type.
   ///
   /// Throws an exception if the component type is not supported.
-  static ComponentRenderer getRenderer(Type componentType) {
+  static IRenderer getRenderer(Type componentType) {
     if (_renderers.containsKey(componentType)) {
       return _renderers[componentType]!;
     } else {

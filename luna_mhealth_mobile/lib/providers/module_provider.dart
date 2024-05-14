@@ -35,7 +35,7 @@ class ModuleProvider with ChangeNotifier {
     try {
       _handleModules(await ModuleHandler.getModules());
     } catch (e) {
-      debugPrint('Failed to load modules: $e');
+      _handleModules([]);
     }
   }
 
@@ -46,7 +46,8 @@ class ModuleProvider with ChangeNotifier {
       await ModuleHandler.saveModuleFileToStorage(selectedFile);
       await loadAvailableModules();
     } catch (e) {
-      debugPrint('Failed to fetch and initialize modules: $e');
+      // Handle the error here
+      print('Error occurred while selecting and storing module file: $e');
     }
   }
 

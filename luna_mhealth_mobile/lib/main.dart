@@ -31,7 +31,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("MyApp build method called");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
