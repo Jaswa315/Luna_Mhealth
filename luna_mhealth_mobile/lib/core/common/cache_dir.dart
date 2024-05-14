@@ -1,10 +1,12 @@
 import 'package:path_provider/path_provider.dart';
 
 /// List the contents of the cache directory.
-Future<void> listCacheDirContents() async {
+Future<List<String>> listCacheDirContents() async {
   final cacheDir = await getTemporaryDirectory();
   final contents = cacheDir.listSync();
+  List<String> paths = [];
   for (var fileSystemEntity in contents) {
-    print(fileSystemEntity.path);
+    paths.add(fileSystemEntity.path);
   }
+  return paths;
 }

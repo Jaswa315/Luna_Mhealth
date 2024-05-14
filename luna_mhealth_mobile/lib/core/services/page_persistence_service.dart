@@ -17,7 +17,6 @@ class PagePersistenceService {
   /// The [moduleId] parameter represents the unique identifier of the module.
   // TODO: implement the strong key [moduleId] to prevent conflicts
   Future<int> loadLastVisitedPage(String moduleId) async {
-    print("ModulePersistenceService loadLastVisitedPage $moduleId");
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt('lastPage_$moduleId') ?? 0;
   }
@@ -29,7 +28,6 @@ class PagePersistenceService {
   /// The [moduleId] parameter represents the unique identifier of the module.
   // TODO: implement the strong key [moduleId] to prevent conflicts
   Future<void> saveLastVisitedPage(String moduleId, int pageIndex) async {
-    print("ModulePersistenceService saveLastVisitedPage $moduleId");
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('lastPage_$moduleId', pageIndex);
   }

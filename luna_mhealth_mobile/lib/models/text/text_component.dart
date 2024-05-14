@@ -78,7 +78,5 @@ class TextComponent extends Component {
 
   /// Handles the click event for the text component.
   @override
-  void onClick() {
-    print('Text Component Clicked: $text');
-  }
+  void onClick() {}
 }

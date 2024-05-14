@@ -27,24 +27,20 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    print("HomePage initState");
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("HomePage didChangeDependencies");
   }
 
   @override
   void dispose() {
-    print("HomePage dispose");
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("HomePage build method called");
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppConstants.appName),

@@ -36,11 +36,11 @@ class ImageComponent extends Component {
             name: 'ImageComponent');
 
   @override
-  Future<Widget> render([String? title]) async {
+  Future<Widget> render() async {
     String imageFileName = imagePath.split('/').last;
 
     return FutureBuilder<Uint8List?>(
-      future: ModuleHandler.getImageBytes(title!, imageFileName),
+      future: ModuleHandler.getImageBytes(imageFileName),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return CircularProgressIndicator();
@@ -68,7 +68,5 @@ class ImageComponent extends Component {
   }
 
   @override
-  void onClick() {
-    print('Image Component Clicked: $imagePath');
-  }
+  void onClick() {}
 }

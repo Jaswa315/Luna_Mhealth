@@ -45,7 +45,6 @@ class _ModulePageState extends State<ModulePage> {
 
   @override
   void initState() {
-    print("ModulePage initState");
     super.initState();
     _navigationController =
         NavigationController(pageController: PageController());
@@ -55,7 +54,6 @@ class _ModulePageState extends State<ModulePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("ModulePage didChangeDependencies");
     _setupPageWidgets();
   }
 
@@ -64,13 +62,10 @@ class _ModulePageState extends State<ModulePage> {
     _saveLastVisitedPage();
     _navigationController.pageController.dispose();
     super.dispose();
-    print("ModulePage dispose");
   }
 
   @override
   Widget build(BuildContext context) {
-    print("ModulePage build method called");
-
     return Scaffold(
       appBar: AppBar(
           title: Text(widget.module.title),
@@ -128,8 +123,8 @@ class _ModulePageState extends State<ModulePage> {
           widget.module,
           pageIndex,
           screenSize,
-          (page, size, scale) => widget.pageServices
-              .buildPage(page, size, scale, widget.module.title),
+          (page, size, scale) =>
+              widget.pageServices.buildPage(page, size, scale),
         ) ??
         SizedBox();
   }
