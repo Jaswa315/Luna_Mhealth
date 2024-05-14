@@ -29,14 +29,15 @@ class LocalizedText extends IterableBase<String> {
 
   // Get the available locale from the internal map or fall back to English (US)
   Locale _getAvailableLocale(Locale locale) {
-  // Check if the provided locale's language code is in the localized strings
-  bool localeAvailable = _localizedStrings.values.any((text) => text.contains(locale.languageCode));
-  // If the provided locale is not available, fall back to English (US)
-  if (!localeAvailable) {
-    return Locale('en', 'US');
+    // Check if the provided locale's language code is in the localized strings
+    bool localeAvailable = _localizedStrings.values
+        .any((text) => text.contains(locale.languageCode));
+    // If the provided locale is not available, fall back to English (US)
+    if (!localeAvailable) {
+      return Locale('en', 'US');
+    }
+    return locale;
   }
-  return locale;
-}
 
   // Iterable interface implementation
   @override
