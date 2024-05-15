@@ -44,8 +44,8 @@ dependencies:
   path_provider: ^2.1.3
   test: ^1.24.9
 
-  luna_mhealth_mobile:
-    path: ../../luna_mhealth_mobile
+  luna_core:
+    path: ../../luna_core
   uuid: ^4.4.0
 
 dev_dependencies:
