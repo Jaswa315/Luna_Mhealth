@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'presentation_tree.dart';
 import 'package:path/path.dart' as path;
+import 'package:pptx_parser/presentation_tree_utilities.dart';
 
 /// The CSVGenerator class allows creation of CSV Files from a Presentation Data Tree as input
 ///
@@ -24,10 +25,8 @@ class CSVGenerator {
   Future<File> createCSVFromPrsDataTextNodes(
       PrsNode data, Locale language) async {
     // await LogManager().logFunction('ModuleTextElements.generateCSV', () async {
-    List<TextNode> _elements = [];
-    _walkPrsTreeRecursively(_elements, data);
-    print(_elements.length);
-    print(_elements);
+    List<TextNode> _elements = getTextNodesFromPrsTree(data);
+
     String csvFileName = "${language.toLanguageTag()}.csv";
 
     // TODO: File creation on disk is slow , reconsider
@@ -52,14 +51,8 @@ class CSVGenerator {
         'Failed to generate CSV'); // Shouldn't reach here, but satisfy the IDE to not be red
   }
 
-  /// Recursive function to walk a presentation tree and retrieve all text node references.
-  void _walkPrsTreeRecursively(List<TextNode> textNodes, PrsNode node) {
-    if (node is TextNode) {
-      var textNode = node;
-      textNodes.add(textNode);
-    }
-    for (PrsNode child in node.children) {
-      _walkPrsTreeRecursively(textNodes, child);
-    }
+  List<TextNode> getTextNodesFromPrsTree(PrsNode data) {
+    PrsTreeUtilities utility = PrsTreeUtilities();
+    return utility.getAllTextNodes(data);
   }
 }
