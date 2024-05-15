@@ -5,11 +5,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:luna_core/utils/logging.dart';
 import 'package:luna_mhealth_mobile/presentation/pages/home_page.dart';
+import 'package:luna_mhealth_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
-
-import 'providers/module_ui_picker.dart';
-import '../../luna_core/lib/utils/logging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ppt_parser/presentation_parser.dart';
-import 'package:ppt_parser/presentation_tree.dart';
-import 'package:ppt_parser/textnode_uniqueid_assigner.dart';
+import 'package:pptx_parser/presentation_parser.dart';
+import 'package:pptx_parser/presentation_tree.dart';
+import 'package:pptx_parser/textnode_uniqueid_assigner.dart';
 
 const String assetsFolder = 'test/test_assets';
 

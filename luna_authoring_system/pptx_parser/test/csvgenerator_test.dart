@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ppt_parser/presentation_parser.dart';
-import 'package:ppt_parser/presentation_tree.dart';
-import 'package:ppt_parser/textnode_uniqueid_assigner.dart';
-import 'package:ppt_parser/csv_generator.dart'; // Assuming you have a CSVGenerator class
+import 'package:pptx_parser/presentation_parser.dart';
+import 'package:pptx_parser/presentation_tree.dart';
+import 'package:pptx_parser/textnode_uniqueid_assigner.dart';
+import 'package:pptx_parser/csv_generator.dart'; // Assuming you have a CSVGenerator class
 import 'package:path/path.dart' as path;
 
 const String assetsFolder = 'test/test_assets';

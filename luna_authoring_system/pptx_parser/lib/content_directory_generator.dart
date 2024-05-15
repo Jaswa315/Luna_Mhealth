@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:path/path.dart' as path;
-import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:luna_core/utils/logging.dart';
 
 // Content Directory Generator provides tools and methods to generate the proper
 // structure for the content module data. The generated structures are supposed
