@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
-import 'presentation_tree.dart';
+import '../parser/presentation_tree.dart';
 import 'package:path/path.dart' as path;
-import 'package:pptx_parser/presentation_tree_utilities.dart';
+import 'package:pptx_parser/utils/presentation_tree_utilities.dart';
 
 /// The CSVGenerator class allows creation of CSV Files from a Presentation Data Tree as input
 ///

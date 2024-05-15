@@ -6,7 +6,7 @@ import 'package:luna_core/utils/logging.dart';
 // Content Directory Generator provides tools and methods to generate the proper
 // structure for the content module data. The generated structures are supposed
 // to support holding all required assets needed to run a Luna content module
-// ToDo: Kill this and put into module storage and calling class
+// TODO: Kill this and put into module storage and calling class
 class ContentDirectoryGenerator {
   // ContentDirectoryGenerator has no data values, it's a utility class
   ContentDirectoryGenerator();

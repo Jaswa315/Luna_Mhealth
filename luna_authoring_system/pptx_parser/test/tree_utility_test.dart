@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pptx_parser/presentation_parser.dart';
-import 'package:pptx_parser/presentation_tree.dart';
-import 'package:pptx_parser/presentation_tree_utilities.dart';
+import 'package:pptx_parser/parser/presentation_parser.dart';
+import 'package:pptx_parser/parser/presentation_tree.dart';
+import 'package:pptx_parser/utils/presentation_tree_utilities.dart';
 
 const String assetsFolder = 'test/test_assets';
 

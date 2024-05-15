@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'parser/presentation_tree.dart';
+import '../parser/presentation_tree.dart';
 
 /// PrsNodeUniqueIDAssigner class can take presentation trees and assign unique IDs to the
 /// presentation data text nodes in place.
