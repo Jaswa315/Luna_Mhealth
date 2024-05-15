@@ -13,7 +13,7 @@ import 'dart:io';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:uuid/uuid.dart';
-import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:luna_core/utils/logging.dart';
 
 // From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
@@ -412,9 +412,9 @@ class PresentationParser {
     node.audioPath = slideRelationship?[_getNullableValue(
         json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
 
-    if (_getNullableValue(json, ['p:txBody']) != null) {
-      node.children.add(_parseTextBody(json['p:txBody']));
-    }
+    // if (_getNullableValue(json, ['p:txBody']) != null) {
+    //   node.children.add(_parseTextBody(json['p:txBody']));
+    // }
 
     node.hyperlink = _getHyperlink(
         _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));

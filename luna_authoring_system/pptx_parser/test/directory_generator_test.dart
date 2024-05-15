@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:ppt_parser/content_directory_generator.dart';
+import 'package:pptx_parser/content_directory_generator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
-import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:luna_core/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'dart:ui'; // Import dart:ui to access the Locale class
 
