@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:pptx_parser/content_directory_generator.dart';
+import 'package:pptx_parser/utils/content_directory_generator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
 import 'package:luna_core/utils/logging.dart';

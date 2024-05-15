@@ -8,8 +8,8 @@
 
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pptx_parser/presentation_parser.dart';
-import 'package:pptx_parser/presentation_tree.dart';
+import 'package:pptx_parser/parser/presentation_parser.dart';
+import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'dart:convert';
 
 const String assetsFolder = 'test/test_assets';
