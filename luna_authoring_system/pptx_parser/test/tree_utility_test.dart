@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ppt_parser/presentation_parser.dart';
-import 'package:ppt_parser/presentation_tree.dart';
-import 'package:ppt_parser/textnode_uniqueid_assigner.dart';
+import 'package:pptx_parser/parser/presentation_parser.dart';
+import 'package:pptx_parser/parser/presentation_tree.dart';
+import 'package:pptx_parser/utils/presentation_tree_utilities.dart';
 
 const String assetsFolder = 'test/test_assets';
 
@@ -11,7 +11,7 @@ const String assetsFolder = 'test/test_assets';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('UIDAssigner Class Tests', () {
+  group('Tree Utility Class Tests', () {
     setUpAll(() async {
       //LogManager.createInstance();
       // Ensure the output directory exists
@@ -25,10 +25,19 @@ void main() {
     }
 
     test(
-        'UIDAssigner: Assigning unique IDs to a PowerPoint with one text box should result in one text node with the unique ID of 1',
+        'Tree Utility Get Text Nodes: Getting List of TextNodes from single textbox powerpoint has return value of one textnode in a list.',
         () async {
-      PrsTreeTextNodeUIDAssigner uniqueIDAssignerObject =
-          PrsTreeTextNodeUIDAssigner();
+      String pptx_name = "TextBox-HelloWorld.pptx";
+      PrsNode data = await getPresentationData(pptx_name);
+      PrsTreeUtilities tree_utilities = PrsTreeUtilities();
+      List<TextNode> allTextNodes = tree_utilities.getAllTextNodes(data);
+      expect(allTextNodes.length, 1);
+      expect(allTextNodes[0].text, "Hello, World!");
+    });
+    test(
+        'Tree Utility UIDAssigner: Assigning unique IDs to a PowerPoint with one text box should result in one text node with the unique ID of 1',
+        () async {
+      PrsTreeUtilities uniqueIDAssignerObject = PrsTreeUtilities();
       String pptx_name = "TextBox-HelloWorld.pptx";
       PrsNode data = await getPresentationData(pptx_name);
       Map<int, String>? result =
@@ -37,25 +46,24 @@ void main() {
     });
 
     test(
-        'UIDAssigner: Assigning unique IDs to the same PrsNode twice should result in no changes the second time.',
+        'Tree Utility UIDAssigner: Assigning unique IDs to the same PrsNode twice should result in no changes the second time.',
         () async {
-      PrsTreeTextNodeUIDAssigner uniqueIDAssignerObject =
-          PrsTreeTextNodeUIDAssigner();
+      PrsTreeUtilities uniqueIDAssignerObject = PrsTreeUtilities();
       String pptx_name = "TextBox-HelloWorld.pptx";
       PrsNode data = await getPresentationData(pptx_name);
       Map<int, String>? result1 =
           uniqueIDAssignerObject.walkPrsTreeAndAssignUIDs(data);
       expect(result1?.isEmpty, false);
+      expect(result1.length == 1, true);
       Map<int, String>? result2 =
           uniqueIDAssignerObject.walkPrsTreeAndAssignUIDs(data);
       expect(result2?.isEmpty, true);
     });
 
     test(
-        'UIDAssigner: Trying to assign UIDs to an empty PowerPoint results in an empty map return value, meaning no UID assignment was done. ',
+        'Tree Utility UIDAssigner: Trying to assign UIDs to an empty PowerPoint results in an empty map return value, meaning no UID assignment was done. ',
         () async {
-      PrsTreeTextNodeUIDAssigner uniqueIDAssignerObject =
-          PrsTreeTextNodeUIDAssigner();
+      PrsTreeUtilities uniqueIDAssignerObject = PrsTreeUtilities();
       String pptx_name = "Empty.pptx";
       PrsNode data = await getPresentationData(pptx_name);
       Map<int, String>? result =
