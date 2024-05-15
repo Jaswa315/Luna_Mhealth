@@ -9,11 +9,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:luna_core/enums/component_type.dart';
+import 'package:luna_core/models/component.dart';
+import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_mhealth_mobile/core/constants/constants.dart';
-import 'package:luna_mhealth_mobile/core/services/module_resource_factory.dart';
-
-import '../../enums/component_type.dart';
-import '../component.dart';
 
 /// Represents an image component that can be rendered and clicked.
 class ImageComponent extends Component {

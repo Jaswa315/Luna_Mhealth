@@ -11,7 +11,7 @@
 
 import 'dart:io';
 import 'dart:typed_data';
-import '../../../luna_core/lib/storage/istorage_provider.dart';
+import 'package:luna_core/storage/istorage_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 

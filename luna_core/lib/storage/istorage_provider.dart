@@ -14,7 +14,7 @@
 
 import 'dart:typed_data';
 
-import '../../../luna_core/lib/storage/local_storage_provider.dart';
+import 'package:luna_core/storage/local_storage_provider.dart';
 
 /// IStorageProvider: Interface for low level file storage access
 /// To be implemented by local storage, database, and cloud data providers

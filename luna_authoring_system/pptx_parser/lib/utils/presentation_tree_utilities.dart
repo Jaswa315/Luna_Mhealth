@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../parser/presentation_tree.dart';
+import 'package:pptx_parser/parser/presentation_tree.dart';
 
 /// PrsNodeUniqueIDAssigner class can take presentation trees and assign unique IDs to the
 /// presentation data text nodes in place.
@@ -18,7 +18,7 @@ class PrsTreeUtilities {
   /// Recursive function to walk a presentation tree and retrieve all text node references.
   List<TextNode> _walkPrsTreeRecursively(PrsNode node) {
     List<TextNode> textNodes = [];
-    
+
     if (node is TextNode) {
       textNodes.add(node);
     }
