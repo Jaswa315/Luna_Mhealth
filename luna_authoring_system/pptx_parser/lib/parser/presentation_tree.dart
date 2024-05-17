@@ -57,13 +57,14 @@ class PrsNode with ToJson {
 }
 
 class PresentationNode extends PrsNode {
-  late final String moudleId;
+  late final String moduleID;
   late final String title;
   late final String author;
   late final int slideCount;
   late final Map<String, dynamic> section;
   late final double x;
   late final double y;
+
   static const String defaultSection = 'Default Section';
 
   PresentationNode() {
@@ -75,7 +76,7 @@ class PresentationNode extends PrsNode {
     return {
       name: {
         'type': name,
-        'moduleId': moudleId,
+        'moduleId': moduleID,
         'title': title,
         'author': author,
         'slideCount': slideCount,
@@ -117,7 +118,7 @@ class TextBoxNode extends PrsNode {
       'type': name,
       if (audioPath != null) 'audiopath': audioPath,
       if (hyperlink != null) 'hyperlink': hyperlink,
-      // todo, change children name to shape and textbody based on type
+      // TODO: change children name to shape and textbody based on type
       'children': children.map((child) => child.toJson()).toList()
     };
   }
@@ -164,8 +165,7 @@ class TextNode extends PrsNode {
   late final bool bold;
   late final bool underline;
   late final int? size;
-  late int?
-      uid; // This uid will be used as a key to reference Localized UIDObjects
+  late int? uid;
   late final String? color;
   late final String? highlightColor;
   late final String? language;
@@ -174,7 +174,6 @@ class TextNode extends PrsNode {
 
   TextNode() {
     name = 'text';
-    uid = null;
   }
 
   @override

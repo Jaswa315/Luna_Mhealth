@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import '../parser/presentation_tree.dart';
 import 'package:path/path.dart' as path;
-import 'package:pptx_parser/utils/presentation_tree_utilities.dart';
+import 'package:pptx_parser/utils/presentation_node_retriever.dart';
 
 /// The CSVGenerator class allows creation of CSV Files from a Presentation Data Tree as input
 ///
@@ -52,7 +52,7 @@ class CSVGenerator {
   }
 
   List<TextNode> getTextNodesFromPrsTree(PrsNode data) {
-    PrsTreeUtilities utility = PrsTreeUtilities();
+    PrsNodeRetriever utility = PrsNodeRetriever();
     return utility.getAllTextNodes(data);
   }
 }
