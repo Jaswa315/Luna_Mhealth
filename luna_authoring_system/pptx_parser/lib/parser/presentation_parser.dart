@@ -36,6 +36,7 @@ class PresentationParser {
   Map<String, dynamic>? placeholderToTransform;
   List<dynamic> categoryContainerTransform = [];
   List<dynamic> categoryImageTransform = [];
+  int _nextTextNodeUID = 1;
 
   PresentationParser(File file) {
     _file = file;
@@ -115,7 +116,7 @@ class PresentationParser {
     node.title = coreMap['cp:coreProperties']['dc:title'];
     node.author = coreMap['cp:coreProperties']['dc:creator'];
     node.slideCount = int.parse(appMap['Properties']['Slides']);
-    node.moudleId = uuidGenerator.v4();
+    node.moduleID = uuidGenerator.v4();
     slideCount = node.slideCount;
 
     slideWidth =
@@ -509,6 +510,7 @@ class PresentationParser {
     node.text = json['a:t'];
     node.hyperlink =
         _getHyperlink(_getNullableValue(json, ['a:rPr', 'a:hlinkClick']));
+    node.uid = _nextTextNodeUID++;
 
     return node;
   }

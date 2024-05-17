@@ -491,4 +491,34 @@ void main() {
     //   expect(shapeType2, "bentConnector3");
     // });
   });
+
+  test('A Textbox has UID of 1', () async {
+    // Arrange
+    var filename = "TextBox-HelloWorld.pptx";
+    Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+    // Act
+    int pptUID = astJson['presentation']['slides'][0]['shapes'][0]
+        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+    // Assert
+    expect(pptUID, 1);
+  });
+
+  test('N Textboxes have assigned UIDs', () async {
+    var filename = "TextBoxes.pptx";
+    Map<String, dynamic> astJson = await toMapFromPath(filename);
+    int pptUID0 = astJson['presentation']['slides'][0]['shapes'][0]
+        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+    int pptUID1 = astJson['presentation']['slides'][0]['shapes'][1]
+        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+    int pptUID2 = astJson['presentation']['slides'][0]['shapes'][2]
+        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+    expect(pptUID0, 1);
+    expect(pptUID1, 2);
+    expect(pptUID2, 3);
+  });
 }
