@@ -9,7 +9,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
-import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'dart:convert';
 
 const String assetsFolder = 'test/test_assets';
@@ -19,7 +18,6 @@ Future<Map<String, dynamic>> toMapFromPath(String fileName) async {
   PresentationParser parser = PresentationParser(file);
   return parser.toMap();
 }
-
 void main() {
   group('Tests for the PPTX Parser', () {
     test('A Textbox has content', () async {

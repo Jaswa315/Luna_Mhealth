@@ -247,6 +247,7 @@ class ConnectionNode extends PrsNode {
   }
 }
 
+// Page Image
 class ImageNode extends PrsNode {
   late final String? imageName;
   late final String path;
@@ -275,21 +276,21 @@ class CategoryGameEditorNode extends PrsNode {
   late final String slideId;
 
   CategoryGameEditorNode() {
-    name = 'categorygameeditor';
+    name = 'categoryGameEditor';
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'children': children.map((child) => child.toJson()).toList()
+      'category': children.map((child) => child.toJson()).toList()
     };
   }
 }
 
 class CategoryNode extends PrsNode {
-  ShapeNode? categoryName;
-  ImageNode? categoryImage;
+  CategoryGameTextNode? text;
+  CategoryGameImageNode? image;
 
   CategoryNode() {
     name = 'category';
@@ -299,9 +300,39 @@ class CategoryNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'category': categoryName?.toJson(),
-      'categoryImage': categoryImage?.toJson(),
+      'text': text?.toJson(),
+      'image': image?.toJson(),
       'children': children.map((child) => child.toJson()).toList()
+    };
+  }
+}
+
+class CategoryGameTextNode extends PrsNode {
+  late String? text;
+
+  CategoryGameTextNode() {
+    name = 'categoryGameText';
+  }
+  @override
+  Map<String, dynamic> toJson() {
+    return {'type': name, 'text': text};
+  }
+}
+
+class CategoryGameImageNode extends PrsNode {
+  late String path;
+  late String? altText;
+
+  CategoryGameImageNode() {
+    name = 'categoryGameImage';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': name,
+      'path': path,
+      'alttext': altText,
     };
   }
 }

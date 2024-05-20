@@ -291,7 +291,7 @@ class PresentationParser {
         case keyPicture:
           var picList = shapeTree[key];
           _processDynamicCollection(picList, (para) {
-            var element = _parseImage(para);
+            var element = _parseCategoryGameImage(para);
             ShapeNode? shapeElement = element.children[0] as ShapeNode;
             int? index = _addToCategory(element);
             categoryImageTransform.any((item) =>
@@ -299,16 +299,16 @@ class PresentationParser {
                     item.offset.y == shapeElement.transform.offset.y &&
                     item.size.x == shapeElement.transform.size.x &&
                     item.size.y == shapeElement.transform.size.y)
-                ? (node.children[index ?? 0] as CategoryNode).categoryImage =
-                    element as ImageNode
+                ? (node.children[index ?? 0] as CategoryNode).image =
+                    element as CategoryGameImageNode
                 : node.children[index ?? 0].children.add(element);
           });
         case keyShape:
           var shapeObj = shapeTree[key];
           _processDynamicCollection(shapeObj, (para) {
-            var element = _parseShape(para);
-            (node.children[_addToCategory(element) ?? 0] as CategoryNode)
-                .categoryName = element as ShapeNode;
+            var element = _parseCategoryGameTextBox(para);
+            (node.children[_addToCategory(element) ?? 0] as CategoryNode).text =
+                element as CategoryGameTextNode;
           });
       }
     });
@@ -338,6 +338,27 @@ class PresentationParser {
       }
     }
     return null;
+  }
+
+  PrsNode _parseCategoryGameTextBox(Map<String, dynamic> json) {
+    CategoryGameTextNode node = CategoryGameTextNode();
+
+    // TODO: parsing author's two line category name
+    node.text = json['p:txBody']['a:p']['a:r']['a:t'];
+    node.children.add(_parseShape(json));
+
+    return node;
+  }
+
+  PrsNode _parseCategoryGameImage(Map<String, dynamic> json) {
+    CategoryGameImageNode node = CategoryGameImageNode();
+
+    node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
+    String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
+    node.path = slideRelationship?[relsLink];
+    node.children.add(_parseBasicShape(json));
+
+    return node;
   }
 
   PrsNode _parseImage(Map<String, dynamic> json) {
