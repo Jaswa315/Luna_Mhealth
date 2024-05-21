@@ -1,18 +1,16 @@
 {
     "presentation": {
         "type": "presentation",
-        "moduleId": "b393ff37-b7d0-43c3-8f76-e6156dfe23da",
+        "moduleId": "a08fc6ce-eebf-439f-abd6-240b0b059560",
         "title": "PowerPoint Presentation",
         "author": "Wonwhoo A nah",
-        "slideCount": 6,
+        "slideCount": 4,
         "section": {
             "Default Section": [
                 "S256",
                 "S257",
                 "S258",
-                "S260",
-                "S261",
-                "S259"
+                "S261"
             ]
         },
         "slides": [
@@ -21,18 +19,47 @@
                 "slideId": "S256",
                 "shapes": [
                     {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.13663188976377952,
-                                "y": 0.010122156605424322
+                        "type": "textbox",
+                        "children": [
+                            {
+                                "type": "rectangle",
+                                "transform": {
+                                    "offset": {
+                                        "x": 0.13663188976377952,
+                                        "y": 0.010122156605424322
+                                    },
+                                    "size": {
+                                        "x": 0.7267360017497813,
+                                        "y": 0.0543241469816273
+                                    }
+                                },
+                                "children": []
                             },
-                            "size": {
-                                "x": 0.7267360017497813,
-                                "y": 0.0543241469816273
+                            {
+                                "type": "textbody",
+                                "wrap": "rect",
+                                "paragraphs": [
+                                    {
+                                        "type": "paragraph",
+                                        "alignment": null,
+                                        "textgroups": [
+                                            {
+                                                "type": "text",
+                                                "uid": 1,
+                                                "italics": false,
+                                                "bold": false,
+                                                "underline": false,
+                                                "size": null,
+                                                "color": null,
+                                                "highlightcolor": null,
+                                                "language": "en-US",
+                                                "text": "this is topic"
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
-                        },
-                        "children": []
+                        ]
                     },
                     {
                         "type": "rectangle",
@@ -45,6 +72,30 @@
                                 "x": 0.9104166666666667,
                                 "y": 0.04461811023622047
                             }
+                        },
+                        "textBody": {
+                            "type": "textbody",
+                            "wrap": "rect",
+                            "paragraphs": [
+                                {
+                                    "type": "paragraph",
+                                    "alignment": null,
+                                    "textgroups": [
+                                        {
+                                            "type": "text",
+                                            "uid": 2,
+                                            "italics": false,
+                                            "bold": false,
+                                            "underline": false,
+                                            "size": null,
+                                            "color": null,
+                                            "highlightcolor": null,
+                                            "language": "en-KR",
+                                            "text": "this is subtopic"
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         "children": []
                     },
@@ -59,6 +110,30 @@
                                 "x": 0.9104166666666667,
                                 "y": 0.04461811023622047
                             }
+                        },
+                        "textBody": {
+                            "type": "textbody",
+                            "wrap": "rect",
+                            "paragraphs": [
+                                {
+                                    "type": "paragraph",
+                                    "alignment": null,
+                                    "textgroups": [
+                                        {
+                                            "type": "text",
+                                            "uid": 3,
+                                            "italics": false,
+                                            "bold": false,
+                                            "underline": false,
+                                            "size": null,
+                                            "color": null,
+                                            "highlightcolor": null,
+                                            "language": "en-KR",
+                                            "text": "this is second subtopic"
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         "children": []
                     }
@@ -80,6 +155,30 @@
                                 "y": 0.04461811023622047
                             }
                         },
+                        "textBody": {
+                            "type": "textbody",
+                            "wrap": "rect",
+                            "paragraphs": [
+                                {
+                                    "type": "paragraph",
+                                    "alignment": null,
+                                    "textgroups": [
+                                        {
+                                            "type": "text",
+                                            "uid": 4,
+                                            "italics": false,
+                                            "bold": false,
+                                            "underline": false,
+                                            "size": null,
+                                            "color": null,
+                                            "highlightcolor": null,
+                                            "language": "en-KR",
+                                            "text": "this is subtopic"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
                         "children": []
                     },
                     {
@@ -94,111 +193,29 @@
                                 "y": 0.04461811023622047
                             }
                         },
-                        "children": []
-                    }
-                ]
-            },
-            {
-                "type": "categoryGameEditor",
-                "category": [
-                    {
-                        "type": "category",
-                        "categoryName": {
-                            "type": "categoryGameText",
-                            "text": "fruits"
-                        },
-                        "categoryImage": {
-                            "type": "categoryGameImage",
-                            "path": "../media/image7.png",
-                            "alttext": null
-                        },
-                        "categoryMembers": [
-                            {
-                                "type": "categoryGameImage",
-                                "path": "../media/image9.png",
-                                "alttext": null
-                            },
-                            {
-                                "type": "categoryGameImage",
-                                "path": "../media/image10.png",
-                                "alttext": null
-                            }
-                        ]
-                    },
-                    {
-                        "type": "category",
-                        "categoryName": {
-                            "type": "categoryGameText",
-                            "text": "vegetables"
-                        },
-                        "categoryImage": {
-                            "type": "categoryGameImage",
-                            "path": "../media/image8.png",
-                            "alttext": null
-                        },
-                        "categoryMembers": [
-                            {
-                                "type": "categoryGameImage",
-                                "path": "../media/image11.png",
-                                "alttext": null
-                            },
-                            {
-                                "type": "categoryGameImage",
-                                "path": "../media/image12.png",
-                                "alttext": null
-                            },
-                            {
-                                "type": "categoryGameImage",
-                                "path": "../media/image13.png",
-                                "alttext": null
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "slide",
-                "slideId": "S260",
-                "shapes": [
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.13663188976377952,
-                                "y": 0.010122156605424322
-                            },
-                            "size": {
-                                "x": 0.7267360017497813,
-                                "y": 0.0543241469816273
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.04192060367454068,
-                                "y": 0.4065474628171479
-                            },
-                            "size": {
-                                "x": 0.9104166666666667,
-                                "y": 0.04461811023622047
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.035725503062117234,
-                                "y": 0.8369603018372703
-                            },
-                            "size": {
-                                "x": 0.9104166666666667,
-                                "y": 0.04461811023622047
-                            }
+                        "textBody": {
+                            "type": "textbody",
+                            "wrap": "rect",
+                            "paragraphs": [
+                                {
+                                    "type": "paragraph",
+                                    "alignment": null,
+                                    "textgroups": [
+                                        {
+                                            "type": "text",
+                                            "uid": 5,
+                                            "italics": false,
+                                            "bold": false,
+                                            "underline": false,
+                                            "size": null,
+                                            "color": null,
+                                            "highlightcolor": null,
+                                            "language": "en-KR",
+                                            "text": "this is subtopic"
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         "children": []
                     }
@@ -263,204 +280,60 @@
                 ]
             },
             {
-                "type": "slide",
-                "slideId": "S259",
-                "shapes": [
+                "type": "categoryGameEditor",
+                "category": [
                     {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.04791666666666667,
-                                "y": 0.028819444444444446
-                            },
-                            "size": {
-                                "x": 0.44270844269466314,
-                                "y": 0.08281255468066492
-                            }
+                        "type": "category",
+                        "categoryName": {
+                            "type": "categoryGameText",
+                            "text": "fruits"
                         },
-                        "children": []
+                        "categoryImage": {
+                            "type": "categoryGameImage",
+                            "path": "../media/image7.png",
+                            "alttext": null
+                        },
+                        "categoryMembers": [
+                            {
+                                "type": "categoryGameImage",
+                                "path": "../media/image9.png",
+                                "alttext": null
+                            },
+                            {
+                                "type": "categoryGameImage",
+                                "path": "../media/image10.png",
+                                "alttext": null
+                            }
+                        ]
                     },
                     {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.5319916885389326,
-                                "y": 0.02881955380577428
-                            },
-                            "size": {
-                                "x": 0.4177084426946632,
-                                "y": 0.08052755905511812
-                            }
+                        "type": "category",
+                        "categoryName": {
+                            "type": "categoryGameText",
+                            "text": "vegetables"
                         },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.061607392825896765,
-                                "y": 0.14791666666666667
-                            },
-                            "size": {
-                                "x": 0.37068438320209973,
-                                "y": 0.16918405511811024
-                            }
+                        "categoryImage": {
+                            "type": "categoryGameImage",
+                            "path": "../media/image8.png",
+                            "alttext": null
                         },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.021052930883639544,
-                                "y": 0.3277777777777778
+                        "categoryMembers": [
+                            {
+                                "type": "categoryGameImage",
+                                "path": "../media/image11.png",
+                                "alttext": null
                             },
-                            "size": {
-                                "x": 0.4417926509186352,
-                                "y": 0.04131944444444444
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.5484619422572179,
-                                "y": 0.14428871391076115
+                            {
+                                "type": "categoryGameImage",
+                                "path": "../media/image12.png",
+                                "alttext": null
                             },
-                            "size": {
-                                "x": 0.37068438320209973,
-                                "y": 0.16918405511811024
+                            {
+                                "type": "categoryGameImage",
+                                "path": "../media/image13.png",
+                                "alttext": null
                             }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.5079074803149606,
-                                "y": 0.3241498250218723
-                            },
-                            "size": {
-                                "x": 0.4417926509186352,
-                                "y": 0.04131944444444444
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.0715936132983377,
-                                "y": 0.3842330489938758
-                            },
-                            "size": {
-                                "x": 0.37068438320209973,
-                                "y": 0.16918405511811024
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.03103915135608049,
-                                "y": 0.5640941601049869
-                            },
-                            "size": {
-                                "x": 0.4417926509186352,
-                                "y": 0.04131944444444444
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.5667482502187227,
-                                "y": 0.3842330489938758
-                            },
-                            "size": {
-                                "x": 0.37068438320209973,
-                                "y": 0.16918405511811024
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.5261937882764655,
-                                "y": 0.5640941601049869
-                            },
-                            "size": {
-                                "x": 0.4417926509186352,
-                                "y": 0.04131944444444444
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.06600721784776903,
-                                "y": 0.6358672353455818
-                            },
-                            "size": {
-                                "x": 0.37068438320209973,
-                                "y": 0.15858803587051618
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.025452755905511812,
-                                "y": 0.8038735783027121
-                            },
-                            "size": {
-                                "x": 0.4417926509186352,
-                                "y": 0.04131944444444444
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.5484617235345581,
-                                "y": 0.6358672353455818
-                            },
-                            "size": {
-                                "x": 0.37068438320209973,
-                                "y": 0.15853510498687665
-                            }
-                        },
-                        "children": []
-                    },
-                    {
-                        "type": "rectangle",
-                        "transform": {
-                            "offset": {
-                                "x": 0.5199494750656168,
-                                "y": 0.8035755686789151
-                            },
-                            "size": {
-                                "x": 0.4417926509186352,
-                                "y": 0.04131944444444444
-                            }
-                        },
-                        "children": []
+                        ]
                     }
                 ]
             }

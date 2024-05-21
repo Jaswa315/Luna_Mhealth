@@ -317,8 +317,9 @@ class PresentationParser {
   }
 
   int? _addToCategory(var element) {
-    ShapeNode shapeElement =
-        element is ShapeNode ? element : element.children[0] as ShapeNode;
+    ShapeNode shapeElement = element.children[0] is ShapeNode
+        ? element.children[0]
+        : element.children[0].children[0] as ShapeNode;
 
     var centerX =
         shapeElement.transform.offset.x + shapeElement.transform.size.x / 2;
@@ -392,7 +393,7 @@ class PresentationParser {
 
     // Check if a Textbox has placeholder that follows slidelayout
     if (['body', 'title'].contains(
-        _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph' '_type']))) {
+        _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type']))) {
       return _parseTextBox(json);
     }
 
@@ -435,12 +436,17 @@ class PresentationParser {
 
     node.transform = _parseTransform(json);
 
+    if (_getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) != '1' &&
+        !['body', 'title'].contains(
+            _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type'])) &&
+        _getNullableValue(json, ['p:txBody']) != null) {
+      node.textBody = _parseTextBody(json['p:txBody']);
+    } else {
+      node.textBody = null;
+    }
+
     node.audioPath = slideRelationship?[_getNullableValue(
         json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
-
-    // if (_getNullableValue(json, ['p:txBody']) != null) {
-    //   node.children.add(_parseTextBody(json['p:txBody']));
-    // }
 
     node.hyperlink = _getHyperlink(
         _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));

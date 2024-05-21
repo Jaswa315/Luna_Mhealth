@@ -407,24 +407,24 @@ void main() {
       expect(hyperlink1, null);
     });
 
-    // test('Basic shapes with texts have text content', () async {
-    //   var filename = "Ellipse and rectangle shapes with textbox.pptx";
-    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+    test('Basic shapes with texts have text content', () async {
+      var filename = "Ellipse and rectangle shapes with textbox.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-    //   String shapeType0 =
-    //       astJson['presentation']['slides'][0]['shapes'][0]['type'];
-    //   String text0 = astJson['presentation']['slides'][0]['shapes'][0]
-    //       ['children'][0]['paragraphs'][0]['textgroups'][0]['text'];
-    //   String shapeType1 =
-    //       astJson['presentation']['slides'][0]['shapes'][1]['type'];
-    //   String text1 = astJson['presentation']['slides'][0]['shapes'][1]
-    //       ['children'][0]['paragraphs'][0]['textgroups'][0]['text'];
+      String shapeType0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String text0 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['textBody']['paragraphs'][0]['textgroups'][0]['text'];
+      String shapeType1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String text1 = astJson['presentation']['slides'][0]['shapes'][1]
+          ['textBody']['paragraphs'][0]['textgroups'][0]['text'];
 
-    //   expect(shapeType0, "ellipse");
-    //   expect(shapeType1, "rectangle");
-    //   expect(text0, "text1");
-    //   expect(text1, "text2");
-    // });
+      expect(shapeType0, "ellipse");
+      expect(shapeType1, "rectangle");
+      expect(text0, "text1");
+      expect(text1, "text2");
+    });
 
     test('Category game editor is parsed as catogory and images', () async {
       var filename = "Content and category game editor.pptx";
