@@ -327,6 +327,7 @@ class PresentationParser {
   }
 
   int? _addToCategory(var element) {
+    // element is either Image or TextBox
     ShapeNode shapeElement = element.children[0] is ShapeNode
         ? element.children[0]
         : element.children[0].children[0] as ShapeNode;
