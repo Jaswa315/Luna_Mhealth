@@ -106,6 +106,16 @@ class PresentationParser {
     return (value == null || value == "") ? null : value;
   }
 
+  bool _isTextBox(Map<String, dynamic> json) {
+    if (_getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) == '1' ||
+        ['body', 'title'].contains(
+            _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type']))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   PrsNode _parsePresentation() {
     PresentationNode node = PresentationNode();
 
@@ -387,13 +397,7 @@ class PresentationParser {
   }
 
   PrsNode _parseShape(Map<String, dynamic> json) {
-    if (_getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) == '1') {
-      return _parseTextBox(json);
-    }
-
-    // Check if a Textbox has placeholder that follows slidelayout
-    if (['body', 'title'].contains(
-        _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type']))) {
+    if (_isTextBox(json)) {
       return _parseTextBox(json);
     }
 
@@ -436,10 +440,8 @@ class PresentationParser {
 
     node.transform = _parseTransform(json);
 
-    if (_getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) != '1' &&
-        !['body', 'title'].contains(
-            _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type'])) &&
-        _getNullableValue(json, ['p:txBody']) != null) {
+    // A Shape can have textBody
+    if (!_isTextBox(json) && _getNullableValue(json, ['p:txBody']) != null) {
       node.textBody = _parseTextBody(json['p:txBody']);
     } else {
       node.textBody = null;
