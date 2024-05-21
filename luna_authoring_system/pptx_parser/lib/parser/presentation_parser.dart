@@ -343,8 +343,12 @@ class PresentationParser {
   PrsNode _parseCategoryGameTextBox(Map<String, dynamic> json) {
     CategoryGameTextNode node = CategoryGameTextNode();
 
-    // TODO: parsing author's two line category name
-    node.text = json['p:txBody']['a:p']['a:r']['a:t'];
+    String categoryName = "";
+    _processDynamicCollection(json['p:txBody']['a:p'], (para) {
+      categoryName += para['a:r']['a:t'] + " ";
+    });
+    categoryName = categoryName.replaceAll(RegExp(r'\\[tnv]\s*'), ' ');
+    node.text = categoryName.substring(0, categoryName.length - 1);
     node.children.add(_parseShape(json));
 
     return node;

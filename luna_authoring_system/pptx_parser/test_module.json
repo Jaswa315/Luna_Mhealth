@@ -1,7 +1,7 @@
 {
     "presentation": {
         "type": "presentation",
-        "moduleId": "02b3da80-e974-42a1-9b56-8e71b6933f87",
+        "moduleId": "b393ff37-b7d0-43c3-8f76-e6156dfe23da",
         "title": "PowerPoint Presentation",
         "author": "Wonwhoo A nah",
         "slideCount": 6,
@@ -105,7 +105,7 @@
                         "type": "category",
                         "categoryName": {
                             "type": "categoryGameText",
-                            "text": "fruits\\t"
+                            "text": "fruits"
                         },
                         "categoryImage": {
                             "type": "categoryGameImage",
@@ -211,7 +211,7 @@
                         "type": "category",
                         "categoryName": {
                             "type": "categoryGameText",
-                            "text": "fruits\\t"
+                            "text": "fruits"
                         },
                         "categoryImage": {
                             "type": "categoryGameImage",

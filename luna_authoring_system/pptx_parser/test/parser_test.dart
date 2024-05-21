@@ -431,21 +431,20 @@ void main() {
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       String type0 = astJson['presentation']['slides'][2]['type'];
-      List<dynamic> category = astJson['presentation']['slides'][2]['children'];
+      List<dynamic> category = astJson['presentation']['slides'][2]['category'];
 
-      expect(type0, 'categorygameeditor');
+      expect(type0, 'categoryGameEditor');
       expect(category.length, 2);
     });
 
-    test('Double line category ', () async {
-      var filename = "Content and category game editor.pptx";
+    test('Double line category name is parsed as categoryName', () async {
+      var filename = "Two lines of categoryName.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      String type0 = astJson['presentation']['slides'][2]['type'];
-      List<dynamic> category = astJson['presentation']['slides'][2]['children'];
+      String categoryName = astJson['presentation']['slides'][0]['category'][0]
+          ['categoryName']['text'];
 
-      expect(type0, 'categorygameeditor');
-      expect(category.length, 2);
+      expect(categoryName, "fruits this is fruits");
     });
 
     test('PPTX with one slide that follows slideLayout returns JSON file',
@@ -482,6 +481,36 @@ void main() {
 
       expect(fileExists, true);
     });
+
+    test('A Textbox has UID of 1', () async {
+      // Arrange
+      var filename = "TextBox-HelloWorld.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      // Act
+      int pptUID = astJson['presentation']['slides'][0]['shapes'][0]['children']
+          [1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      // Assert
+      expect(pptUID, 1);
+    });
+
+    test('N Textboxes have assigned UIDs', () async {
+      var filename = "TextBoxes.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      int pptUID0 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      int pptUID1 = astJson['presentation']['slides'][0]['shapes'][1]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      int pptUID2 = astJson['presentation']['slides'][0]['shapes'][2]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      expect(pptUID0, 1);
+      expect(pptUID1, 2);
+      expect(pptUID2, 3);
+    });
   });
 
   group('Non MVP', () {
@@ -500,35 +529,5 @@ void main() {
     //   expect(shapeType1, "curvedConnector3");
     //   expect(shapeType2, "bentConnector3");
     // });
-  });
-
-  test('A Textbox has UID of 1', () async {
-    // Arrange
-    var filename = "TextBox-HelloWorld.pptx";
-    Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-    // Act
-    int pptUID = astJson['presentation']['slides'][0]['shapes'][0]['children']
-        [1]['paragraphs'][0]['textgroups'][0]['uid'];
-
-    // Assert
-    expect(pptUID, 1);
-  });
-
-  test('N Textboxes have assigned UIDs', () async {
-    var filename = "TextBoxes.pptx";
-    Map<String, dynamic> astJson = await toMapFromPath(filename);
-    int pptUID0 = astJson['presentation']['slides'][0]['shapes'][0]['children']
-        [1]['paragraphs'][0]['textgroups'][0]['uid'];
-
-    int pptUID1 = astJson['presentation']['slides'][0]['shapes'][1]['children']
-        [1]['paragraphs'][0]['textgroups'][0]['uid'];
-
-    int pptUID2 = astJson['presentation']['slides'][0]['shapes'][2]['children']
-        [1]['paragraphs'][0]['textgroups'][0]['uid'];
-
-    expect(pptUID0, 1);
-    expect(pptUID1, 2);
-    expect(pptUID2, 3);
   });
 }
