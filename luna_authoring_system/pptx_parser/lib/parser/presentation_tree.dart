@@ -289,8 +289,8 @@ class CategoryGameEditorNode extends PrsNode {
 }
 
 class CategoryNode extends PrsNode {
-  CategoryGameTextNode? text;
-  CategoryGameImageNode? image;
+  CategoryGameTextNode? categoryName;
+  CategoryGameImageNode? categoryImage;
 
   CategoryNode() {
     name = 'category';
@@ -300,9 +300,9 @@ class CategoryNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'text': text?.toJson(),
-      'image': image?.toJson(),
-      'children': children.map((child) => child.toJson()).toList()
+      'categoryName': categoryName?.toJson(),
+      'categoryImage': categoryImage?.toJson(),
+      'categoryMembers': children.map((child) => child.toJson()).toList()
     };
   }
 }

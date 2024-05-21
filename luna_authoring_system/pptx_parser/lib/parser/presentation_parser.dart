@@ -299,7 +299,7 @@ class PresentationParser {
                     item.offset.y == shapeElement.transform.offset.y &&
                     item.size.x == shapeElement.transform.size.x &&
                     item.size.y == shapeElement.transform.size.y)
-                ? (node.children[index ?? 0] as CategoryNode).image =
+                ? (node.children[index ?? 0] as CategoryNode).categoryImage =
                     element as CategoryGameImageNode
                 : node.children[index ?? 0].children.add(element);
           });
@@ -307,8 +307,8 @@ class PresentationParser {
           var shapeObj = shapeTree[key];
           _processDynamicCollection(shapeObj, (para) {
             var element = _parseCategoryGameTextBox(para);
-            (node.children[_addToCategory(element) ?? 0] as CategoryNode).text =
-                element as CategoryGameTextNode;
+            (node.children[_addToCategory(element) ?? 0] as CategoryNode)
+                .categoryName = element as CategoryGameTextNode;
           });
       }
     });

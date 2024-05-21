@@ -1,7 +1,7 @@
 {
     "presentation": {
         "type": "presentation",
-        "moduleId": "cc1d1ab6-f5dc-434f-9e5d-54ea616e9c93",
+        "moduleId": "02b3da80-e974-42a1-9b56-8e71b6933f87",
         "title": "PowerPoint Presentation",
         "author": "Wonwhoo A nah",
         "slideCount": 6,
@@ -103,16 +103,16 @@
                 "category": [
                     {
                         "type": "category",
-                        "text": {
+                        "categoryName": {
                             "type": "categoryGameText",
                             "text": "fruits\\t"
                         },
-                        "image": {
+                        "categoryImage": {
                             "type": "categoryGameImage",
                             "path": "../media/image7.png",
                             "alttext": null
                         },
-                        "children": [
+                        "categoryMembers": [
                             {
                                 "type": "categoryGameImage",
                                 "path": "../media/image9.png",
@@ -127,16 +127,16 @@
                     },
                     {
                         "type": "category",
-                        "text": {
+                        "categoryName": {
                             "type": "categoryGameText",
                             "text": "vegetables"
                         },
-                        "image": {
+                        "categoryImage": {
                             "type": "categoryGameImage",
                             "path": "../media/image8.png",
                             "alttext": null
                         },
-                        "children": [
+                        "categoryMembers": [
                             {
                                 "type": "categoryGameImage",
                                 "path": "../media/image11.png",
@@ -209,16 +209,16 @@
                 "category": [
                     {
                         "type": "category",
-                        "text": {
+                        "categoryName": {
                             "type": "categoryGameText",
                             "text": "fruits\\t"
                         },
-                        "image": {
+                        "categoryImage": {
                             "type": "categoryGameImage",
                             "path": "../media/image7.png",
                             "alttext": null
                         },
-                        "children": [
+                        "categoryMembers": [
                             {
                                 "type": "categoryGameImage",
                                 "path": "../media/image9.png",
@@ -233,16 +233,16 @@
                     },
                     {
                         "type": "category",
-                        "text": {
+                        "categoryName": {
                             "type": "categoryGameText",
                             "text": "vegetables"
                         },
-                        "image": {
+                        "categoryImage": {
                             "type": "categoryGameImage",
                             "path": "../media/image8.png",
                             "alttext": null
                         },
-                        "children": [
+                        "categoryMembers": [
                             {
                                 "type": "categoryGameImage",
                                 "path": "../media/image11.png",
