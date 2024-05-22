@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
 import 'dart:convert';
+import 'package:luna_core/utils/logging.dart';
 
 const String assetsFolder = 'test/test_assets';
 
@@ -469,6 +470,18 @@ void main() {
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
     });
 
     test('toJSON returns JSON file', () async {
@@ -480,6 +493,18 @@ void main() {
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
     });
 
     test('A Textbox has UID of 1', () async {
