@@ -14,13 +14,13 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:collection/collection.dart';
-import 'package:luna_mhealth_mobile/storage/istorage_provider.dart';
-import 'package:luna_mhealth_mobile/storage/local_storage_provider.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:luna_mhealth_mobile/storage/module_storage.dart';
-import 'package:luna_mhealth_mobile/models/module.dart';
+import 'package:luna_core/models/module.dart';
+import 'package:luna_core/storage/istorage_provider.dart';
+import 'package:luna_core/storage/local_storage_provider.dart';
+import 'package:luna_core/storage/module_storage.dart';
+import 'package:luna_core/utils/logging.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:luna_mhealth_mobile/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
 
 const String kApplicationDocumentsPath = 'test/storage/moduletestdata';

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'dart:collection';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
-import '../../../luna_core/lib/localization/localized_text.dart';
+import 'package:luna_core/localization/localized_text.dart';
 
 void main() {
   group('LocalizedText', () {
