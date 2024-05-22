@@ -169,7 +169,7 @@ class ModuleStorage {
   }
 
   /// Adds a new Module to the storage provider
-  Future<Module> addModule(String moduleName, String jsonData) async {
+  Future<Module> createNewModuleFile(String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleStorage.addModule', () async {
       Module module = Module.fromJson(jsonDecode(jsonData));
       String moduleFileName = _getModuleFileName(moduleName);
@@ -191,7 +191,11 @@ class ModuleStorage {
   }
 
   /// Adds a new Module file to the storage provider
-  Future<bool> addModuleFile(String moduleName, Uint8List fileData) async {
+  /// archiveFileData: the moduleName.luna file to transfer to the default
+  /// module store location from the storage provider
+  /// ToDo: Simplify this with previously existing helpers
+  Future<bool> importModuleFile(
+      String moduleName, Uint8List archiveFileData) async {
     return await LogManager().logFunction('ModuleStorage.addModuleFile',
         () async {
       String moduleFileName = _getModuleFileName(moduleName);
@@ -201,11 +205,14 @@ class ModuleStorage {
         throw Exception("Module already exists: $moduleFileName");
       }
 
-      return _storageProvider.saveFile(fullModulePath, fileData,
+      return _storageProvider.saveFile(fullModulePath, archiveFileData,
           createContainer: true);
     });
   }
 
+  /// ToDo: Rip this out with addModuleAudio
+  ///   Take all common code out and refactor to addModuleAsset(moduleName, string assetPath/filename, Uint8List? bytes)
+  /// ToDo: adjust addModuleImage/audo to use the refactored method.  Then pull out image/audio methods to resourceFactory.
   /// Adds an image asset to a Module.luna archive package
   Future<bool> addModuleImage(
       String moduleName, String imageFileName, Uint8List? imageBytes) async {
@@ -216,7 +223,7 @@ class ModuleStorage {
       if (archive == null) {
         return false;
       }
-      String filePath = "$moduleName/images/$imageFileName";
+      String filePath = "resources/images/$imageFileName";
 
       if (await _updateOrAddAssetToArchive(archive, filePath, imageBytes!)) {
         return _saveArchiveToFileSystem(moduleName, archive);
@@ -235,7 +242,7 @@ class ModuleStorage {
       if (archive == null) {
         return false;
       }
-      String filePath = "audio/$audioFileName";
+      String filePath = "resources/audio/$audioFileName";
 
       if (await _updateOrAddAssetToArchive(archive, filePath, audioBytes!)) {
         return _saveArchiveToFileSystem(moduleName, archive);

@@ -49,14 +49,14 @@ class ModuleResourceFactory {
   /// Adds a module with the given name and JSON data.
   static Future<Module> addModule(String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleHandler.addModule', () async {
-      return moduleStorage.addModule(moduleName, jsonData);
+      return moduleStorage.createNewModuleFile(moduleName, jsonData);
     });
   }
 
   /// Adds a module file with the given name and file data.
   static Future<bool> addModuleFile(
       String moduleName, Uint8List fileData) async {
-    return moduleStorage.addModuleFile(moduleName, fileData);
+    return moduleStorage.importModuleFile(moduleName, fileData);
   }
 
   /// Gets the image with the given name from the stored module.
