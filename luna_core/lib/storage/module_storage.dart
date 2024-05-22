@@ -155,7 +155,7 @@ class ModuleStorage {
     return await LogManager().logFunction('ModuleStorage.getImageBytes',
         () async {
       return _extractAssetFromModule(
-          moduleName, "$moduleName/images/$imageFileName");
+          moduleName, "resources/images/$imageFileName");
     });
   }
 
@@ -164,7 +164,7 @@ class ModuleStorage {
       String moduleName, String audioFileName) async {
     return await LogManager().logFunction('ModuleStorage.getAudioBytes',
         () async {
-      return _extractAssetFromModule(moduleName, "audio/$audioFileName");
+      return _extractAssetFromModule(moduleName, "resources/audio/$audioFileName");
     });
   }
 
