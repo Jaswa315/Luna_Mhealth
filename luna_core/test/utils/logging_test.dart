@@ -10,7 +10,7 @@ import 'dart:io';
 import 'dart:core';
 import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_mhealth_mobile/utils/logging.dart';
+import 'package:luna_core/utils/logging.dart';
 import 'package:mockito/mockito.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:azure_application_insights/azure_application_insights.dart';
@@ -21,12 +21,11 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
 
-  group('LogManager Tests', () {       
-    
+  group('LogManager Tests', () {
     test('LogManager - Singleton create fail', () async {
       expect(() {
         LogManager manager = LogManager();
-      }, throwsException);      
+      }, throwsException);
     });
 
     test('LogManager - AddLoggers', () async {
@@ -76,8 +75,8 @@ void main() {
 
     test('LogManager - Create Trace', overridePrint(() async {
       log.clear();
-      LogManager lm = await LogManager.createInstance(false);  
-      lm.clearLoggers();    
+      LogManager lm = await LogManager.createInstance(false);
+      lm.clearLoggers();
       MockLogger mockLogger = MockLogger();
 
       lm.addLogger(mockLogger);
@@ -95,7 +94,7 @@ void main() {
     test('LogManager - Create Exception', overridePrint(() async {
       log.clear();
       LogManager lm = await LogManager.createInstance(false);
-      lm.clearLoggers();      
+      lm.clearLoggers();
       MockLogger mockLogger = MockLogger();
 
       lm.addLogger(mockLogger);

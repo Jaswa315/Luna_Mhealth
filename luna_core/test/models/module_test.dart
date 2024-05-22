@@ -7,13 +7,14 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_mhealth_mobile/models/module.dart';
-import 'package:luna_mhealth_mobile/enums/item_type.dart';
-import 'package:luna_mhealth_mobile/models/page.dart';
+import 'package:luna_core/enums/item_type.dart';
+import 'package:luna_core/models/module.dart';
+import 'package:luna_core/models/page.dart';
 import 'dart:io';
 import 'dart:convert';
 
 const String kTestAssetsPath = 'test/storage/testassets';
+
 void main() {
   group('Module Class Tests', () {
     // Test initialization of the Module

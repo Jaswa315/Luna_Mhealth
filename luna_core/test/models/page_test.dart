@@ -8,10 +8,10 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart' hide Page;
-import 'package:luna_mhealth_mobile/models/page.dart';
-import 'package:luna_mhealth_mobile/models/component.dart';
-import 'package:luna_mhealth_mobile/enums/component_type.dart';
-import 'package:luna_mhealth_mobile/models/interfaces/clickable.dart';
+import 'package:luna_core/enums/component_type.dart';
+import 'package:luna_core/models/page.dart';
+import 'package:luna_core/models/component.dart';
+import 'package:luna_core/models/interfaces/clickable.dart';
 
 // Updated MockComponent to add to the Page for testing purposes
 class MockComponent extends Component implements Clickable {

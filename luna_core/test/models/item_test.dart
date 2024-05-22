@@ -7,8 +7,8 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_mhealth_mobile/enums/item_type.dart';
-import 'package:luna_mhealth_mobile/models/item.dart';
+import 'package:luna_core/enums/item_type.dart';
+import 'package:luna_core/models/item.dart';
 
 void main() {
   group('Item', () {

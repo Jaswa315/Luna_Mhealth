@@ -12,8 +12,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:luna_mhealth_mobile/storage/istorage_provider.dart';
-import 'package:luna_mhealth_mobile/storage/local_storage_provider.dart';
+import 'package:luna_core/storage/istorage_provider.dart';
+import 'package:luna_core/storage/local_storage_provider.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
