@@ -8,14 +8,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:luna_core/models/module.dart';
+import 'package:luna_mhealth_mobile/core/constants/constants.dart';
+import 'package:luna_mhealth_mobile/core/services/page_builder_service.dart';
+import 'package:luna_mhealth_mobile/core/services/page_persistence_service.dart';
+import 'package:luna_mhealth_mobile/presentation/pages/module_page.dart';
+import 'package:luna_mhealth_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
-
-import '../../core/constants/constants.dart';
-import '../../core/services/page_builder_service.dart';
-import '../../core/services/page_persistence_service.dart';
-import '../../models/module.dart';
-import '../../providers/module_provider.dart';
-import 'module_page.dart';
 
 /// The home page of the application.
 class HomePage extends StatefulWidget {
@@ -46,14 +45,14 @@ class _HomePageState extends State<HomePage> {
         title: const Text(AppConstants.appName),
         actions: [
           IconButton(
-            onPressed: () => Provider.of<ModuleProvider>(context, listen: false)
+            onPressed: () => Provider.of<ModuleUIPicker>(context, listen: false)
                 .selectAndStoreModuleFile(),
             icon: const Icon(CupertinoIcons.add_circled),
           ),
         ],
       ),
       body: Center(
-        child: Consumer<ModuleProvider>(
+        child: Consumer<ModuleUIPicker>(
           builder: (context, moduleProvider, child) {
             if (moduleProvider.areModulesLoaded) {
               return ListView.builder(
@@ -83,7 +82,7 @@ class _HomePageState extends State<HomePage> {
 
 Widget _buildModuleListItem(BuildContext context, int index) {
   final module =
-      Provider.of<ModuleProvider>(context, listen: false).moduleList[index];
+      Provider.of<ModuleUIPicker>(context, listen: false).moduleList[index];
   return ListTile(
     title: Text(module.title),
     onTap: () => _navigateToModulePage(context, module),
