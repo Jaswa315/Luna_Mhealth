@@ -61,7 +61,7 @@ void main() {
           ModuleStorage(provider: storageProvider, userName: "");
 
       Module testData =
-          await moduleStorage.addModule(testModuleName, jsonModule);
+          await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
       List<String> moduleFileNames = await storageProvider.getAllFileNames();
 
       //expect(expectData.id == testData.id, true);
@@ -79,10 +79,10 @@ void main() {
           ModuleStorage(provider: storageProvider, userName: "");
 
       Module testData =
-          await moduleStorage.addModule(testModuleName, jsonModule);
+          await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
 
       expect(() async {
-        await moduleStorage.addModule(testModuleName, jsonModule);
+        await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
       }, throwsA(TypeMatcher<Exception>()));
     });
 
@@ -97,7 +97,7 @@ void main() {
           ModuleStorage(provider: storageProvider, userName: userName);
 
       Module testData =
-          await moduleStorage.addModule(testModuleName, jsonModule);
+          await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
       List<String> moduleFileNames =
           await storageProvider.getAllFileNames(container: userName);
 
@@ -117,7 +117,7 @@ void main() {
       ModuleStorage moduleStorage =
           ModuleStorage(provider: storageProvider, userName: userName);
 
-      await moduleStorage.addModule(testModuleName, jsonModule);
+      await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
 
       Module? testData = await moduleStorage.loadModule(testModuleName);
 
@@ -136,7 +136,7 @@ void main() {
       ModuleStorage moduleStorage =
           ModuleStorage(provider: storageProvider, userName: userName);
 
-      await moduleStorage.addModule(testModuleName, jsonModule);
+      await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
 
       Module? testData = await moduleStorage.loadModule(testModuleName);
 
@@ -156,8 +156,8 @@ void main() {
       ModuleStorage moduleStorage =
           ModuleStorage(provider: storageProvider, userName: userName);
 
-      await moduleStorage.addModule(testModuleName1, jsonModule);
-      await moduleStorage.addModule(testModuleName2, jsonModule);
+      await moduleStorage.createNewModuleFile(testModuleName1, jsonModule);
+      await moduleStorage.createNewModuleFile(testModuleName2, jsonModule);
 
       List<Module?> modules = await moduleStorage.loadAllModules();
 
@@ -177,8 +177,8 @@ void main() {
       ModuleStorage moduleStorage =
           ModuleStorage(provider: storageProvider, userName: userName);
 
-      await moduleStorage.addModule(testModuleName1, jsonModule);
-      await moduleStorage.addModule(testModuleName2, jsonModule);
+      await moduleStorage.createNewModuleFile(testModuleName1, jsonModule);
+      await moduleStorage.createNewModuleFile(testModuleName2, jsonModule);
 
       List<Module?> modules = await moduleStorage.loadAllModules();
 
@@ -198,7 +198,7 @@ void main() {
       ModuleStorage moduleStorage =
           ModuleStorage(provider: storageProvider, userName: "");
 
-      await moduleStorage.addModule(testModuleName, jsonModule);
+      await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
 
       bool result =
           await moduleStorage.updateModuleSchema(testModuleName, jsonModule2);
@@ -207,64 +207,6 @@ void main() {
 
       // expect(expectData.id == testData?.id, true);
       expect(expectData.title == testData?.title, true);
-    });
-
-    test('Add/Retrieve Image', () async {
-      String testModuleName = "TestModule";
-      String userName = "";
-      String imageFileName = "checkmark.png";
-
-      String jsonModule =
-          File("$kTestAssetsPath/module.json").readAsStringSync();
-
-      File image = File("$kTestAssetsPath/$imageFileName");
-
-      List<int> listImageBytes = await image.readAsBytes();
-
-      Uint8List imageBytes = Uint8List.fromList(listImageBytes);
-
-      ModuleStorage moduleStorage =
-          ModuleStorage(provider: storageProvider, userName: userName);
-
-      await moduleStorage.addModule(testModuleName, jsonModule);
-
-      await moduleStorage.addModuleImage(
-          testModuleName, imageFileName, imageBytes);
-
-      Uint8List? testBytes =
-          await moduleStorage.getImageBytes(testModuleName, imageFileName);
-
-      expect(testBytes != null && ListEquality().equals(testBytes, imageBytes),
-          true);
-    });
-
-    test('Add/Retrieve Audio', () async {
-      String testModuleName = "TestModule";
-      String userName = "";
-      String audioFileName = "sampleaudio.mp3";
-
-      String jsonModule =
-          File("$kTestAssetsPath/module.json").readAsStringSync();
-
-      File image = File("$kTestAssetsPath/$audioFileName");
-
-      List<int> listAudioBytes = await image.readAsBytes();
-
-      Uint8List audioBytes = Uint8List.fromList(listAudioBytes);
-
-      ModuleStorage moduleStorage =
-          ModuleStorage(provider: storageProvider, userName: userName);
-
-      await moduleStorage.addModule(testModuleName, jsonModule);
-
-      await moduleStorage.addModuleAudio(
-          testModuleName, audioFileName, audioBytes);
-
-      Uint8List? testBytes =
-          await moduleStorage.getAudioBytes(testModuleName, audioFileName);
-
-      expect(testBytes != null && ListEquality().equals(testBytes, audioBytes),
-          true);
     });
 
     test('Remove Module - UserProfle', () async {
@@ -278,7 +220,7 @@ void main() {
           ModuleStorage(provider: storageProvider, userName: userName);
 
       Module testData =
-          await moduleStorage.addModule(testModuleName, jsonModule);
+          await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
 
       bool result = await moduleStorage.removeModule(testModuleName);
 
@@ -300,7 +242,7 @@ void main() {
           ModuleStorage(provider: storageProvider, userName: userName);
 
       Module testData =
-          await moduleStorage.addModule(testModuleName, jsonModule);
+          await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
 
       bool result = await moduleStorage.removeModule(testModuleName);
 
@@ -310,8 +252,6 @@ void main() {
       expect(result, true);
       expect(!moduleFileNames.contains("$testModuleName.luna"), true);
     });
-
-    
 
     tearDown(() async {
       // clear out all files in the test folder

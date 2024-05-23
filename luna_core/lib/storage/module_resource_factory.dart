@@ -60,8 +60,32 @@ class ModuleResourceFactory {
   }
 
   /// Gets the image with the given name from the stored module.
-  static Future<Uint8List?> getImageBytes(String imageFileName) async {
-    return moduleStorage.getImageBytes(imageModuleName, imageFileName);
+  static Future<Uint8List?> getImageBytes(
+      String moduleName, String imageFileName) async {
+    return moduleStorage.getAsset(
+        moduleName, moduleStorage.getImagePath(moduleName, imageFileName));
+  }
+
+  /// Gets the audio with the given name and language locale from the stored module.
+  static Future<Uint8List?> getAudioBytes(
+      String moduleName, String audioFileName, String langLocale) async {
+    return moduleStorage.getAsset(moduleName,
+        moduleStorage.getAudioPath(moduleName, audioFileName, langLocale));
+  }
+
+  /// Adds an image asset to a Module.luna archive package.
+  static Future<bool> addModuleImage(
+      String moduleName, String imageFileName, Uint8List? imageBytes) async {
+    String filePath = "resources/images/$imageFileName";
+    return moduleStorage.addModuleAsset(moduleName, filePath, imageBytes);
+  }
+
+  /// Adds an audio asset to a Module.luna archive package.
+  /// (matched audio structure)
+  static Future<bool> addModuleAudio(String moduleName, String audioFileName,
+      Uint8List? audioBytes, String langLocale) async {
+    String filePath = "resources/$langLocale/audio/$audioFileName";
+    return moduleStorage.addModuleAsset(moduleName, filePath, audioBytes);
   }
 
   /// Loads all modules from storage.
