@@ -71,6 +71,7 @@ class PresentationNode extends PrsNode {
 
   PresentationNode() {
     name = 'presentation';
+    //TODO: get local info dynamically
     locale = defaultLocale;
   }
 
@@ -191,7 +192,7 @@ class TextNode extends PrsNode {
       'size': size,
       'color': color,
       'highlightcolor': highlightColor,
-      'language': language,
+      // 'language': language,
       'text': text,
       if (hyperlink != null) 'hyperlink': hyperlink,
     };
