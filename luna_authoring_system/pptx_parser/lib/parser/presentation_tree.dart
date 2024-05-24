@@ -64,11 +64,14 @@ class PresentationNode extends PrsNode {
   late final Map<String, dynamic> section;
   late final double x;
   late final double y;
+  late final String locale;
 
   static const String defaultSection = 'Default Section';
+  static const String defaultLocale = 'en-US';
 
   PresentationNode() {
     name = 'presentation';
+    locale = defaultLocale;
   }
 
   @override
