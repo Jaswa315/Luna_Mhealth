@@ -73,6 +73,7 @@ class PresentationNode extends PrsNode {
 
   PresentationNode() {
     name = 'presentation';
+    //TODO: get local info dynamically
     locale = defaultLocale;
   }
 
