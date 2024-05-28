@@ -18,8 +18,6 @@ import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 class ImageComponent extends Component {
   /// The path to the image file.
   String imagePath;
-
-  /// The name of the module.
   String moduleName;
 
   /// Constructs a new instance of [ImageComponent] with the given [imagePath], [x], [y], [width], and [height].
@@ -42,10 +40,9 @@ class ImageComponent extends Component {
   Future<Widget> render() async {
     String imageFileName = imagePath.split('/').last;
 
-    /// Updated the render method to use the new getImageBytes signature
     return FutureBuilder<Uint8List?>(
       future: ModuleResourceFactory.getImageBytes(
-          moduleName, imageFileName), //added module name
+          moduleName, imageFileName), 
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return CircularProgressIndicator();
@@ -62,7 +59,6 @@ class ImageComponent extends Component {
   }
 
   /// Creates an [ImageComponent] from a JSON map.
-  /// Updated the fromJson method to include moduleName
   static ImageComponent fromJson(Map<String, dynamic> json) {
     return ImageComponent(
       imagePath: json['image_path'],

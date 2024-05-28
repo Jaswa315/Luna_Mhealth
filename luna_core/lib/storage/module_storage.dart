@@ -328,6 +328,9 @@ class ModuleStorage {
       String moduleName, String assetFileName, Uint8List? assetBytes) async {
     return await LogManager().logFunction('ModuleStorage.addModuleAsset',
         () async {
+      if (assetBytes == null) {
+        return false;
+      }
       Archive? archive = await _getModuleArchive(moduleName);
 
       if (archive == null) {
