@@ -19,13 +19,9 @@ class ImageComponent extends Component {
   /// The path to the image file.
   String imagePath;
 
-  /// The name of the module.
-  String moduleName;
-
   /// Constructs a new instance of [ImageComponent] with the given [imagePath], [x], [y], [width], and [height].
   ImageComponent({
     required this.imagePath,
-    required this.moduleName,
     required double x,
     required double y,
     required double width,
@@ -44,8 +40,7 @@ class ImageComponent extends Component {
 
     /// Updated the render method to use the new getImageBytes signature
     return FutureBuilder<Uint8List?>(
-      future: ModuleResourceFactory.getImageBytes(
-          moduleName, imageFileName), //added module name
+      future: ModuleResourceFactory.getImageBytes(imageFileName),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return CircularProgressIndicator();
@@ -67,7 +62,6 @@ class ImageComponent extends Component {
   static ImageComponent fromJson(Map<String, dynamic> json) {
     return ImageComponent(
       imagePath: json['image_path'],
-      moduleName: json['module_name'], //added module name
       x: json['position']['left'].toDouble(),
       y: json['position']['top'].toDouble(),
       width: json['position']['width'].toDouble(),
