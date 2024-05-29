@@ -6,8 +6,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import '../models/image/image_component.dart';
-import 'base_component_renderer.dart';
+import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/renderers/base_component_renderer.dart';
 
-/// A class that extends the [BaseComponentRenderer] class to render an image component.
-class ImageComponentRenderer extends BaseComponentRenderer<ImageComponent> {}
+/// A class that extends the [BaseComponentRenderer] class to render divider components.
+class DividerComponentRenderer
+    extends BaseComponentRenderer<DividerComponent> {}

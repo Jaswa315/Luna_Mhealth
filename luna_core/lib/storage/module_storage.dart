@@ -135,12 +135,9 @@ class ModuleStorage {
 
         if (archive != null) {
           for (final ArchiveFile file in archive) {
-            if (file.isFile &&
-                !file.name.startsWith(AppConstants.macosSystemFilePrefix) &&
-                file.name.endsWith(".json") &&
-                file.content.isNotEmpty) {
-              String jsonModule = utf8.decode(file.content as List<int>);
-              modules.add(Module.fromJson(jsonDecode(jsonModule)));
+            Module? module = _processArchiveFile(file);
+            if (module != null) {
+              modules.add(module);
             }
           }
         }
@@ -309,6 +306,22 @@ class ModuleStorage {
 
   String _getModuleJsonFileName(String moduleName) {
     return '${moduleName.trim().replaceAll(" ", "_")}.json';
+  }
+
+  Module? _processArchiveFile(ArchiveFile file) {
+    bool isFile = file.isFile;
+    bool isNotMacosSystemFile =
+        !file.name.startsWith(AppConstants.macosSystemFilePrefix);
+    bool isJsonFile = file.name.endsWith(".json");
+    bool isContentNotEmpty = file.content.isNotEmpty;
+
+    if (isFile && isNotMacosSystemFile && isJsonFile && isContentNotEmpty) {
+      String jsonModule = utf8.decode(file.content as List<int>);
+
+      return Module.fromJson(jsonDecode(jsonModule));
+    }
+
+    return null;
   }
 
   /// Adds a generic asset to a Module.luna archive package.
