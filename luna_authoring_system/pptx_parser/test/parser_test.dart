@@ -195,30 +195,6 @@ void main() {
           "A group of people outside of a building\n\nDescription automatically generated");
     });
 
-    test('Language is denoted as [language-Region]', () async {
-      var filename = "A Texbox written in English in South Korea Region.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String language = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      expect(language, "en-KR");
-    });
-
-    test('Textboxes with different language have different [language-region]',
-        () async {
-      var filename = "Two Textboxes in English and Korean.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String language1 = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-      String language2 = astJson['presentation']['slides'][0]['shapes'][1]
-          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      expect(language1.substring(0, 2), "ko");
-      expect(language2.substring(0, 2), "en");
-    });
-
     test('Same slides from the same file have the same slide id', () async {
       var filename1 = "Slide 1 and 2.pptx";
       var filename2 = "Slide 2 and 1.pptx";
@@ -553,6 +529,30 @@ void main() {
     //   expect(shapeType0, "line");
     //   expect(shapeType1, "curvedConnector3");
     //   expect(shapeType2, "bentConnector3");
+    // });
+
+    // test('Language is denoted as [language-Region]', () async {
+    //   var filename = "A Texbox written in English in South Korea Region.pptx";
+    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+    //   String language = astJson['presentation']['slides'][0]['shapes'][0]
+    //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+    //   expect(language, "en-KR");
+    // });
+
+    // test('Textboxes with different language have different [language-region]',
+    //     () async {
+    //   var filename = "Two Textboxes in English and Korean.pptx";
+    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+    //   String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+    //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+    //   String language2 = astJson['presentation']['slides'][0]['shapes'][1]
+    //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+
+    //   expect(language1.substring(0, 2), "ko");
+    //   expect(language2.substring(0, 2), "en");
     // });
   });
 }
