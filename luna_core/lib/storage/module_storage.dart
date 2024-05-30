@@ -17,6 +17,7 @@ import 'package:archive/archive.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/istorage_provider.dart';
+import 'package:luna_core/utils/json_data_extractor.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 
@@ -65,23 +66,6 @@ class ModuleStorage {
                 GlobalConfiguration().getValue('StorageProviderType')),
         _userPath = userName;
 
-  /// Updates the Module.json file in a Module.luna archive package
-  Future<bool> updateModuleSchema(String moduleName, String jsonData) async {
-    Archive? archive = await _getModuleArchive(moduleName);
-    return await LogManager().logFunction('ModuleStorage.updateModuleSchema',
-        () async {
-      if (archive == null) {
-        return false;
-      }
-
-      if (await _updateOrAddAssetToArchive(
-          archive, _getModuleJsonFileName(moduleName), utf8.encode(jsonData))) {
-        return _saveArchiveToFileSystem(moduleName, archive);
-      }
-      return false;
-    });
-  }
-
   /// Loads a Module object from a Module.luna archive package
   ///
   /// This method will lookup and extract the Module.json file from
@@ -103,8 +87,7 @@ class ModuleStorage {
     return await LogManager().logFunction('ModuleStorage.loadModule', () async {
       moduleName.trim().replaceAll(" ", "_");
 
-      Uint8List? jsonData =
-          await _extractAssetFromModule(moduleName, "$moduleName.json");
+      Uint8List? jsonData = await getJSONDataBytes(moduleName);
 
       String jsonString = utf8.decode(jsonData as List<int>);
 
@@ -146,6 +129,34 @@ class ModuleStorage {
     });
   }
 
+  /// Retrieves JSON data of given moduleName from the Module.luna archive package
+  Future<Uint8List?> getJSONDataBytes(String moduleName) async {
+    return await LogManager().logFunction('ModuleStorage.getJSONDataBytes',
+        () async {
+      return _extractAssetFromModule(moduleName, "data/$moduleName.json");
+    });
+  }
+
+  /// Retrieves an image asset from a Module.luna archive package
+  Future<Uint8List?> getImageBytes(
+      String moduleName, String imageFileName) async {
+    return await LogManager().logFunction('ModuleStorage.getImageBytes',
+        () async {
+      return _extractAssetFromModule(
+          moduleName, "resources/images/$imageFileName");
+    });
+  }
+
+  /// Retrieves an audio asset from a Module.luna archive package
+  Future<Uint8List?> getAudioBytes(
+      String moduleName, String audioFileName) async {
+    return await LogManager().logFunction('ModuleStorage.getAudioBytes',
+        () async {
+      return _extractAssetFromModule(
+          moduleName, "resources/audio/$audioFileName");
+    });
+  }
+
   /// Adds a new Module to the storage provider
   Future<Module> createNewModuleFile(String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleStorage.addModule', () async {
@@ -157,10 +168,8 @@ class ModuleStorage {
         throw Exception("Module already exists: $moduleFileName");
       }
 
-      Archive archive = Archive();
-
-      _updateOrAddAssetToArchive(
-          archive, _getModuleJsonFileName(moduleName), utf8.encode(jsonData));
+      Archive archive = await _createArchiveFromModuleDataWithInitialAssets(
+          moduleName, jsonData);
 
       await _saveArchiveToFileSystem(moduleName, archive);
 
@@ -288,6 +297,41 @@ class ModuleStorage {
     return true;
   }
 
+  Future<bool> _addEmptyDirectoryFolderToArchive(
+      Archive archive, String directoryPath) async {
+    if (!directoryPath.endsWith('/')) {
+      directoryPath += '/';
+    }
+
+    ArchiveFile emptyDirectory = ArchiveFile(directoryPath, 0, Uint8List(0))
+      ..isFile = false
+      ..compress = false;
+
+    archive.addFile(emptyDirectory);
+    return true;
+  }
+  
+  Future<Archive> _createArchiveFromModuleDataWithInitialAssets(
+      String moduleName, String jsonData) async {
+    Archive moduleArchive = Archive();
+    await _updateOrAddAssetToArchive(
+        moduleArchive,
+        "${_getDataPath()}/${_getModuleJsonFileName(moduleName)}",
+        utf8.encode(jsonData));
+
+    await _addEmptyDirectoryFolderToArchive(moduleArchive, _getImagePath());
+
+    Uint8List? csvFileBytes = await _createInitialNewLanguageCSV(jsonData);
+
+    String csvFilePath = _getInitialCSVFilePath(jsonData);
+
+    await _updateOrAddAssetToArchive(moduleArchive, csvFilePath, csvFileBytes!);
+
+    await _addEmptyDirectoryFolderToArchive(moduleArchive, _getInitialAudioDirectoryPath(jsonData));
+
+    return moduleArchive;
+  }
+
   String _getModuleTempFilePath(String moduleName) {
     moduleName.trim().replaceAll(" ", "_");
     return _userPath == '' ? "$moduleName" : '$_userPath/$moduleName';
@@ -379,5 +423,48 @@ class ModuleStorage {
     return _userPath == ''
         ? '$moduleName/resources/$langLocale/audio/$audioFileName'
         : '$_userPath/$moduleName/resources/$langLocale/audio/$audioFileName';
+      }
+      
+  String _getDataPath() {
+    return "data";
+  }
+
+  String _getResourcePath() {
+    return "resources";
+  }
+
+  String _getImagePath() {
+    return "${_getResourcePath()}/images";
+  }
+
+  String _getLanguagePath(String language) {
+    return "${_getResourcePath()}/$language";
+  }
+
+  String _getAudioPath(String language) {
+    return "${_getLanguagePath(language)}/audio";
+  }
+
+  Future<Uint8List?> _createInitialNewLanguageCSV(String jsonData) async {
+    JSONDataExtractor extractor = JSONDataExtractor();
+    Uint8List? csvData =
+        await extractor.extractTextDataFromJSONAsCSVBytes(jsonData);
+    return csvData;
+  }
+
+  String _getLanguageFromJSONData(String jsonData) {
+    JSONDataExtractor extractor = JSONDataExtractor();
+    String languageAsString = extractor.extractLanguageFromJSON(jsonData);
+    return languageAsString;
+  }
+
+  String _getInitialCSVFilePath(String jsonData) {
+    String dataLanguage = _getLanguageFromJSONData(jsonData);
+    return '${_getLanguagePath(dataLanguage)}/$dataLanguage.csv';
+  }
+
+    String _getInitialAudioDirectoryPath(String jsonData) {
+    String dataLanguage = _getLanguageFromJSONData(jsonData);
+    return '${_getAudioPath(dataLanguage)}';
   }
 }
