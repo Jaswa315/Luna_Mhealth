@@ -118,9 +118,12 @@ class ModuleStorage {
 
         if (archive != null) {
           for (final ArchiveFile file in archive) {
-            Module? module = _processArchiveFile(file);
-            if (module != null) {
-              modules.add(module);
+            if (file.isFile &&
+                !file.name.startsWith(AppConstants.macosSystemFilePrefix) &&
+                file.name.endsWith(".json") &&
+                file.content.isNotEmpty) {
+              String jsonModule = utf8.decode(file.content as List<int>);
+              modules.add(Module.fromJson(jsonDecode(jsonModule)));
             }
           }
         }
@@ -424,48 +427,5 @@ class ModuleStorage {
     return _userPath == ''
         ? '$moduleName/resources/$langLocale/audio/$audioFileName'
         : '$_userPath/$moduleName/resources/$langLocale/audio/$audioFileName';
-  }
-
-  String _getDataPath() {
-    return "data";
-  }
-
-  String _getResourcePath() {
-    return "resources";
-  }
-
-  String _getImagePath() {
-    return "${_getResourcePath()}/images";
-  }
-
-  String _getLanguagePath(String language) {
-    return "${_getResourcePath()}/$language";
-  }
-
-  String _getAudioPath(String language) {
-    return "${_getLanguagePath(language)}/audio";
-  }
-
-  Future<Uint8List?> _createInitialNewLanguageCSV(String jsonData) async {
-    JSONDataExtractor extractor = JSONDataExtractor();
-    Uint8List? csvData =
-        await extractor.extractTextDataFromJSONAsCSVBytes(jsonData);
-    return csvData;
-  }
-
-  String _getLanguageFromJSONData(String jsonData) {
-    JSONDataExtractor extractor = JSONDataExtractor();
-    String languageAsString = extractor.extractLanguageFromJSON(jsonData);
-    return languageAsString;
-  }
-
-  String _getInitialCSVFilePath(String jsonData) {
-    String dataLanguage = _getLanguageFromJSONData(jsonData);
-    return '${_getLanguagePath(dataLanguage)}/$dataLanguage.csv';
-  }
-
-  String _getInitialAudioDirectoryPath(String jsonData) {
-    String dataLanguage = _getLanguageFromJSONData(jsonData);
-    return '${_getAudioPath(dataLanguage)}';
   }
 }
