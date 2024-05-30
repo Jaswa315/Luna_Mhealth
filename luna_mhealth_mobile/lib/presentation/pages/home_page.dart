@@ -54,25 +54,23 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Consumer<ModuleUIPicker>(
           builder: (context, moduleProvider, child) {
-            if (moduleProvider.areModulesLoaded) {
-              return ListView.builder(
-                itemCount: moduleProvider.moduleList.length,
-                itemBuilder: _buildModuleListItem,
-              );
-            } else {
-              return FutureBuilder(
-                future: moduleProvider.loadAvailableModules(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return const Text('No modules available');
-                  }
-                },
-              );
-            }
+            return moduleProvider.areModulesLoaded
+                ? ListView.builder(
+                    itemCount: moduleProvider.moduleList.length,
+                    itemBuilder: _buildModuleListItem,
+                  )
+                : FutureBuilder(
+                    future: moduleProvider.loadAvailableModules(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return const Text('No modules available');
+                      }
+                    },
+                  );
           },
         ),
       ),

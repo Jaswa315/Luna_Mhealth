@@ -6,6 +6,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/renderers/divider_component_renderer.dart';
+
 import '../models/image/image_component.dart';
 import '../models/text/text_component.dart';
 import 'image_component_renderer.dart';
@@ -17,6 +20,7 @@ class RendererFactory {
   static final Map<Type, IRenderer> _renderers = {
     ImageComponent: ImageComponentRenderer(),
     TextComponent: TextComponentRenderer(),
+    DividerComponent: DividerComponentRenderer(),
   };
 
   /// Returns the renderer for the specified component type.

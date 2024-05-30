@@ -13,4 +13,7 @@ class AppConstants {
 
   /// The prefix for macOS system files.
   static const String macosSystemFilePrefix = "__MACOSX";
+
+  /// Number of pages to cache
+  static const int numberOfPagesCacheLimit = 10;
 }
