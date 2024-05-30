@@ -19,14 +19,7 @@ import 'module_storage.dart';
 /// An archive handler that provides methods to handle Luna files.
 class ModuleResourceFactory {
   /// The name of the image module.
-  static String _imageModuleName = '';
-
-  /// The module storage instance.
-  static String get moduleName => _imageModuleName;
-
-  static set moduleName(String value) {
-    _imageModuleName = value;
-  }
+  static late String imageModuleName;
 
   /// The module storage instance.
   static ModuleStorage moduleStorage =
@@ -41,7 +34,6 @@ class ModuleResourceFactory {
         .logFunction('ModuleHandler.saveModuleFileToStorage', () async {
       String fileName = p.basenameWithoutExtension(lunaFile.path);
       Uint8List fileData = await lunaFile.readAsBytes();
-
       return addModuleFile(fileName, fileData);
     });
   }
@@ -64,13 +56,12 @@ class ModuleResourceFactory {
   /// Adds a module file with the given name and file data.
   static Future<bool> addModuleFile(
       String moduleName, Uint8List fileData) async {
-    await cleanupModuleData(moduleName); // FIXME: Code - Remove this line
-
     return moduleStorage.importModuleFile(moduleName, fileData);
   }
 
   /// Gets the image with the given name from the stored module.
-  static Future<Uint8List?> getImageBytes(String imageFileName) async {
+  static Future<Uint8List?> getImageBytes(
+      String moduleName, String imageFileName) async {
     return moduleStorage.getAsset(
         moduleName, moduleStorage.getImagePath(moduleName, imageFileName));
   }

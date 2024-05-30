@@ -310,7 +310,7 @@ class ModuleStorage {
     archive.addFile(emptyDirectory);
     return true;
   }
-  
+
   Future<Archive> _createArchiveFromModuleDataWithInitialAssets(
       String moduleName, String jsonData) async {
     Archive moduleArchive = Archive();
@@ -327,7 +327,8 @@ class ModuleStorage {
 
     await _updateOrAddAssetToArchive(moduleArchive, csvFilePath, csvFileBytes!);
 
-    await _addEmptyDirectoryFolderToArchive(moduleArchive, _getInitialAudioDirectoryPath(jsonData));
+    await _addEmptyDirectoryFolderToArchive(
+        moduleArchive, _getInitialAudioDirectoryPath(jsonData));
 
     return moduleArchive;
   }
@@ -423,8 +424,8 @@ class ModuleStorage {
     return _userPath == ''
         ? '$moduleName/resources/$langLocale/audio/$audioFileName'
         : '$_userPath/$moduleName/resources/$langLocale/audio/$audioFileName';
-      }
-      
+  }
+
   String _getDataPath() {
     return "data";
   }
@@ -463,7 +464,7 @@ class ModuleStorage {
     return '${_getLanguagePath(dataLanguage)}/$dataLanguage.csv';
   }
 
-    String _getInitialAudioDirectoryPath(String jsonData) {
+  String _getInitialAudioDirectoryPath(String jsonData) {
     String dataLanguage = _getLanguageFromJSONData(jsonData);
     return '${_getAudioPath(dataLanguage)}';
   }

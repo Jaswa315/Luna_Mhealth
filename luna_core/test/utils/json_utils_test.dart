@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pptx_parser/parser/presentation_parser.dart';
-import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'package:luna_core/utils/json_data_extractor.dart';
 import 'testassets/json_utils_test_data.dart';
 
