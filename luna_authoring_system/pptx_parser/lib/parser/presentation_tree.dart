@@ -64,11 +64,15 @@ class PresentationNode extends PrsNode {
   late final Map<String, dynamic> section;
   late final double x;
   late final double y;
+  late final String locale;
 
   static const String defaultSection = 'Default Section';
+  static const String defaultLocale = 'en-US';
 
   PresentationNode() {
     name = 'presentation';
+    //TODO: get local info dynamically
+    locale = defaultLocale;
   }
 
   @override
@@ -188,7 +192,7 @@ class TextNode extends PrsNode {
       'size': size,
       'color': color,
       'highlightcolor': highlightColor,
-      'language': language,
+      // 'language': language,
       'text': text,
       if (hyperlink != null) 'hyperlink': hyperlink,
     };

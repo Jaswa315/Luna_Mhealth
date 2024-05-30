@@ -135,36 +135,14 @@ class ModuleStorage {
 
         if (archive != null) {
           for (final ArchiveFile file in archive) {
-            if (file.isFile &&
-                !file.name.startsWith(AppConstants.macosSystemFilePrefix) &&
-                file.name.endsWith(".json") &&
-                file.content.isNotEmpty) {
-              String jsonModule = utf8.decode(file.content as List<int>);
-              modules.add(Module.fromJson(jsonDecode(jsonModule)));
+            Module? module = _processArchiveFile(file);
+            if (module != null) {
+              modules.add(module);
             }
           }
         }
       }
       return modules;
-    });
-  }
-
-  /// Retrieves an image asset from a Module.luna archive package
-  Future<Uint8List?> getImageBytes(
-      String moduleName, String imageFileName) async {
-    return await LogManager().logFunction('ModuleStorage.getImageBytes',
-        () async {
-      return _extractAssetFromModule(
-          moduleName, "resources/images/$imageFileName");
-    });
-  }
-
-  /// Retrieves an audio asset from a Module.luna archive package
-  Future<Uint8List?> getAudioBytes(
-      String moduleName, String audioFileName) async {
-    return await LogManager().logFunction('ModuleStorage.getAudioBytes',
-        () async {
-      return _extractAssetFromModule(moduleName, "resources/audio/$audioFileName");
     });
   }
 
@@ -207,47 +185,6 @@ class ModuleStorage {
 
       return _storageProvider.saveFile(fullModulePath, archiveFileData,
           createContainer: true);
-    });
-  }
-
-  /// ToDo: Rip this out with addModuleAudio
-  ///   Take all common code out and refactor to addModuleAsset(moduleName, string assetPath/filename, Uint8List? bytes)
-  /// ToDo: adjust addModuleImage/audo to use the refactored method.  Then pull out image/audio methods to resourceFactory.
-  /// Adds an image asset to a Module.luna archive package
-  Future<bool> addModuleImage(
-      String moduleName, String imageFileName, Uint8List? imageBytes) async {
-    return await LogManager().logFunction('ModuleStorage.addModuleImage',
-        () async {
-      Archive? archive = await _getModuleArchive(moduleName);
-
-      if (archive == null) {
-        return false;
-      }
-      String filePath = "resources/images/$imageFileName";
-
-      if (await _updateOrAddAssetToArchive(archive, filePath, imageBytes!)) {
-        return _saveArchiveToFileSystem(moduleName, archive);
-      }
-      return false;
-    });
-  }
-
-  /// Adds an audio asset to a Module.luna archive package
-  Future<bool> addModuleAudio(
-      String moduleName, String audioFileName, Uint8List? audioBytes) async {
-    return await LogManager().logFunction('ModuleStorage.addModuleAudio',
-        () async {
-      Archive? archive = await _getModuleArchive(moduleName);
-
-      if (archive == null) {
-        return false;
-      }
-      String filePath = "resources/audio/$audioFileName";
-
-      if (await _updateOrAddAssetToArchive(archive, filePath, audioBytes!)) {
-        return _saveArchiveToFileSystem(moduleName, archive);
-      }
-      return false;
     });
   }
 
@@ -369,5 +306,78 @@ class ModuleStorage {
 
   String _getModuleJsonFileName(String moduleName) {
     return '${moduleName.trim().replaceAll(" ", "_")}.json';
+  }
+
+  Module? _processArchiveFile(ArchiveFile file) {
+    bool isFile = file.isFile;
+    bool isNotMacosSystemFile =
+        !file.name.startsWith(AppConstants.macosSystemFilePrefix);
+    bool isJsonFile = file.name.endsWith(".json");
+    bool isContentNotEmpty = file.content.isNotEmpty;
+
+    if (isFile && isNotMacosSystemFile && isJsonFile && isContentNotEmpty) {
+      String jsonModule = utf8.decode(file.content as List<int>);
+
+      return Module.fromJson(jsonDecode(jsonModule));
+    }
+
+    return null;
+  }
+
+  /// Adds a generic asset to a Module.luna archive package.
+  ///
+  /// This method is used to add any type of asset (image, audio) to a module
+  /// by adding the asset file to the module's archive.
+  ///
+  /// Parameters:
+  /// - [moduleName]: The name of the module to which the asset should be added.
+  /// - [assetFileName]: The file path of the asset within the module's directory structure.
+  /// - [assetBytes]: The byte data of the asset file.
+  ///
+  /// Returns:
+  /// - true if the asset was successfully added to the module,
+  ///   or false if failed.
+  Future<bool> addModuleAsset(
+      String moduleName, String assetFileName, Uint8List? assetBytes) async {
+    return await LogManager().logFunction('ModuleStorage.addModuleAsset',
+        () async {
+      if (assetBytes == null) {
+        return false;
+      }
+      Archive? archive = await _getModuleArchive(moduleName);
+
+      if (archive == null) {
+        return false;
+      }
+
+      if (await _updateOrAddAssetToArchive(
+          archive, assetFileName, assetBytes!)) {
+        return _saveArchiveToFileSystem(moduleName, archive);
+      }
+      return false;
+    });
+  }
+
+  /// public wrapper method getAsset
+  Future<Uint8List?> getAsset(String moduleName, String assetFileName) {
+    return _extractAssetFromModule(moduleName, assetFileName);
+  }
+
+  /// Method to get the full path for an image file within a module
+  String getImagePath(String moduleName, String imageFileName) {
+    moduleName = moduleName.trim().replaceAll(" ", "_");
+    return _userPath == ''
+        ? '$moduleName/resources/images/$imageFileName'
+        : '$_userPath/$moduleName/resources/images/$imageFileName';
+  }
+
+  /// Method to get the full path for an audio file within a module,
+  /// considering language locale
+  String getAudioPath(
+      String moduleName, String audioFileName, String langLocale) {
+    moduleName = moduleName.trim().replaceAll(" ", "_");
+    return _userPath == ''
+        ? '$moduleName/resources/$langLocale/audio/$audioFileName'
+        : '$_userPath/$moduleName/resources/$langLocale/audio/$audioFileName';
   }
 }

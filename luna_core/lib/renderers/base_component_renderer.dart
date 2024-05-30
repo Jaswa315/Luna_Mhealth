@@ -10,10 +10,15 @@ import 'package:flutter/material.dart';
 import '../models/component.dart';
 import 'irenderer.dart';
 
-/// A base class for rendering components.
+/// An abstract class representing a base component renderer.
+/// It implements the [IRenderer] interface.
 abstract class BaseComponentRenderer<T extends Component> implements IRenderer {
+  /// Renders the given [component].
+  /// The [component] parameter represents the dynamic component to be rendered.
+  /// Returns a [Widget] representing the rendered component.
+  /// Throws an [ArgumentError] if the component is not of the correct type.
   @override
-  Widget renderComponent(dynamic component, double scale) {
+  Widget renderComponent(dynamic component) {
     if (component is T) {
       return FutureBuilder<Widget>(
         future: component.render(),
@@ -21,13 +26,10 @@ abstract class BaseComponentRenderer<T extends Component> implements IRenderer {
           if (snapshot.connectionState != ConnectionState.done) {
             return CircularProgressIndicator();
           }
-          if (snapshot.hasError) {
-            return Text('Error loading component');
-          }
-          if (snapshot.hasData) {
-            return snapshot.data!;
-          }
-          return Text('No data');
+          if (snapshot.hasError) throw Exception('Error loading component');
+          if (!snapshot.hasData) throw Exception('No data');
+
+          return snapshot.data!;
         },
       );
     } else {

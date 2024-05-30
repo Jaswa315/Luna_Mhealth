@@ -10,11 +10,10 @@ import 'package:flutter/material.dart';
 
 /// An abstract class that defines the contract for a component renderer.
 abstract class IRenderer {
-  /// Renders the given [component] with the specified [scale].
+  /// Renders the given [component].
   ///
   /// The [component] parameter represents the dynamic component to be rendered.
-  /// The [scale] parameter represents the scaling factor for the component.
   ///
   /// Returns a [Widget] representing the rendered component.
-  Widget renderComponent(dynamic component, double scale);
+  Widget renderComponent(dynamic component);
 }

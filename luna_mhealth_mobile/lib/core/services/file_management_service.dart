@@ -10,7 +10,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 
 /// A service class that provides file management functionality.
-/// ToDo: integrate into localFileStorage or create new provider from standard 
+/// ToDo: integrate into localFileStorage or create new provider from standard
 /// interface
 class FileManagementService {
   /// A method to pick and store a file from the device.
@@ -31,13 +31,14 @@ class FileManagementService {
   /// Returns a [File] object representing the selected file, or `null` if no file was selected.
   Future<File?> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['zip'],
+      type: FileType.any,
     );
     if (result != null) {
       final path = result.files.single.path;
+
       return File(path!);
     }
+
     return null;
   }
 }

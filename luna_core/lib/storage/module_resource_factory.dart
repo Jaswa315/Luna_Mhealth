@@ -19,7 +19,14 @@ import 'module_storage.dart';
 /// An archive handler that provides methods to handle Luna files.
 class ModuleResourceFactory {
   /// The name of the image module.
-  static late String imageModuleName;
+  static String _imageModuleName = '';
+
+  /// The module storage instance.
+  static String get moduleName => _imageModuleName;
+
+  static set moduleName(String value) {
+    _imageModuleName = value;
+  }
 
   /// The module storage instance.
   static ModuleStorage moduleStorage =
@@ -34,6 +41,7 @@ class ModuleResourceFactory {
         .logFunction('ModuleHandler.saveModuleFileToStorage', () async {
       String fileName = p.basenameWithoutExtension(lunaFile.path);
       Uint8List fileData = await lunaFile.readAsBytes();
+
       return addModuleFile(fileName, fileData);
     });
   }
@@ -56,12 +64,37 @@ class ModuleResourceFactory {
   /// Adds a module file with the given name and file data.
   static Future<bool> addModuleFile(
       String moduleName, Uint8List fileData) async {
+    await cleanupModuleData(moduleName); // FIXME: Code - Remove this line
+
     return moduleStorage.importModuleFile(moduleName, fileData);
   }
 
   /// Gets the image with the given name from the stored module.
   static Future<Uint8List?> getImageBytes(String imageFileName) async {
-    return moduleStorage.getImageBytes(imageModuleName, imageFileName);
+    return moduleStorage.getAsset(
+        moduleName, moduleStorage.getImagePath(moduleName, imageFileName));
+  }
+
+  /// Gets the audio with the given name and language locale from the stored module.
+  static Future<Uint8List?> getAudioBytes(
+      String moduleName, String audioFileName, String langLocale) async {
+    return moduleStorage.getAsset(moduleName,
+        moduleStorage.getAudioPath(moduleName, audioFileName, langLocale));
+  }
+
+  /// Adds an image asset to a Module.luna archive package.
+  static Future<bool> addModuleImage(
+      String moduleName, String imageFileName, Uint8List? imageBytes) async {
+    String filePath = "resources/images/$imageFileName";
+    return moduleStorage.addModuleAsset(moduleName, filePath, imageBytes);
+  }
+
+  /// Adds an audio asset to a Module.luna archive package.
+  /// (matched audio structure)
+  static Future<bool> addModuleAudio(String moduleName, String audioFileName,
+      Uint8List? audioBytes, String langLocale) async {
+    String filePath = "resources/$langLocale/audio/$audioFileName";
+    return moduleStorage.addModuleAsset(moduleName, filePath, audioBytes);
   }
 
   /// Loads all modules from storage.

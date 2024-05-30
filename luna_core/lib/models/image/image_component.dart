@@ -50,6 +50,7 @@ class ImageComponent extends Component {
         if (snapshot.hasData && snapshot.data != null) {
           return Image.memory(snapshot.data!);
         }
+
         return Text(AppConstants.noImageErrorMessage);
       },
     );

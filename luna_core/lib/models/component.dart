@@ -7,13 +7,13 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/widgets.dart';
-import '../enums/item_type.dart';
-
-import '../enums/component_type.dart';
-import 'image/image_component.dart';
-import 'interfaces/clickable.dart';
-import 'item.dart';
-import 'text/text_component.dart';
+import 'package:luna_core/enums/component_type.dart';
+import 'package:luna_core/enums/item_type.dart';
+import 'package:luna_core/models/image/image_component.dart';
+import 'package:luna_core/models/interfaces/clickable.dart';
+import 'package:luna_core/models/item.dart';
+import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/text/text_component.dart';
 
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
@@ -55,6 +55,8 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
         return ImageComponent.fromJson(json);
       case ComponentType.text:
         return TextComponent.fromJson(json);
+      case ComponentType.divider:
+        return DividerComponent.fromJson(json);
       default:
         throw Exception('Unsupported component type');
     }
@@ -65,4 +67,5 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
 const Map<int, ComponentType> _typeMapping = {
   13: ComponentType.image,
   17: ComponentType.text,
+  9: ComponentType.divider,
 };
