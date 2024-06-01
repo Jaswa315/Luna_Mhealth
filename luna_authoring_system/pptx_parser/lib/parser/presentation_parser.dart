@@ -21,6 +21,7 @@ const String keyShape = 'p:sp';
 const String keyConnectionShape = 'p:cxnSp';
 const String keySlideLayoutSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout";
+
 const String keyLunaCategoryContainer = 'luna_category_container';
 const String keyLunaCategoryPicture = 'luna_category_picture';
 
@@ -34,9 +35,10 @@ class PresentationParser {
   int? slideCount;
   // for slides made upon a slideLayout
   Map<String, dynamic> placeholderToTransform = {};
+  int _nextTextNodeUID = 1;
+
   List<dynamic> categoryContainerTransform = [];
   List<dynamic> categoryImageTransform = [];
-  int _nextTextNodeUID = 1;
 
   PresentationParser(File file) {
     _file = file;
@@ -175,88 +177,85 @@ class PresentationParser {
       for (var element in rIdList) {
         rIdToTarget[element['_Id']] = element['_Target'];
         if (placeholderToTransform.isEmpty) {
-          placeholderToTransform = _parsePlaceholderToTransfrom(element);
+          placeholderToTransform = _parseSlideLayout(element);
         }
       }
     } else if (rIdList is Map<String, dynamic>) {
       rIdToTarget[rIdList['_Id']] = rIdList['_Target'];
       if (placeholderToTransform.isEmpty) {
-        placeholderToTransform = _parsePlaceholderToTransfrom(rIdList);
+        placeholderToTransform = _parseSlideLayout(rIdList);
       }
     }
 
     return rIdToTarget;
   }
 
-  Map<String, dynamic> _parsePlaceholderToTransfrom(Map<String, dynamic> json) {
-    Map<String, dynamic>? phToTransform = {};
-
+  Map<String, dynamic> _parseSlideLayout(Map<String, dynamic> json) {
+    Map<String, dynamic> phToP = {};
     if (json['_Type'] == keySlideLayoutSchema) {
       RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
-      phToTransform = _parseSlideLayout(
-          int.parse(regex.firstMatch(json['_Target'])?.group(0) ?? "1"));
-    }
+      int slideIndex =
+          int.parse(regex.firstMatch(json['_Target'])?.group(0) ?? "1");
 
-    return phToTransform;
-  }
+      var slideLayoutMap =
+          jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
+      var shapeTree = slideLayoutMap['p:sldLayout']['p:cSld']['p:spTree'];
 
-  Map<String, dynamic> _parseSlideLayout(int slideIndex) {
-    Map<String, dynamic> phToP = {};
-    var slideLayoutMap =
-        jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
-    var shapeTree = slideLayoutMap['p:sldLayout']['p:cSld']['p:spTree'];
+      shapeTree.forEach((key, value) {
+        if (key == keyShape) {
+          if (shapeTree[key] is List) {
+            for (var element in shapeTree[key]) {
+              var descr =
+                  _getNullableValue(element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+              switch (descr) {
+                case keyLunaCategoryContainer:
+                  categoryContainerTransform.add(_parseTransform(element));
+                  break;
+                case keyLunaCategoryPicture:
+                  categoryImageTransform.add(_parseTransform(element));
+                  break;
+              }
 
-    shapeTree.forEach((key, value) {
-      if (key == keyShape) {
-        if (shapeTree[key] is List) {
-          for (var element in shapeTree[key]) {
-            var descr =
-                _getNullableValue(element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+              var ph =
+                  _getNullableValue(element, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+              var spPr = element['p:spPr'];
+              if (ph != null &&
+                  ph.containsKey('_idx') &&
+                  (_getNullableValue(spPr, ['a:xfrm']) != null) &&
+                  (ph['_type'] == null ||
+                      ['body', 'title', 'subTitle', 'pic']
+                          .contains(ph['_type']))) {
+                phToP[ph['_idx']] = _parseTransform(element);
+              }
+            }
+          } else if (shapeTree[key] is Map<String, dynamic>) {
+            var descr = _getNullableValue(
+                shapeTree[key], ['p:nvSpPr', 'p:cNvPr', '_descr']);
             switch (descr) {
               case keyLunaCategoryContainer:
-                categoryContainerTransform.add(_parseTransform(element));
+                categoryContainerTransform.add(_parseTransform(shapeTree[key]));
                 break;
               case keyLunaCategoryPicture:
-                categoryImageTransform.add(_parseTransform(element));
+                categoryImageTransform.add(_parseTransform(shapeTree[key]));
                 break;
             }
 
-            var ph = _getNullableValue(element, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-            var spPr = element['p:spPr'];
+            var ph = _getNullableValue(
+                shapeTree[key], ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+            var spPr = shapeTree[key]['p:spPr'];
             if (ph != null &&
                 ph.containsKey('_idx') &&
                 (_getNullableValue(spPr, ['a:xfrm']) != null) &&
                 (ph['_type'] == null ||
                     ['body', 'title', 'subTitle', 'pic']
                         .contains(ph['_type']))) {
-              phToP[ph['_idx']] = _parseTransform(element);
+              phToP[ph['_idx']] = _parseTransform(shapeTree[key]);
             }
           }
-        } else if (shapeTree[key] is Map<String, dynamic>) {
-          var descr = _getNullableValue(
-              shapeTree[key], ['p:nvSpPr', 'p:cNvPr', '_descr']);
-          switch (descr) {
-            case keyLunaCategoryContainer:
-              categoryContainerTransform.add(_parseTransform(shapeTree[key]));
-              break;
-            case keyLunaCategoryPicture:
-              categoryImageTransform.add(_parseTransform(shapeTree[key]));
-              break;
-          }
-
-          var ph =
-              _getNullableValue(shapeTree[key], ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-          var spPr = shapeTree[key]['p:spPr'];
-          if (ph != null &&
-              ph.containsKey('_idx') &&
-              (_getNullableValue(spPr, ['a:xfrm']) != null) &&
-              (ph['_type'] == null ||
-                  ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
-            phToP[ph['_idx']] = _parseTransform(shapeTree[key]);
-          }
         }
-      }
-    });
+      });
+    }
+
     return phToP;
   }
 
