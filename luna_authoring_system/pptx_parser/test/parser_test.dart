@@ -51,7 +51,6 @@ void main() {
       expect(pptText1, "Thing2");
       expect(pptText2, "Thing3");
     });
-
     test('An Image has image path', () async {
       var filename = "Image-Snorlax.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -232,7 +231,7 @@ void main() {
       var filename = "Image-Snorlax.pptx";
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./position_values_module.json");
       String jsonString = json.readAsStringSync();
 
       Map<String, dynamic> astJson = jsonDecode(jsonString);
@@ -257,6 +256,13 @@ void main() {
       expect(isPercentage(offsetY), true);
       expect(isPercentage(sizeX), true);
       expect(isPercentage(sizeY), true);
+
+      try {
+        await json.delete();
+      } catch (e) {
+        LogManager().logTrace(
+            ("Error occured while deleting file."), LunaSeverityLevel.Verbose);
+      }
     });
 
     test('Audio is parsed for each shapes', () async {
@@ -430,10 +436,22 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./slideLayout_module.json");
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
     });
 
     test('PPTX with muliple slides that follows slideLayout returns JSON file',
@@ -442,7 +460,7 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./multiple_slideLayout_module.json");
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
@@ -465,7 +483,7 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./toJSON_module.json");
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);

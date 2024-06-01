@@ -33,7 +33,7 @@ class PresentationParser {
   int? slideIndex;
   int? slideCount;
   // for slides made upon a slideLayout
-  Map<String, dynamic>? placeholderToTransform;
+  Map<String, dynamic> placeholderToTransform = {};
   List<dynamic> categoryContainerTransform = [];
   List<dynamic> categoryImageTransform = [];
   int _nextTextNodeUID = 1;
@@ -83,17 +83,6 @@ class PresentationParser {
     return _xmlDocumentToJson(doc);
   }
 
-  void _processDynamicCollection(
-      dynamic input, void Function(Map<String, dynamic> para) mapping) {
-    if (input is List) {
-      for (var element in input) {
-        mapping(element);
-      }
-    } else if (input is Map<String, dynamic>) {
-      mapping(input);
-    }
-  }
-
   dynamic _getNullableValue(dynamic map, List<String> keys) {
     dynamic value = map;
     for (var key in keys) {
@@ -137,9 +126,13 @@ class PresentationParser {
     var slideIdList =
         presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
     List<String> parsedSlideIdList = [];
-    _processDynamicCollection(slideIdList, (para) {
-      parsedSlideIdList.add('S${para["_id"]}');
-    });
+    if (slideIdList is List) {
+      for (var element in slideIdList) {
+        parsedSlideIdList.add('S${element["_id"]}');
+      }
+    } else if (slideIdList is Map<String, dynamic>) {
+      parsedSlideIdList.add('S${slideIdList["_id"]}');
+    }
 
     if (presentationMap['p:presentation']['p:extLst'] == null ||
         presentationMap['p:presentation']['p:extLst']['p:ext']
@@ -165,7 +158,7 @@ class PresentationParser {
           ? _parseSlide(parsedSlideIdList)
           : _parseCategoryGameEditor(parsedSlideIdList);
       node.children.add(slide);
-      placeholderToTransform = null;
+      placeholderToTransform = {};
       categoryContainerTransform = [];
       categoryImageTransform = [];
     }
@@ -176,18 +169,35 @@ class PresentationParser {
   Map<String, dynamic> _parseSlideRels(int slideNum) {
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
     var rIdList = relsMap['Relationships']['Relationship'];
-    Map<String, dynamic> rIdToTarget = {};
 
-    _processDynamicCollection(rIdList, (para) {
-      rIdToTarget[para['_Id']] = para['_Target'];
-      if (para['_Type'] == keySlideLayoutSchema) {
-        RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
-        placeholderToTransform = _parseSlideLayout(
-            int.parse(regex.firstMatch(para['_Target'])?.group(0) ?? "1"));
+    Map<String, dynamic> rIdToTarget = {};
+    if (rIdList is List) {
+      for (var element in rIdList) {
+        rIdToTarget[element['_Id']] = element['_Target'];
+        if (placeholderToTransform.isEmpty) {
+          placeholderToTransform = _parsePlaceholderToTransfrom(element);
+        }
       }
-    });
+    } else if (rIdList is Map<String, dynamic>) {
+      rIdToTarget[rIdList['_Id']] = rIdList['_Target'];
+      if (placeholderToTransform.isEmpty) {
+        placeholderToTransform = _parsePlaceholderToTransfrom(rIdList);
+      }
+    }
 
     return rIdToTarget;
+  }
+
+  Map<String, dynamic> _parsePlaceholderToTransfrom(Map<String, dynamic> json) {
+    Map<String, dynamic>? phToTransform = {};
+
+    if (json['_Type'] == keySlideLayoutSchema) {
+      RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
+      phToTransform = _parseSlideLayout(
+          int.parse(regex.firstMatch(json['_Target'])?.group(0) ?? "1"));
+    }
+
+    return phToTransform;
   }
 
   Map<String, dynamic> _parseSlideLayout(int slideIndex) {
@@ -198,27 +208,53 @@ class PresentationParser {
 
     shapeTree.forEach((key, value) {
       if (key == keyShape) {
-        _processDynamicCollection(shapeTree[key], (para) {
-          var descr =
-              _getNullableValue(para, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+        if (shapeTree[key] is List) {
+          for (var element in shapeTree[key]) {
+            var descr =
+                _getNullableValue(element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+            switch (descr) {
+              case keyLunaCategoryContainer:
+                categoryContainerTransform.add(_parseTransform(element));
+                break;
+              case keyLunaCategoryPicture:
+                categoryImageTransform.add(_parseTransform(element));
+                break;
+            }
+
+            var ph = _getNullableValue(element, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+            var spPr = element['p:spPr'];
+            if (ph != null &&
+                ph.containsKey('_idx') &&
+                (_getNullableValue(spPr, ['a:xfrm']) != null) &&
+                (ph['_type'] == null ||
+                    ['body', 'title', 'subTitle', 'pic']
+                        .contains(ph['_type']))) {
+              phToP[ph['_idx']] = _parseTransform(element);
+            }
+          }
+        } else if (shapeTree[key] is Map<String, dynamic>) {
+          var descr = _getNullableValue(
+              shapeTree[key], ['p:nvSpPr', 'p:cNvPr', '_descr']);
           switch (descr) {
             case keyLunaCategoryContainer:
-              categoryContainerTransform.add(_parseTransform(para));
+              categoryContainerTransform.add(_parseTransform(shapeTree[key]));
               break;
             case keyLunaCategoryPicture:
-              categoryImageTransform.add(_parseTransform(para));
+              categoryImageTransform.add(_parseTransform(shapeTree[key]));
+              break;
           }
 
-          var ph = _getNullableValue(para, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-          var spPr = para['p:spPr'];
+          var ph =
+              _getNullableValue(shapeTree[key], ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+          var spPr = shapeTree[key]['p:spPr'];
           if (ph != null &&
               ph.containsKey('_idx') &&
               (_getNullableValue(spPr, ['a:xfrm']) != null) &&
               (ph['_type'] == null ||
                   ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
-            phToP[ph['_idx']] = _parseTransform(para);
+            phToP[ph['_idx']] = _parseTransform(shapeTree[key]);
           }
-        });
+        }
       }
     });
     return phToP;
@@ -267,19 +303,31 @@ class PresentationParser {
       switch (key) {
         case keyPicture:
           var picList = shapeTree[key];
-          _processDynamicCollection(picList, (para) {
-            node.children.add(_parseImage(para));
-          });
+          if (picList is List) {
+            for (var element in picList) {
+              node.children.add(_parseImage(element));
+            }
+          } else if (picList is Map<String, dynamic>) {
+            node.children.add(_parseImage(picList));
+          }
         case keyShape:
           var shapeObj = shapeTree[key];
-          _processDynamicCollection(shapeObj, (para) {
-            node.children.add(_parseShape(para));
-          });
+          if (shapeObj is List) {
+            for (var element in shapeObj) {
+              node.children.add(_parseShape(element));
+            }
+          } else if (shapeObj is Map<String, dynamic>) {
+            node.children.add(_parseShape(shapeObj));
+          }
         case keyConnectionShape:
           var connectionShapeObj = shapeTree[key];
-          _processDynamicCollection(connectionShapeObj, (para) {
-            node.children.add(_parseConnectionShape(para));
-          });
+          if (connectionShapeObj is List) {
+            for (var element in connectionShapeObj) {
+              node.children.add(_parseConnectionShape(element));
+            }
+          } else if (connectionShapeObj is Map<String, dynamic>) {
+            node.children.add(_parseConnectionShape(connectionShapeObj));
+          }
       }
     });
 
@@ -299,9 +347,24 @@ class PresentationParser {
     shapeTree.forEach((key, value) {
       switch (key) {
         case keyPicture:
-          var picList = shapeTree[key];
-          _processDynamicCollection(picList, (para) {
-            var element = _parseCategoryGameImage(para);
+          var picObj = shapeTree[key];
+
+          if (picObj is List) {
+            for (var obj in picObj) {
+              var element = _parseCategoryGameImage(obj);
+              ShapeNode? shapeElement = element.children[0] as ShapeNode;
+              int? index = _addToCategory(element);
+              categoryImageTransform.any((item) =>
+                      item.offset.x == shapeElement.transform.offset.x &&
+                      item.offset.y == shapeElement.transform.offset.y &&
+                      item.size.x == shapeElement.transform.size.x &&
+                      item.size.y == shapeElement.transform.size.y)
+                  ? (node.children[index ?? 0] as CategoryNode).categoryImage =
+                      element as CategoryGameImageNode
+                  : node.children[index ?? 0].children.add(element);
+            }
+          } else if (picObj is Map<String, dynamic>) {
+            var element = _parseCategoryGameImage(picObj);
             ShapeNode? shapeElement = element.children[0] as ShapeNode;
             int? index = _addToCategory(element);
             categoryImageTransform.any((item) =>
@@ -312,14 +375,22 @@ class PresentationParser {
                 ? (node.children[index ?? 0] as CategoryNode).categoryImage =
                     element as CategoryGameImageNode
                 : node.children[index ?? 0].children.add(element);
-          });
+          }
+          break;
         case keyShape:
           var shapeObj = shapeTree[key];
-          _processDynamicCollection(shapeObj, (para) {
-            var element = _parseCategoryGameTextBox(para);
+          if (shapeObj is List) {
+            for (var obj in shapeObj) {
+              var element = _parseCategoryGameTextBox(obj);
+              (node.children[_addToCategory(element) ?? 0] as CategoryNode)
+                  .categoryName = element as CategoryGameTextNode;
+            }
+          } else if (shapeObj is Map<String, dynamic>) {
+            var element = _parseCategoryGameTextBox(shapeObj);
             (node.children[_addToCategory(element) ?? 0] as CategoryNode)
                 .categoryName = element as CategoryGameTextNode;
-          });
+          }
+          break;
       }
     });
 
@@ -356,9 +427,13 @@ class PresentationParser {
     CategoryGameTextNode node = CategoryGameTextNode();
 
     String categoryName = "";
-    _processDynamicCollection(json['p:txBody']['a:p'], (para) {
-      categoryName += para['a:r']['a:t'] + " ";
-    });
+    if (json['p:txBody']['a:p'] is List) {
+      for (var element in json['p:txBody']['a:p']) {
+        categoryName += element['a:r']['a:t'] + " ";
+      }
+    } else if (json['p:txBody']['a:p'] is Map<String, dynamic>) {
+      categoryName += json['p:txBody']['a:p']['a:r']['a:t'] + " ";
+    }
     categoryName = categoryName.replaceAll(RegExp(r'\\[tnv]\s*'), ' ');
     node.text = categoryName.substring(0, categoryName.length - 1);
     node.children.add(_parseShape(json));
@@ -414,11 +489,11 @@ class PresentationParser {
         _getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
         _getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
 
-    if (placeholderToTransform != null &&
+    if (placeholderToTransform.isNotEmpty &&
         _getNullableValue(nvPr, ['p:ph']) != null) {
       // this shape follows slideLayout
       String phIdx = nvPr['p:ph']['_idx'];
-      return placeholderToTransform?[phIdx];
+      return placeholderToTransform[phIdx];
     } else {
       Transform node = Transform();
       node.offset = Point2D(
@@ -509,9 +584,14 @@ class PresentationParser {
         ? "rect"
         : _getNullableValue(json, ['a:bodyPr', '_wrap']);
     var pObj = json['a:p'];
-    _processDynamicCollection(pObj, (para) {
-      node.children.add(_parseTextPara(para));
-    });
+
+    if (pObj is List) {
+      for (var element in pObj) {
+        node.children.add(_parseTextPara(element));
+      }
+    } else if (pObj is Map<String, dynamic>) {
+      node.children.add(_parseTextPara(pObj));
+    }
 
     return node;
   }
@@ -521,10 +601,14 @@ class PresentationParser {
 
     node.alignment = _getNullableValue(json, ['a:pPr', 'align']);
     var rObj = json['a:r'];
-    _processDynamicCollection(rObj, (para) {
-      node.children.add(_parseText(para));
-    });
 
+    if (rObj is List) {
+      for (var element in rObj) {
+        node.children.add(_parseText(element));
+      }
+    } else if (rObj is Map<String, dynamic>) {
+      node.children.add(_parseText(rObj));
+    }
     return node;
   }
 
