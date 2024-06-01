@@ -85,6 +85,7 @@ class PresentationNode extends PrsNode {
         'author': author,
         'slideCount': slideCount,
         'section': section,
+        'defaultLocale': defaultLocale,
         'slides': children.map((child) => child.toJson()).toList()
       }
     };
