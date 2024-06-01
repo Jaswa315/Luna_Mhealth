@@ -190,6 +190,31 @@ class PresentationParser {
     return rIdToTarget;
   }
 
+  Map<String, dynamic> _parseTransformForPlaceholder(
+      Map<String, dynamic> json) {
+    Map<String, dynamic> result = {};
+    var descr = _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+    switch (descr) {
+      case keyLunaCategoryContainer:
+        categoryContainerTransform.add(_parseTransform(json));
+        break;
+      case keyLunaCategoryPicture:
+        categoryImageTransform.add(_parseTransform(json));
+        break;
+    }
+
+    var ph = _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+    var spPr = json['p:spPr'];
+    if (ph != null &&
+        ph.containsKey('_idx') &&
+        (_getNullableValue(spPr, ['a:xfrm']) != null) &&
+        (ph['_type'] == null ||
+            ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
+      result[ph['_idx']] = _parseTransform(json);
+    }
+    return result;
+  }
+
   Map<String, dynamic> _parseSlideLayout(Map<String, dynamic> json) {
     Map<String, dynamic> phToP = {};
     if (json['_Type'] == keySlideLayoutSchema) {
@@ -205,52 +230,10 @@ class PresentationParser {
         if (key == keyShape) {
           if (shapeTree[key] is List) {
             for (var element in shapeTree[key]) {
-              var descr =
-                  _getNullableValue(element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
-              switch (descr) {
-                case keyLunaCategoryContainer:
-                  categoryContainerTransform.add(_parseTransform(element));
-                  break;
-                case keyLunaCategoryPicture:
-                  categoryImageTransform.add(_parseTransform(element));
-                  break;
-              }
-
-              var ph =
-                  _getNullableValue(element, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-              var spPr = element['p:spPr'];
-              if (ph != null &&
-                  ph.containsKey('_idx') &&
-                  (_getNullableValue(spPr, ['a:xfrm']) != null) &&
-                  (ph['_type'] == null ||
-                      ['body', 'title', 'subTitle', 'pic']
-                          .contains(ph['_type']))) {
-                phToP[ph['_idx']] = _parseTransform(element);
-              }
+              phToP.addAll(_parseTransformForPlaceholder(element));
             }
           } else if (shapeTree[key] is Map<String, dynamic>) {
-            var descr = _getNullableValue(
-                shapeTree[key], ['p:nvSpPr', 'p:cNvPr', '_descr']);
-            switch (descr) {
-              case keyLunaCategoryContainer:
-                categoryContainerTransform.add(_parseTransform(shapeTree[key]));
-                break;
-              case keyLunaCategoryPicture:
-                categoryImageTransform.add(_parseTransform(shapeTree[key]));
-                break;
-            }
-
-            var ph = _getNullableValue(
-                shapeTree[key], ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-            var spPr = shapeTree[key]['p:spPr'];
-            if (ph != null &&
-                ph.containsKey('_idx') &&
-                (_getNullableValue(spPr, ['a:xfrm']) != null) &&
-                (ph['_type'] == null ||
-                    ['body', 'title', 'subTitle', 'pic']
-                        .contains(ph['_type']))) {
-              phToP[ph['_idx']] = _parseTransform(shapeTree[key]);
-            }
+            phToP.addAll(_parseTransformForPlaceholder(shapeTree[key]));
           }
         }
       });
