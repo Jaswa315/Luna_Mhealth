@@ -257,6 +257,7 @@ class ImageNode extends PrsNode {
   late final String? altText;
   late final String? audioPath;
   late final int? hyperlink;
+  late Transform transform;
 
   ImageNode() {
     name = 'image';
@@ -270,6 +271,7 @@ class ImageNode extends PrsNode {
       'alttext': altText,
       if (audioPath != null) 'audiopath': audioPath,
       if (hyperlink != null) 'hyperlink': hyperlink,
+      'transform': transform.toJson(),
       'children': children.map((child) => child.toJson()).toList()
     };
   }
