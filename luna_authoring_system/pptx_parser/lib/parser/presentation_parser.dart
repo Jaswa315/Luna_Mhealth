@@ -14,6 +14,7 @@ import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:uuid/uuid.dart';
 import 'package:luna_core/utils/logging.dart';
+import 'package:pptx_parser/parser/category_game_editor_parser.dart';
 
 // From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
@@ -24,6 +25,13 @@ const String keySlideLayoutSchema =
 
 const String keyLunaCategoryContainer = 'luna_category_container';
 const String keyLunaCategoryPicture = 'luna_category_picture';
+const List<String> keyLunaCategorySlideLayout = [
+  '2_category',
+  '3_category',
+  '4_category',
+  '5_category',
+  '6_category'
+];
 
 class PresentationParser {
   // removed static so the localization_test and parser_test work
@@ -155,10 +163,15 @@ class PresentationParser {
 
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
+
+      String slideLayout = _lookAheadSlideLayout(i);
+      PrsNode slide = PrsNode();
+      if (keyLunaCategorySlideLayout.contains(slideLayout)) {
+        slide = _parseCategoryGameEditor(parsedSlideIdList);
+      } else {
+        slide = _parseSlide(parsedSlideIdList);
+      }
       slideRelationship = _parseSlideRels(i);
-      PrsNode slide = categoryContainerTransform.isEmpty
-          ? _parseSlide(parsedSlideIdList)
-          : _parseCategoryGameEditor(parsedSlideIdList);
       node.children.add(slide);
       placeholderToTransform = {};
       categoryContainerTransform = [];
@@ -166,6 +179,40 @@ class PresentationParser {
     }
 
     return node;
+  }
+
+  String _lookAheadSlideLayout(int slideNum) {
+    String slideLayout = "";
+
+    var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
+    var rIdList = relsMap['Relationships']['Relationship'];
+
+    if (rIdList is List) {
+      for (var element in rIdList) {
+        if (element['_Type'] == keySlideLayoutSchema) {
+          RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
+          int slideIndex =
+              int.parse(regex.firstMatch(element['_Target'])?.group(0) ?? "1");
+
+          var slideLayoutMap =
+              jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
+
+          return slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"];
+        }
+      }
+    } else if (rIdList is Map<String, dynamic>) {
+      if (rIdList['_Type'] == keySlideLayoutSchema) {
+        RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
+        int slideIndex =
+            int.parse(regex.firstMatch(rIdList['_Target'])?.group(0) ?? "1");
+
+        var slideLayoutMap =
+            jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
+
+        return slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"];
+      }
+    }
+    return slideLayout;
   }
 
   Map<String, dynamic> _parseSlideRels(int slideNum) {
