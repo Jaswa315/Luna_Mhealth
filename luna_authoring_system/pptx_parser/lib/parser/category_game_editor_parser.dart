@@ -1,6 +1,7 @@
 import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'package:pptx_parser/utils/parser_tools.dart';
 
+/// CategoryGameEditorParser parses specific slides that follows Luna Category Game Editor Slide.
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
 const String keyLunaCategoryContainer = 'luna_category_container';
@@ -96,6 +97,9 @@ class CategoryGameEditorParser {
     return node;
   }
 
+  /// Parse Slide Layout to get transform information in the slide layout.
+  /// These data are used later to dertermine which element is in which category.
+  /// Store transform for each Container, Image, and Text placeholder.
   void _parseTransformFromSlideLayout(Map<String, dynamic> json) {
     var shapeTree = json['p:sldLayout']['p:cSld']['p:spTree'];
 
@@ -168,6 +172,7 @@ class CategoryGameEditorParser {
     });
   }
 
+  /// Determine which given element is in which category.
   int? _addToCategory(var element) {
     // element is either Image or TextBox
     Transform shapeElement = element.children[0];
@@ -240,6 +245,7 @@ class CategoryGameEditorParser {
     return node;
   }
 
+  /// Clean transform data for further parsing
   static void cleanTransformList() {
     categoryContainerTransform = [];
     categoryImageTransform = [];
