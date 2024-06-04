@@ -24,16 +24,6 @@ const String keyConnectionShape = 'p:cxnSp';
 const String keySlideLayoutSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout";
 
-const String keyLunaCategoryContainer = 'luna_category_container';
-const String keyLunaCategoryPicture = 'luna_category_picture';
-const List<String> keyLunaCategorySlideLayout = [
-  '2_category',
-  '3_category',
-  '4_category',
-  '5_category',
-  '6_category'
-];
-
 class PresentationParser {
   // removed static so the localization_test and parser_test work
   late final File _file;
@@ -155,29 +145,32 @@ class PresentationParser {
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
 
-      String slideLayoutName = _lookAheadSlideLayout(i);
+      List<dynamic> slideLayoutInfo = _lookAheadSlideLayout(i);
+      String? slideLayoutName = slideLayoutInfo[0];
+      int? slideLayoutIndex = slideLayoutInfo[1];
       PrsNode slide = PrsNode();
       slideRelationship = _parseSlideRels(i);
-      if (keyLunaCategorySlideLayout.contains(slideLayoutName)) {
+      if (CategoryGameEditorParser.keyLunaCategorySlideLayout
+          .contains(slideLayoutName)) {
         slide = categoryGameEditorParser.parseCategoryGameEditor(
             jsonFromArchive("ppt/slides/slide$slideIndex.xml"),
+            jsonFromArchive(
+                "ppt/slideLayouts/slideLayout$slideLayoutIndex.xml"),
             parsedSlideIdList,
             slideIndex!,
-            slideRelationship,
-            placeholderToTransform);
+            slideRelationship);
+        CategoryGameEditorParser.cleanTransformList();
       } else {
         slide = _parseSlide(parsedSlideIdList);
       }
       node.children.add(slide);
       placeholderToTransform = {};
-      CategoryGameEditorParser.categoryContainerTransform = [];
-      CategoryGameEditorParser.categoryImageTransform = [];
     }
 
     return node;
   }
 
-  String _lookAheadSlideLayout(int slideNum) {
+  List<dynamic> _lookAheadSlideLayout(int slideNum) {
     String slideLayoutName = "";
 
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
@@ -193,7 +186,7 @@ class PresentationParser {
           var slideLayoutMap =
               jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
 
-          return slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"];
+          return [slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"], slideIndex];
         }
       }
     } else if (rIdList is Map<String, dynamic>) {
@@ -205,10 +198,10 @@ class PresentationParser {
         var slideLayoutMap =
             jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
 
-        return slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"];
+        return [slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"], slideIndex];
       }
     }
-    return slideLayoutName;
+    return [slideLayoutName, 0];
   }
 
   Map<String, dynamic> _parseSlideRels(int slideNum) {
@@ -236,18 +229,6 @@ class PresentationParser {
   Map<String, dynamic> _parseTransformForPlaceholder(
       Map<String, dynamic> json) {
     Map<String, dynamic> result = {};
-    var descr =
-        ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', '_descr']);
-    switch (descr) {
-      case keyLunaCategoryContainer:
-        CategoryGameEditorParser.categoryContainerTransform
-            .add(_parseTransform(json));
-        break;
-      case keyLunaCategoryPicture:
-        CategoryGameEditorParser.categoryImageTransform
-            .add(_parseTransform(json));
-        break;
-    }
 
     var ph = ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
     var spPr = json['p:spPr'];
