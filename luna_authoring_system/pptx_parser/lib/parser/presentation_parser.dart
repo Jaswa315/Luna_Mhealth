@@ -15,6 +15,7 @@ import 'package:xml2json/xml2json.dart';
 import 'package:uuid/uuid.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:pptx_parser/parser/category_game_editor_parser.dart';
+import 'package:pptx_parser/utils/parser_tools.dart';
 
 // From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
@@ -93,22 +94,10 @@ class PresentationParser {
     return _xmlDocumentToJson(doc);
   }
 
-  dynamic _getNullableValue(dynamic map, List<String> keys) {
-    dynamic value = map;
-    for (var key in keys) {
-      if (value == null || value == "") {
-        return null;
-      }
-      value = value[key];
-    }
-
-    return (value == null || value == "") ? null : value;
-  }
-
   bool _isTextBox(Map<String, dynamic> json) {
-    if (_getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) == '1' ||
+    if (ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) == '1' ||
         ['body', 'title'].contains(
-            _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type']))) {
+            ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type']))) {
       return true;
     } else {
       return false;
@@ -164,14 +153,19 @@ class PresentationParser {
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
 
-      String slideLayout = _lookAheadSlideLayout(i);
+      String slideLayoutName = _lookAheadSlideLayout(i);
       PrsNode slide = PrsNode();
-      if (keyLunaCategorySlideLayout.contains(slideLayout)) {
-        slide = _parseCategoryGameEditor(parsedSlideIdList);
+      slideRelationship = _parseSlideRels(i);
+      if (keyLunaCategorySlideLayout.contains(slideLayoutName)) {
+        slide = CategoryGameEditorParser(
+                jsonFromArchive("ppt/slides/slide$slideIndex.xml"),
+                parsedSlideIdList,
+                slideIndex!,
+                slideRelationship)
+            .parseCategoryGameEditor();
       } else {
         slide = _parseSlide(parsedSlideIdList);
       }
-      slideRelationship = _parseSlideRels(i);
       node.children.add(slide);
       placeholderToTransform = {};
       categoryContainerTransform = [];
@@ -182,7 +176,7 @@ class PresentationParser {
   }
 
   String _lookAheadSlideLayout(int slideNum) {
-    String slideLayout = "";
+    String slideLayoutName = "";
 
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
     var rIdList = relsMap['Relationships']['Relationship'];
@@ -212,7 +206,7 @@ class PresentationParser {
         return slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"];
       }
     }
-    return slideLayout;
+    return slideLayoutName;
   }
 
   Map<String, dynamic> _parseSlideRels(int slideNum) {
@@ -240,7 +234,7 @@ class PresentationParser {
   Map<String, dynamic> _parseTransformForPlaceholder(
       Map<String, dynamic> json) {
     Map<String, dynamic> result = {};
-    var descr = _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+    var descr = ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', '_descr']);
     switch (descr) {
       case keyLunaCategoryContainer:
         categoryContainerTransform.add(_parseTransform(json));
@@ -250,11 +244,11 @@ class PresentationParser {
         break;
     }
 
-    var ph = _getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+    var ph = ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
     var spPr = json['p:spPr'];
     if (ph != null &&
         ph.containsKey('_idx') &&
-        (_getNullableValue(spPr, ['a:xfrm']) != null) &&
+        (ParserTools.getNullableValue(spPr, ['a:xfrm']) != null) &&
         (ph['_type'] == null ||
             ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
       result[ph['_idx']] = _parseTransform(json);
@@ -303,7 +297,7 @@ class PresentationParser {
       // if sldId is List, it has at least 2 slides in that section
 
       var sectionData =
-          _getNullableValue(section, ['p14:sldIdLst', 'p14:sldId']);
+          ParserTools.getNullableValue(section, ['p14:sldIdLst', 'p14:sldId']);
 
       if (sectionData != null) {
         if (sectionData is Map<String, dynamic>) {
@@ -363,124 +357,6 @@ class PresentationParser {
     return node;
   }
 
-  PrsNode _parseCategoryGameEditor(var slideIdList) {
-    CategoryGameEditorNode node = CategoryGameEditorNode();
-    var slideMap = jsonFromArchive("ppt/slides/slide$slideIndex.xml");
-    var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
-    node.slideId = slideIdList[slideIndex! - 1];
-
-    for (int i = 0; i < categoryContainerTransform.length; i++) {
-      node.children.add(CategoryNode());
-    }
-
-    shapeTree.forEach((key, value) {
-      switch (key) {
-        case keyPicture:
-          var picObj = shapeTree[key];
-
-          if (picObj is List) {
-            for (var obj in picObj) {
-              var element = _parseCategoryGameImage(obj);
-              ShapeNode? shapeElement = element.children[0] as ShapeNode;
-              int? index = _addToCategory(element);
-              categoryImageTransform.any((item) =>
-                      item.offset.x == shapeElement.transform.offset.x &&
-                      item.offset.y == shapeElement.transform.offset.y &&
-                      item.size.x == shapeElement.transform.size.x &&
-                      item.size.y == shapeElement.transform.size.y)
-                  ? (node.children[index ?? 0] as CategoryNode).categoryImage =
-                      element as CategoryGameImageNode
-                  : node.children[index ?? 0].children.add(element);
-            }
-          } else if (picObj is Map<String, dynamic>) {
-            var element = _parseCategoryGameImage(picObj);
-            ShapeNode? shapeElement = element.children[0] as ShapeNode;
-            int? index = _addToCategory(element);
-            categoryImageTransform.any((item) =>
-                    item.offset.x == shapeElement.transform.offset.x &&
-                    item.offset.y == shapeElement.transform.offset.y &&
-                    item.size.x == shapeElement.transform.size.x &&
-                    item.size.y == shapeElement.transform.size.y)
-                ? (node.children[index ?? 0] as CategoryNode).categoryImage =
-                    element as CategoryGameImageNode
-                : node.children[index ?? 0].children.add(element);
-          }
-          break;
-        case keyShape:
-          var shapeObj = shapeTree[key];
-          if (shapeObj is List) {
-            for (var obj in shapeObj) {
-              var element = _parseCategoryGameTextBox(obj);
-              (node.children[_addToCategory(element) ?? 0] as CategoryNode)
-                  .categoryName = element as CategoryGameTextNode;
-            }
-          } else if (shapeObj is Map<String, dynamic>) {
-            var element = _parseCategoryGameTextBox(shapeObj);
-            (node.children[_addToCategory(element) ?? 0] as CategoryNode)
-                .categoryName = element as CategoryGameTextNode;
-          }
-          break;
-      }
-    });
-
-    return node;
-  }
-
-  int? _addToCategory(var element) {
-    // element is either Image or TextBox
-    ShapeNode shapeElement = element.children[0] is ShapeNode
-        ? element.children[0]
-        : element.children[0].children[0] as ShapeNode;
-
-    var centerX =
-        shapeElement.transform.offset.x + shapeElement.transform.size.x / 2;
-    var centerY =
-        shapeElement.transform.offset.y + shapeElement.transform.size.y / 2;
-
-    for (int i = 0; i < categoryContainerTransform.length; i++) {
-      if (categoryContainerTransform[i].offset.x <= centerX &&
-          centerX <=
-              categoryContainerTransform[i].offset.x +
-                  categoryContainerTransform[i].size.x &&
-          categoryContainerTransform[i].offset.y <= centerY &&
-          centerY <=
-              categoryContainerTransform[i].offset.y +
-                  categoryContainerTransform[i].size.y) {
-        return i;
-      }
-    }
-    return null;
-  }
-
-  PrsNode _parseCategoryGameTextBox(Map<String, dynamic> json) {
-    CategoryGameTextNode node = CategoryGameTextNode();
-
-    String categoryName = "";
-    if (json['p:txBody']['a:p'] is List) {
-      for (var element in json['p:txBody']['a:p']) {
-        categoryName += element['a:r']['a:t'] + " ";
-      }
-    } else if (json['p:txBody']['a:p'] is Map<String, dynamic>) {
-      categoryName += json['p:txBody']['a:p']['a:r']['a:t'] + " ";
-    }
-    categoryName = categoryName.replaceAll(RegExp(r'\\[tnv]\s*'), ' ');
-    node.text = categoryName.substring(0, categoryName.length - 1);
-    node.children.add(_parseShape(json));
-
-    return node;
-  }
-
-  PrsNode _parseCategoryGameImage(Map<String, dynamic> json) {
-    CategoryGameImageNode node = CategoryGameImageNode();
-
-    node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
-    String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
-    node.path = slideRelationship?[relsLink];
-    node.children.add(_parseBasicShape(json));
-
-    return node;
-  }
-
   PrsNode _parseImage(Map<String, dynamic> json) {
     ImageNode node = ImageNode();
 
@@ -488,13 +364,13 @@ class PresentationParser {
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
     String audioRelsLink = "";
-    audioRelsLink = _getNullableValue(
+    audioRelsLink = ParserTools.getNullableValue(
             json['p:nvPicPr'], ['p:nvPr', 'a:audioFile', '_r:link']) ??
         "";
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
     node.hyperlink = _getHyperlink(
-        _getNullableValue(json['p:nvPicPr'], ['p:cNvPr', 'a:hlinkClick']));
+        ParserTools.getNullableValue(json['p:nvPicPr'], ['p:cNvPr', 'a:hlinkClick']));
 
     node.children.add(_parseBasicShape(json));
 
@@ -514,12 +390,12 @@ class PresentationParser {
     // check if it has own transform.
     // if it does not have nvPr, look up in placeholder in slideLayout.
 
-    var nvPr = _getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
-        _getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
-        _getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
+    var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
+        ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
+        ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
 
     if (placeholderToTransform.isNotEmpty &&
-        _getNullableValue(nvPr, ['p:ph']) != null) {
+        ParserTools.getNullableValue(nvPr, ['p:ph']) != null) {
       // this shape follows slideLayout
       String phIdx = nvPr['p:ph']['_idx'];
       return placeholderToTransform[phIdx];
@@ -537,7 +413,7 @@ class PresentationParser {
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    String shape = _getNullableValue(json, ['p:spPr']) == null
+    String shape = ParserTools.getNullableValue(json, ['p:spPr']) == null
         ? 'rect'
         : json['p:spPr']['a:prstGeom']['_prst'];
 
@@ -546,17 +422,17 @@ class PresentationParser {
     node.transform = _parseTransform(json);
 
     // A Shape can have textBody
-    if (!_isTextBox(json) && _getNullableValue(json, ['p:txBody']) != null) {
+    if (!_isTextBox(json) && ParserTools.getNullableValue(json, ['p:txBody']) != null) {
       node.textBody = _parseTextBody(json['p:txBody']);
     } else {
       node.textBody = null;
     }
 
-    node.audioPath = slideRelationship?[_getNullableValue(
+    node.audioPath = slideRelationship?[ParserTools.getNullableValue(
         json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
 
     node.hyperlink = _getHyperlink(
-        _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
+        ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
 
     switch (shape) {
       case 'rect':
@@ -595,10 +471,10 @@ class PresentationParser {
   PrsNode _parseTextBox(Map<String, dynamic> json) {
     TextBoxNode node = TextBoxNode();
 
-    node.audioPath = slideRelationship?[_getNullableValue(
+    node.audioPath = slideRelationship?[ParserTools.getNullableValue(
         json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
     node.hyperlink = _getHyperlink(
-        _getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
+        ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
 
     node.children.add(_parseBasicShape(json));
     node.children.add(_parseTextBody(json['p:txBody']));
@@ -609,9 +485,9 @@ class PresentationParser {
   PrsNode _parseTextBody(Map<String, dynamic> json) {
     TextBodyNode node = TextBodyNode();
 
-    node.wrap = _getNullableValue(json, ['a:bodyPr']) == null
+    node.wrap = ParserTools.getNullableValue(json, ['a:bodyPr']) == null
         ? "rect"
-        : _getNullableValue(json, ['a:bodyPr', '_wrap']);
+        : ParserTools.getNullableValue(json, ['a:bodyPr', '_wrap']);
     var pObj = json['a:p'];
 
     if (pObj is List) {
@@ -628,7 +504,7 @@ class PresentationParser {
   PrsNode _parseTextPara(Map<String, dynamic> json) {
     TextParagraphNode node = TextParagraphNode();
 
-    node.alignment = _getNullableValue(json, ['a:pPr', 'align']);
+    node.alignment = ParserTools.getNullableValue(json, ['a:pPr', 'align']);
     var rObj = json['a:r'];
 
     if (rObj is List) {
@@ -649,14 +525,14 @@ class PresentationParser {
     node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);
     String? sizeStr = json['a:rPr']['_sz'];
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
-    node.color = _getNullableValue(
+    node.color = ParserTools.getNullableValue(
         json['a:rPr'], ['a:solidFill', 'a:schemeClr', '_val']);
     node.highlightColor =
-        _getNullableValue(json['a:rPr'], ['a:highlight', 'a:srgbClr', '_val']);
+        ParserTools.getNullableValue(json['a:rPr'], ['a:highlight', 'a:srgbClr', '_val']);
     node.language = json['a:rPr']['_lang'];
     node.text = json['a:t'];
     node.hyperlink =
-        _getHyperlink(_getNullableValue(json, ['a:rPr', 'a:hlinkClick']));
+        _getHyperlink(ParserTools.getNullableValue(json, ['a:rPr', 'a:hlinkClick']));
     node.uid = _nextTextNodeUID++;
 
     return node;
