@@ -30,7 +30,7 @@ class Point2D with ToJson {
   }
 }
 
-class Transform with ToJson {
+class Transform extends PrsNode with ToJson {
   late final Point2D offset;
   late final Point2D size;
 
@@ -213,7 +213,7 @@ class BodyNode extends PrsNode {
 }
 
 class ShapeNode extends PrsNode {
-  late final Transform transform;
+  late final PrsNode? transform;
   late final ShapeGeometry shape;
   late final String? audioPath;
   late final int? hyperlink;
@@ -225,7 +225,7 @@ class ShapeNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': shape.name,
-      'transform': transform.toJson(),
+      'transform': transform?.toJson(),
       if (textBody != null) 'textBody': textBody?.toJson(),
       if (audioPath != null) 'audiopath': audioPath,
       if (hyperlink != null) 'hyperlink': hyperlink,

@@ -1,5 +1,5 @@
 import 'package:pptx_parser/parser/presentation_tree.dart';
-import 'package:pptx_parser/parser/presentation_parser.dart';
+import 'package:pptx_parser/utils/parser_tools.dart';
 
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
@@ -8,15 +8,16 @@ const String keyLunaCategoryContainer = 'luna_category_container';
 const String keyLunaCategoryPicture = 'luna_category_picture';
 
 class CategoryGameEditorParser {
-  List<dynamic> categoryContainerTransform = [];
-  List<dynamic> categoryImageTransform = [];
+  static List<dynamic> categoryContainerTransform = [];
+  static List<dynamic> categoryImageTransform = [];
   late Map<String, dynamic> slideMap;
   late var slideIdList;
   int slideIndex;
   Map<String, dynamic>? slideRelationship;
+  Map<String, dynamic> placeholderToTransform;
 
-  CategoryGameEditorParser(
-      this.slideMap, this.slideIdList, this.slideIndex, this.slideRelationship);
+  CategoryGameEditorParser(this.slideMap, this.slideIdList, this.slideIndex,
+      this.slideRelationship, this.placeholderToTransform);
 
   PrsNode parseCategoryGameEditor() {
     CategoryGameEditorNode node = CategoryGameEditorNode();
@@ -35,26 +36,26 @@ class CategoryGameEditorParser {
           if (picObj is List) {
             for (var obj in picObj) {
               var element = _parseCategoryGameImage(obj);
-              ShapeNode? shapeElement = element.children[0] as ShapeNode;
+              Transform? shapeElement = element.children[0] as Transform;
               int? index = _addToCategory(element);
               categoryImageTransform.any((item) =>
-                      item.offset.x == shapeElement.transform.offset.x &&
-                      item.offset.y == shapeElement.transform.offset.y &&
-                      item.size.x == shapeElement.transform.size.x &&
-                      item.size.y == shapeElement.transform.size.y)
+                      item.offset.x == shapeElement.offset.x &&
+                      item.offset.y == shapeElement.offset.y &&
+                      item.size.x == shapeElement.size.x &&
+                      item.size.y == shapeElement.size.y)
                   ? (node.children[index ?? 0] as CategoryNode).categoryImage =
                       element as CategoryGameImageNode
                   : node.children[index ?? 0].children.add(element);
             }
           } else if (picObj is Map<String, dynamic>) {
             var element = _parseCategoryGameImage(picObj);
-            ShapeNode? shapeElement = element.children[0] as ShapeNode;
+            Transform? shapeElement = element.children[0] as Transform;
             int? index = _addToCategory(element);
             categoryImageTransform.any((item) =>
-                    item.offset.x == shapeElement.transform.offset.x &&
-                    item.offset.y == shapeElement.transform.offset.y &&
-                    item.size.x == shapeElement.transform.size.x &&
-                    item.size.y == shapeElement.transform.size.y)
+                    item.offset.x == shapeElement.offset.x &&
+                    item.offset.y == shapeElement.offset.y &&
+                    item.size.x == shapeElement.size.x &&
+                    item.size.y == shapeElement.size.y)
                 ? (node.children[index ?? 0] as CategoryNode).categoryImage =
                     element as CategoryGameImageNode
                 : node.children[index ?? 0].children.add(element);
@@ -82,14 +83,10 @@ class CategoryGameEditorParser {
 
   int? _addToCategory(var element) {
     // element is either Image or TextBox
-    ShapeNode shapeElement = element.children[0] is ShapeNode
-        ? element.children[0]
-        : element.children[0].children[0] as ShapeNode;
+    Transform shapeElement = element.children[0];
 
-    var centerX =
-        shapeElement.transform.offset.x + shapeElement.transform.size.x / 2;
-    var centerY =
-        shapeElement.transform.offset.y + shapeElement.transform.size.y / 2;
+    var centerX = shapeElement.offset.x + shapeElement.size.x / 2;
+    var centerY = shapeElement.offset.y + shapeElement.size.y / 2;
 
     for (int i = 0; i < categoryContainerTransform.length; i++) {
       if (categoryContainerTransform[i].offset.x <= centerX &&
@@ -119,8 +116,7 @@ class CategoryGameEditorParser {
     }
     categoryName = categoryName.replaceAll(RegExp(r'\\[tnv]\s*'), ' ');
     node.text = categoryName.substring(0, categoryName.length - 1);
-    
-    // node.children.add(parseShape(json));
+    node.children.add(_parseCategoryTransform(json));
 
     return node;
   }
@@ -131,14 +127,31 @@ class CategoryGameEditorParser {
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
     node.path = slideRelationship?[relsLink];
-    // node.children.add(parseBasicShape(json));
+    node.children.add(_parseCategoryTransform(json));
 
     return node;
   }
 
-  PrsNode _parseCategoryTransform(Map<String, dynamic> json){
-    var nvPr = _getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
-        _getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
-        _getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
+  PrsNode _parseCategoryTransform(Map<String, dynamic> json) {
+    var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
+        ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
+        ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
+
+    if (placeholderToTransform.isNotEmpty &&
+        ParserTools.getNullableValue(nvPr, ['p:ph']) != null) {
+      // this shape follows slideLayout
+      String phIdx = nvPr['p:ph']['_idx'];
+      return placeholderToTransform[phIdx];
+    } else {
+      Transform node = Transform();
+      node.offset = Point2D(
+          double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
+          double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
+
+      node.size = Point2D(
+          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
+          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
+      return node;
+    }
   }
 }
