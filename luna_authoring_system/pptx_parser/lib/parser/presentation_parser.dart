@@ -46,6 +46,9 @@ class PresentationParser {
   Map<String, dynamic> placeholderToTransform = {};
   int _nextTextNodeUID = 1;
 
+  CategoryGameEditorParser categoryGameEditorParser =
+      CategoryGameEditorParser();
+
   PresentationParser(File file) {
     _file = file;
   }
@@ -156,13 +159,12 @@ class PresentationParser {
       PrsNode slide = PrsNode();
       slideRelationship = _parseSlideRels(i);
       if (keyLunaCategorySlideLayout.contains(slideLayoutName)) {
-        slide = CategoryGameEditorParser(
-                jsonFromArchive("ppt/slides/slide$slideIndex.xml"),
-                parsedSlideIdList,
-                slideIndex!,
-                slideRelationship,
-                placeholderToTransform)
-            .parseCategoryGameEditor();
+        slide = categoryGameEditorParser.parseCategoryGameEditor(
+            jsonFromArchive("ppt/slides/slide$slideIndex.xml"),
+            parsedSlideIdList,
+            slideIndex!,
+            slideRelationship,
+            placeholderToTransform);
       } else {
         slide = _parseSlide(parsedSlideIdList);
       }

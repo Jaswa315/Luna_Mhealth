@@ -10,16 +10,22 @@ const String keyLunaCategoryPicture = 'luna_category_picture';
 class CategoryGameEditorParser {
   static List<dynamic> categoryContainerTransform = [];
   static List<dynamic> categoryImageTransform = [];
-  late Map<String, dynamic> slideMap;
-  late var slideIdList;
-  int slideIndex;
-  Map<String, dynamic>? slideRelationship;
-  Map<String, dynamic> placeholderToTransform;
 
-  CategoryGameEditorParser(this.slideMap, this.slideIdList, this.slideIndex,
-      this.slideRelationship, this.placeholderToTransform);
+  Map<String, dynamic>? slideRelationship = {};
+  Map<String, dynamic> placeholderToTransform = {};
 
-  PrsNode parseCategoryGameEditor() {
+  CategoryGameEditorParser();
+
+  PrsNode parseCategoryGameEditor(
+      Map<String, dynamic> slideMap,
+      var slideIdList,
+      int slideIndex,
+      Map<String, dynamic>? slideRelationship,
+      Map<String, dynamic> placeholderToTransform) {
+        
+    this.slideRelationship = slideRelationship;
+    this.placeholderToTransform = placeholderToTransform;
+
     CategoryGameEditorNode node = CategoryGameEditorNode();
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
     node.slideId = slideIdList[slideIndex - 1];
