@@ -177,7 +177,6 @@ class Game with ChangeNotifier {
       return TileState.selected_correct;
     } else {
       incorrectRemaining--;
-      notifyListeners();
       return TileState.selected_incorrect;
     }
   }
