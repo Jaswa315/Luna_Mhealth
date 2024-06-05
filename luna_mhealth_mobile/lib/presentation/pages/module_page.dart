@@ -122,8 +122,7 @@ class _ModulePageState extends State<ModulePage> {
           widget.module,
           pageIndex,
           screenSize,
-          (page, size, scale) =>
-              widget.pageServices.buildPage(page, size, scale),
+          (page, size) => widget.pageServices.buildPage(page, size),
         ) ??
         SizedBox();
   }

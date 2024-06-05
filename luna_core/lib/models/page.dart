@@ -17,44 +17,52 @@ import 'component.dart';
 /// A page contains a list of components that can be added or removed.
 /// It can be converted to and from a JSON map.
 class Page {
-  /// The index of the page.
-  final int index;
-  final List<Component> _components = [];
+  /// The unique identifier for the slide.
+  final String slideId;
 
-  /// Constructs a new instance of [Page] with the given [index].
-  Page({required this.index});
+  /// A list of components on the slide.
+  final List<Component> components;
+
+  /// Constructs a new instance of [Page].
+  Page({
+    required this.slideId,
+    List<Component>? components,
+  }) : components = components ?? [];
 
   /// Gets the list of components in the page.
-  List<Component> get components => List.unmodifiable(_components);
+  List<Component> get getPageComponents => List.unmodifiable(components);
 
-  /// Adds a [component] to the page.
+  /// Adds a component to the page.
   void addComponent(Component component) {
-    _components.add(component);
+    components.add(component);
   }
 
-  /// Removes a [component] from the page.
+  /// Removes a component from the page.
   void removeComponent(Component component) {
-    _components.remove(component);
+    components.remove(component);
   }
 
-  /// Converts a JSON map into a Page.
+  /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
   factory Page.fromJson(Map<String, dynamic> json) {
-    Page page = Page(index: json['slide_number'] as int);
-
-    var elements = json['elements'] as List<dynamic>;
-    for (var elementJson in elements) {
-      Component? component = Component.fromJson(elementJson);
-      page.addComponent(component);
+    if (json['type'] != 'slide') {
+      throw FormatException('Only slide type components are allowed');
     }
 
-    return page;
+    List<Component> components = (json['shapes'] as List<dynamic>)
+        .map((shapeJson) => Component.fromJson(shapeJson))
+        .toList();
+
+    return Page(
+      slideId: json['slideId'] as String,
+      components: components,
+    );
   }
 
   /// Converts a Page into a JSON map.
   Map<String, dynamic> toJson() {
     return {
-      'index': index,
-      'components': _components.map((c) => c.toJson()).toList(),
+      'slideId': slideId,
+      'shapes': components.map((c) => c.toJson()).toList(),
     };
   }
 

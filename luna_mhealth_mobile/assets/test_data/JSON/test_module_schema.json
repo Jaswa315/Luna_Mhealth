@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Luna IR JSON Schema",
+  "type": "object",
+  "definitions": {
+    "transform": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "object",
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          }
+        },
+        "size": {
+          "type": "object",
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          }
+        }
+      }
+    },
+    "textgroup": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["text"] },
+        "uid": { "type": "number" },
+        "italics": { "type": "boolean", "default": false },
+        "bold": { "type": "boolean", "default": false },
+        "underline": { "type": "boolean", "default": false },
+        "size": { "type": ["string", "null"] },
+        "color": { "type": ["string", "null"] },
+        "highlightcolor": { "type": ["string", "null"] },
+        "language": { "type": "string" },
+        "text": { "type": "string" }
+      },
+      "required": ["type", "uid", "language", "text"]
+    },
+    "paragraph": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["paragraph"] },
+        "alignment": { "type": ["string", "null"], "default": "left" },
+        "textgroups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/textgroup" }
+        }
+      },
+      "required": ["type", "textgroups"]
+    },
+    "textBody": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["textbody"] },
+        "wrap": { "type": "string", "enum": ["rect"] },
+        "paragraphs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/paragraph" }
+        }
+      },
+      "required": ["type", "wrap", "paragraphs"]
+    },
+    "shape": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["textbox", "rectangle", "textbody"]
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/shape" }
+        },
+        "transform": { "$ref": "#/definitions/transform" },
+        "textBody": { "$ref": "#/definitions/textBody" }
+      }
+    },
+    "slide": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["slide", "categoryGameEditor"] },
+        "slideId": { "type": "string" },
+        "shapes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/shape" }
+        },
+        "category": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/category" }
+        }
+      }
+    },
+    "category": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["category"] },
+        "categoryName": { "$ref": "#/definitions/categoryName" },
+        "categoryImage": { "$ref": "#/definitions/categoryImage" },
+        "categoryMembers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/categoryImage" }
+        }
+      },
+      "required": ["type", "categoryName", "categoryImage", "categoryMembers"]
+    },
+    "categoryName": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["categoryGameText"] },
+        "text": { "type": "string" }
+      },
+      "required": ["type", "text"]
+    },
+    "categoryImage": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["categoryGameImage"] },
+        "path": { "type": "string" },
+        "alttext": { "type": ["string", "null"], "default": "" }
+      },
+      "required": ["type", "path"]
+    }
+  },
+  "properties": {
+    "presentation": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["presentation"] },
+        "moduleId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "slideCount": { "type": "number", "minimum": 0 },
+        "section": {
+          "type": "object",
+          "properties": {
+            "Default Section": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "required": ["Default Section"]
+        },
+        "slides": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/slide" }
+        }
+      },
+      "required": [
+        "type",
+        "moduleId",
+        "title",
+        "author",
+        "slideCount",
+        "section",
+        "slides"
+      ]
+    }
+  }
+}

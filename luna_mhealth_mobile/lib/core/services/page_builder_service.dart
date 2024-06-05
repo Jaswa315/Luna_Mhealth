@@ -43,9 +43,9 @@ class ModulePageBuilderService {
     Module module,
     int pageIndex,
     Size screenSize,
-    Widget Function(page_model.Page, Size, double) buildPage,
+    Widget Function(page_model.Page, Size) buildPage,
   ) {
-    double scale = scaleUtilities.calculateScale(screenSize, module.width);
+    //double scale = scaleUtilities.calculateScale(screenSize, module.width);
 
     ModuleResourceFactory.moduleName = module.title; // TODO: update the logic
 
@@ -53,8 +53,7 @@ class ModulePageBuilderService {
       if (cachedPages.length >= cacheSizeLimit) {
         cachedPages.remove(cachedPages.keys.first);
       }
-      cachedPages[pageIndex] =
-          buildPage(module.pages[pageIndex], screenSize, scale);
+      cachedPages[pageIndex] = buildPage(module.pages[pageIndex], screenSize);
     } else {
       // Move the accessed page to the end of the map to implement LRU policy.
       cachedPages[pageIndex] = cachedPages.remove(pageIndex)!;
@@ -63,28 +62,23 @@ class ModulePageBuilderService {
     return cachedPages[pageIndex];
   }
 
-  /// Builds a page using the given [page], [screenSize], and [scale].
+  /// Builds a page using the given [page], and [screenSize].
   ///
   /// The [page] parameter represents the page model to be built.
   /// The [screenSize] parameter represents the size of the screen.
-  /// The [scale] parameter represents the scaling factor.
   ///
   /// Returns a [Widget] representing the built page.
-  Widget buildPage(page_model.Page page, Size screenSize, double scale) {
+  Widget buildPage(page_model.Page page, Size screenSize) {
     return SingleChildScrollView(
       child: Container(
         width: screenSize.width,
         height: screenSize.height,
         child: Stack(
-          children: page.components.map((component) {
+          children: page.getPageComponents.map((component) {
             IRenderer renderer =
                 RendererFactory.getRenderer(component.runtimeType);
 
             return Positioned(
-              left: component.bounds.left * scale,
-              top: component.bounds.top * scale,
-              width: component.bounds.width * scale,
-              height: component.bounds.height * scale,
               child: renderer.renderComponent(component),
             );
           }).toList(),

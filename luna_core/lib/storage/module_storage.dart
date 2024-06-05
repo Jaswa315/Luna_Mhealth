@@ -411,9 +411,7 @@ class ModuleStorage {
   /// Method to get the full path for an image file within a module
   String getImagePath(String moduleName, String imageFileName) {
     moduleName = moduleName.trim().replaceAll(" ", "_");
-    return _userPath == ''
-        ? '$moduleName/resources/images/$imageFileName'
-        : '$_userPath/$moduleName/resources/images/$imageFileName';
+    return '$moduleName/resources/images/$imageFileName';
   }
 
   /// Method to get the full path for an audio file within a module,
@@ -421,9 +419,7 @@ class ModuleStorage {
   String getAudioPath(
       String moduleName, String audioFileName, String langLocale) {
     moduleName = moduleName.trim().replaceAll(" ", "_");
-    return _userPath == ''
-        ? '$moduleName/resources/$langLocale/audio/$audioFileName'
-        : '$_userPath/$moduleName/resources/$langLocale/audio/$audioFileName';
+    return '$moduleName/resources/$langLocale/audio/$audioFileName';
   }
 
   String _getDataPath() {
