@@ -18,16 +18,16 @@ import 'package:provider/provider.dart';
 
 
 
-class OuterGameWidget extends StatefulWidget {
-  const OuterGameWidget({super.key, required this.gameContext});
+class GameContainer extends StatefulWidget {
+  const GameContainer({super.key, required this.gameContext});
 
   final GameContext gameContext;
 
   @override
-  State<OuterGameWidget> createState() => _OuterGameWidgetState();
+  State<GameContainer> createState() => _GameContainerState();
 }
 
-class _OuterGameWidgetState extends State<OuterGameWidget> {
+class _GameContainerState extends State<GameContainer> {
 
   int counter = 0;
 
@@ -35,7 +35,7 @@ class _OuterGameWidgetState extends State<OuterGameWidget> {
   Widget build(BuildContext context) {
 
     return Column(children: [
-      Expanded(child: MiddleManGameWidget(key: Key("game_${counter}"), gameContext: widget.gameContext,)),
+      Expanded(child: ProviderContainer(key: Key("game_${counter}"), gameContext: widget.gameContext,)),
       GameButton(text: TEXT_RESET_GAME, onTap: () {
         setState(() {
           counter++;
@@ -51,8 +51,8 @@ class _OuterGameWidgetState extends State<OuterGameWidget> {
   }
 }
 
-class MiddleManGameWidget extends StatelessWidget {
-  const MiddleManGameWidget({super.key, required this.gameContext});
+class ProviderContainer extends StatelessWidget {
+  const ProviderContainer({super.key, required this.gameContext});
 
   final GameContext gameContext;
 
@@ -61,14 +61,14 @@ class MiddleManGameWidget extends StatelessWidget {
     return MultiProvider(providers: [
       ChangeNotifierProvider(create:(context) => Game(gameContext: gameContext),),
     ],
-    child: InnerGameWidget(key: Key("innergame_${super.key}"),),
+    child: GameInstanceWidget(key: Key("innergame_${super.key}"),),
     );
   }
 }
 
 
-class InnerGameWidget extends StatelessWidget {
-  const InnerGameWidget({super.key});
+class GameInstanceWidget extends StatelessWidget {
+  const GameInstanceWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

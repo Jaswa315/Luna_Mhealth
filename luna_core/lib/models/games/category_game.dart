@@ -40,7 +40,7 @@ class CategoryGame extends Component {
   @override
   Future<Widget> render() async {
 
-    return OuterGameWidget(gameContext: gameContext);
+    return GameContainer(gameContext: gameContext);
   }
 
   /// Creates an [ImageComponent] from a JSON map.

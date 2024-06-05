@@ -5,15 +5,14 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 
 class GameContext {
-  GameContext({required this.categories}) {
-  }
+  GameContext({required this.categories}) {}
 
   List<Category> categories = [];
 
-
   factory GameContext.fromJson(Map<String, dynamic> json) {
     if (json['categories'] == null) {
-      throw FormatException('Expected a "categories" field with an array value.');
+      throw FormatException(
+          'Expected a "categories" field with an array value.');
     }
 
     final categories = (json['categories'] as List<dynamic>)
@@ -24,13 +23,10 @@ class GameContext {
       categories: categories,
     );
   }
-
 }
 
 class Category {
-  Category({required this.category_name, required this.members}) {
-
-  }
+  Category({required this.category_name, required this.members}) {}
 
   void AddToCategory(CategoryMember member) {
     members.add(member);
@@ -51,22 +47,16 @@ class Category {
     return Category(
       category_name: json['category_name'] as String,
       members: members,
-      );
+    );
   }
-
 }
 
-
 class CategoryMember {
-
   String imagePath;
 
-  CategoryMember({required this.imagePath}) {
-
-  }
+  CategoryMember({required this.imagePath}) {}
 
   factory CategoryMember.fromJson(Map<String, dynamic> json) {
-
     String imagePath = json['member_image_path'];
     return CategoryMember(imagePath: imagePath);
   }
