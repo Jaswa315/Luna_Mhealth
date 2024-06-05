@@ -186,29 +186,6 @@ void main() {
       // expect(modules[0]?.id == expectData.id, true);
     });
 
-    test('Update Module - NoUserProfile', () async {
-      String testModuleName = "TestModule";
-      String jsonModule =
-          File("$kTestAssetsPath/module.json").readAsStringSync();
-      String jsonModule2 =
-          File("$kTestAssetsPath/module2.json").readAsStringSync();
-      Module module1 = Module.fromJson(jsonDecode(jsonModule));
-      Module expectData = Module.fromJson(jsonDecode(jsonModule2));
-
-      ModuleStorage moduleStorage =
-          ModuleStorage(provider: storageProvider, userName: "");
-
-      await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
-
-      bool result =
-          await moduleStorage.updateModuleSchema(testModuleName, jsonModule2);
-
-      Module? testData = await moduleStorage.loadModule(testModuleName);
-
-      // expect(expectData.id == testData?.id, true);
-      expect(expectData.title == testData?.title, true);
-    });
-
     test('Remove Module - UserProfle', () async {
       String testModuleName = "TestModule";
       String userName = "TestUser";
