@@ -5,42 +5,30 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 
 class GameContext {
-  GameContext() {
+  GameContext({required this.categories}) {
   }
 
   List<Category> categories = [];
 
-  void addCategory(Category category) {
-    categories.add(category);
-  }
 
-  void populateWithSampleData() {
-    Category healthy = Category(name: "Healthy");
-    healthy.AddToCategory(CategoryMember(image: "apple"));
-    healthy.AddToCategory(CategoryMember(image: "brocolli"));
-    healthy.AddToCategory(CategoryMember(image: "grapes"));
-    healthy.AddToCategory(CategoryMember(image: "kiwi"));
-    healthy.AddToCategory(CategoryMember(image: "lettuce"));
-    healthy.AddToCategory(CategoryMember(image: "orange"));
-    healthy.AddToCategory(CategoryMember(image: "pear"));
-    healthy.AddToCategory(CategoryMember(image: "salad"));
-    healthy.AddToCategory(CategoryMember(image: "yogurt"));
+  factory GameContext.fromJson(Map<String, dynamic> json) {
+    if (json['categories'] == null) {
+      throw FormatException('Expected a "categories" field with an array value.');
+    }
 
-    
-    Category unhealthy = Category(name: "Unhealthy");
-    unhealthy.AddToCategory(CategoryMember(image: "chips"));
-    unhealthy.AddToCategory(CategoryMember(image: "burger"));
-    unhealthy.AddToCategory(CategoryMember(image: "hotdog"));
-    unhealthy.AddToCategory(CategoryMember(image: "pizza"));
+    final categories = (json['categories'] as List<dynamic>)
+        .map((slideJson) => Category.fromJson(slideJson))
+        .toList();
 
-    categories.add(healthy);
-    categories.add(unhealthy);
+    return GameContext(
+      categories: categories,
+    );
   }
 
 }
 
 class Category {
-  Category({required this.name}) {
+  Category({required this.category_name, required this.members}) {
 
   }
 
@@ -48,17 +36,38 @@ class Category {
     members.add(member);
   }
 
-  String name;
+  String category_name;
   List<CategoryMember> members = [];
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    if (json['members'] == null) {
+      throw FormatException('Expected a "members" field with an array value.');
+    }
+
+    final members = (json['members'] as List<dynamic>)
+        .map((slideJson) => CategoryMember.fromJson(slideJson))
+        .toList();
+
+    return Category(
+      category_name: json['category_name'] as String,
+      members: members,
+      );
+  }
 
 }
 
 
 class CategoryMember {
 
-  String image;
+  String imagePath;
 
-  CategoryMember({required this.image}) {
+  CategoryMember({required this.imagePath}) {
 
+  }
+
+  factory CategoryMember.fromJson(Map<String, dynamic> json) {
+
+    String imagePath = json['member_image_path'];
+    return CategoryMember(imagePath: imagePath);
   }
 }

@@ -3,10 +3,14 @@
 
 
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luna_core/models/image/image_component.dart';
+import 'package:luna_core/storage/module_resource_factory.dart';
+import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 import 'package:luna_mhealth_mobile/games/animatedwidgets.dart';
 import 'package:luna_mhealth_mobile/games/gameconstants.dart';
 import 'package:luna_mhealth_mobile/games/gamecontext.dart';
@@ -15,7 +19,9 @@ import 'package:provider/provider.dart';
 
 
 class OuterGameWidget extends StatefulWidget {
-  const OuterGameWidget({super.key});
+  const OuterGameWidget({super.key, required this.gameContext});
+
+  final GameContext gameContext;
 
   @override
   State<OuterGameWidget> createState() => _OuterGameWidgetState();
@@ -28,11 +34,8 @@ class _OuterGameWidgetState extends State<OuterGameWidget> {
   @override
   Widget build(BuildContext context) {
 
-    GameContext gameContext = GameContext();
-    gameContext.populateWithSampleData();
-
     return Column(children: [
-      Expanded(child: MiddleManGameWidget(key: Key("game_${counter}"), gameContext: gameContext,)),
+      Expanded(child: MiddleManGameWidget(key: Key("game_${counter}"), gameContext: widget.gameContext,)),
       GameButton(text: TEXT_RESET_GAME, onTap: () {
         setState(() {
           counter++;
@@ -43,7 +46,6 @@ class _OuterGameWidgetState extends State<OuterGameWidget> {
           counter++;
         });
       }),
-      SizedBox(height: 30,),
     ]
     );
   }
@@ -73,12 +75,9 @@ class InnerGameWidget extends StatelessWidget {
     Game game = context.watch<Game>();
 
     return Column(children: [
-      SizedBox(height: 35,),
       
-      Text("${TEXT_PROMPT} ${game.targetCategory.name}", textScaler: TextScaler.linear(GAME_FONT_SIZE)),
-      SizedBox(height: 15,),
+      Text("${TEXT_PROMPT} ${game.targetCategory.category_name}", textScaler: TextScaler.linear(GAME_FONT_SIZE)),
 
-      SizedBox(height: 15,),
       if (game.gameState == GameState.active) Text("", textScaler: TextScaler.linear(GAME_FONT_SIZE)),
       if (game.gameState == GameState.won) Text(TEXT_WIN, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
       if (game.gameState == GameState.lost) Text(TEXT_LOST, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
@@ -102,13 +101,13 @@ class LivesRemainingDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> livesDisplay = List.empty(growable: true);
-    livesDisplay.add(SizedBox(width: 30,));
+    //livesDisplay.add(SizedBox(width: 30,));
     livesDisplay.add(Text("${TEXT_MISTAKES_REMAINING}", textScaler: TextScaler.linear(GAME_FONT_SIZE),));
 
     for (int i = 0; i < livesRemaining; i++) {
       livesDisplay.add( Icon(Icons.circle, color: COLOR_MISTAKES_REMAINING,));
     }
-    livesDisplay.add(SizedBox(width: 30,));
+    //livesDisplay.add(SizedBox(width: 30,));
 
     return Row(children: livesDisplay,);
   }
@@ -311,7 +310,7 @@ class _TileWidgetState extends State<TileWidget> with SingleTickerProviderStateM
       }
     }
     
-    TileRender tileRender = TileRender(drawBorder: (state == TileState.unselected), image: widget.member.image,);
+    TileRender tileRender = TileRender(drawBorder: (state == TileState.unselected), image: widget.member.imagePath,);
 
     return GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -386,14 +385,44 @@ class TileRender extends StatelessWidget {
         );
       }
 
+    //Future<Uint8List?> imageData = ModuleResourceFactory.getImageBytes(image);
+
+  String imageFileName = image.split('/').last;
+
+    /// Updated the render method to use the new getImageBytes signature
+
     return Stack(children: [
       Positioned(
-                child: Container(
+        
+                child: FutureBuilder<Uint8List?>(
+                  future: ModuleResourceFactory.getImageBytes(imageFileName),
+                  builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return Container(
+                        decoration: BoxDecoration(
+                        image: DecorationImage(image: Image.memory(snapshot.data!).image),
+                        border: border
+                      ),
+                      ); 
+                    }
+
+                    return Text(AppConstants.noImageErrorMessage);
+                  },
+                ),
+                
+                
+                /*Container(
                 decoration: BoxDecoration(
-                image: DecorationImage(image: Image.asset('assets/images/${image}.png').image),
+                image: DecorationImage(image: Image.memory(imageData).image),
                 border: border
                 ),
-              ),
+              ),*/
               left: 10, right: 10, top: 10, bottom: 10, 
      )
 

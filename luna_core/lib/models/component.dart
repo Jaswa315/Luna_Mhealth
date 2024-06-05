@@ -9,11 +9,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/enums/item_type.dart';
+import 'package:luna_core/models/games/category_game.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
+import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
@@ -48,7 +50,7 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
   /// Converts a JSON object to a Component object.
   ///
   /// This method takes a [json] object and returns a Component object based on the 'type' field in the JSON.
-  static Component fromJson(Map<String, dynamic> json) {
+  static Component fromJson(Map<String, dynamic> json, List<GameContext> games) {
     ComponentType? type = _typeMapping[json['type']];
     switch (type) {
       case ComponentType.image:
@@ -57,6 +59,8 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
         return TextComponent.fromJson(json);
       case ComponentType.divider:
         return DividerComponent.fromJson(json);
+      case ComponentType.category_game:
+        return CategoryGame.fromJson(json, games);
       default:
         throw Exception('Unsupported component type');
     }
@@ -68,4 +72,5 @@ const Map<int, ComponentType> _typeMapping = {
   13: ComponentType.image,
   17: ComponentType.text,
   9: ComponentType.divider,
+  666: ComponentType.category_game,
 };
