@@ -38,6 +38,7 @@ class ImageComponent extends Component {
   Future<Widget> render() async {
     String imageFileName = imagePath.split('/').last;
 
+    /// Updated the render method to use the new getImageBytes signature
     return FutureBuilder<Uint8List?>(
       future: ModuleResourceFactory.getImageBytes(imageFileName),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
@@ -57,6 +58,7 @@ class ImageComponent extends Component {
   }
 
   /// Creates an [ImageComponent] from a JSON map.
+  /// Updated the fromJson method to include moduleName
   static ImageComponent fromJson(Map<String, dynamic> json) {
     return ImageComponent(
       imagePath: json['image_path'],
