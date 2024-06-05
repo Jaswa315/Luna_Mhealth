@@ -1,7 +1,6 @@
 //This is a temporary class that contains all classes relevant to the games.
 // I will split this up into multiple classes as they make sense.
 
-
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -16,8 +15,6 @@ import 'package:luna_mhealth_mobile/games/gameconstants.dart';
 import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 import 'package:provider/provider.dart';
 
-
-
 class GameContainer extends StatefulWidget {
   const GameContainer({super.key, required this.gameContext});
 
@@ -28,26 +25,31 @@ class GameContainer extends StatefulWidget {
 }
 
 class _GameContainerState extends State<GameContainer> {
-
   int counter = 0;
 
   @override
   Widget build(BuildContext context) {
-
     return Column(children: [
-      Expanded(child: ProviderContainer(key: Key("game_${counter}"), gameContext: widget.gameContext,)),
-      GameButton(text: TEXT_RESET_GAME, onTap: () {
-        setState(() {
-          counter++;
-        });
-      }),
-      GameButton(text: TEXT_NEW_CATEGORY, onTap: () {
-        setState(() {
-          counter++;
-        });
-      }),
-    ]
-    );
+      Expanded(
+          child: ProviderContainer(
+        key: Key("game_${counter}"),
+        gameContext: widget.gameContext,
+      )),
+      GameButton(
+          text: TEXT_RESET_GAME,
+          onTap: () {
+            setState(() {
+              counter++;
+            });
+          }),
+      GameButton(
+          text: TEXT_NEW_CATEGORY,
+          onTap: () {
+            setState(() {
+              counter++;
+            });
+          }),
+    ]);
   }
 }
 
@@ -58,14 +60,18 @@ class ProviderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(create:(context) => Game(gameContext: gameContext),),
-    ],
-    child: GameInstanceWidget(key: Key("innergame_${super.key}"),),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Game(gameContext: gameContext),
+        ),
+      ],
+      child: GameInstanceWidget(
+        key: Key("innergame_${super.key}"),
+      ),
     );
   }
 }
-
 
 class GameInstanceWidget extends StatelessWidget {
   const GameInstanceWidget({super.key});
@@ -74,27 +80,25 @@ class GameInstanceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Game game = context.watch<Game>();
 
-    return Column(children: [
-      
-      Text("${TEXT_PROMPT} ${game.targetCategory.category_name}", textScaler: TextScaler.linear(GAME_FONT_SIZE)),
-
-      if (game.gameState == GameState.active) Text("", textScaler: TextScaler.linear(GAME_FONT_SIZE)),
-      if (game.gameState == GameState.won) Text(TEXT_WIN, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
-      if (game.gameState == GameState.lost) Text(TEXT_LOST, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
-      
-      GameGrid(columns: 3, children: game.getTiles()),
-     
-      LivesRemainingDisplay(livesRemaining: game.incorrectRemaining),
-
-    ],
+    return Column(
+      children: [
+        Text("${TEXT_PROMPT} ${game.targetCategory.category_name}",
+            textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+        if (game.gameState == GameState.active)
+          Text("", textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+        if (game.gameState == GameState.won)
+          Text(TEXT_WIN, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+        if (game.gameState == GameState.lost)
+          Text(TEXT_LOST, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+        GameGrid(columns: 3, children: game.getTiles()),
+        LivesRemainingDisplay(livesRemaining: game.incorrectRemaining),
+      ],
     );
   }
 }
 
 class LivesRemainingDisplay extends StatelessWidget {
-  const LivesRemainingDisplay({
-    required this.livesRemaining,
-    super.key});
+  const LivesRemainingDisplay({required this.livesRemaining, super.key});
 
   final int livesRemaining;
 
@@ -102,23 +106,30 @@ class LivesRemainingDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> livesDisplay = List.empty(growable: true);
     //livesDisplay.add(SizedBox(width: 30,));
-    livesDisplay.add(Text("${TEXT_MISTAKES_REMAINING}", textScaler: TextScaler.linear(GAME_FONT_SIZE),));
+    livesDisplay.add(Text(
+      "${TEXT_MISTAKES_REMAINING}",
+      textScaler: TextScaler.linear(GAME_FONT_SIZE),
+    ));
 
     for (int i = 0; i < livesRemaining; i++) {
-      livesDisplay.add( Icon(Icons.circle, color: COLOR_MISTAKES_REMAINING,));
+      livesDisplay.add(Icon(
+        Icons.circle,
+        color: COLOR_MISTAKES_REMAINING,
+      ));
     }
     //livesDisplay.add(SizedBox(width: 30,));
 
-    return Row(children: livesDisplay,);
+    return Row(
+      children: livesDisplay,
+    );
   }
 }
 
 class Game with ChangeNotifier {
   Game({required this.gameContext}) {
-    
-    RandomCategoryIterator iterator = RandomCategoryIterator(); 
+    RandomCategoryIterator iterator = RandomCategoryIterator();
 
-    targetCategory = iterator.pickCategory(gameContext); 
+    targetCategory = iterator.pickCategory(gameContext);
 
     tiles = List.empty(growable: true);
 
@@ -141,21 +152,22 @@ class Game with ChangeNotifier {
   int incorrectRemaining = 0;
 
   Widget createTile() {
-
-    RandomCategoryIterator iterator = RandomCategoryIterator(); 
+    RandomCategoryIterator iterator = RandomCategoryIterator();
 
     Category category = iterator.pickCategory(gameContext);
     CategoryMember member = iterator.pickCategoryMember(category);
 
     if (category == targetCategory) {
-      correctRemaining++; 
+      correctRemaining++;
     }
 
-    return TileWidget(category: category, member: member,);
+    return TileWidget(
+      category: category,
+      member: member,
+    );
   }
 
   List<Widget> getTiles() {
-
     return tiles;
   }
 
@@ -168,11 +180,9 @@ class Game with ChangeNotifier {
       notifyListeners();
       return TileState.selected_incorrect;
     }
-
   }
 
   void checkForEndGame() {
-
     if (correctRemaining == 0) {
       //Game won
       _ChangeGameState(GameState.won);
@@ -182,79 +192,66 @@ class Game with ChangeNotifier {
       //Game lost
 
       _ChangeGameState(GameState.lost);
-
     }
   }
 
   void _ChangeGameState(GameState newState) {
-    
-      gameState = newState;
+    gameState = newState;
 
-      notifyListeners();
+    notifyListeners();
   }
 }
 
-enum GameState {
-  active,
-  won,
-  lost
-}
+enum GameState { active, won, lost }
 
 //ITERATORS
 abstract class CategoryIterator {
-
   ///Pick a  tiles from a given game context
   Category pickCategory(GameContext gameContext);
 
   ///Pick a category member from a given category
   CategoryMember pickCategoryMember(Category category);
-
 }
 
 ///Randomly pick tiles from the game context
 class RandomCategoryIterator extends CategoryIterator {
   @override
   Category pickCategory(GameContext gameContext) {
-    
     Random random = Random();
-    Category category = gameContext.categories[random.nextInt(gameContext.categories.length)];
+    Category category =
+        gameContext.categories[random.nextInt(gameContext.categories.length)];
 
     return category;
   }
-  
+
   @override
   CategoryMember pickCategoryMember(Category category) {
-    
     Random random = Random();
 
-    CategoryMember member = category.members[random.nextInt(category.members.length)];
+    CategoryMember member =
+        category.members[random.nextInt(category.members.length)];
 
     return member;
   }
-
 }
 
-
-
-
 class GameGrid extends StatelessWidget {
-  const GameGrid({super.key, required int columns, required List<Widget> children}) :
-  _columns = columns, _children = children ;
-  
+  const GameGrid(
+      {super.key, required int columns, required List<Widget> children})
+      : _columns = columns,
+        _children = children;
+
   final int _columns;
   final List<Widget> _children;
 
-
   @override
   Widget build(BuildContext context) {
-    
-    return Expanded( 
-      child : GridView.count(
-        crossAxisCount: _columns, 
+    return Expanded(
+      child: GridView.count(
+        crossAxisCount: _columns,
         children: _children,
-        ),
+      ),
     );
-    
   }
 }
 
@@ -264,24 +261,22 @@ class TileWidget extends StatefulWidget {
   final Category category;
   final CategoryMember member;
 
-  
-
   @override
   State<TileWidget> createState() => _TileWidgetState();
 }
 
-class _TileWidgetState extends State<TileWidget> with SingleTickerProviderStateMixin {
-
+class _TileWidgetState extends State<TileWidget>
+    with SingleTickerProviderStateMixin {
   TileState state = TileState.unselected;
 
   late AnimationController controller;
 
   @override
   void initState() {
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
 
-    controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
-    
-    controller.addStatusListener((status) { 
+    controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         controller.reverse();
       }
@@ -292,7 +287,6 @@ class _TileWidgetState extends State<TileWidget> with SingleTickerProviderStateM
 
   @override
   void dispose() {
-
     controller.dispose();
 
     super.dispose();
@@ -300,7 +294,6 @@ class _TileWidgetState extends State<TileWidget> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-
     Game game = context.watch<Game>();
 
     if (game.gameState != GameState.active) {
@@ -309,41 +302,47 @@ class _TileWidgetState extends State<TileWidget> with SingleTickerProviderStateM
         controller.forward();
       }
     }
-    
-    TileRender tileRender = TileRender(drawBorder: (state == TileState.unselected), image: widget.member.imagePath,);
+
+    TileRender tileRender = TileRender(
+      drawBorder: (state == TileState.unselected),
+      image: widget.member.imagePath,
+    );
 
     return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            _select(game);
-          },
-          child: Container(
-                width: 80,
-                height: 80,
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        _select(game);
+      },
+      child: Container(
+        width: 80,
+        height: 80,
+        child: Stack(
+          children: [
+            //
+            //TileRender(drawBorder: (state == TileState.unselected), image: widget.member.image,),
+            if (state == TileState.unselected) tileRender,
 
-            child: Stack(children: [
+            if (state == TileState.selected_correct)
+              ZoomWidget(
+                  controller: controller, child: tileRender, intensity: 15),
+            if (state == TileState.selected_incorrect)
+              ShakeWidget(
+                  controller: controller, child: tileRender, intensity: 10),
+            if (state == TileState.unselected_locked) tileRender,
+            //if (state == TileState.selected_incorrect) ShakeWidget(controller: controller, child: tileRender, intensity: 10),
 
-               
-              //
-              //TileRender(drawBorder: (state == TileState.unselected), image: widget.member.image,),
-              if (state == TileState.unselected) tileRender,
-              
-              if (state == TileState.selected_correct) ZoomWidget(controller: controller, child: tileRender, intensity: 15),
-              if (state == TileState.selected_incorrect) ShakeWidget(controller: controller, child: tileRender, intensity: 10),
-              if (state == TileState.unselected_locked) tileRender,
-              //if (state == TileState.selected_incorrect) ShakeWidget(controller: controller, child: tileRender, intensity: 10),
-
-              if (state == TileState.selected_correct) TileCheckmarkRender(icon: Icon(Icons.check_circle, color: COLOR_CORRECT, size: 40)),
-              if (state == TileState.selected_incorrect) TileCheckmarkRender(icon: Icon(Icons.remove_circle, color: COLOR_INCORRECT, size: 40)),
-              ],
-
-
-            ), 
-            
-          ),
-
-            
-        );
+            if (state == TileState.selected_correct)
+              TileCheckmarkRender(
+                  icon:
+                      Icon(Icons.check_circle, color: COLOR_CORRECT, size: 40)),
+            if (state == TileState.selected_incorrect)
+              TileCheckmarkRender(
+                  icon: Icon(Icons.remove_circle,
+                      color: COLOR_INCORRECT, size: 40)),
+          ],
+        ),
+      ),
+    );
   }
 
   void _select(Game game) {
@@ -360,7 +359,6 @@ class _TileWidgetState extends State<TileWidget> with SingleTickerProviderStateM
   }
 }
 
-
 enum TileState {
   unselected,
   unselected_locked,
@@ -369,83 +367,87 @@ enum TileState {
 }
 
 class TileRender extends StatelessWidget {
-  const TileRender({super.key, required this.drawBorder, required this.image });
+  const TileRender({super.key, required this.drawBorder, required this.image});
 
   final bool drawBorder;
   final String image;
 
   @override
   Widget build(BuildContext context) {
-      BoxBorder? border = null;
+    BoxBorder? border = null;
 
-      if (drawBorder) {
-        border = Border.all(
-          width: 2,
-          color: Color.fromARGB(255, 0, 0, 0),
-        );
-      }
+    if (drawBorder) {
+      border = Border.all(
+        width: 2,
+        color: Color.fromARGB(255, 0, 0, 0),
+      );
+    }
 
     //Future<Uint8List?> imageData = ModuleResourceFactory.getImageBytes(image);
 
-  String imageFileName = image.split('/').last;
+    String imageFileName = image.split('/').last;
 
     /// Updated the render method to use the new getImageBytes signature
 
-    return Stack(children: [
-      Positioned(
-        
-                child: FutureBuilder<Uint8List?>(
-                  future: ModuleResourceFactory.getImageBytes(imageFileName),
-                  builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done) {
-                      return CircularProgressIndicator();
-                    }
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    }
-                    if (snapshot.hasData && snapshot.data != null) {
-                      return Container(
-                        decoration: BoxDecoration(
-                        image: DecorationImage(image: Image.memory(snapshot.data!).image),
-                        border: border
-                      ),
-                      ); 
-                    }
+    return Stack(
+      children: [
+        Positioned(
+          child: FutureBuilder<Uint8List?>(
+            future: ModuleResourceFactory.getImageBytes(imageFileName),
+            builder:
+                (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+              if (snapshot.hasData && snapshot.data != null) {
+                return Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: Image.memory(snapshot.data!).image),
+                      border: border),
+                );
+              }
 
-                    return Text(AppConstants.noImageErrorMessage);
-                  },
-                ),
-                
-                
-                /*Container(
+              return Text(AppConstants.noImageErrorMessage);
+            },
+          ),
+
+          /*Container(
                 decoration: BoxDecoration(
                 image: DecorationImage(image: Image.memory(imageData).image),
                 border: border
                 ),
               ),*/
-              left: 10, right: 10, top: 10, bottom: 10, 
-     )
-
-    ],);
-     
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10,
+        )
+      ],
+    );
   }
 }
 
 class TileCheckmarkRender extends StatelessWidget {
   const TileCheckmarkRender({super.key, required this.icon});
 
-  final Icon icon; 
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(child:  icon,//Image(image: Image.asset(image).image),
-                left: 0, right: 60, top: 0, bottom: 60,);
+    return Positioned(
+      child: icon, //Image(image: Image.asset(image).image),
+      left: 0, right: 60, top: 0, bottom: 60,
+    );
   }
 }
 
-///Bubled Circle Style 
+///Bubled Circle Style
 class GameButton extends StatelessWidget {
-  const GameButton({super.key, required this.text, required this.onTap });
+  const GameButton({super.key, required this.text, required this.onTap});
 
   final String text;
 
@@ -454,13 +456,16 @@ class GameButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.all(Radius.circular(30))),
+      decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.all(Radius.circular(30))),
       child: GestureDetector(
-        child: Text(" ${text} ", textScaler: TextScaler.linear(GAME_FONT_SIZE),),
+        child: Text(
+          " ${text} ",
+          textScaler: TextScaler.linear(GAME_FONT_SIZE),
+        ),
         onTap: onTap,
-    ),  
+      ),
     );
-    
-  
   }
 }
