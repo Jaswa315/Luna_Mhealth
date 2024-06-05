@@ -10,6 +10,8 @@
 /// A page can contain multiple components.
 
 import 'dart:convert';
+import 'package:luna_mhealth_mobile/games/gamecontext.dart';
+
 import 'component.dart';
 
 /// Represents a page in the application.
@@ -42,14 +44,14 @@ class Page {
     components.remove(component);
   }
 
-  /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
-  factory Page.fromJson(Map<String, dynamic> json) {
+    /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
+  factory Page.fromJson(Map<String, dynamic> json, List<GameContext> gameContexts) {
     if (json['type'] != 'slide') {
       throw FormatException('Only slide type components are allowed');
     }
 
     List<Component> components = (json['shapes'] as List<dynamic>)
-        .map((shapeJson) => Component.fromJson(shapeJson))
+        .map((shapeJson) => Component.fromJson(shapeJson, gameContexts))
         .toList();
 
     return Page(
