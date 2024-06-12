@@ -23,6 +23,10 @@ const String keyShape = 'p:sp';
 const String keyConnectionShape = 'p:cxnSp';
 const String keySlideLayoutSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout";
+const String keySlideMasterSchema =
+    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster";
+const String keyThemeSchema =
+    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
 
 class PresentationParser {
   // removed static so the localization_test and parser_test work
@@ -145,13 +149,12 @@ class PresentationParser {
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
 
-      List<dynamic> slideLayoutInfo = _lookAheadSlideLayout(i);
+      List<dynamic> slideLayoutInfo = _lookAheadTheme(i);
       String? slideLayoutName = slideLayoutInfo[0];
       int? slideLayoutIndex = slideLayoutInfo[1];
       PrsNode slide = PrsNode();
       slideRelationship = _parseSlideRels(i);
-      if (CategoryGameEditorParser.keyLunaCategorySlideLayout
-          .contains(slideLayoutName)) {
+      if (slideLayoutName == CategoryGameEditorParser.keyLunaCategoryTheme) {
         slide = categoryGameEditorParser.parseCategoryGameEditor(
             jsonFromArchive("ppt/slides/slide$slideIndex.xml"),
             jsonFromArchive(
@@ -170,38 +173,67 @@ class PresentationParser {
     return node;
   }
 
-  List<dynamic> _lookAheadSlideLayout(int slideNum) {
-    String slideLayoutName = "";
-
-    var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
-    var rIdList = relsMap['Relationships']['Relationship'];
-
-    if (rIdList is List) {
-      for (var element in rIdList) {
-        if (element['_Type'] == keySlideLayoutSchema) {
-          RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
-          int slideIndex =
-              int.parse(regex.firstMatch(element['_Target'])?.group(0) ?? "1");
-
-          var slideLayoutMap =
-              jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
-
-          return [slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"], slideIndex];
-        }
-      }
-    } else if (rIdList is Map<String, dynamic>) {
-      if (rIdList['_Type'] == keySlideLayoutSchema) {
-        RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
-        int slideIndex =
-            int.parse(regex.firstMatch(rIdList['_Target'])?.group(0) ?? "1");
-
-        var slideLayoutMap =
-            jsonFromArchive("ppt/slideLayouts/slideLayout$slideIndex.xml");
-
-        return [slideLayoutMap["p:sldLayout"]["p:cSld"]["_name"], slideIndex];
-      }
+  List<dynamic> _lookAheadTheme(int slideNum) {
+    // get slide layout index
+    var slideRelationshipElement = jsonFromArchive(
+            "ppt/slides/_rels/slide$slideNum.xml.rels")['Relationships']
+        ['Relationship'];
+    var slideLayoutElement;
+    if (slideRelationshipElement is List) {
+      slideLayoutElement = slideRelationshipElement.firstWhere(
+        (element) => element['_Type'] == keySlideLayoutSchema,
+        orElse: () => "",
+      );
+    } else if (slideRelationshipElement is Map<String, dynamic>) {
+      slideLayoutElement =
+          slideRelationshipElement['_Type'] == keySlideLayoutSchema
+              ? slideRelationshipElement
+              : "";
     }
-    return [slideLayoutName, 0];
+    int slideLayoutIndex = int.parse(RegExp(r"(?<=slideLayout)\d+(?=.xml)")
+            .firstMatch(slideLayoutElement['_Target'])
+            ?.group(0) ??
+        "1");
+
+    // get slide master index
+    var slideLayoutRelationshipElement = jsonFromArchive(
+            "ppt/slideLayouts/_rels/slideLayout$slideLayoutIndex.xml.rels")[
+        'Relationships']['Relationship'];
+    var slideMasterElement;
+    if (slideLayoutRelationshipElement is List) {
+      slideMasterElement = slideLayoutRelationshipElement.firstWhere(
+        (element) => element['_Type'] == keySlideMasterSchema,
+        orElse: () => "",
+      );
+    } else if (slideLayoutRelationshipElement is Map<String, dynamic>) {
+      slideMasterElement =
+          slideLayoutRelationshipElement['_Type'] == keySlideMasterSchema
+              ? slideLayoutRelationshipElement
+              : "";
+    }
+    int slideMasterIndex = int.parse(RegExp(r"(?<=slideMaster)\d+(?=.xml)")
+            .firstMatch(slideMasterElement['_Target'])
+            ?.group(0) ??
+        "1");
+
+    // get theme index
+    List<dynamic> slideMasterRelsList = jsonFromArchive(
+            "ppt/slideMasters/_rels/slideMaster$slideMasterIndex.xml.rels")[
+        'Relationships']['Relationship'];
+    var themeElement = slideMasterRelsList.firstWhere(
+        (element) => element['_Type'] == keyThemeSchema,
+        orElse: () => "");
+    int themeIndex = int.parse(RegExp(r"(?<=theme)\d+(?=.xml)")
+            .firstMatch(themeElement['_Target'])
+            ?.group(0) ??
+        "-1");
+        
+    // get Theme name
+    String? themeName = themeIndex == -1
+        ? ""
+        : jsonFromArchive("ppt/theme/theme$themeIndex.xml")['a:theme']['_name'];
+
+    return [themeName, slideLayoutIndex];
   }
 
   Map<String, dynamic> _parseSlideRels(int slideNum) {
@@ -399,9 +431,11 @@ class PresentationParser {
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    String shape = ParserTools.getNullableValue(json, ['p:spPr']) == null
-        ? 'rect'
-        : json['p:spPr']['a:prstGeom']['_prst'];
+    String shape =
+        ParserTools.getNullableValue(json, ['p:spPr', 'a:prstGeom', '_prst']) ==
+                null
+            ? 'rect'
+            : json['p:spPr']['a:prstGeom']['_prst'];
 
     ShapeNode node = ShapeNode();
 

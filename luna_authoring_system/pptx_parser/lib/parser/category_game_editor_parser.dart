@@ -9,17 +9,18 @@ const String keyLunaCategoryPicture = 'luna_category_picture';
 const String keyLunaCategoryTitle = 'luna_category_title';
 
 class CategoryGameEditorParser {
-  static const List<String> keyLunaCategorySlideLayout = [
-    '2_category',
-    '3_category',
-    '4_category',
-    '5_category',
-    '6_category'
-  ];
+  static const String keyLunaCategoryTheme =
+      "category_game";
 
   static List<dynamic> categoryContainerTransform = [];
   static List<dynamic> categoryImageTransform = [];
   static List<dynamic> categoryTextTransform = [];
+
+  // static const String keyLunaCategoryContainerTitleAndImage =
+  //     "{luna_category_container_title_and_image}";
+  // static const String keyLunaCategoryContainer = "{luna_category_container}";
+
+  // static Map<String, dynamic> categoryContainerTransform = {};
 
   Map<String, dynamic>? slideRelationship = {};
   Map<String, dynamic> placeholderToTransform = {};

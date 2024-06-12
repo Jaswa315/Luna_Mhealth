@@ -409,7 +409,7 @@ void main() {
       expect(text1, "text2");
     });
 
-    test('Category game editor is parsed as catogory and images', () async {
+    test('Category game editor is parsed as category and images', () async {
       var filename = "Content and category game editor.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
