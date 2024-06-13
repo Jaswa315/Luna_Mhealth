@@ -6,6 +6,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'dart:ui';
+
 enum ShapeGeometry { ellipse, rectangle, line }
 
 // From MS-ODRAW 1.1 Glossary
@@ -64,15 +66,15 @@ class PresentationNode extends PrsNode {
   late final Map<String, dynamic> section;
   late final double x;
   late final double y;
-  late final String locale;
+  late final Locale langLocale;
 
   static const String defaultSection = 'Default Section';
-  static const String defaultLocale = 'en-US';
+  static const Locale defaultlangLocale = Locale('en', 'US');
 
   PresentationNode() {
     name = 'presentation';
-    //TODO: get local info dynamically
-    locale = defaultLocale;
+    //TODO: get locale info dynamically
+    langLocale = defaultlangLocale;
   }
 
   @override
@@ -82,6 +84,7 @@ class PresentationNode extends PrsNode {
         'type': name,
         'moduleId': moduleID,
         'title': title,
+        'language': langLocale.toLanguageTag(),
         'author': author,
         'slideCount': slideCount,
         'section': section,
@@ -261,6 +264,7 @@ class ImageNode extends PrsNode {
   late final String? altText;
   late final String? audioPath;
   late final int? hyperlink;
+  late Transform transform;
 
   ImageNode() {
     name = 'image';
@@ -274,6 +278,7 @@ class ImageNode extends PrsNode {
       'alttext': altText,
       if (audioPath != null) 'audiopath': audioPath,
       if (hyperlink != null) 'hyperlink': hyperlink,
+      'transform': transform.toJson(),
       'children': children.map((child) => child.toJson()).toList()
     };
   }

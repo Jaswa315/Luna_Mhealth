@@ -389,6 +389,9 @@ class PresentationParser {
     node.hyperlink = _getHyperlink(ParserTools.getNullableValue(
         json['p:nvPicPr'], ['p:cNvPr', 'a:hlinkClick']));
 
+    // initiated transform
+    node.transform = _parseTransform(json);
+
     node.children.add(_parseBasicShape(json));
 
     return node;
@@ -417,7 +420,6 @@ class PresentationParser {
       String phIdx = nvPr['p:ph']['_idx'];
       return placeholderToTransform[phIdx];
     } else {
-      Transform node = Transform();
       node.offset = Point2D(
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));

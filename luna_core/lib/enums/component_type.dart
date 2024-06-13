@@ -25,5 +25,8 @@ enum ComponentType {
   divider,
 
   /// Represents an audio component.
-  audio
+  audio,
+
+  ///Represents a category game component,
+  category_game,
 }
