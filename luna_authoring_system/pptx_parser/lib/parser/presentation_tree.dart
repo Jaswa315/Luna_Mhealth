@@ -32,7 +32,7 @@ class Point2D with ToJson {
   }
 }
 
-class Transform with ToJson {
+class Transform extends PrsNode with ToJson {
   late final Point2D offset;
   late final Point2D size;
 
@@ -88,6 +88,7 @@ class PresentationNode extends PrsNode {
         'author': author,
         'slideCount': slideCount,
         'section': section,
+        'defaultLocale': defaultLocale,
         'slides': children.map((child) => child.toJson()).toList()
       }
     };
@@ -215,10 +216,11 @@ class BodyNode extends PrsNode {
 }
 
 class ShapeNode extends PrsNode {
-  late final Transform transform;
+  late final PrsNode? transform;
   late final ShapeGeometry shape;
   late final String? audioPath;
   late final int? hyperlink;
+  late final PrsNode? textBody;
 
   ShapeNode();
 
@@ -226,7 +228,8 @@ class ShapeNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': shape.name,
-      'transform': transform.toJson(),
+      'transform': transform?.toJson(),
+      if (textBody != null) 'textBody': textBody?.toJson(),
       if (audioPath != null) 'audiopath': audioPath,
       if (hyperlink != null) 'hyperlink': hyperlink,
       'children': children.map((child) => child.toJson()).toList()
@@ -254,6 +257,7 @@ class ConnectionNode extends PrsNode {
   }
 }
 
+// Page Image
 class ImageNode extends PrsNode {
   late final String? imageName;
   late final String path;
@@ -284,21 +288,21 @@ class CategoryGameEditorNode extends PrsNode {
   late final String slideId;
 
   CategoryGameEditorNode() {
-    name = 'categorygameeditor';
+    name = 'categoryGameEditor';
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'children': children.map((child) => child.toJson()).toList()
+      'category': children.map((child) => child.toJson()).toList()
     };
   }
 }
 
 class CategoryNode extends PrsNode {
-  ShapeNode? categoryName;
-  ImageNode? categoryImage;
+  CategoryGameTextNode? categoryName;
+  CategoryGameImageNode? categoryImage;
 
   CategoryNode() {
     name = 'category';
@@ -308,9 +312,41 @@ class CategoryNode extends PrsNode {
   Map<String, dynamic> toJson() {
     return {
       'type': name,
-      'category': categoryName?.toJson(),
+      'categoryName': categoryName?.toJson(),
       'categoryImage': categoryImage?.toJson(),
-      'children': children.map((child) => child.toJson()).toList()
+      'categoryMembers': children.map((child) => child.toJson()).toList()
+    };
+  }
+}
+
+class CategoryGameTextNode extends PrsNode {
+  late String? text;
+  late PrsNode transform;
+
+  CategoryGameTextNode() {
+    name = 'categoryGameText';
+  }
+  @override
+  Map<String, dynamic> toJson() {
+    return {'type': name, 'text': text};
+  }
+}
+
+class CategoryGameImageNode extends PrsNode {
+  late String path;
+  late String? altText;
+  late PrsNode transform;
+
+  CategoryGameImageNode() {
+    name = 'categoryGameImage';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': name,
+      'path': path,
+      'alttext': altText,
     };
   }
 }

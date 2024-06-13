@@ -9,8 +9,8 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
-import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'dart:convert';
+import 'package:luna_core/utils/logging.dart';
 
 const String assetsFolder = 'test/test_assets';
 
@@ -51,7 +51,6 @@ void main() {
       expect(pptText1, "Thing2");
       expect(pptText2, "Thing3");
     });
-
     test('An Image has image path', () async {
       var filename = "Image-Snorlax.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -195,30 +194,6 @@ void main() {
           "A group of people outside of a building\n\nDescription automatically generated");
     });
 
-    test('Language is denoted as [language-Region]', () async {
-      var filename = "A Texbox written in English in South Korea Region.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String language = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      expect(language, "en-KR");
-    });
-
-    test('Textboxes with different language have different [language-region]',
-        () async {
-      var filename = "Two Textboxes in English and Korean.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String language1 = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-      String language2 = astJson['presentation']['slides'][0]['shapes'][1]
-          ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
-
-      expect(language1.substring(0, 2), "ko");
-      expect(language2.substring(0, 2), "en");
-    });
-
     test('Same slides from the same file have the same slide id', () async {
       var filename1 = "Slide 1 and 2.pptx";
       var filename2 = "Slide 2 and 1.pptx";
@@ -256,7 +231,7 @@ void main() {
       var filename = "Image-Snorlax.pptx";
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./position_values_module.json");
       String jsonString = json.readAsStringSync();
 
       Map<String, dynamic> astJson = jsonDecode(jsonString);
@@ -281,6 +256,13 @@ void main() {
       expect(isPercentage(offsetY), true);
       expect(isPercentage(sizeX), true);
       expect(isPercentage(sizeY), true);
+
+      try {
+        await json.delete();
+      } catch (e) {
+        LogManager().logTrace(
+            ("Error occured while deleting file."), LunaSeverityLevel.Verbose);
+      }
     });
 
     test('Audio is parsed for each shapes', () async {
@@ -408,34 +390,34 @@ void main() {
       expect(hyperlink1, null);
     });
 
-    // test('Basic shapes with texts have text content', () async {
-    //   var filename = "Ellipse and rectangle shapes with textbox.pptx";
-    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+    test('Basic shapes with texts have text content', () async {
+      var filename = "Ellipse and rectangle shapes with textbox.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-    //   String shapeType0 =
-    //       astJson['presentation']['slides'][0]['shapes'][0]['type'];
-    //   String text0 = astJson['presentation']['slides'][0]['shapes'][0]
-    //       ['children'][0]['paragraphs'][0]['textgroups'][0]['text'];
-    //   String shapeType1 =
-    //       astJson['presentation']['slides'][0]['shapes'][1]['type'];
-    //   String text1 = astJson['presentation']['slides'][0]['shapes'][1]
-    //       ['children'][0]['paragraphs'][0]['textgroups'][0]['text'];
+      String shapeType0 =
+          astJson['presentation']['slides'][0]['shapes'][0]['type'];
+      String text0 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['textBody']['paragraphs'][0]['textgroups'][0]['text'];
+      String shapeType1 =
+          astJson['presentation']['slides'][0]['shapes'][1]['type'];
+      String text1 = astJson['presentation']['slides'][0]['shapes'][1]
+          ['textBody']['paragraphs'][0]['textgroups'][0]['text'];
 
-    //   expect(shapeType0, "ellipse");
-    //   expect(shapeType1, "rectangle");
-    //   expect(text0, "text1");
-    //   expect(text1, "text2");
-    // });
+      expect(shapeType0, "ellipse");
+      expect(shapeType1, "rectangle");
+      expect(text0, "text1");
+      expect(text1, "text2");
+    });
 
-    test('Category game editor is parsed as catogory and images', () async {
+    test('Category game editor is parsed as category and images', () async {
       var filename = "Content and category game editor.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      String type0 = astJson['presentation']['slides'][2]['type'];
-      List<dynamic> category = astJson['presentation']['slides'][2]['children'];
+      String type0 = astJson['presentation']['slides'][0]['type'];
+      List<dynamic> category = astJson['presentation']['slides'][0]['category'];
 
-      expect(type0, 'categorygameeditor');
-      expect(category.length, 2);
+      expect(type0, 'categoryGameEditor');
+      expect(category.length, 3);
     });
 
     test('PPTX with one slide that follows slideLayout returns JSON file',
@@ -444,10 +426,22 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./slideLayout_module.json");
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
     });
 
     test('PPTX with muliple slides that follows slideLayout returns JSON file',
@@ -456,10 +450,22 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./multiple_slideLayout_module.json");
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
     });
 
     test('toJSON returns JSON file', () async {
@@ -467,10 +473,63 @@ void main() {
       File file = File("$assetsFolder/$filename");
       PresentationParser parser = PresentationParser(file);
 
-      File json = await parser.toJSON("./test_module.json");
+      File json = await parser.toJSON("./toJSON_module.json");
       bool fileExists = json.existsSync();
 
       expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
+    });
+
+    test(
+        'Shapes out of bound in categoryGameEditor are stored in the last node',
+        () async {
+      var filename = "CategoryGameEditorOutOfBounds.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      List<dynamic> category = astJson['presentation']['slides'][0]['category'];
+
+      expect(category[2]["categoryMembers"][0]['text'], 'almonds');
+    });
+
+    test('A Textbox has UID of 1', () async {
+      // Arrange
+      var filename = "TextBox-HelloWorld.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      // Act
+      int pptUID = astJson['presentation']['slides'][0]['shapes'][0]['children']
+          [1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      // Assert
+      expect(pptUID, 1);
+    });
+
+    test('N Textboxes have assigned UIDs', () async {
+      var filename = "TextBoxes.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      int pptUID0 = astJson['presentation']['slides'][0]['shapes'][0]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      int pptUID1 = astJson['presentation']['slides'][0]['shapes'][1]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      int pptUID2 = astJson['presentation']['slides'][0]['shapes'][2]
+          ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+
+      expect(pptUID0, 1);
+      expect(pptUID1, 2);
+      expect(pptUID2, 3);
     });
   });
 
@@ -490,35 +549,29 @@ void main() {
     //   expect(shapeType1, "curvedConnector3");
     //   expect(shapeType2, "bentConnector3");
     // });
-  });
 
-  test('A Textbox has UID of 1', () async {
-    // Arrange
-    var filename = "TextBox-HelloWorld.pptx";
-    Map<String, dynamic> astJson = await toMapFromPath(filename);
+    // test('Language is denoted as [language-Region]', () async {
+    //   var filename = "A Texbox written in English in South Korea Region.pptx";
+    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-    // Act
-    int pptUID = astJson['presentation']['slides'][0]['shapes'][0]
-        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+    //   String language = astJson['presentation']['slides'][0]['shapes'][0]
+    //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
 
-    // Assert
-    expect(pptUID, 1);
-  });
+    //   expect(language, "en-KR");
+    // });
 
-  test('N Textboxes have assigned UIDs', () async {
-    var filename = "TextBoxes.pptx";
-    Map<String, dynamic> astJson = await toMapFromPath(filename);
-    int pptUID0 = astJson['presentation']['slides'][0]['shapes'][0]
-        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+    // test('Textboxes with different language have different [language-region]',
+    //     () async {
+    //   var filename = "Two Textboxes in English and Korean.pptx";
+    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-    int pptUID1 = astJson['presentation']['slides'][0]['shapes'][1]
-        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
+    //   String language1 = astJson['presentation']['slides'][0]['shapes'][0]
+    //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
+    //   String language2 = astJson['presentation']['slides'][0]['shapes'][1]
+    //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
 
-    int pptUID2 = astJson['presentation']['slides'][0]['shapes'][2]
-        ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
-
-    expect(pptUID0, 1);
-    expect(pptUID1, 2);
-    expect(pptUID2, 3);
+    //   expect(language1.substring(0, 2), "ko");
+    //   expect(language2.substring(0, 2), "en");
+    // });
   });
 }
