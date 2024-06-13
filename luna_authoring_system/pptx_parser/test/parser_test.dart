@@ -491,14 +491,15 @@ void main() {
       }
     });
 
-    test('Shapes out of bound in categoryGameEditor are stored in the last node', () async{
+    test(
+        'Shapes out of bound in categoryGameEditor are stored in the last node',
+        () async {
       var filename = "CategoryGameEditorOutOfBounds.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
       List<dynamic> category = astJson['presentation']['slides'][0]['category'];
 
       expect(category[2]["categoryMembers"][0]['text'], 'almonds');
-
     });
 
     test('A Textbox has UID of 1', () async {

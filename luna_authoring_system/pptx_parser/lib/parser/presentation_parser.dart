@@ -148,7 +148,7 @@ class PresentationParser {
 
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
-
+      // TODO: Separate getting slideLayoutName and slideLayoutIndex
       List<dynamic> slideLayoutInfo = _lookAheadTheme(i);
       String? slideLayoutName = slideLayoutInfo[0];
       int? slideLayoutIndex = slideLayoutInfo[1];

@@ -51,7 +51,6 @@ class CategoryGameEditorParser {
       switch (key) {
         case keyPicture:
           var picObj = shapeTree[key];
-
           if (picObj is List) {
             for (var obj in picObj) {
               var element = _parseCategoryGameImage(obj);
@@ -99,6 +98,8 @@ class CategoryGameEditorParser {
         break;
       }
     }
+
+    // anything that is not in the category is stored in the additional CategoryNode
     if (i == categories) {
       node.children[categories].children.add(imageNode);
     }
@@ -119,6 +120,8 @@ class CategoryGameEditorParser {
         break;
       }
     }
+
+    // anything that is not in the category is stored in the additional CategoryNode
     if (i == categories) {
       node.children[categories].children.add(textNode);
     }
