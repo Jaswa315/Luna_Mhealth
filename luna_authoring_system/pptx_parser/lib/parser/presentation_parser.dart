@@ -162,7 +162,6 @@ class PresentationParser {
             parsedSlideIdList,
             slideIndex!,
             slideRelationship);
-        CategoryGameEditorParser.cleanTransformList();
       } else {
         slide = _parseSlide(parsedSlideIdList);
       }
@@ -227,7 +226,7 @@ class PresentationParser {
             .firstMatch(themeElement['_Target'])
             ?.group(0) ??
         "-1");
-        
+
     // get Theme name
     String? themeName = themeIndex == -1
         ? ""

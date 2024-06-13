@@ -4,24 +4,14 @@ import 'package:pptx_parser/utils/parser_tools.dart';
 /// CategoryGameEditorParser parses specific slides that follows Luna Category Game Editor Slide.
 const String keyPicture = 'p:pic';
 const String keyShape = 'p:sp';
-const String keyLunaCategoryContainer = 'luna_category_container';
-const String keyLunaCategoryPicture = 'luna_category_picture';
-const String keyLunaCategoryTitle = 'luna_category_title';
+const String keyLunaCategoryContainer = '{luna_category_container}';
+const String keyLunaCategoryTitleAndImage =
+    '{luna_category_container_title_and_image}';
 
 class CategoryGameEditorParser {
-  static const String keyLunaCategoryTheme =
-      "category_game";
+  static const String keyLunaCategoryTheme = "category_game";
 
-  static List<dynamic> categoryContainerTransform = [];
-  static List<dynamic> categoryImageTransform = [];
-  static List<dynamic> categoryTextTransform = [];
-
-  // static const String keyLunaCategoryContainerTitleAndImage =
-  //     "{luna_category_container_title_and_image}";
-  // static const String keyLunaCategoryContainer = "{luna_category_container}";
-
-  // static Map<String, dynamic> categoryContainerTransform = {};
-
+  List<Map<String, dynamic>> categoryContainerTransform = [];
   Map<String, dynamic>? slideRelationship = {};
   Map<String, dynamic> placeholderToTransform = {};
 
@@ -35,13 +25,17 @@ class CategoryGameEditorParser {
       Map<String, dynamic>? slideRelationship) {
     this.slideRelationship = slideRelationship;
 
+    /// Clean transform data made from previous parsing
+    categoryContainerTransform = [];
+
     _parseTransformFromSlideLayout(slideLayoutMap);
 
     CategoryGameEditorNode node = CategoryGameEditorNode();
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
     node.slideId = slideIdList[slideIndex - 1];
 
-    for (int i = 0; i < categoryContainerTransform.length; i++) {
+    // anything that is not in the category is stored in the additional CategoryNode
+    for (int i = 0; i < categoryContainerTransform.length + 1; i++) {
       node.children.add(CategoryNode());
     }
 
@@ -53,29 +47,11 @@ class CategoryGameEditorParser {
           if (picObj is List) {
             for (var obj in picObj) {
               var element = _parseCategoryGameImage(obj);
-              Transform? shapeElement = element.children[0] as Transform;
-              int? index = _addToCategory(element);
-              categoryImageTransform.any((item) =>
-                      item.offset.x == shapeElement.offset.x &&
-                      item.offset.y == shapeElement.offset.y &&
-                      item.size.x == shapeElement.size.x &&
-                      item.size.y == shapeElement.size.y)
-                  ? (node.children[index ?? 0] as CategoryNode).categoryImage =
-                      element as CategoryGameImageNode
-                  : node.children[index ?? 0].children.add(element);
+              _addImageToCategoryContainer(node, element);
             }
           } else if (picObj is Map<String, dynamic>) {
             var element = _parseCategoryGameImage(picObj);
-            Transform? shapeElement = element.children[0] as Transform;
-            int? index = _addToCategory(element);
-            categoryImageTransform.any((item) =>
-                    item.offset.x == shapeElement.offset.x &&
-                    item.offset.y == shapeElement.offset.y &&
-                    item.size.x == shapeElement.size.x &&
-                    item.size.y == shapeElement.size.y)
-                ? (node.children[index ?? 0] as CategoryNode).categoryImage =
-                    element as CategoryGameImageNode
-                : node.children[index ?? 0].children.add(element);
+            _addImageToCategoryContainer(node, element);
           }
           break;
         case keyShape:
@@ -83,117 +59,115 @@ class CategoryGameEditorParser {
           if (shapeObj is List) {
             for (var obj in shapeObj) {
               var element = _parseCategoryGameTextBox(obj);
-              (node.children[_addToCategory(element) ?? 0] as CategoryNode)
-                  .categoryName = element as CategoryGameTextNode;
+              _addTextToCategoryContainer(node, element);
             }
           } else if (shapeObj is Map<String, dynamic>) {
             var element = _parseCategoryGameTextBox(shapeObj);
-            (node.children[_addToCategory(element) ?? 0] as CategoryNode)
-                .categoryName = element as CategoryGameTextNode;
+            _addTextToCategoryContainer(node, element);
           }
           break;
       }
     });
-
     return node;
+  }
+
+  void _addImageToCategoryContainer(CategoryGameEditorNode node, var element) {
+    CategoryGameImageNode imageNode = element as CategoryGameImageNode;
+    Transform imageTransform = imageNode.transform as Transform;
+    int categories = categoryContainerTransform.length;
+    int i;
+
+    for (i = 0; i < categories; i++) {
+      Transform categoryContainer =
+          categoryContainerTransform[i][keyLunaCategoryContainer];
+      Transform categoryTitleAndImageContainer =
+          categoryContainerTransform[i][keyLunaCategoryTitleAndImage];
+
+      if (_isInTheBoundary(categoryTitleAndImageContainer, imageTransform)) {
+        (node.children[i] as CategoryNode).categoryImage = imageNode;
+        break;
+      } else if (_isInTheBoundary(categoryContainer, imageTransform)) {
+        node.children[i].children.add(imageNode);
+        break;
+      }
+    }
+    if (i == categories) {
+      node.children[categories].children.add(imageNode);
+    }
+  }
+
+  void _addTextToCategoryContainer(CategoryGameEditorNode node, var element) {
+    CategoryGameTextNode textNode = element as CategoryGameTextNode;
+    Transform textTransform = textNode.transform as Transform;
+    int categories = categoryContainerTransform.length;
+    int i;
+
+    for (i = 0; i < categories; i++) {
+      Transform categoryTitleAndImageContainer =
+          categoryContainerTransform[i][keyLunaCategoryTitleAndImage];
+
+      if (_isInTheBoundary(categoryTitleAndImageContainer, textTransform)) {
+        (node.children[i] as CategoryNode).categoryName = textNode;
+        break;
+      }
+    }
+    if (i == categories) {
+      node.children[categories].children.add(textNode);
+    }
+  }
+
+  bool _isInTheBoundary(Transform container, Transform element) {
+    var x = element.offset.x + (0.5) * element.size.x;
+    var y = element.offset.y + (0.5) * element.size.y;
+    var lowerX = container.offset.x;
+    var lowerY = container.offset.y;
+    var upperX = container.offset.x + container.size.x;
+    var upperY = container.offset.y + container.size.y;
+
+    if (lowerX <= x && x <= upperX && lowerY <= y && y <= upperY) {
+      return true;
+    }
+    return false;
   }
 
   /// Parse Slide Layout to get transform information in the slide layout.
   /// These data are used later to dertermine which element is in which category.
   /// Store transform for each Container, Image, and Text placeholder.
   void _parseTransformFromSlideLayout(Map<String, dynamic> json) {
-    var shapeTree = json['p:sldLayout']['p:cSld']['p:spTree'];
+    var slideLayoutShapeTree =
+        json['p:sldLayout']['p:cSld']['p:spTree'][keyShape];
+    int currentCategory = 0;
 
-    shapeTree.forEach((key, value) {
-      if (key == keyShape) {
-        if (shapeTree[key] is List) {
-          for (var element in shapeTree[key]) {
-            var descr = ParserTools.getNullableValue(
-                element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
-            switch (descr) {
-              case keyLunaCategoryContainer:
-                CategoryGameEditorParser.categoryContainerTransform
-                    .add(_parseCategoryTransform(element));
-                break;
-              case keyLunaCategoryPicture:
-                CategoryGameEditorParser.categoryImageTransform
-                    .add(_parseCategoryTransform(element));
-                break;
-              case keyLunaCategoryTitle:
-                CategoryGameEditorParser.categoryTextTransform
-                    .add(_parseCategoryTransform(element));
-            }
-
-            Map<String, dynamic> result = {};
-
-            var ph = ParserTools.getNullableValue(
-                element, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-            var spPr = element['p:spPr'];
-            if (ph != null &&
-                ph.containsKey('_idx') &&
-                (ParserTools.getNullableValue(spPr, ['a:xfrm']) != null) &&
-                (ph['_type'] == null ||
-                    ['body', 'title', 'subTitle', 'pic']
-                        .contains(ph['_type']))) {
-              result[ph['_idx']] = _parseCategoryTransform(element);
-            }
-            placeholderToTransform.addAll(result);
-          }
-        } else if (shapeTree[key] is Map<String, dynamic>) {
-          var descr = ParserTools.getNullableValue(
-              shapeTree, ['p:nvSpPr', 'p:cNvPr', '_descr']);
-          switch (descr) {
-            case keyLunaCategoryContainer:
-              CategoryGameEditorParser.categoryContainerTransform
-                  .add(_parseCategoryTransform(shapeTree[key]));
-              break;
-            case keyLunaCategoryPicture:
-              CategoryGameEditorParser.categoryImageTransform
-                  .add(_parseCategoryTransform(shapeTree[key]));
-              break;
-            case keyLunaCategoryTitle:
-              CategoryGameEditorParser.categoryTextTransform
-                  .add(_parseCategoryTransform(shapeTree[key]));
-          }
-          Map<String, dynamic> result = {};
-
-          var ph = ParserTools.getNullableValue(
-              shapeTree[key], ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-          var spPr = shapeTree[key]['p:spPr'];
-          if (ph != null &&
-              ph.containsKey('_idx') &&
-              (ParserTools.getNullableValue(spPr, ['a:xfrm']) != null) &&
-              (ph['_type'] == null ||
-                  ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
-            result[ph['_idx']] = _parseCategoryTransform(shapeTree[key]);
-          }
-          placeholderToTransform.addAll(result);
-        }
+    for (var element in slideLayoutShapeTree) {
+      // Store Category box transform
+      var descr = ParserTools.getNullableValue(
+          element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+      switch (descr) {
+        case keyLunaCategoryContainer:
+          categoryContainerTransform.add(
+              {keyLunaCategoryContainer: _parseCategoryTransform(element)});
+          break;
+        case keyLunaCategoryTitleAndImage:
+          categoryContainerTransform[currentCategory]
+              [keyLunaCategoryTitleAndImage] = _parseCategoryTransform(element);
+          currentCategory += 1;
+          break;
       }
-    });
-  }
 
-  /// Determine which given element is in which category.
-  int? _addToCategory(var element) {
-    // element is either Image or TextBox
-    Transform shapeElement = element.children[0];
-
-    var centerX = shapeElement.offset.x + shapeElement.size.x / 2;
-    var centerY = shapeElement.offset.y + shapeElement.size.y / 2;
-
-    for (int i = 0; i < categoryContainerTransform.length; i++) {
-      if (categoryContainerTransform[i].offset.x <= centerX &&
-          centerX <=
-              categoryContainerTransform[i].offset.x +
-                  categoryContainerTransform[i].size.x &&
-          categoryContainerTransform[i].offset.y <= centerY &&
-          centerY <=
-              categoryContainerTransform[i].offset.y +
-                  categoryContainerTransform[i].size.y) {
-        return i;
+      // Store placeholder transform
+      Map<String, dynamic> result = {};
+      var ph =
+          ParserTools.getNullableValue(element, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+      var spPr = element['p:spPr'];
+      if (ph != null &&
+          ph.containsKey('_idx') &&
+          (ParserTools.getNullableValue(spPr, ['a:xfrm']) != null) &&
+          (ph['_type'] == null ||
+              ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
+        result[ph['_idx']] = _parseCategoryTransform(element);
       }
+      placeholderToTransform.addAll(result);
     }
-    return null;
   }
 
   PrsNode _parseCategoryGameTextBox(Map<String, dynamic> json) {
@@ -209,7 +183,7 @@ class CategoryGameEditorParser {
     }
     categoryName = categoryName.replaceAll(RegExp(r'\\[tnv]\s*'), ' ');
     node.text = categoryName.substring(0, categoryName.length - 1);
-    node.children.add(_parseCategoryTransform(json));
+    node.transform = _parseCategoryTransform(json);
 
     return node;
   }
@@ -220,7 +194,7 @@ class CategoryGameEditorParser {
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
     node.path = slideRelationship?[relsLink];
-    node.children.add(_parseCategoryTransform(json));
+    node.transform = _parseCategoryTransform(json);
 
     return node;
   }
@@ -244,12 +218,5 @@ class CategoryGameEditorParser {
     node.size = Point2D(double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
         double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
     return node;
-  }
-
-  /// Clean transform data for further parsing
-  static void cleanTransformList() {
-    categoryContainerTransform = [];
-    categoryImageTransform = [];
-    categoryTextTransform = [];
   }
 }

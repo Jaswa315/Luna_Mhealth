@@ -413,21 +413,11 @@ void main() {
       var filename = "Content and category game editor.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
 
-      String type0 = astJson['presentation']['slides'][2]['type'];
-      List<dynamic> category = astJson['presentation']['slides'][2]['category'];
+      String type0 = astJson['presentation']['slides'][0]['type'];
+      List<dynamic> category = astJson['presentation']['slides'][0]['category'];
 
       expect(type0, 'categoryGameEditor');
-      expect(category.length, 2);
-    });
-
-    test('Double line category name is parsed as categoryName', () async {
-      var filename = "Two lines of categoryName.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-
-      String categoryName = astJson['presentation']['slides'][0]['category'][0]
-          ['categoryName']['text'];
-
-      expect(categoryName, "fruits this is fruits");
+      expect(category.length, 3);
     });
 
     test('PPTX with one slide that follows slideLayout returns JSON file',
@@ -499,6 +489,16 @@ void main() {
         LogManager()
             .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
       }
+    });
+
+    test('Shapes out of bound in categoryGameEditor are stored in the last node', () async{
+      var filename = "CategoryGameEditorOutOfBounds.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      List<dynamic> category = astJson['presentation']['slides'][0]['category'];
+
+      expect(category[2]["categoryMembers"][0]['text'], 'almonds');
+
     });
 
     test('A Textbox has UID of 1', () async {

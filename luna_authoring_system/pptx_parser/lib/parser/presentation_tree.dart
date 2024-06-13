@@ -316,6 +316,7 @@ class CategoryNode extends PrsNode {
 
 class CategoryGameTextNode extends PrsNode {
   late String? text;
+  late PrsNode transform;
 
   CategoryGameTextNode() {
     name = 'categoryGameText';
@@ -329,6 +330,7 @@ class CategoryGameTextNode extends PrsNode {
 class CategoryGameImageNode extends PrsNode {
   late String path;
   late String? altText;
+  late PrsNode transform;
 
   CategoryGameImageNode() {
     name = 'categoryGameImage';
