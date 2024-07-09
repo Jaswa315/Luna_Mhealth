@@ -59,6 +59,7 @@ class ModuleObjectGenerator {
     List<Component> pageComponents = [];
     for (PrsNode child in data.children) {
       if (child is TextBoxNode) {
+        //NEED TO FULLY IMPLEMENT _createText(child)
         //pageComponents.add(_createText(child));
       } else if (child is ImageNode) {
         pageComponents.add(_createImage(child));
