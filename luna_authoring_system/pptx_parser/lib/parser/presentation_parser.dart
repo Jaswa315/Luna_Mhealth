@@ -409,8 +409,7 @@ class PresentationParser {
   PrsNode _parseTransform(Map<String, dynamic> json) {
     // check if it has own transform.
     // if it does not have nvPr, look up in placeholder in slideLayout.
-    ImageNode node = ImageNode();
-    /*
+  
     var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
@@ -420,7 +419,10 @@ class PresentationParser {
       // this shape follows slideLayout
       String phIdx = nvPr['p:ph']['_idx'];
       return placeholderToTransform[phIdx];
-    } else {
+    }
+    else
+    {
+      Transform node = Transform();
       node.offset = Point2D(
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
@@ -430,8 +432,6 @@ class PresentationParser {
           double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
       return node;
     }
-    */
-    return node;
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
