@@ -6,7 +6,7 @@ import 'package:luna_core/localization/localized_text.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_storage.dart';
 import 'dart:typed_data';
-//import 'module_object_generator.dart';
+import 'module_object_generator.dart';
 
 import 'package:path/path.dart' as p;
 
