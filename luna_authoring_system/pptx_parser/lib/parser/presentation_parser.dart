@@ -416,7 +416,7 @@ class PresentationParser {
   PrsNode _parseTransform(Map<String, dynamic> json) {
     // check if it has own transform.
     // if it does not have nvPr, look up in placeholder in slideLayout.
-
+  
     var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
