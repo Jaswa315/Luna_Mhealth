@@ -13,6 +13,7 @@ enum ShapeGeometry { ellipse, rectangle, line }
 // From MS-ODRAW 1.1 Glossary
 const double emuToPointFactor = 12700;
 
+// To Do: Get rid of this!!!  Use presentation width/height instead
 double slideWidth = 0;
 double slideHeight = 0;
 
@@ -28,6 +29,7 @@ class Point2D with ToJson {
 
   @override
   Map<String, dynamic> toJson() {
+    // To Do: Fix! Should not be calculated here
     return {'x': x / slideWidth, 'y': y / slideHeight};
   }
 }
@@ -64,8 +66,8 @@ class PresentationNode extends PrsNode {
   late final String author;
   late final int slideCount;
   late final Map<String, dynamic> section;
-  late final double x;
-  late final double y;
+  late final double width;
+  late final double height;
   late final Locale langLocale;
 
   static const String defaultSection = 'Default Section';
@@ -88,7 +90,7 @@ class PresentationNode extends PrsNode {
         'author': author,
         'slideCount': slideCount,
         'section': section,
-        'defaultLocale': defaultLocale,
+        'defaultLocale': defaultlangLocale,
         'slides': children.map((child) => child.toJson()).toList()
       }
     };

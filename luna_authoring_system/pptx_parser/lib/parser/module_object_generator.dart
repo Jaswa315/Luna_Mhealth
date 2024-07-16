@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:pptx_parser/parser/presentation_parser.dart';
 import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/module.dart';
@@ -9,13 +10,13 @@ import 'package:luna_core/models/image/image_component.dart';
 // import 'package:luna_core/utils/logging.dart';
 
 class ModuleObjectGenerator {
-  late final PrsNode _root;
+  late final PresentationParser parser;
+  //late final PrsNode _root;
 
-  ModuleObjectGenerator(PrsNode presentationData) {
-    _root = presentationData;
-  }
+  ModuleObjectGenerator(this.parser);
 
-  Module generateLunaModule(PrsNode root) {
+  Future<Module> generateLunaModule() async {
+    PrsNode root = await parser.toPrsNode();
     return _createModule(root);
   }
 
@@ -26,7 +27,6 @@ class ModuleObjectGenerator {
     }
     // create myself
     // TODO: Try and Catch
-    // TODO: make GUID for id.
     PresentationNode data = root as PresentationNode;
 
     List<Page> pages = [];
@@ -45,8 +45,8 @@ class ModuleObjectGenerator {
         slideCount: data.children.length,
         section: {},
         pages: pages,
-        width: data.x,
-        height: data.y,
+        width: data.width,
+        height: data.height,
         games: []);
     return moduleObj;
   }
@@ -59,9 +59,11 @@ class ModuleObjectGenerator {
     List<Component> pageComponents = [];
     for (PrsNode child in data.children) {
       if (child is TextBoxNode) {
-        pageComponents.add(_createText(child));
+        pageComponents.add(_createTextBox(child));
       } else if (child is ImageNode) {
         pageComponents.add(_createImage(child));
+      } else {
+        print('ParseTree conversion not supported: $child.name');
       }
     }
     Page pageObj = Page(slideId: data.slideId, components: pageComponents);
@@ -86,9 +88,45 @@ class ModuleObjectGenerator {
   }
 
   // TODO: Create Text Components. Check with team on status of text components
-  // TextComponent _createText(PrsNode root) {
-  //   TODO: Is text component updated? More explanation on text types ? What do we care about retrieving?
-  // }
+  TextComponent _createTextBox(PrsNode root) {
+    late final Transform tsr;
+    late final TextBodyNode textBody;
+    List<TextPart> textParts = [];
+
+    if (root.name != 'textbox') {
+      throw ArgumentError('${root.name} is not a textbox');
+    }
+
+    TextBoxNode prsTextBox = root as TextBoxNode;
+
+    for (PrsNode child in prsTextBox.children) {
+      if (child is ShapeNode) {
+        tsr = child.transform as Transform;
+      }
+      if (child is TextBodyNode) {
+        textBody = child;
+        for (PrsNode textChild in textBody.children) {
+          if (textChild is TextNode) {
+            TextPart text = TextPart(
+                text: textChild.text ?? "",
+                fontSize: textChild.size as double,
+                fontStyle: textChild.italics == true
+                    ? FontStyle.italic
+                    : FontStyle.normal,
+                color: textChild.color as Color);
+            textParts.add(text);
+          }
+        }
+      }
+    }
+
+    return TextComponent(
+        textChildren: textParts,
+        x: tsr.offset.x,
+        y: tsr.offset.y,
+        width: tsr.size.x,
+        height: tsr.size.y);
+  }
 
   // TODO: Create Necessary Components
   //

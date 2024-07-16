@@ -69,6 +69,14 @@ class ImageComponent extends Component {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+    'imagePath': imagePath,
+    'x': bounds.left,
+    'y': bounds.top,
+    'width': bounds.width,
+    'height': bounds.height
+  };
+
   @override
   void onClick() {}
 }
