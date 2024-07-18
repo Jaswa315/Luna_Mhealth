@@ -130,7 +130,7 @@ class ModuleObjectGenerator {
               if (pChild is TextNode) {
                 TextPart text = TextPart(
                     text: pChild.text ?? "",
-                    fontSize: pChild.size!.toDouble(),
+                    fontSize: pChild.size?.toDouble() ?? 16.0,
                     fontStyle:
                         pChild.italics ? FontStyle.italic : FontStyle.normal,
                     fontWeight:
