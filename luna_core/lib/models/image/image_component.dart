@@ -62,15 +62,16 @@ class ImageComponent extends Component {
   static ImageComponent fromJson(Map<String, dynamic> json) {
     return ImageComponent(
       imagePath: json['image_path'],
-      x: json['position']['left'].toDouble(),
-      y: json['position']['top'].toDouble(),
-      width: json['position']['width'].toDouble(),
-      height: json['position']['height'].toDouble(),
+      x: json['x'].toDouble(),
+      y: json['y'].toDouble(),
+      width: json['width'].toDouble(),
+      height: json['height'].toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'imagePath': imagePath,
+    'type': super.type.name,
+    'image_path': imagePath,
     'x': bounds.left,
     'y': bounds.top,
     'width': bounds.width,

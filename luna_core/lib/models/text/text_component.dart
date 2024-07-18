@@ -17,7 +17,7 @@ import '../component.dart';
 /// specific to text components.
 class TextComponent extends Component {
   /// The text to display in the text component.
-  List<TextPart> textChildren = [];
+  final List<TextPart> textChildren;
 
   /// Constructs a new instance of [TextComponent] with the given parameters.
   TextComponent({
@@ -25,7 +25,7 @@ class TextComponent extends Component {
     // this.fontSize = 16.0,
     // this.fontStyle = FontStyle.normal,
     // this.color = Colors.black,
-    required List<TextPart> textChildren,
+    required this.textChildren,
     required double x,
     required double y,
     required double width,
@@ -65,12 +65,21 @@ class TextComponent extends Component {
 
     return TextComponent(
       textChildren: children,
-      x: json['position']['left'].toDouble(),
-      y: json['position']['top'].toDouble(),
-      width: json['position']['width'].toDouble(),
-      height: json['position']['height'].toDouble(),
+      x: json['x'].toDouble(),
+      y: json['y'].toDouble(),
+      width: json['width'].toDouble(),
+      height: json['height'].toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'type': ComponentType.text.name,
+        'textParts': textChildren.map((textPart) => textPart.toJson()).toList(),
+        'x': x,
+        'y': y,
+        'width': width,
+        'height': height
+      };
 
   /// Handles the click event for the text component.
   @override
@@ -81,12 +90,16 @@ class TextPart {
   String text;
   double fontSize;
   FontStyle fontStyle;
+  FontWeight fontWeight;
+  TextDecoration fontUnderline;
   Color color;
 
   TextPart(
       {required this.text,
       this.fontSize = 16.0,
       this.fontStyle = FontStyle.normal,
+      this.fontWeight = FontWeight.normal,
+      this.fontUnderline = TextDecoration.none,
       this.color = Colors.black});
 
   TextSpan getTextSpan() {
@@ -95,21 +108,28 @@ class TextPart {
         style: TextStyle(
             color: this.color,
             fontStyle: this.fontStyle,
-            fontSize: this.fontSize));
+            fontSize: this.fontSize,
+            fontWeight: this.fontWeight,
+            decoration: this.fontUnderline));
   }
 
   static TextPart fromJson(Map<String, dynamic> json) {
     return TextPart(
         text: json['text'],
-        fontSize: json['font_size'] ?? 16.0,
-        fontStyle: json['font_style'] ?? FontStyle.normal,
-        color: json['font_color'] ?? Colors.black);
+        fontSize: json['fontSize'] ?? 16.0,
+        // ToDo: No hardcoding font properties!
+        fontStyle: json['fontStyle'] ==  'italic' ? FontStyle.italic : FontStyle.normal,
+        color: Color(json['color']) ?? Colors.black,
+        fontWeight: json['fontWeight'] == 'bold' ? FontWeight.bold : FontWeight.normal,
+        fontUnderline: json['fontUnderline'] == 'underline' ? TextDecoration.underline : TextDecoration.none);
   }
 
   Map<String, dynamic> toJson() => {
         'text': text,
         'fontSize': fontSize,
-        'fontStyle': fontStyle,
-        'color': color
+        'fontStyle': fontStyle.name == FontStyle.italic ? 'italic' : '',
+        'color': color.value,
+        'fontWeight': fontWeight == FontWeight.bold ? 'bold' : '',
+        'fontUnderline': fontUnderline == TextDecoration.underline ? 'underline' : ''
       };
 }

@@ -10,6 +10,9 @@
 /// A page can contain multiple components.
 
 import 'dart:convert';
+import 'package:luna_core/enums/component_type.dart';
+import 'package:luna_core/enums/item_type.dart';
+import 'package:luna_core/models/item.dart';
 import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 
 import 'component.dart';
@@ -18,7 +21,7 @@ import 'component.dart';
 ///
 /// A page contains a list of components that can be added or removed.
 /// It can be converted to and from a JSON map.
-class Page {
+class Page extends Item {
   /// The unique identifier for the slide.
   final String slideId;
 
@@ -26,10 +29,10 @@ class Page {
   final List<Component> components;
 
   /// Constructs a new instance of [Page].
-  Page({
+  Page({    
     required this.slideId,
-    List<Component>? components,
-  }) : components = components ?? [];
+    List<Component>? components, 
+  }) : components = components ?? [], super(itemType: ItemType.page);
 
   /// Gets the list of components in the page.
   List<Component> get getPageComponents => List.unmodifiable(components);
@@ -44,17 +47,19 @@ class Page {
     components.remove(component);
   }
 
-    /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
-  factory Page.fromJson(Map<String, dynamic> json, List<GameContext> gameContexts) {
-    if (json['type'] != 'slide') {
-      throw FormatException('Only slide type components are allowed');
+  /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
+  /// ToDo: Fix parameter dependency on GameContext
+  factory Page.fromJson(Map<String, dynamic> json,
+      {List<GameContext> gameContexts = const []}) {
+    if (json['type'] != ItemType.page.name) {
+      throw FormatException('Only page type components are allowed');
     }
 
     List<Component> components = (json['shapes'] as List<dynamic>)
-        .map((shapeJson) => Component.fromJson(shapeJson, gameContexts))
+        .map((shapeJson) => Component.fromJson(shapeJson, games: gameContexts))
         .toList();
 
-    return Page(
+    return Page(      
       slideId: json['slideId'] as String,
       components: components,
     );
@@ -63,6 +68,7 @@ class Page {
   /// Converts a Page into a JSON map.
   Map<String, dynamic> toJson() {
     return {
+      'type': super.itemType.name,
       'slideId': slideId,
       'shapes': components.map((c) => c.toJson()).toList(),
     };

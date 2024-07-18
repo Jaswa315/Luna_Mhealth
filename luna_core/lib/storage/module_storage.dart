@@ -21,6 +21,8 @@ import 'package:luna_core/utils/json_data_extractor.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 
+// ToDo: Refactor module storage to clean up redundancy/perf
+
 /// Handles packaging, asset retrieval, loading, and storage
 /// for Module operations
 ///
@@ -287,7 +289,7 @@ class ModuleStorage {
   }
 
   Future<Archive?> _getArchiveFromBytes(Uint8List zippedBytes) async {
-    return ZipDecoder().decodeBytes(zippedBytes);
+    return ZipDecoder().decodeBytes(zippedBytes, verify: true);
   }
 
   Future<bool> _updateOrAddAssetToArchive(
@@ -321,11 +323,12 @@ class ModuleStorage {
 
     await _addEmptyDirectoryFolderToArchive(moduleArchive, _getImagePath());
 
-    Uint8List? csvFileBytes = await _createInitialNewLanguageCSV(jsonData);
+    // ToDo: CSV generation should be in Authoring, not in the standard createmodule flow.
+    //Uint8List? csvFileBytes = await _createInitialNewLanguageCSV(jsonData);
 
-    String csvFilePath = _getInitialCSVFilePath(jsonData);
+    //String csvFilePath = _getInitialCSVFilePath(jsonData);
 
-    await _updateOrAddAssetToArchive(moduleArchive, csvFilePath, csvFileBytes!);
+    //await _updateOrAddAssetToArchive(moduleArchive, csvFilePath, csvFileBytes!);
 
     await _addEmptyDirectoryFolderToArchive(
         moduleArchive, _getInitialAudioDirectoryPath(jsonData));

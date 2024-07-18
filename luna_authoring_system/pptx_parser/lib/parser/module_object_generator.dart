@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:flutter/src/painting/borders.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
 import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'package:luna_core/models/page.dart';
@@ -7,6 +7,8 @@ import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
+import 'package:luna_core/models/shape/divider_component.dart';
+
 // import 'package:luna_core/utils/logging.dart';
 
 class ModuleObjectGenerator {
@@ -41,7 +43,6 @@ class ModuleObjectGenerator {
         moduleId: data.moduleID,
         title: data.title,
         author: data.author,
-        type: 'module',
         slideCount: data.children.length,
         section: {},
         pages: pages,
@@ -62,12 +63,30 @@ class ModuleObjectGenerator {
         pageComponents.add(_createTextBox(child));
       } else if (child is ImageNode) {
         pageComponents.add(_createImage(child));
+      } else if (child is ConnectionNode) {
+        pageComponents.add(_createDivider(child));
       } else {
+        // ToDo: use exception handling and logging instead of print
         print('ParseTree conversion not supported: $child.name');
       }
     }
     Page pageObj = Page(slideId: data.slideId, components: pageComponents);
     return pageObj;
+  }
+
+  DividerComponent _createDivider(PrsNode root) {
+    if (root is! ConnectionNode) {
+      throw ArgumentError('${root.name} is not a connection line');
+    }
+
+    ConnectionNode cxn = root;
+
+    return DividerComponent(
+        x: cxn.transform.offset.x,
+        y: cxn.transform.offset.y,
+        width: cxn.transform.size.x,
+        height: cxn.transform.size.y,
+        thickness: cxn.weight);
   }
 
   ImageComponent _createImage(PrsNode root) {
@@ -79,7 +98,7 @@ class ModuleObjectGenerator {
     Point2D offset = transformData.offset;
     Point2D size = transformData.size;
     ImageComponent imageComponentObj = ImageComponent(
-        imagePath: data.path,
+        imagePath: data.path.replaceFirst('../media', 'resources/images'),
         height: offset.y,
         width: offset.x,
         x: size.x,
@@ -106,15 +125,24 @@ class ModuleObjectGenerator {
       if (child is TextBodyNode) {
         textBody = child;
         for (PrsNode textChild in textBody.children) {
-          if (textChild is TextNode) {
-            TextPart text = TextPart(
-                text: textChild.text ?? "",
-                fontSize: textChild.size as double,
-                fontStyle: textChild.italics == true
-                    ? FontStyle.italic
-                    : FontStyle.normal,
-                color: textChild.color as Color);
-            textParts.add(text);
+          if (textChild is TextParagraphNode) {
+            for (PrsNode pChild in textChild.children) {
+              if (pChild is TextNode) {
+                TextPart text = TextPart(
+                    text: pChild.text ?? "",
+                    fontSize: pChild.size!.toDouble(),
+                    fontStyle:
+                        pChild.italics ? FontStyle.italic : FontStyle.normal,
+                    fontWeight:
+                        pChild.bold ? FontWeight.bold : FontWeight.normal,
+                    fontUnderline: pChild.underline
+                        ? TextDecoration.underline
+                        : TextDecoration.none);
+                // ToDo: Reenable color.  Disabling due to unmapped values in presentation parser _parseText
+                // color: pChild.color != null ? Color(pChild.color) : null );
+                textParts.add(text);
+              }
+            }
           }
         }
       }

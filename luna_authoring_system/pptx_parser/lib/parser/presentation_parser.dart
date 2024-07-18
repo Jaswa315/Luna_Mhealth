@@ -555,6 +555,8 @@ class PresentationParser {
     node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);
     String? sizeStr = json['a:rPr']['_sz'];
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
+    // ToDo: Map this to a real color value
+    // Some are just showing up as 'accent1' and such.
     node.color = ParserTools.getNullableValue(
         json['a:rPr'], ['a:solidFill', 'a:schemeClr', '_val']);
     node.highlightColor = ParserTools.getNullableValue(
