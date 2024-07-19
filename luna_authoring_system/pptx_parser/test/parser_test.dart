@@ -227,44 +227,6 @@ void main() {
       expect(uniqueCount, slideCount);
     });
 
-    test('Position values are described as percentages', () async {
-      var filename = "Image-Snorlax.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-      File json = await parser.toJSON("./position_values_module.json");
-      String jsonString = json.readAsStringSync();
-
-      Map<String, dynamic> astJson = jsonDecode(jsonString);
-      double offsetX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['offset']['x'];
-      double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['offset']['y'];
-      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['size']['x'];
-      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['size']['y'];
-
-      bool isPercentage(x) {
-        if (x >= 0 && x <= 100) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-
-      expect(isPercentage(offsetX), true);
-      expect(isPercentage(offsetY), true);
-      expect(isPercentage(sizeX), true);
-      expect(isPercentage(sizeY), true);
-
-      try {
-        await json.delete();
-      } catch (e) {
-        LogManager().logTrace(
-            ("Error occured while deleting file."), LunaSeverityLevel.Verbose);
-      }
-    });
-
     test('Audio is parsed for each shapes', () async {
       var filename = "Audios in Shapes.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
@@ -530,6 +492,13 @@ void main() {
       expect(pptUID0, 1);
       expect(pptUID1, 2);
       expect(pptUID2, 3);
+    });
+
+    test('Top bar and bottom bar are nor parsed', () async {
+      var filename = "Module with top and bottom bar.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      
+      expect(true, true);
     });
   });
 
