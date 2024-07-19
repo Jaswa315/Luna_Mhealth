@@ -65,11 +65,14 @@ class PresentationParser {
     return outputFile;
   }
 
-  XmlDocument _extractXMLFromZip(String xmlFilePath) {
+  ArchiveFile extractFileFromZip(String filePath) {
     var bytes = _file.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
-    var file = archive.firstWhere((file) => file.name == xmlFilePath);
-    return XmlDocument.parse(utf8.decode(file.content));
+    return archive.firstWhere((file) => file.name == filePath);
+  }
+
+  XmlDocument _extractXMLFromZip(String xmlFilePath) {   
+    return XmlDocument.parse(utf8.decode(extractFileFromZip(xmlFilePath).content));
   }
 
   dynamic _xmlDocumentToJson(XmlDocument document) {
@@ -113,10 +116,14 @@ class PresentationParser {
     node.moduleID = uuidGenerator.v4();
     slideCount = node.slideCount;
 
+    // To Do: Get rid of the global and use the presentation values 
     slideWidth =
         double.parse(presentationMap['p:presentation']['p:sldSz']['_cx']);
     slideHeight =
         double.parse(presentationMap['p:presentation']['p:sldSz']['_cy']);
+
+    node.width = slideWidth;
+    node.height = slideHeight;
 
     var slideIdList =
         presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
@@ -390,7 +397,7 @@ class PresentationParser {
         json['p:nvPicPr'], ['p:cNvPr', 'a:hlinkClick']));
 
     // initiated transform
-    //node.transform = _parseTransform(json);
+    node.transform = _parseTransform(json) as Transform;
 
     node.children.add(_parseBasicShape(json));
 
@@ -419,9 +426,7 @@ class PresentationParser {
       // this shape follows slideLayout
       String phIdx = nvPr['p:ph']['_idx'];
       return placeholderToTransform[phIdx];
-    }
-    else
-    {
+    } else {
       Transform node = Transform();
       node.offset = Point2D(
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
@@ -550,6 +555,8 @@ class PresentationParser {
     node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);
     String? sizeStr = json['a:rPr']['_sz'];
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
+    // ToDo: Map this to a real color value
+    // Some are just showing up as 'accent1' and such.
     node.color = ParserTools.getNullableValue(
         json['a:rPr'], ['a:solidFill', 'a:schemeClr', '_val']);
     node.highlightColor = ParserTools.getNullableValue(

@@ -23,6 +23,10 @@ import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 abstract class Component extends Item with ChangeNotifier implements Clickable {
   /// The type of the component.
   final ComponentType type;
+  final double x;
+  final double y;
+  final double width;
+  final double height;
 
   /// The position and size of the component represented as a Rect.
   Rect _bounds;
@@ -34,10 +38,10 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
   /// Creates a new Component instance.
   Component({
     required this.type,
-    required double x,
-    required double y,
-    required double width,
-    required double height,
+    required this.x,
+    required this.y,
+    required this.width,
+    required this.height,
     required String name,
   })  : _bounds = Rect.fromLTWH(x, y, width, height),
         super(itemType: ItemType.component, name: name);
@@ -50,7 +54,9 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
   /// Converts a JSON object to a Component object.
   ///
   /// This method takes a [json] object and returns a Component object based on the 'type' field in the JSON.
-  static Component fromJson(Map<String, dynamic> json, List<GameContext> games) {
+  /// ToDo: fix game context parameter dependency
+  static Component fromJson(Map<String, dynamic> json,
+      {List<GameContext> games = const []}) {
     ComponentType? type = _typeMapping[json['type']];
     switch (type) {
       case ComponentType.image:
@@ -62,15 +68,15 @@ abstract class Component extends Item with ChangeNotifier implements Clickable {
       case ComponentType.category_game:
         return CategoryGame.fromJson(json, games);
       default:
-        throw Exception('Unsupported component type');
+        throw Exception('Unsupported component type: $type.toString()');
     }
   }
 }
 
 /// A mapping of component type IDs to ComponentType enum values.
-const Map<int, ComponentType> _typeMapping = {
-  13: ComponentType.image,
-  17: ComponentType.text,
-  9: ComponentType.divider,
-  666: ComponentType.category_game,
+const Map<String, ComponentType> _typeMapping = {
+  'image': ComponentType.image,
+  'text': ComponentType.text,
+  'divider': ComponentType.divider,
+  'category_game': ComponentType.category_game,
 };

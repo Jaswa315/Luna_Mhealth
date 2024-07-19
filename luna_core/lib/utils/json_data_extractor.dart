@@ -3,6 +3,8 @@ import 'dart:typed_data';
 // import 'package:luna_core/utils/logging.dart';
 
 // Utility class that extracts data from JSON data strings
+
+// ToDo:  This should be a static class / static methods
 class JSONDataExtractor {
   JSONDataExtractor();
 
@@ -59,18 +61,19 @@ class JSONDataExtractor {
   }
 
   String extractLanguageFromJSON(String jsonData) {
-    Map<String, dynamic> dataAsMap = jsonDecode(jsonData);
-    if (!dataAsMap.containsKey('presentation')) {
-      //TODO: Log json data given doesn't have presentation key, which means given json Data is an outdated IR, probably from module storage
-      // since the tests there have old IR module.json
-      return "en-US";
-    }
-    // Directly access the 'presentation' object
-    Map<String, dynamic> presentation =
-        dataAsMap['presentation'] as Map<String, dynamic>;
-    // Retrieve the 'language' string
-    String language = presentation['language'] as String;
+    Map<String, dynamic> moduleData = jsonDecode(jsonData);
+    // if (!dataAsMap.containsKey('module')) {
+    //   //TODO: Log json data given doesn't have presentation key, which means given json Data is an outdated IR, probably from module storage
+    //   // since the tests there have old IR module.json
+    //   return "en-US";
+    // }
+    // // Directly access the 'presentation' object
+    // Map<String, dynamic> presentation =
+    //     dataAsMap['module'] as Map<String, dynamic>;
+    // // Retrieve the 'language' string
+    // String language = presentation['language'] as String;
 
-    return language;
+    // return language;
+    return moduleData['module']?['language'] ?? 'en-us';
   }
 }

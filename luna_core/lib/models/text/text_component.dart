@@ -17,23 +17,15 @@ import '../component.dart';
 /// specific to text components.
 class TextComponent extends Component {
   /// The text to display in the text component.
-  String text;
-
-  /// The font size of the text.
-  double fontSize;
-
-  /// The font style of the text.
-  FontStyle fontStyle;
-
-  /// The color of the text.
-  Color color;
+  final List<TextPart> textChildren;
 
   /// Constructs a new instance of [TextComponent] with the given parameters.
   TextComponent({
-    required this.text,
-    this.fontSize = 16.0,
-    this.fontStyle = FontStyle.normal,
-    this.color = Colors.black,
+    //required this.text,
+    // this.fontSize = 16.0,
+    // this.fontStyle = FontStyle.normal,
+    // this.color = Colors.black,
+    required this.textChildren,
     required double x,
     required double y,
     required double width,
@@ -49,15 +41,16 @@ class TextComponent extends Component {
 
   @override
   Future<Widget> render() {
+    List<TextSpan> textSpans = [];
+    for (TextPart textPart in textChildren) {
+      textSpans.add(textPart.getTextSpan());
+    }
+
     return Future.value(
-      Text(
-        text,
-        style: TextStyle(
-          fontSize: fontSize,
-          fontStyle: fontStyle,
-          color: color,
-        ),
-      ),
+      RichText(
+          text: TextSpan(
+        children: textSpans,
+      )),
     );
   }
 
@@ -66,17 +59,77 @@ class TextComponent extends Component {
   /// The [json] parameter is a JSON object that contains the data for the [TextComponent].
   /// Returns a new instance of [TextComponent] with the data from the JSON object.
   static TextComponent fromJson(Map<String, dynamic> json) {
+    List<TextPart> children = (json['textParts'] as List)
+        .map((textPartJson) => TextPart.fromJson(textPartJson))
+        .toList();
+
     return TextComponent(
-      text: json['text'],
-      fontSize: json['text_properties']?['font_size']?.toDouble() ?? 16.0,
-      x: json['position']['left'].toDouble(),
-      y: json['position']['top'].toDouble(),
-      width: json['position']['width'].toDouble(),
-      height: json['position']['height'].toDouble(),
+      textChildren: children,
+      x: json['x'].toDouble(),
+      y: json['y'].toDouble(),
+      width: json['width'].toDouble(),
+      height: json['height'].toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'type': ComponentType.text.name,
+        'textParts': textChildren.map((textPart) => textPart.toJson()).toList(),
+        'x': x,
+        'y': y,
+        'width': width,
+        'height': height
+      };
 
   /// Handles the click event for the text component.
   @override
   void onClick() {}
+}
+
+class TextPart {
+  String text;
+  double fontSize;
+  FontStyle fontStyle;
+  FontWeight fontWeight;
+  TextDecoration fontUnderline;
+  Color color;
+
+  TextPart(
+      {required this.text,
+      this.fontSize = 16.0,
+      this.fontStyle = FontStyle.normal,
+      this.fontWeight = FontWeight.normal,
+      this.fontUnderline = TextDecoration.none,
+      this.color = Colors.black});
+
+  TextSpan getTextSpan() {
+    return TextSpan(
+        text: text,
+        style: TextStyle(
+            color: this.color,
+            fontStyle: this.fontStyle,
+            fontSize: this.fontSize,
+            fontWeight: this.fontWeight,
+            decoration: this.fontUnderline));
+  }
+
+  static TextPart fromJson(Map<String, dynamic> json) {
+    return TextPart(
+        text: json['text'],
+        fontSize: json['fontSize'] ?? 16.0,
+        // ToDo: No hardcoding font properties!
+        fontStyle: json['fontStyle'] ==  'italic' ? FontStyle.italic : FontStyle.normal,
+        color: Color(json['color']) ?? Colors.black,
+        fontWeight: json['fontWeight'] == 'bold' ? FontWeight.bold : FontWeight.normal,
+        fontUnderline: json['fontUnderline'] == 'underline' ? TextDecoration.underline : TextDecoration.none);
+  }
+
+  Map<String, dynamic> toJson() => {
+        'text': text,
+        'fontSize': fontSize,
+        'fontStyle': fontStyle.name == FontStyle.italic ? 'italic' : '',
+        'color': color.value,
+        'fontWeight': fontWeight == FontWeight.bold ? 'bold' : '',
+        'fontUnderline': fontUnderline == TextDecoration.underline ? 'underline' : ''
+      };
 }

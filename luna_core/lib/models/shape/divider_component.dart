@@ -61,7 +61,7 @@ class DividerComponent extends Component {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': type.index,
+      'type': type.name,
       'x': bounds.left,
       'y': bounds.top,
       'width': bounds.width,
