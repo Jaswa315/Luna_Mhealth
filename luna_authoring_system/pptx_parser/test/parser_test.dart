@@ -494,11 +494,13 @@ void main() {
       expect(pptUID2, 3);
     });
 
-    test('Top bar and bottom bar are nor parsed', () async {
+    test('Padding values are parsed', () async {
       var filename = "Module with top and bottom bar.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
-      
-      expect(true, true);
+      expect(astJson['presentation']['slides'][0]['padding'],
+          [178877.0, 271222.0, 178877.0, 547590.0]);
+      expect(astJson['presentation']['slides'][1]['padding'],
+          [178877.0, 271222.0, 178877.0, 547590.0]);
     });
   });
 

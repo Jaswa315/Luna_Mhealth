@@ -28,6 +28,14 @@ const String keySlideMasterSchema =
 const String keyThemeSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
 
+// contant value for padding
+const String keyLunaCustomDesign = "Pregnancy Symptoms and Conditions";
+const String keyLunaTopSystemBar = "{luna top_system_bar}";
+const String keyLunaBottomSystemBar = "{luna bottom_system_bar}";
+const String keyLunaLeftPadding = "{luna left_padding}";
+const String keyLunaRightPadding = "{luna right_padding}";
+const List<double> zeroPadding = [0, 0, 0, 0];
+
 class PresentationParser {
   // removed static so the localization_test and parser_test work
   late final File _file;
@@ -71,8 +79,9 @@ class PresentationParser {
     return archive.firstWhere((file) => file.name == filePath);
   }
 
-  XmlDocument _extractXMLFromZip(String xmlFilePath) {   
-    return XmlDocument.parse(utf8.decode(extractFileFromZip(xmlFilePath).content));
+  XmlDocument _extractXMLFromZip(String xmlFilePath) {
+    return XmlDocument.parse(
+        utf8.decode(extractFileFromZip(xmlFilePath).content));
   }
 
   dynamic _xmlDocumentToJson(XmlDocument document) {
@@ -116,7 +125,7 @@ class PresentationParser {
     node.moduleID = uuidGenerator.v4();
     slideCount = node.slideCount;
 
-    // To Do: Get rid of the global and use the presentation values 
+    // To Do: Get rid of the global and use the presentation values
     slideWidth =
         double.parse(presentationMap['p:presentation']['p:sldSz']['_cx']);
     slideHeight =
@@ -159,6 +168,7 @@ class PresentationParser {
       List<dynamic> slideLayoutInfo = _lookAheadTheme(i);
       String? slideLayoutName = slideLayoutInfo[0];
       int? slideLayoutIndex = slideLayoutInfo[1];
+      int? slideMasterIndex = slideLayoutInfo[2];
       PrsNode slide = PrsNode();
       slideRelationship = _parseSlideRels(i);
       if (slideLayoutName == CategoryGameEditorParser.keyLunaCategoryTheme) {
@@ -171,12 +181,63 @@ class PresentationParser {
             slideRelationship);
       } else {
         slide = _parseSlide(parsedSlideIdList);
+        if (slideLayoutName == keyLunaCustomDesign) {
+          SlideNode contentSlide = slide as SlideNode;
+          List<double> padding = _parsePadding(jsonFromArchive(
+              "ppt/slideMasters/slideMaster$slideMasterIndex.xml"));
+          contentSlide.padding = padding;
+          slide = contentSlide as PrsNode;
+        } else {
+          SlideNode contentSlide = slide as SlideNode;
+          contentSlide.padding = zeroPadding;
+          slide = contentSlide as PrsNode;
+        }
       }
       node.children.add(slide);
       placeholderToTransform = {};
     }
 
     return node;
+  }
+
+  List<double> _parsePadding(Map<String, dynamic> json) {
+    List<double> padding = [0, 0, 0, 0];
+    var slideMasterShapeTree =
+        json['p:sldMaster']['p:cSld']['p:spTree'][keyShape];
+
+    for (var element in slideMasterShapeTree) {
+      // get the alt text of the shape
+      var descr = ParserTools.getNullableValue(
+          element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+      switch (descr) {
+        case keyLunaLeftPadding:
+          padding[0] =
+              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cx']);
+          break;
+        case keyLunaRightPadding:
+          padding[2] =
+              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cx']);
+          break;
+      }
+    }
+    var slideMasterPicTree =
+        json['p:sldMaster']['p:cSld']['p:spTree'][keyPicture];
+    for (var element in slideMasterPicTree) {
+      // get the alt text of the shape
+      var descr = ParserTools.getNullableValue(
+          element, ['p:nvPicPr', 'p:cNvPr', '_descr']);
+      switch (descr) {
+        case keyLunaTopSystemBar:
+          padding[1] =
+              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cy']);
+          break;
+        case keyLunaBottomSystemBar:
+          padding[3] =
+              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cy']);
+          break;
+      }
+    }
+    return padding;
   }
 
   List<dynamic> _lookAheadTheme(int slideNum) {
@@ -239,7 +300,7 @@ class PresentationParser {
         ? ""
         : jsonFromArchive("ppt/theme/theme$themeIndex.xml")['a:theme']['_name'];
 
-    return [themeName, slideLayoutIndex];
+    return [themeName, slideLayoutIndex, slideMasterIndex];
   }
 
   Map<String, dynamic> _parseSlideRels(int slideNum) {
@@ -416,7 +477,7 @@ class PresentationParser {
   PrsNode _parseTransform(Map<String, dynamic> json) {
     // check if it has own transform.
     // if it does not have nvPr, look up in placeholder in slideLayout.
-  
+
     var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);

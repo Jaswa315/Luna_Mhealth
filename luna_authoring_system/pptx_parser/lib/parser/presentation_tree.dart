@@ -98,6 +98,8 @@ class PresentationNode extends PrsNode {
 
 class SlideNode extends PrsNode {
   late final String slideId;
+  late final List<double>?
+      padding; // left, top, right, bottom padding of the slide
 
   SlideNode() {
     name = 'slide';
@@ -108,6 +110,7 @@ class SlideNode extends PrsNode {
     return {
       'type': name,
       'slideId': slideId,
+      if (padding != null) 'padding': padding,
       'shapes': children.map((child) => child.toJson()).toList()
     };
   }
