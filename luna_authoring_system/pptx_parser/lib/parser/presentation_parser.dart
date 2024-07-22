@@ -492,7 +492,20 @@ class PresentationParser {
         ParserTools.getNullableValue(nvPr, ['p:ph']) != null) {
       // this shape follows slideLayout
       String phIdx = nvPr['p:ph']['_idx'];
-      return placeholderToTransform[phIdx];
+
+      if (placeholderToTransform[phIdx] == null) {
+        Transform node = Transform();
+        node.offset = Point2D(
+            double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
+            double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
+
+        node.size = Point2D(
+            double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
+            double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
+        return node;
+      } else {
+        return placeholderToTransform[phIdx];
+      }
     } else {
       Transform node = Transform();
       node.offset = Point2D(
