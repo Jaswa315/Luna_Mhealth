@@ -34,6 +34,7 @@ class ModuleObjectGenerator {
     List<Page> pages = [];
 
     for (PrsNode child in data.children) {
+      //TODO: pass width and height value to translate into percentage
       if (child is SlideNode) {
         pages.add(_createPage(child));
       }
@@ -58,6 +59,7 @@ class ModuleObjectGenerator {
     }
     SlideNode data = root as SlideNode;
     List<Component> pageComponents = [];
+    // TODO: for components: substract padding value using SubtractPadding class
     for (PrsNode child in data.children) {
       if (child is TextBoxNode) {
         pageComponents.add(_createTextBox(child));
@@ -71,6 +73,7 @@ class ModuleObjectGenerator {
       }
     }
     Page pageObj = Page(slideId: data.slideId, components: pageComponents);
+
     return pageObj;
   }
 

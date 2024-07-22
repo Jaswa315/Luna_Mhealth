@@ -34,7 +34,12 @@ const String keyLunaTopSystemBar = "{luna top_system_bar}";
 const String keyLunaBottomSystemBar = "{luna bottom_system_bar}";
 const String keyLunaLeftPadding = "{luna left_padding}";
 const String keyLunaRightPadding = "{luna right_padding}";
-const List<double> zeroPadding = [0, 0, 0, 0];
+const Map<String, double> zeroPadding = {
+  "left": 0,
+  "top": 0,
+  "right": 0,
+  "bottom": 0
+};
 
 class PresentationParser {
   // removed static so the localization_test and parser_test work
@@ -125,14 +130,10 @@ class PresentationParser {
     node.moduleID = uuidGenerator.v4();
     slideCount = node.slideCount;
 
-    // To Do: Get rid of the global and use the presentation values
-    slideWidth =
+    node.width =
         double.parse(presentationMap['p:presentation']['p:sldSz']['_cx']);
-    slideHeight =
+    node.height =
         double.parse(presentationMap['p:presentation']['p:sldSz']['_cy']);
-
-    node.width = slideWidth;
-    node.height = slideHeight;
 
     var slideIdList =
         presentationMap['p:presentation']['p:sldIdLst']['p:sldId'];
@@ -183,7 +184,7 @@ class PresentationParser {
         slide = _parseSlide(parsedSlideIdList);
         if (slideLayoutName == keyLunaCustomDesign) {
           SlideNode contentSlide = slide as SlideNode;
-          List<double> padding = _parsePadding(jsonFromArchive(
+          Map<String, double> padding = _parsePadding(jsonFromArchive(
               "ppt/slideMasters/slideMaster$slideMasterIndex.xml"));
           contentSlide.padding = padding;
           slide = contentSlide as PrsNode;
@@ -200,8 +201,13 @@ class PresentationParser {
     return node;
   }
 
-  List<double> _parsePadding(Map<String, dynamic> json) {
-    List<double> padding = [0, 0, 0, 0];
+  Map<String, double> _parsePadding(Map<String, dynamic> json) {
+    Map<String, double> padding = {
+      "left": 0,
+      "top": 0,
+      "right": 0,
+      "bottom": 0
+    };
     var slideMasterShapeTree =
         json['p:sldMaster']['p:cSld']['p:spTree'][keyShape];
 
@@ -211,11 +217,11 @@ class PresentationParser {
           element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
       switch (descr) {
         case keyLunaLeftPadding:
-          padding[0] =
+          padding["left"] =
               double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cx']);
           break;
         case keyLunaRightPadding:
-          padding[2] =
+          padding["right"] =
               double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cx']);
           break;
       }
@@ -228,11 +234,11 @@ class PresentationParser {
           element, ['p:nvPicPr', 'p:cNvPr', '_descr']);
       switch (descr) {
         case keyLunaTopSystemBar:
-          padding[1] =
+          padding["top"] =
               double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cy']);
           break;
         case keyLunaBottomSystemBar:
-          padding[3] =
+          padding["bottom"] =
               double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cy']);
           break;
       }

@@ -9,7 +9,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
-import 'dart:convert';
 import 'package:luna_core/utils/logging.dart';
 
 const String assetsFolder = 'test/test_assets';
@@ -497,10 +496,18 @@ void main() {
     test('Padding values are parsed', () async {
       var filename = "Module with top and bottom bar.pptx";
       Map<String, dynamic> astJson = await toMapFromPath(filename);
-      expect(astJson['presentation']['slides'][0]['padding'],
-          [178877.0, 271222.0, 178877.0, 547590.0]);
-      expect(astJson['presentation']['slides'][1]['padding'],
-          [178877.0, 271222.0, 178877.0, 547590.0]);
+      expect(astJson['presentation']['slides'][0]['padding']["left"], 178877.0);
+      expect(astJson['presentation']['slides'][0]['padding']["top"], 271222.0);
+      expect(
+          astJson['presentation']['slides'][0]['padding']["right"], 178877.0);
+      expect(
+          astJson['presentation']['slides'][0]['padding']["bottom"], 547590.0);
+      expect(astJson['presentation']['slides'][1]['padding']["left"], 178877.0);
+      expect(astJson['presentation']['slides'][1]['padding']["top"], 271222.0);
+      expect(
+          astJson['presentation']['slides'][1]['padding']["right"], 178877.0);
+      expect(
+          astJson['presentation']['slides'][1]['padding']["bottom"], 547590.0);
     });
   });
 
