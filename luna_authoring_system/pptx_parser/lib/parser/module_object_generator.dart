@@ -8,6 +8,7 @@ import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:pptx_parser/utils/size_converter.dart';
 
 // import 'package:luna_core/utils/logging.dart';
 
@@ -36,9 +37,11 @@ class ModuleObjectGenerator {
     for (PrsNode child in data.children) {
       //TODO: pass width and height value to translate into percentage
       if (child is SlideNode) {
-        pages.add(_createPage(child));
+        pages.add(_createPage(child, data.width, data.height));
       }
     }
+
+    /// The width and height are in EMU values.
     Module moduleObj = Module(
         id: data.moduleID,
         moduleId: data.moduleID,
@@ -53,23 +56,25 @@ class ModuleObjectGenerator {
     return moduleObj;
   }
 
-  Page _createPage(PrsNode root) {
+  Page _createPage(PrsNode root, double slideWidth, double slideHeight) {
     if (root.name != 'slide') {
       throw ArgumentError('${root.name} is not a slide');
     }
     SlideNode data = root as SlideNode;
     List<Component> pageComponents = [];
-    // TODO: for components: substract padding value using SubtractPadding class
     for (PrsNode child in data.children) {
       if (child is TextBoxNode) {
-        pageComponents.add(_createTextBox(child));
+        pageComponents
+            .add(_createTextBox(child, slideWidth, slideHeight, data.padding));
       } else if (child is ImageNode) {
-        pageComponents.add(_createImage(child));
+        pageComponents
+            .add(_createImage(child, slideWidth, slideHeight, data.padding));
       } else if (child is ConnectionNode) {
-        pageComponents.add(_createDivider(child));
+        pageComponents
+            .add(_createDivider(child, slideWidth, slideHeight, data.padding));
       } else {
         // ToDo: use exception handling and logging instead of print
-        print('ParseTree conversion not supported: $child.name');
+        print('ParseTree conversion not supported: ${child.name}');
       }
     }
     Page pageObj = Page(slideId: data.slideId, components: pageComponents);
@@ -77,7 +82,8 @@ class ModuleObjectGenerator {
     return pageObj;
   }
 
-  DividerComponent _createDivider(PrsNode root) {
+  DividerComponent _createDivider(PrsNode root, double slideWidth,
+      double slideHeight, Map<String, double> padding) {
     if (root is! ConnectionNode) {
       throw ArgumentError('${root.name} is not a connection line');
     }
@@ -85,14 +91,19 @@ class ModuleObjectGenerator {
     ConnectionNode cxn = root;
 
     return DividerComponent(
-        x: cxn.transform.offset.x,
-        y: cxn.transform.offset.y,
-        width: cxn.transform.size.x,
-        height: cxn.transform.size.y,
+        x: SizeConverter.getPointPercentX(
+            cxn.transform.offset.x, slideWidth, padding),
+        y: SizeConverter.getPointPercentY(
+            cxn.transform.offset.y, slideHeight, padding),
+        width: SizeConverter.getSizePercentX(
+            cxn.transform.size.x, slideWidth, padding),
+        height: SizeConverter.getSizePercentY(
+            cxn.transform.size.y, slideHeight, padding),
         thickness: cxn.weight);
   }
 
-  ImageComponent _createImage(PrsNode root) {
+  ImageComponent _createImage(PrsNode root, double slideWidth,
+      double slideHeight, Map<String, double> padding) {
     if (root.name != 'image') {
       throw ArgumentError('${root.name} is not a image');
     }
@@ -102,15 +113,16 @@ class ModuleObjectGenerator {
     Point2D size = transformData.size;
     ImageComponent imageComponentObj = ImageComponent(
         imagePath: data.path.replaceFirst('../media', 'resources/images'),
-        height: offset.y,
-        width: offset.x,
-        x: size.x,
-        y: size.y);
+        x: SizeConverter.getPointPercentX(size.x, slideWidth, padding),
+        y: SizeConverter.getPointPercentY(size.y, slideHeight, padding),
+        width: SizeConverter.getSizePercentX(offset.x, slideWidth, padding),
+        height: SizeConverter.getSizePercentY(offset.y, slideHeight, padding));
     return imageComponentObj;
   }
 
   // TODO: Create Text Components. Check with team on status of text components
-  TextComponent _createTextBox(PrsNode root) {
+  TextComponent _createTextBox(PrsNode root, double slideWidth,
+      double slideHeight, Map<String, double> padding) {
     late final Transform tsr;
     late final TextBodyNode textBody;
     List<TextPart> textParts = [];
@@ -153,10 +165,11 @@ class ModuleObjectGenerator {
 
     return TextComponent(
         textChildren: textParts,
-        x: tsr.offset.x,
-        y: tsr.offset.y,
-        width: tsr.size.x,
-        height: tsr.size.y);
+        x: SizeConverter.getPointPercentX(tsr.offset.x, slideWidth, padding),
+        y: SizeConverter.getPointPercentY(tsr.offset.y, slideHeight, padding),
+        width: SizeConverter.getSizePercentX(tsr.size.x, slideWidth, padding),
+        height:
+            SizeConverter.getSizePercentY(tsr.size.y, slideHeight, padding));
   }
 
   // TODO: Create Necessary Components
