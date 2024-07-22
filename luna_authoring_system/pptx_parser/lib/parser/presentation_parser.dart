@@ -481,42 +481,50 @@ class PresentationParser {
   }
 
   PrsNode _parseTransform(Map<String, dynamic> json) {
-    // check if it has own transform.
-    // if it does not have nvPr, look up in placeholder in slideLayout.
+    // helper function to get transform data from json
+    Transform _getTransformData(Map<String, dynamic> json) {
+      var xfrm = json['p:spPr']?['a:xfrm'];
+      if (xfrm == null)
+        return Transform(); // return default if xfrm is not available
 
+      var offset = xfrm['a:off'];
+      var size = xfrm['a:ext'];
+
+      return Transform()
+        ..offset = Point2D(
+          double.tryParse(offset?['_x'] ?? '0') ?? 0,
+          double.tryParse(offset?['_y'] ?? '0') ?? 0,
+        )
+        ..size = Point2D(
+          double.tryParse(size?['_cx'] ?? '0') ?? 0,
+          double.tryParse(size?['_cy'] ?? '0') ?? 0,
+        );
+    }
+
+    // Check for transform in placeholder
     var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
         ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
 
     if (placeholderToTransform.isNotEmpty &&
         ParserTools.getNullableValue(nvPr, ['p:ph']) != null) {
-      // this shape follows slideLayout
-      String phIdx = nvPr['p:ph']['_idx'];
+      String? phIdx = nvPr['p:ph']['_idx'];
 
-      if (placeholderToTransform[phIdx] == null) {
-        Transform node = Transform();
-        node.offset = Point2D(
-            double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
-            double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
-
-        node.size = Point2D(
-            double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
-            double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
-        return node;
-      } else {
-        return placeholderToTransform[phIdx];
+      if (phIdx != null) {
+        // Return existing placeholder transform if available
+        if (placeholderToTransform.containsKey(phIdx)) {
+          return placeholderToTransform[phIdx]!;
+        } else {
+          var node = _getTransformData(json);
+          placeholderToTransform[phIdx] =
+              node; // Cache new transform for future use
+          return node;
+        }
       }
-    } else {
-      Transform node = Transform();
-      node.offset = Point2D(
-          double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
-          double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
-
-      node.size = Point2D(
-          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
-          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
-      return node;
     }
+
+    // Return default transform if no placeholder or transform found
+    return _getTransformData(json);
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
