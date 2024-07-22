@@ -484,9 +484,12 @@ class PresentationParser {
     // helper function to get transform data from json
     Transform _getTransformData(Map<String, dynamic> json) {
       var xfrm = json['p:spPr']?['a:xfrm'];
-      if (xfrm == null)
-        return Transform(); // return default if xfrm is not available
-
+      if (xfrm == null) {
+        LogManager().logTrace(
+            'Invalid transform to parse: ${json['p:spPr']}\n May have a placeholder instead.',
+            LunaSeverityLevel.Critical);
+        return Transform();
+      }
       var offset = xfrm['a:off'];
       var size = xfrm['a:ext'];
 
@@ -515,9 +518,11 @@ class PresentationParser {
         if (placeholderToTransform.containsKey(phIdx)) {
           return placeholderToTransform[phIdx]!;
         } else {
+          LogManager().logTrace('Invalid placeholder to parse: $phIdx',
+              LunaSeverityLevel.Warning);
           var node = _getTransformData(json);
-          placeholderToTransform[phIdx] =
-              node; // Cache new transform for future use
+          // update placeholder map
+          placeholderToTransform[phIdx] = node;
           return node;
         }
       }
