@@ -490,18 +490,16 @@ class PresentationParser {
             LunaSeverityLevel.Critical);
         return Transform();
       }
-      var offset = xfrm['a:off'];
-      var size = xfrm['a:ext'];
+  
+      Transform node = Transform();
+      node.offset = Point2D(
+          double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
+          double.parse(json['p:spPr']['a:xfrm']['a:off']['_y']));
 
-      return Transform()
-        ..offset = Point2D(
-          double.tryParse(offset?['_x'] ?? '0') ?? 0,
-          double.tryParse(offset?['_y'] ?? '0') ?? 0,
-        )
-        ..size = Point2D(
-          double.tryParse(size?['_cx'] ?? '0') ?? 0,
-          double.tryParse(size?['_cy'] ?? '0') ?? 0,
-        );
+      node.size = Point2D(
+          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cx']),
+          double.parse(json['p:spPr']['a:xfrm']['a:ext']['_cy']));
+      return node;
     }
 
     // Check for transform in placeholder

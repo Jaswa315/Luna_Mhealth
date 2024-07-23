@@ -25,7 +25,6 @@ class Point2D with ToJson {
 
   @override
   Map<String, dynamic> toJson() {
-    // To Do: Fix! Should not be calculated here
     return {'x': x, 'y': y};
   }
 }
