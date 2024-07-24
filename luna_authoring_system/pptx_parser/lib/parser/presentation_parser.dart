@@ -487,10 +487,10 @@ class PresentationParser {
       if (xfrm == null) {
         LogManager().logTrace(
             'Invalid transform to parse: ${json['p:spPr']}\n May have a placeholder instead.',
-            LunaSeverityLevel.Critical);
+            LunaSeverityLevel.Warning);
         return Transform();
       }
-  
+
       Transform node = Transform();
       node.offset = Point2D(
           double.parse(json['p:spPr']['a:xfrm']['a:off']['_x']),
