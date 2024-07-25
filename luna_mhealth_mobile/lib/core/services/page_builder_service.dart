@@ -47,7 +47,8 @@ class ModulePageBuilderService {
   ) {
     //double scale = scaleUtilities.calculateScale(screenSize, module.width);
 
-    ModuleResourceFactory.moduleName = module.title; // TODO: update the logic
+    // ToDo: Fix We should be using a ModuleContext to get the current module and core properties
+    ModuleResourceFactory.moduleName = module.name; 
 
     if (!cachedPages.containsKey(pageIndex)) {
       if (cachedPages.length >= cacheSizeLimit) {

@@ -116,13 +116,15 @@ class ModuleStorage {
           container: _userPath, recursiveSearch: false);
 
       for (Uint8List moduleBytes in modulesBytes) {
-        Archive? archive = await _getArchiveFromBytes(moduleBytes);
+        if (_isZipFile(moduleBytes)) {
+          Archive? archive = await _getArchiveFromBytes(moduleBytes);
 
-        if (archive != null) {
-          for (final ArchiveFile file in archive) {
-            Module? module = _processArchiveFile(file);
-            if (module != null) {
-              modules.add(module);
+          if (archive != null) {
+            for (final ArchiveFile file in archive) {
+              Module? module = _processArchiveFile(file);
+              if (module != null) {
+                modules.add(module);
+              }
             }
           }
         }
@@ -414,7 +416,7 @@ class ModuleStorage {
   /// Method to get the full path for an image file within a module
   String getImagePath(String moduleName, String imageFileName) {
     moduleName = moduleName.trim().replaceAll(" ", "_");
-    return '$moduleName/resources/images/$imageFileName';
+    return 'resources/images/$imageFileName';
   }
 
   /// Method to get the full path for an audio file within a module,
@@ -422,7 +424,7 @@ class ModuleStorage {
   String getAudioPath(
       String moduleName, String audioFileName, String langLocale) {
     moduleName = moduleName.trim().replaceAll(" ", "_");
-    return '$moduleName/resources/$langLocale/audio/$audioFileName';
+    return 'resources/$langLocale/audio/$audioFileName';
   }
 
   String _getDataPath() {
@@ -466,5 +468,18 @@ class ModuleStorage {
   String _getInitialAudioDirectoryPath(String jsonData) {
     String dataLanguage = _getLanguageFromJSONData(jsonData);
     return '${_getAudioPath(dataLanguage)}';
+  }
+
+  bool _isZipFile(Uint8List bytes) {
+    const zipSignature = [0x50, 0x4B, 0x03, 0x04];
+    if (bytes.length < 4) {
+      return false;
+    }
+    for (int i = 0; i < 4; i++) {
+      if (bytes[i] != zipSignature[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 }
