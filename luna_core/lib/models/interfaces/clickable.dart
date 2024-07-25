@@ -6,10 +6,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/// An abstract class representing a clickable element.
+import 'package:flutter/gestures.dart';
+
+/// An abstract mixin representing a clickable element.
 ///
 /// Implementing classes must provide an implementation for the [onClick] method.
-abstract class Clickable {
-  /// Called when the element is clicked.
+mixin Clickable {
   void onClick();
+
+  GestureRecognizer getTapGestureRecognizer() {
+    return TapGestureRecognizer()..onTap = onClick;
+  }
 }

@@ -10,14 +10,27 @@ import 'package:flutter/cupertino.dart';
 
 /// Controller for managing navigation between pages.
 class NavigationController {
+  static final NavigationController _instance =
+      NavigationController._internal();
+
   /// The [PageController] for the navigation.
   final PageController pageController;
 
   /// The current page index.
   int currentPage;
 
-  /// Constructs a [NavigationController] with the given [pageController] and [currentPage].
-  NavigationController({required this.pageController, this.currentPage = 0});
+  /// Constructs a [NavigationController] with the given and optional [currentPage].
+  factory NavigationController({int? currentPage}) {
+    if (currentPage != null) {
+      _instance.currentPage = currentPage;
+      _instance.pageController.jumpToPage(currentPage);
+    }
+    return _instance;
+  }
+
+  NavigationController._internal()
+      : pageController = PageController(),
+        currentPage = 0;
 
   /// Jumps to the specified [page].
   void jumpToPage(int page) {

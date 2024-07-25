@@ -17,12 +17,12 @@ class ModuleObjectGenerator {
 
   ModuleObjectGenerator(this.parser);
 
-  Future<Module> generateLunaModule() async {
+  Future<Module> generateLunaModule(String fileName) async {
     PrsNode root = await parser.toPrsNode();
-    return _createModule(root);
+    return _createModule(root, fileName);
   }
 
-  Module _createModule(PrsNode root) {
+  Module _createModule(PrsNode root, String fileName) {
     // validate myself
     if (root.name != 'presentation') {
       throw ArgumentError('${root.name} is not a presentation');
@@ -42,6 +42,7 @@ class ModuleObjectGenerator {
         id: data.moduleID,
         moduleId: data.moduleID,
         title: data.title,
+        name: fileName,
         author: data.author,
         slideCount: data.children.length,
         section: {},
@@ -102,7 +103,8 @@ class ModuleObjectGenerator {
         height: offset.y,
         width: offset.x,
         x: size.x,
-        y: size.y);
+        y: size.y,
+        hyperlink: data.hyperlink?.toString());
     return imageComponentObj;
   }
 

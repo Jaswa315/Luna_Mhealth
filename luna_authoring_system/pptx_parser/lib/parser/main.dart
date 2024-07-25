@@ -66,7 +66,7 @@ Future<void> main(List<String> arguments) async {
 
   ModuleObjectGenerator moduleObjectGenerator =
       ModuleObjectGenerator(presentationParser);
-  Module module = await moduleObjectGenerator.generateLunaModule();
+  Module module = await moduleObjectGenerator.generateLunaModule(moduleName);
 
   String moduleJson = jsonEncode(module.toJson());
   File moduleSchema = File(p.join(outputDir, '$moduleName.json'));

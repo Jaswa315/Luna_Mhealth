@@ -20,7 +20,7 @@ import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
 /// Components can be rendered on the screen.
-abstract class Component extends Item with ChangeNotifier implements Clickable {
+abstract class Component extends Item with ChangeNotifier, Clickable{
   /// The type of the component.
   final ComponentType type;
   final double x;

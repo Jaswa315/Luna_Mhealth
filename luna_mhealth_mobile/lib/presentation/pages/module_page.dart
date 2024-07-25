@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart' as page_model;
-import 'package:luna_mhealth_mobile/core/controllers/navigation_controller.dart';
+import 'package:luna_core/controllers/navigation_controller.dart';
 import 'package:luna_mhealth_mobile/core/services/page_builder_service.dart';
 import 'package:luna_mhealth_mobile/core/services/page_persistence_service.dart';
 import 'package:luna_mhealth_mobile/presentation/widgets/module_page_navigation.dart';
@@ -46,7 +46,7 @@ class _ModulePageState extends State<ModulePage> {
   void initState() {
     super.initState();
     _navigationController =
-        NavigationController(pageController: PageController());
+        NavigationController();
     _loadLastVisitedPage();
   }
 

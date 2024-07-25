@@ -58,7 +58,8 @@ class Module extends Item {
     required this.games,
     required this.width,
     required this.height,
-  }) : super(id: id ?? Uuid().v4(), name: title, itemType: ItemType.module);
+    required String name,
+  }) : super(id: id ?? Uuid().v4(), name: name, itemType: ItemType.module);
 
   /// A factory method that creates a [Module] from a JSON map.
   factory Module.fromJson(Map<String, dynamic> json) {
@@ -89,6 +90,7 @@ class Module extends Item {
       games: category_games,
       width: (json['module']['width'] as num).toDouble(),
       height: (json['module']['height'] as num).toDouble(),
+      name: json['module']['name']
     );
   }
 
@@ -98,6 +100,7 @@ class Module extends Item {
       'module': {
         'moduleId': moduleId,
         'title': title,
+        'name': super.name,
         'author': author,
         'slideCount': slideCount,
         'section': section.map((key, value) => MapEntry(key, value)),

@@ -30,7 +30,7 @@ class ModuleResourceFactory {
 
   /// The module storage instance.
   static ModuleStorage moduleStorage =
-      ModuleStorage(userName: AppConstants.moduleStorageUserName);
+      ModuleStorage();
 
   /// Loads the available modules.
   static Future<List<Module>> getModules() async => _getAllModulesFromStorage();

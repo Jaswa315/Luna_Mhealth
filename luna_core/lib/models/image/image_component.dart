@@ -9,6 +9,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:luna_core/controllers/navigation_controller.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
@@ -18,15 +19,17 @@ import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 class ImageComponent extends Component {
   /// The path to the image file.
   String imagePath;
+  String? hyperlink;
 
   /// Constructs a new instance of [ImageComponent] with the given [imagePath], [x], [y], [width], and [height].
-  ImageComponent({
-    required this.imagePath,
-    required double x,
-    required double y,
-    required double width,
-    required double height,
-  }) : super(
+  ImageComponent(
+      {required this.imagePath,
+      required double x,
+      required double y,
+      required double width,
+      required double height,
+      this.hyperlink})
+      : super(
             type: ComponentType.image,
             x: x,
             y: y,
@@ -49,7 +52,10 @@ class ImageComponent extends Component {
           return Text('Error: ${snapshot.error}');
         }
         if (snapshot.hasData && snapshot.data != null) {
-          return Image.memory(snapshot.data!);
+          return GestureDetector(
+            onTap: onClick,
+            child: Image.memory(snapshot.data!),
+          );
         }
 
         return Text(AppConstants.noImageErrorMessage);
@@ -61,23 +67,33 @@ class ImageComponent extends Component {
   /// Updated the fromJson method to include moduleName
   static ImageComponent fromJson(Map<String, dynamic> json) {
     return ImageComponent(
-      imagePath: json['image_path'],
-      x: json['x'].toDouble(),
-      y: json['y'].toDouble(),
-      width: json['width'].toDouble(),
-      height: json['height'].toDouble(),
-    );
+        imagePath: json['image_path'],
+        x: json['x'].toDouble(),
+        y: json['y'].toDouble(),
+        width: json['width'].toDouble(),
+        height: json['height'].toDouble(),
+        hyperlink: json['hyperlink']);
   }
 
   Map<String, dynamic> toJson() => {
-    'type': super.type.name,
-    'image_path': imagePath,
-    'x': bounds.left,
-    'y': bounds.top,
-    'width': bounds.width,
-    'height': bounds.height
-  };
+        'type': super.type.name,
+        'image_path': imagePath,
+        'x': bounds.left,
+        'y': bounds.top,
+        'width': bounds.width,
+        'height': bounds.height,
+        'hyperlink': hyperlink
+      };
 
   @override
-  void onClick() {}
+  void onClick() {
+    // Process hyperlink
+    if (hyperlink != null) {
+      // Try to parse a single slide number
+      int? slideNum = int.tryParse(hyperlink!);
+      if (slideNum != null) {
+        NavigationController().jumpToPage(slideNum);
+      }
+    }
+  }
 }

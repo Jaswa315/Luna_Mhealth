@@ -3,10 +3,7 @@
 
 class AppConstants {
   /// App name
-  static const String appName = 'Luna';
-
-  /// The name of the module storage user.
-  static const String moduleStorageUserName = 'userProfile';
+  static const String appName = 'Luna';  
 
   /// Error messages
   static const String noImageErrorMessage = 'No image to display.';
