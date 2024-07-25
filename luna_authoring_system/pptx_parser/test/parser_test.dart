@@ -9,7 +9,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
-import 'dart:convert';
 import 'package:luna_core/utils/logging.dart';
 
 const String assetsFolder = 'test/test_assets';
@@ -225,44 +224,6 @@ void main() {
       int uniqueCount = uniqueId.length;
 
       expect(uniqueCount, slideCount);
-    });
-
-    test('Position values are described as percentages', () async {
-      var filename = "Image-Snorlax.pptx";
-      File file = File("$assetsFolder/$filename");
-      PresentationParser parser = PresentationParser(file);
-      File json = await parser.toJSON("./position_values_module.json");
-      String jsonString = json.readAsStringSync();
-
-      Map<String, dynamic> astJson = jsonDecode(jsonString);
-      double offsetX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['offset']['x'];
-      double offsetY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['offset']['y'];
-      double sizeX = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['size']['x'];
-      double sizeY = astJson['presentation']['slides'][0]['shapes'][0]
-          ['children'][0]['transform']['size']['y'];
-
-      bool isPercentage(x) {
-        if (x >= 0 && x <= 100) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-
-      expect(isPercentage(offsetX), true);
-      expect(isPercentage(offsetY), true);
-      expect(isPercentage(sizeX), true);
-      expect(isPercentage(sizeY), true);
-
-      try {
-        await json.delete();
-      } catch (e) {
-        LogManager().logTrace(
-            ("Error occured while deleting file."), LunaSeverityLevel.Verbose);
-      }
     });
 
     test('Audio is parsed for each shapes', () async {
@@ -530,6 +491,23 @@ void main() {
       expect(pptUID0, 1);
       expect(pptUID1, 2);
       expect(pptUID2, 3);
+    });
+
+    test('Padding values are parsed', () async {
+      var filename = "Module with top and bottom bar.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      expect(astJson['presentation']['slides'][0]['padding']["left"], 178877.0);
+      expect(astJson['presentation']['slides'][0]['padding']["top"], 271222.0);
+      expect(
+          astJson['presentation']['slides'][0]['padding']["right"], 178877.0);
+      expect(
+          astJson['presentation']['slides'][0]['padding']["bottom"], 547590.0);
+      expect(astJson['presentation']['slides'][1]['padding']["left"], 178877.0);
+      expect(astJson['presentation']['slides'][1]['padding']["top"], 271222.0);
+      expect(
+          astJson['presentation']['slides'][1]['padding']["right"], 178877.0);
+      expect(
+          astJson['presentation']['slides'][1]['padding']["bottom"], 547590.0);
     });
   });
 

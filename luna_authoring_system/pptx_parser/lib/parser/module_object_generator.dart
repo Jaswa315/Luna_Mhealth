@@ -8,11 +8,15 @@ import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:pptx_parser/utils/size_converter.dart';
 
 // import 'package:luna_core/utils/logging.dart';
 
 class ModuleObjectGenerator {
   late final PresentationParser parser;
+  late double _slideWidth;
+  late double _slideHeight;
+  late Map<String, double> _padding;
   //late final PrsNode _root;
 
   ModuleObjectGenerator(this.parser);
@@ -30,14 +34,19 @@ class ModuleObjectGenerator {
     // create myself
     // TODO: Try and Catch
     PresentationNode data = root as PresentationNode;
+    _slideWidth = data.width;
+    _slideHeight = data.height;
 
     List<Page> pages = [];
 
     for (PrsNode child in data.children) {
+      //TODO: pass width and height value to translate into percentage
       if (child is SlideNode) {
         pages.add(_createPage(child));
       }
     }
+
+    /// The width and height are in EMU values.
     Module moduleObj = Module(
         id: data.moduleID,
         moduleId: data.moduleID,
@@ -57,6 +66,8 @@ class ModuleObjectGenerator {
       throw ArgumentError('${root.name} is not a slide');
     }
     SlideNode data = root as SlideNode;
+    _padding = data.padding;
+
     List<Component> pageComponents = [];
     for (PrsNode child in data.children) {
       if (child is TextBoxNode) {
@@ -67,10 +78,11 @@ class ModuleObjectGenerator {
         pageComponents.add(_createDivider(child));
       } else {
         // ToDo: use exception handling and logging instead of print
-        print('ParseTree conversion not supported: $child.name');
+        print('ParseTree conversion not supported: ${child.name}');
       }
     }
     Page pageObj = Page(slideId: data.slideId, components: pageComponents);
+
     return pageObj;
   }
 
@@ -82,10 +94,14 @@ class ModuleObjectGenerator {
     ConnectionNode cxn = root;
 
     return DividerComponent(
-        x: cxn.transform.offset.x,
-        y: cxn.transform.offset.y,
-        width: cxn.transform.size.x,
-        height: cxn.transform.size.y,
+        x: SizeConverter.getPointPercentX(
+            cxn.transform.offset.x, _slideWidth, _padding),
+        y: SizeConverter.getPointPercentY(
+            cxn.transform.offset.y, _slideHeight, _padding),
+        width: SizeConverter.getSizePercentX(
+            cxn.transform.size.x, _slideWidth, _padding),
+        height: SizeConverter.getSizePercentY(
+            cxn.transform.size.y, _slideHeight, _padding),
         thickness: cxn.weight);
   }
 
@@ -99,10 +115,11 @@ class ModuleObjectGenerator {
     Point2D size = transformData.size;
     ImageComponent imageComponentObj = ImageComponent(
         imagePath: data.path.replaceFirst('../media', 'resources/images'),
-        height: offset.y,
-        width: offset.x,
-        x: size.x,
-        y: size.y);
+        x: SizeConverter.getPointPercentX(size.x, _slideWidth, _padding),
+        y: SizeConverter.getPointPercentY(size.y, _slideHeight, _padding),
+        width: SizeConverter.getSizePercentX(offset.x, _slideWidth, _padding),
+        height:
+            SizeConverter.getSizePercentY(offset.y, _slideHeight, _padding));
     return imageComponentObj;
   }
 
@@ -150,10 +167,11 @@ class ModuleObjectGenerator {
 
     return TextComponent(
         textChildren: textParts,
-        x: tsr.offset.x,
-        y: tsr.offset.y,
-        width: tsr.size.x,
-        height: tsr.size.y);
+        x: SizeConverter.getPointPercentX(tsr.offset.x, _slideWidth, _padding),
+        y: SizeConverter.getPointPercentY(tsr.offset.y, _slideHeight, _padding),
+        width: SizeConverter.getSizePercentX(tsr.size.x, _slideWidth, _padding),
+        height:
+            SizeConverter.getSizePercentY(tsr.size.y, _slideHeight, _padding));
   }
 
   // TODO: Create Necessary Components
