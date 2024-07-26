@@ -291,7 +291,8 @@ class ModuleStorage {
   }
 
   Future<Archive?> _getArchiveFromBytes(Uint8List zippedBytes) async {
-    return ZipDecoder().decodeBytes(zippedBytes, verify: true);
+    final inputStream = InputStream(zippedBytes);
+    return ZipDecoder().decodeBuffer(inputStream, verify: true);
   }
 
   Future<bool> _updateOrAddAssetToArchive(
@@ -405,6 +406,27 @@ class ModuleStorage {
         return _saveArchiveToFileSystem(moduleName, archive);
       }
       return false;
+    });
+  }
+
+  Future<bool> addModuleAssets(
+      String moduleName, Map<String, Uint8List?> filesPathBytesMap) async {
+    return await LogManager().logFunction('ModuleStorage.addModuleAssets',
+        () async {
+      if (filesPathBytesMap.isEmpty) {
+        return false;
+      }
+      Archive? archive = await _getModuleArchive(moduleName);
+
+      if (archive == null) {
+        return false;
+      }
+
+      filesPathBytesMap.forEach((key, value) async {
+        await _updateOrAddAssetToArchive(archive, key, value!);
+      });
+
+      return _saveArchiveToFileSystem(moduleName, archive);
     });
   }
 
