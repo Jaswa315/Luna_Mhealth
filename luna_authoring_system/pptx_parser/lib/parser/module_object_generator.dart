@@ -11,6 +11,10 @@ import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:pptx_parser/utils/size_converter.dart';
 
 // import 'package:luna_core/utils/logging.dart';
+// Font size is described as 100 * point value.
+// OpenXML: http://officeopenxml.com/drwSp-text-runProps.php
+const sizeToPointFactor = 100;
+const defaultFontSize = 1600; // 16.0 pt * 100
 
 class ModuleObjectGenerator {
   late final PresentationParser parser;
@@ -116,10 +120,10 @@ class ModuleObjectGenerator {
     Point2D size = transformData.size;
     ImageComponent imageComponentObj = ImageComponent(
         imagePath: data.path.replaceFirst('../media', 'resources/images'),
-        x: SizeConverter.getPointPercentX(size.x, _slideWidth, _padding),
-        y: SizeConverter.getPointPercentY(size.y, _slideHeight, _padding),
-        width: SizeConverter.getSizePercentX(offset.x, _slideWidth, _padding),
-        height: SizeConverter.getSizePercentY(offset.y, _slideHeight, _padding),
+        x: SizeConverter.getPointPercentX(offset.x, _slideWidth, _padding),
+        y: SizeConverter.getPointPercentY(offset.y, _slideHeight, _padding),
+        width: SizeConverter.getSizePercentX(size.x, _slideWidth, _padding),
+        height: SizeConverter.getSizePercentY(size.y, _slideHeight, _padding),
         hyperlink: data.hyperlink?.toString());
     return imageComponentObj;
   }
@@ -148,7 +152,8 @@ class ModuleObjectGenerator {
               if (pChild is TextNode) {
                 TextPart text = TextPart(
                     text: pChild.text ?? "",
-                    fontSize: pChild.size?.toDouble() ?? 16.0,
+                    fontSize: (pChild.size?.toDouble() ?? defaultFontSize) /
+                        sizeToPointFactor,
                     fontStyle:
                         pChild.italics ? FontStyle.italic : FontStyle.normal,
                     fontWeight:
