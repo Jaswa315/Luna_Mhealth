@@ -120,10 +120,10 @@ class ModuleObjectGenerator {
     Point2D size = transformData.size;
     ImageComponent imageComponentObj = ImageComponent(
         imagePath: data.path.replaceFirst('../media', 'resources/images'),
-        x: SizeConverter.getPointPercentX(size.x, _slideWidth, _padding),
-        y: SizeConverter.getPointPercentY(size.y, _slideHeight, _padding),
-        width: SizeConverter.getSizePercentX(offset.x, _slideWidth, _padding),
-        height: SizeConverter.getSizePercentY(offset.y, _slideHeight, _padding),
+        x: SizeConverter.getPointPercentX(offset.x, _slideWidth, _padding),
+        y: SizeConverter.getPointPercentY(offset.y, _slideHeight, _padding),
+        width: SizeConverter.getSizePercentX(size.x, _slideWidth, _padding),
+        height: SizeConverter.getSizePercentY(size.y, _slideHeight, _padding),
         hyperlink: data.hyperlink?.toString());
     return imageComponentObj;
   }
