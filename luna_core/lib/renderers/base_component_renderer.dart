@@ -29,7 +29,12 @@ abstract class BaseComponentRenderer<T extends Component> implements IRenderer {
           if (snapshot.hasError) throw Exception('Error loading component');
           if (!snapshot.hasData) throw Exception('No data');
 
-          return snapshot.data!;
+          Size screenSize = MediaQuery.of(context).size;
+          double lpX = screenSize.width * component.x;
+          double lpY = screenSize.height * component.y;
+
+          return Positioned(left: lpX, top: lpY, child: snapshot.data!);
+          //return snapshot.data!;
         },
       );
     } else {

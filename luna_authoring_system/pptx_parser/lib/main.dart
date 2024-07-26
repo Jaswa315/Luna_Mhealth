@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'presentation_parser.dart';
-import 'presentation_tree.dart';
-import 'image_extractor.dart';
+import 'package:flutter/services.dart' show SystemNavigator, rootBundle;
+import 'parser/presentation_parser.dart';
+import 'parser/presentation_tree.dart';
+import 'parser/image_extractor.dart';
 import 'package:luna_core/localization/localized_text.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_storage.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'dart:typed_data';
-import 'module_object_generator.dart';
+import 'parser/module_object_generator.dart';
 import 'package:path/path.dart' as p;
 
 Future<void> main(List<String> arguments) async {
@@ -97,6 +97,7 @@ Future<void> main(List<String> arguments) async {
   //    "resources/localization/$localizationFileName", localizationBytes);
 
   print('Package created successfully at $outputDir');
+  SystemNavigator.pop();
 }
 
 // Helper function to get PresentationNode from PresentationParser

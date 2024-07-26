@@ -48,7 +48,7 @@ class ModulePageBuilderService {
     //double scale = scaleUtilities.calculateScale(screenSize, module.width);
 
     // ToDo: Fix We should be using a ModuleContext to get the current module and core properties
-    ModuleResourceFactory.moduleName = module.name; 
+    ModuleResourceFactory.moduleName = module.name;
 
     if (!cachedPages.containsKey(pageIndex)) {
       if (cachedPages.length >= cacheSizeLimit) {
@@ -79,9 +79,7 @@ class ModulePageBuilderService {
             IRenderer renderer =
                 RendererFactory.getRenderer(component.runtimeType);
 
-            return Positioned(
-              child: renderer.renderComponent(component),
-            );
+            return renderer.renderComponent(component);
           }).toList(),
         ),
       ),
