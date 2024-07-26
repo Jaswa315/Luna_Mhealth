@@ -73,6 +73,14 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
   }
 }
 
+Map<String, double> scaleToLogicalPixel(BuildContext context, double x, double y) {
+  Size screenSize = MediaQuery.of(context).size;
+  return {
+    'X': screenSize.width * x,
+    'Y': screenSize.height * y
+  };
+}
+
 /// A mapping of component type IDs to ComponentType enum values.
 const Map<String, ComponentType> _typeMapping = {
   'image': ComponentType.image,

@@ -52,15 +52,14 @@ class ImageComponent extends Component {
           return Text('Error: ${snapshot.error}');
         }
         if (snapshot.hasData && snapshot.data != null) {
-          Size screenSize = MediaQuery.of(context).size;
-          double lpWidth = screenSize.width * width;
-          double lpHeight = screenSize.height * height;
+          Map<String, double> lpXY =
+              scaleToLogicalPixel(context, width, height);
           return GestureDetector(
             onTap: onClick,
             child: Image.memory(
               snapshot.data!,
-              width: lpWidth,
-              height: lpHeight,
+              width: lpXY['X'],
+              height: lpXY['Y'],
             ),
           );
         }
