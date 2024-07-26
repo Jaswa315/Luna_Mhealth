@@ -1,6 +1,6 @@
 {
-    "name": "pptx_parser",
-    "short_name": "pptx_parser",
+    "name": "luna_mhealth_mobile",
+    "short_name": "luna_mhealth_mobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
