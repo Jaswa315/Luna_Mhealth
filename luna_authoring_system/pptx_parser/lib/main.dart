@@ -19,6 +19,8 @@ Future<void> main(List<String> arguments) async {
   await GlobalConfiguration().loadFromAsset("app_settings");
   await LogManager.createInstance();
 
+  const int _BATCH_SIZE = 10;
+
   if (arguments.length < 4) {
     print(
         'Usage: dart main.dart <pptx_file_path> <localization_file_path> <output_dir> <module_name>');
@@ -80,13 +82,26 @@ Future<void> main(List<String> arguments) async {
   // Add extracted images and localization to the module archive
   Directory imagesDir = Directory(p.join(outputDir, 'images'));
   List<FileSystemEntity> imageFiles = imagesDir.listSync();
+  int counter = 0;
+  Map<String, Uint8List?> imageMap = {};
   for (var imageFile in imageFiles) {
     if (imageFile is File) {
       String fileName = p.basename(imageFile.path);
       Uint8List imageBytes = await imageFile.readAsBytes();
-      await moduleStorage.addModuleAsset(
-          moduleName, "resources/images/$fileName", imageBytes);
+      imageMap["resources/images/$fileName"] = imageBytes;
+      counter++;
+
+      if (counter > _BATCH_SIZE) {
+        await moduleStorage.addModuleAssets(moduleName, imageMap);
+        counter = 0;
+        imageMap.clear();
+      }
     }
+  }
+
+  // Process any remaining batch files
+  if (imageMap.isNotEmpty) {
+    await moduleStorage.addModuleAssets(moduleName, imageMap);
   }
 
   // ToDo: Add localization files to module correctly from temp dir
