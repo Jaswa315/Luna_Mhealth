@@ -31,6 +31,7 @@ Future<void> main(List<String> arguments) async {
     arguments = [
       // You'll need to change this or add the sample module to autoload the module.
       // Files are under /Users/username/Library/Containers/com.example.pptParser/Data by default on Macos
+      // On Windows, Files are generated under C:\Users\username\Documents.
       // data/sample for temp assets data/documents for the module.luna file
       samplePPTName,
       'sample/localization',
