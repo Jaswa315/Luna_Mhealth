@@ -1,4 +1,4 @@
-package com.example.ppt_parser
+package com.example.pptx_parser
 
 import io.flutter.embedding.android.FlutterActivity
 

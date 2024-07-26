@@ -1,6 +1,6 @@
 {
-    "name": "ppt_parser",
-    "short_name": "ppt_parser",
+    "name": "pptx_parser",
+    "short_name": "pptx_parser",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
