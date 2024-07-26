@@ -29,7 +29,10 @@ abstract class BaseComponentRenderer<T extends Component> implements IRenderer {
           if (snapshot.hasError) throw Exception('Error loading component');
           if (!snapshot.hasData) throw Exception('No data');
 
-          return snapshot.data!;
+          Map<String, double> lpXY =
+              scaleToLogicalPixel(context, component.x, component.y);
+
+          return Positioned(left: lpXY['X'], top: lpXY['Y'], child: snapshot.data!);
         },
       );
     } else {

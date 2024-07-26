@@ -52,9 +52,15 @@ class ImageComponent extends Component {
           return Text('Error: ${snapshot.error}');
         }
         if (snapshot.hasData && snapshot.data != null) {
+          Map<String, double> lpXY =
+              scaleToLogicalPixel(context, width, height);
           return GestureDetector(
             onTap: onClick,
-            child: Image.memory(snapshot.data!),
+            child: Image.memory(
+              snapshot.data!,
+              width: lpXY['X'],
+              height: lpXY['Y'],
+            ),
           );
         }
 
