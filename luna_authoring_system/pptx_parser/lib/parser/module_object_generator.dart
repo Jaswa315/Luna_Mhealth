@@ -11,9 +11,10 @@ import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:pptx_parser/utils/size_converter.dart';
 
 // import 'package:luna_core/utils/logging.dart';
-// From MS-ODRAW Glossary : Section 1.1
-const emuToPointFactor = 12700;
-const defaultEmuFontSize = 203200; // 16.0 pt * 12700
+// Font size is described as 100 * point value.
+// OpenXML: http://officeopenxml.com/drwSp-text-runProps.php
+const sizeToPointFactor = 100;
+const defaultFontSize = 1600; // 16.0 pt * 100
 
 class ModuleObjectGenerator {
   late final PresentationParser parser;
@@ -151,8 +152,8 @@ class ModuleObjectGenerator {
               if (pChild is TextNode) {
                 TextPart text = TextPart(
                     text: pChild.text ?? "",
-                    fontSize: (pChild.size?.toDouble() ?? defaultEmuFontSize) /
-                        emuToPointFactor,
+                    fontSize: (pChild.size?.toDouble() ?? defaultFontSize) /
+                        sizeToPointFactor,
                     fontStyle:
                         pChild.italics ? FontStyle.italic : FontStyle.normal,
                     fontWeight:
