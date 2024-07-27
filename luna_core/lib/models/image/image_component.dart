@@ -38,7 +38,7 @@ class ImageComponent extends Component {
             name: 'ImageComponent');
 
   @override
-  Future<Widget> render() async {
+  Future<Widget> render(Size screenSize) async {
     String imageFileName = imagePath.split('/').last;
 
     /// Updated the render method to use the new getImageBytes signature
@@ -52,14 +52,12 @@ class ImageComponent extends Component {
           return Text('Error: ${snapshot.error}');
         }
         if (snapshot.hasData && snapshot.data != null) {
-          Map<String, double> lpXY =
-              scaleToLogicalPixel(context, width, height);
           return GestureDetector(
             onTap: onClick,
             child: Image.memory(
               snapshot.data!,
-              width: lpXY['X'],
-              height: lpXY['Y'],
+              width: width * screenSize.width,
+              height: height * screenSize.height,
             ),
           );
         }

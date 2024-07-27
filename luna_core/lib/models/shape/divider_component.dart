@@ -40,7 +40,7 @@ class DividerComponent extends Component {
         );
 
   @override
-  Future<Widget> render() {
+  Future<Widget> render(Size screenSize) {
     return Future.value(
       Container(
         width: bounds.width,

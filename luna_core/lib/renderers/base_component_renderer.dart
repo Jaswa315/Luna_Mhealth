@@ -18,10 +18,10 @@ abstract class BaseComponentRenderer<T extends Component> implements IRenderer {
   /// Returns a [Widget] representing the rendered component.
   /// Throws an [ArgumentError] if the component is not of the correct type.
   @override
-  Widget renderComponent(dynamic component) {
+  Widget renderComponent(dynamic component, Size screenSize) {
     if (component is T) {
       return FutureBuilder<Widget>(
-        future: component.render(),
+        future: component.render(screenSize),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return CircularProgressIndicator();
@@ -29,10 +29,10 @@ abstract class BaseComponentRenderer<T extends Component> implements IRenderer {
           if (snapshot.hasError) throw Exception('Error loading component');
           if (!snapshot.hasData) throw Exception('No data');
 
-          Map<String, double> lpXY =
-              scaleToLogicalPixel(context, component.x, component.y);
-
-          return Positioned(left: lpXY['X'], top: lpXY['Y'], child: snapshot.data!);
+          return Positioned(
+              left: component.x * screenSize.width,
+              top: component.y * screenSize.height,
+              child: snapshot.data!);
         },
       );
     } else {

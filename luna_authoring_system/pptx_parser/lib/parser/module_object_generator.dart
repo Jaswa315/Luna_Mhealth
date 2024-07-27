@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:flutter/src/painting/borders.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
 import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'package:luna_core/models/page.dart';
@@ -9,6 +8,7 @@ import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:pptx_parser/utils/size_converter.dart';
+import 'package:luna_core/utils/conversion.dart';
 
 // import 'package:luna_core/utils/logging.dart';
 // Font size is described as 100 * point value.
@@ -160,9 +160,9 @@ class ModuleObjectGenerator {
                         pChild.bold ? FontWeight.bold : FontWeight.normal,
                     fontUnderline: pChild.underline
                         ? TextDecoration.underline
-                        : TextDecoration.none);
-                // ToDo: Reenable color.  Disabling due to unmapped values in presentation parser _parseText
-                // color: pChild.color != null ? Color(pChild.color) : null );
+                        : TextDecoration.none,
+                    color:
+                        pChild.color != null ? hexToColor(pChild.color) : null);
                 textParts.add(text);
               }
             }

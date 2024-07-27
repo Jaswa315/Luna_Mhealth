@@ -49,7 +49,7 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
   /// Abstract method for rendering the UI.
   /// Should be implemented by subclasses to render the UI for the component.
   /// Returns a [Widget] that represents the rendered UI for the component.
-  Future<Widget> render();
+  Future<Widget> render(Size screenSize);
 
   /// Converts a JSON object to a Component object.
   ///
@@ -73,13 +73,13 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
   }
 }
 
-Map<String, double> scaleToLogicalPixel(BuildContext context, double x, double y) {
-  Size screenSize = MediaQuery.of(context).size;
-  return {
-    'X': screenSize.width * x,
-    'Y': screenSize.height * y
-  };
-}
+// Map<String, double> scaleToLogicalPixel(BuildContext context, double x, double y) {
+//   Size screenSize = MediaQuery.of(context).size;
+//   return {
+//     'X': screenSize.width * x,
+//     'Y': screenSize.height * y
+//   };
+// }
 
 /// A mapping of component type IDs to ComponentType enum values.
 const Map<String, ComponentType> _typeMapping = {

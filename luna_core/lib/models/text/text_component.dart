@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../../enums/component_type.dart';
 import '../component.dart';
+import 'package:luna_core/utils/conversion.dart';
 
 /// Represents a text component that can be used in the Luna mHealth Mobile app.
 ///
@@ -40,17 +41,22 @@ class TextComponent extends Component {
         );
 
   @override
-  Future<Widget> render() {
+  Future<Widget> render(Size screenSize) {
     List<TextSpan> textSpans = [];
     for (TextPart textPart in textChildren) {
       textSpans.add(textPart.getTextSpan());
     }
 
     return Future.value(
-      RichText(
-          text: TextSpan(
-        children: textSpans,
-      )),
+      Container(
+          width: width * screenSize.width,
+          height: height * screenSize.height,
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: textSpans,
+            ),
+          )),
     );
   }
 
@@ -92,7 +98,7 @@ class TextPart {
   FontStyle fontStyle;
   FontWeight fontWeight;
   TextDecoration fontUnderline;
-  Color color;
+  Color? color;
 
   TextPart(
       {required this.text,
@@ -100,7 +106,7 @@ class TextPart {
       this.fontStyle = FontStyle.normal,
       this.fontWeight = FontWeight.normal,
       this.fontUnderline = TextDecoration.none,
-      this.color = Colors.black});
+      this.color});
 
   TextSpan getTextSpan() {
     return TextSpan(
@@ -118,18 +124,23 @@ class TextPart {
         text: json['text'],
         fontSize: json['fontSize'] ?? 16.0,
         // ToDo: No hardcoding font properties!
-        fontStyle: json['fontStyle'] ==  'italic' ? FontStyle.italic : FontStyle.normal,
-        color: Color(json['color']) ?? Colors.black,
-        fontWeight: json['fontWeight'] == 'bold' ? FontWeight.bold : FontWeight.normal,
-        fontUnderline: json['fontUnderline'] == 'underline' ? TextDecoration.underline : TextDecoration.none);
+        fontStyle:
+            json['fontStyle'] == 'italic' ? FontStyle.italic : FontStyle.normal,
+        color: json['color'] != null ? Color(json['color']) : Colors.black,
+        fontWeight:
+            json['fontWeight'] == 'bold' ? FontWeight.bold : FontWeight.normal,
+        fontUnderline: json['fontUnderline'] == 'underline'
+            ? TextDecoration.underline
+            : TextDecoration.none);
   }
 
   Map<String, dynamic> toJson() => {
         'text': text,
         'fontSize': fontSize,
         'fontStyle': fontStyle.name == FontStyle.italic ? 'italic' : '',
-        'color': color.value,
+        'color': color?.value,
         'fontWeight': fontWeight == FontWeight.bold ? 'bold' : '',
-        'fontUnderline': fontUnderline == TextDecoration.underline ? 'underline' : ''
+        'fontUnderline':
+            fontUnderline == TextDecoration.underline ? 'underline' : ''
       };
 }
