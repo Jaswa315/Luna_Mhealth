@@ -38,7 +38,7 @@ class CategoryGame extends Component {
             name: 'CategoryGame');
 
   @override
-  Future<Widget> render() async {
+  Future<Widget> render(Size screenSize) async {
 
     return GameContainer(gameContext: gameContext);
   }

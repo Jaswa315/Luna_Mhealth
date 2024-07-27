@@ -646,16 +646,13 @@ class PresentationParser {
     node.underline = (json['a:rPr']['_u'] == 'sng' ? true : false);
     String? sizeStr = json['a:rPr']['_sz'];
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
-    // ToDo: Map this to a real color value
-    // Some are just showing up as 'accent1' and such.
-    node.color = ParserTools.getNullableValue(
-        json['a:rPr'], ['a:solidFill', 'a:schemeClr', '_val']);
-    node.highlightColor = ParserTools.getNullableValue(
-        json['a:rPr'], ['a:highlight', 'a:srgbClr', '_val']);
+    // ToDo: Colors will come from either directly with srgbClr or schemeClr.  Need to map both
+    // if schemeClr, need to lookup against correct themeX.xml    
+    node.color = json['a:rPr']?['a:solidFill']?['a:srgbClr']?['_val'];
+    node.highlightColor = json['a:rPr']?['a:highlight']?['a:srgbClr']?['_val'];
     node.language = json['a:rPr']['_lang'];
     node.text = json['a:t'];
-    node.hyperlink = _getHyperlink(
-        ParserTools.getNullableValue(json, ['a:rPr', 'a:hlinkClick']));
+    node.hyperlink = _getHyperlink(json['a:rPr']?['a:hlinkClick']);
     node.uid = _nextTextNodeUID++;
 
     return node;

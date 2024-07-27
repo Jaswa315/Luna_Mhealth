@@ -79,7 +79,7 @@ class ModulePageBuilderService {
             IRenderer renderer =
                 RendererFactory.getRenderer(component.runtimeType);
 
-            return renderer.renderComponent(component);
+            return renderer.renderComponent(component, screenSize);
           }).toList(),
         ),
       ),
