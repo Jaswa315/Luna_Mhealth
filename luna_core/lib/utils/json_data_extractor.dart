@@ -41,8 +41,7 @@ class JSONDataExtractor {
     // Recursive function to traverse the JSON
     void recursiveSearch(dynamic element) {
       if (element is Map<String, dynamic>) {
-        if (element['type'] == 'text' &&
-            element.containsKey('uid') &&
+        if (element.containsKey('textID') &&
             element.containsKey('text')) {
           collectedTextNodes
               .add({'uid': element['uid'], 'text': element['text']});
@@ -77,3 +76,5 @@ class JSONDataExtractor {
     return moduleData['module']?['language'] ?? 'en-us';
   }
 }
+
+

@@ -17,7 +17,7 @@ import 'package:archive/archive.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/istorage_provider.dart';
-import 'package:luna_core/utils/json_data_extractor.dart';
+
 import 'package:luna_core/utils/logging.dart';
 import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 
@@ -162,7 +162,8 @@ class ModuleStorage {
   }
 
   /// Adds a new Module to the storage provider
-  Future<Module> createNewModuleFile(String moduleName, String jsonData) async {
+  Future<Module> createEmptyModuleFile(
+      String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleStorage.addModule', () async {
       Module module = Module.fromJson(jsonDecode(jsonData));
       String moduleFileName = _getModuleFileName(moduleName);
@@ -172,11 +173,12 @@ class ModuleStorage {
         throw Exception("Module already exists: $moduleFileName");
       }
 
-      Archive archive = await _createArchiveFromModuleDataWithInitialAssets(
-          moduleName, jsonData);
+      Archive moduleArchive = Archive();
 
-      await _saveArchiveToFileSystem(moduleName, archive);
+      await _updateOrAddAssetToArchive(moduleArchive,
+          "data/${_getModuleJsonFileName(moduleName)}", utf8.encode(jsonData));
 
+      await _saveArchiveToFileSystem(moduleName, moduleArchive);
       return module;
     });
   }
@@ -245,6 +247,95 @@ class ModuleStorage {
     });
   }
 
+  Future<bool> addFolderToModule(
+      String moduleName, String directoryPath) async {
+    if (!directoryPath.endsWith('/')) {
+      directoryPath += '/';
+    }
+
+    Archive? archive = await _getModuleArchive(moduleName);
+
+    ArchiveFile emptyDirectory = ArchiveFile(directoryPath, 0, Uint8List(0))
+      ..isFile = false
+      ..compress = false;
+
+    archive?.addFile(emptyDirectory);
+
+    return true;
+  }
+
+  /// Adds a generic asset to a Module.luna archive package.
+  ///
+  /// This method is used to add any type of asset (image, audio) to a module
+  /// by adding the asset file to the module's archive.
+  ///
+  /// Parameters:
+  /// - [moduleName]: The name of the module to which the asset should be added.
+  /// - [assetFileName]: The file path of the asset within the module's directory structure.
+  /// - [assetBytes]: The byte data of the asset file.
+  ///
+  /// Returns:
+  /// - true if the asset was successfully added to the module,
+  ///   or false if failed.
+  Future<bool> addModuleAsset(
+      String moduleName, String assetFileName, Uint8List? assetBytes) async {
+    return await LogManager().logFunction('ModuleStorage.addModuleAsset',
+        () async {
+      if (assetBytes == null) {
+        return false;
+      }
+      Archive? archive = await _getModuleArchive(moduleName);
+
+      if (archive == null) {
+        return false;
+      }
+
+      if (await _updateOrAddAssetToArchive(
+          archive, assetFileName, assetBytes!)) {
+        return _saveArchiveToFileSystem(moduleName, archive);
+      }
+      return false;
+    });
+  }
+
+  /// Adds a generic asset batch to a Module.luna archive package.
+  ///
+  /// This method is used to add any type of assets (image, audio) to a module
+  /// by adding the asset file to the module's archive in batch format.
+  ///
+  /// Parameters:
+  /// - [moduleName]: The name of the module to which the asset should be added.
+  /// - [filesPathBytesMap]: The path and data pairs of the assets within the module's directory structure.
+  ///
+  /// Returns:
+  /// - true if the asset was successfully added to the module,
+  ///   or false if failed.
+  Future<bool> addModuleAssets(
+      String moduleName, Map<String, Uint8List?> filesPathBytesMap) async {
+    return await LogManager().logFunction('ModuleStorage.addModuleAssets',
+        () async {
+      if (filesPathBytesMap.isEmpty) {
+        return false;
+      }
+      Archive? archive = await _getModuleArchive(moduleName);
+
+      if (archive == null) {
+        return false;
+      }
+
+      filesPathBytesMap.forEach((key, value) async {
+        await _updateOrAddAssetToArchive(archive, key, value!);
+      });
+
+      return _saveArchiveToFileSystem(moduleName, archive);
+    });
+  }
+
+  /// public wrapper method getAsset
+  Future<Uint8List?> getAsset(String moduleName, String assetFileName) {
+    return _extractAssetFromModule(moduleName, assetFileName);
+  }
+
   /// Validates a Module package
   bool validateModule(String moduleName) {
     // ToDo: Hook up to future Validation Classes
@@ -302,41 +393,33 @@ class ModuleStorage {
     return true;
   }
 
-  Future<bool> _addEmptyDirectoryFolderToArchive(
-      Archive archive, String directoryPath) async {
-    if (!directoryPath.endsWith('/')) {
-      directoryPath += '/';
+  Module? _processArchiveFile(ArchiveFile file) {
+    bool isFile = file.isFile;
+    bool isNotMacosSystemFile =
+        !file.name.startsWith(AppConstants.macosSystemFilePrefix);
+    bool isJsonFile = file.name.endsWith(".json");
+    bool isContentNotEmpty = file.content.isNotEmpty;
+
+    if (isFile && isNotMacosSystemFile && isJsonFile && isContentNotEmpty) {
+      String jsonModule = utf8.decode(file.content as List<int>);
+
+      return Module.fromJson(jsonDecode(jsonModule));
     }
 
-    ArchiveFile emptyDirectory = ArchiveFile(directoryPath, 0, Uint8List(0))
-      ..isFile = false
-      ..compress = false;
-
-    archive.addFile(emptyDirectory);
-    return true;
+    return null;
   }
 
-  Future<Archive> _createArchiveFromModuleDataWithInitialAssets(
-      String moduleName, String jsonData) async {
-    Archive moduleArchive = Archive();
-    await _updateOrAddAssetToArchive(
-        moduleArchive,
-        "${_getDataPath()}/${_getModuleJsonFileName(moduleName)}",
-        utf8.encode(jsonData));
-
-    await _addEmptyDirectoryFolderToArchive(moduleArchive, _getImagePath());
-
-    // ToDo: CSV generation should be in Authoring, not in the standard createmodule flow.
-    //Uint8List? csvFileBytes = await _createInitialNewLanguageCSV(jsonData);
-
-    //String csvFilePath = _getInitialCSVFilePath(jsonData);
-
-    //await _updateOrAddAssetToArchive(moduleArchive, csvFilePath, csvFileBytes!);
-
-    await _addEmptyDirectoryFolderToArchive(
-        moduleArchive, _getInitialAudioDirectoryPath(jsonData));
-
-    return moduleArchive;
+  bool _isZipFile(Uint8List bytes) {
+    const zipSignature = [0x50, 0x4B, 0x03, 0x04];
+    if (bytes.length < 4) {
+      return false;
+    }
+    for (int i = 0; i < 4; i++) {
+      if (bytes[i] != zipSignature[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   String _getModuleTempFilePath(String moduleName) {
@@ -357,151 +440,5 @@ class ModuleStorage {
 
   String _getModuleJsonFileName(String moduleName) {
     return '${moduleName.trim().replaceAll(" ", "_")}.json';
-  }
-
-  Module? _processArchiveFile(ArchiveFile file) {
-    bool isFile = file.isFile;
-    bool isNotMacosSystemFile =
-        !file.name.startsWith(AppConstants.macosSystemFilePrefix);
-    bool isJsonFile = file.name.endsWith(".json");
-    bool isContentNotEmpty = file.content.isNotEmpty;
-
-    if (isFile && isNotMacosSystemFile && isJsonFile && isContentNotEmpty) {
-      String jsonModule = utf8.decode(file.content as List<int>);
-
-      return Module.fromJson(jsonDecode(jsonModule));
-    }
-
-    return null;
-  }
-
-  /// Adds a generic asset to a Module.luna archive package.
-  ///
-  /// This method is used to add any type of asset (image, audio) to a module
-  /// by adding the asset file to the module's archive.
-  ///
-  /// Parameters:
-  /// - [moduleName]: The name of the module to which the asset should be added.
-  /// - [assetFileName]: The file path of the asset within the module's directory structure.
-  /// - [assetBytes]: The byte data of the asset file.
-  ///
-  /// Returns:
-  /// - true if the asset was successfully added to the module,
-  ///   or false if failed.
-  Future<bool> addModuleAsset(
-      String moduleName, String assetFileName, Uint8List? assetBytes) async {
-    return await LogManager().logFunction('ModuleStorage.addModuleAsset',
-        () async {
-      if (assetBytes == null) {
-        return false;
-      }
-      Archive? archive = await _getModuleArchive(moduleName);
-
-      if (archive == null) {
-        return false;
-      }
-
-      if (await _updateOrAddAssetToArchive(
-          archive, assetFileName, assetBytes!)) {
-        return _saveArchiveToFileSystem(moduleName, archive);
-      }
-      return false;
-    });
-  }
-
-  Future<bool> addModuleAssets(
-      String moduleName, Map<String, Uint8List?> filesPathBytesMap) async {
-    return await LogManager().logFunction('ModuleStorage.addModuleAssets',
-        () async {
-      if (filesPathBytesMap.isEmpty) {
-        return false;
-      }
-      Archive? archive = await _getModuleArchive(moduleName);
-
-      if (archive == null) {
-        return false;
-      }
-
-      filesPathBytesMap.forEach((key, value) async {
-        await _updateOrAddAssetToArchive(archive, key, value!);
-      });
-
-      return _saveArchiveToFileSystem(moduleName, archive);
-    });
-  }
-
-  /// public wrapper method getAsset
-  Future<Uint8List?> getAsset(String moduleName, String assetFileName) {
-    return _extractAssetFromModule(moduleName, assetFileName);
-  }
-
-  /// Method to get the full path for an image file within a module
-  String getImagePath(String moduleName, String imageFileName) {
-    moduleName = moduleName.trim().replaceAll(" ", "_");
-    return 'resources/images/$imageFileName';
-  }
-
-  /// Method to get the full path for an audio file within a module,
-  /// considering language locale
-  String getAudioPath(
-      String moduleName, String audioFileName, String langLocale) {
-    moduleName = moduleName.trim().replaceAll(" ", "_");
-    return 'resources/$langLocale/audio/$audioFileName';
-  }
-
-  String _getDataPath() {
-    return "data";
-  }
-
-  String _getResourcePath() {
-    return "resources";
-  }
-
-  String _getImagePath() {
-    return "${_getResourcePath()}/images";
-  }
-
-  String _getLanguagePath(String language) {
-    return "${_getResourcePath()}/$language";
-  }
-
-  String _getAudioPath(String language) {
-    return "${_getLanguagePath(language)}/audio";
-  }
-
-  Future<Uint8List?> _createInitialNewLanguageCSV(String jsonData) async {
-    JSONDataExtractor extractor = JSONDataExtractor();
-    Uint8List? csvData =
-        await extractor.extractTextDataFromJSONAsCSVBytes(jsonData);
-    return csvData;
-  }
-
-  String _getLanguageFromJSONData(String jsonData) {
-    JSONDataExtractor extractor = JSONDataExtractor();
-    String languageAsString = extractor.extractLanguageFromJSON(jsonData);
-    return languageAsString;
-  }
-
-  String _getInitialCSVFilePath(String jsonData) {
-    String dataLanguage = _getLanguageFromJSONData(jsonData);
-    return '${_getLanguagePath(dataLanguage)}/$dataLanguage.csv';
-  }
-
-  String _getInitialAudioDirectoryPath(String jsonData) {
-    String dataLanguage = _getLanguageFromJSONData(jsonData);
-    return '${_getAudioPath(dataLanguage)}';
-  }
-
-  bool _isZipFile(Uint8List bytes) {
-    const zipSignature = [0x50, 0x4B, 0x03, 0x04];
-    if (bytes.length < 4) {
-      return false;
-    }
-    for (int i = 0; i < 4; i++) {
-      if (bytes[i] != zipSignature[i]) {
-        return false;
-      }
-    }
-    return true;
   }
 }

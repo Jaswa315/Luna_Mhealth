@@ -98,6 +98,7 @@ class TextPart {
   FontStyle fontStyle;
   FontWeight fontWeight;
   TextDecoration fontUnderline;
+  int? textID;
   Color? color;
 
   TextPart(
@@ -106,6 +107,7 @@ class TextPart {
       this.fontStyle = FontStyle.normal,
       this.fontWeight = FontWeight.normal,
       this.fontUnderline = TextDecoration.none,
+      this.textID,
       this.color});
 
   TextSpan getTextSpan() {
@@ -122,6 +124,7 @@ class TextPart {
   static TextPart fromJson(Map<String, dynamic> json) {
     return TextPart(
         text: json['text'],
+        textID: json['textID'],
         fontSize: json['fontSize'] ?? 16.0,
         // ToDo: No hardcoding font properties!
         fontStyle:
@@ -136,6 +139,7 @@ class TextPart {
 
   Map<String, dynamic> toJson() => {
         'text': text,
+        'textID': textID,
         'fontSize': fontSize,
         'fontStyle': fontStyle.name == FontStyle.italic ? 'italic' : '',
         'color': color?.value,

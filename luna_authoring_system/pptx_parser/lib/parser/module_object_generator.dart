@@ -152,6 +152,7 @@ class ModuleObjectGenerator {
               if (pChild is TextNode) {
                 TextPart text = TextPart(
                     text: pChild.text ?? "",
+                    textID: pChild.uid,
                     fontSize: (pChild.size?.toDouble() ?? defaultFontSize) /
                         sizeToPointFactor,
                     fontStyle:
