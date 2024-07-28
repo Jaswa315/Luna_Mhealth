@@ -18,7 +18,7 @@ class JSONDataExtractor {
 
     for (var element in textData) {
       String line =
-          '"${element['uid']}","${element['text']}","${element['text']}"';
+          '"${element['textID']}","${element['text']}","${element['text']}"';
       csvData.add(line);
     }
 
@@ -44,7 +44,7 @@ class JSONDataExtractor {
         if (element.containsKey('textID') &&
             element.containsKey('text')) {
           collectedTextNodes
-              .add({'uid': element['uid'], 'text': element['text']});
+              .add({'textID': element['textID'], 'text': element['text']});
         }
         element.forEach((key, value) {
           recursiveSearch(value);
