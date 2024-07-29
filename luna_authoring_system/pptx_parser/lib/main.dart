@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemNavigator, rootBundle;
+import 'package:luna_core/storage/module_resource_factory.dart';
 import 'parser/presentation_parser.dart';
 import 'parser/presentation_tree.dart';
 import 'parser/image_extractor.dart';
@@ -76,11 +77,19 @@ Future<void> main(List<String> arguments) async {
   moduleSchema.writeAsString(moduleJson);
 
   // Create the package (ZIP file) using ModuleStorage
-  ModuleStorage moduleStorage = ModuleStorage();
   // Save module JSON data into the archive
-  await moduleStorage.createNewModuleFile(moduleName, moduleJson);
+  ModuleResourceFactory.addModule(moduleName, moduleJson);
+
+  // Create initial CSV localization file
+  Uint8List? csvFileBytes =
+      await ModuleResourceFactory.createInitialNewLanguageCSV(moduleJson);
+  String csvFilePath = ModuleResourceFactory.getInitialCSVFilePath(moduleJson);
+  File csvFile = File(p.join(localizationFilePath, csvFilePath));
+  csvFile.parent.createSync(recursive: true);
+  csvFile.writeAsBytes(csvFileBytes!);
 
   // Add extracted images and localization to the module archive
+  ModuleStorage moduleStorage = ModuleStorage();
   Directory imagesDir = Directory(p.join(outputDir, 'images'));
   List<FileSystemEntity> imageFiles = imagesDir.listSync();
   int counter = 0;

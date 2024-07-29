@@ -9,8 +9,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:luna_core/utils/json_data_extractor.dart';
 import 'package:luna_core/utils/logging.dart';
-import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 import 'package:path/path.dart' as p;
 
 import '../models/module.dart';
@@ -29,8 +29,7 @@ class ModuleResourceFactory {
   }
 
   /// The module storage instance.
-  static ModuleStorage moduleStorage =
-      ModuleStorage();
+  static ModuleStorage moduleStorage = ModuleStorage();
 
   /// Loads the available modules.
   static Future<List<Module>> getModules() async => _getAllModulesFromStorage();
@@ -57,7 +56,11 @@ class ModuleResourceFactory {
   /// Adds a module with the given name and JSON data.
   static Future<Module> addModule(String moduleName, String jsonData) async {
     return await LogManager().logFunction('ModuleHandler.addModule', () async {
-      return moduleStorage.createNewModuleFile(moduleName, jsonData);
+      Module module =
+          await moduleStorage.createEmptyModuleFile(moduleName, jsonData);
+      await _PopulateModuleDataWithInitialAssets(moduleName, jsonData);
+
+      return module;
     });
   }
 
@@ -69,17 +72,34 @@ class ModuleResourceFactory {
     return moduleStorage.importModuleFile(moduleName, fileData);
   }
 
+  static Future<bool> _PopulateModuleDataWithInitialAssets(
+      String moduleName, String jsonData) async {
+    await moduleStorage.addFolderToModule(moduleName, _getImagePath());
+
+    // ToDo: CSV generation should be in Authoring, not in the standard createmodule flow.
+    //Uint8List? csvFileBytes = await _createInitialNewLanguageCSV(jsonData);
+
+    //String csvFilePath = _getInitialCSVFilePath(jsonData);
+
+    //await _updateOrAddAssetToArchive(moduleArchive, csvFilePath, csvFileBytes!);
+
+    await moduleStorage.addFolderToModule(
+        moduleName, _getInitialAudioDirectoryPath(jsonData));
+
+    return true;
+  }
+
   /// Gets the image with the given name from the stored module.
   static Future<Uint8List?> getImageBytes(String imageFileName) async {
     return moduleStorage.getAsset(
-        moduleName, moduleStorage.getImagePath(moduleName, imageFileName));
+        moduleName, '${_getImagePath()}/$imageFileName');
   }
 
   /// Gets the audio with the given name and language locale from the stored module.
   static Future<Uint8List?> getAudioBytes(
       String moduleName, String audioFileName, String langLocale) async {
     return moduleStorage.getAsset(moduleName,
-        moduleStorage.getAudioPath(moduleName, audioFileName, langLocale));
+        '${_getAudioPath(langLocale)}/$audioFileName');
   }
 
   /// Adds an image asset to a Module.luna archive package.
@@ -100,5 +120,58 @@ class ModuleResourceFactory {
   /// Loads all modules from storage.
   static Future<List<Module>> _getAllModulesFromStorage() async {
     return await moduleStorage.loadAllModules() as List<Module>;
+  }
+
+  /// Method to get the full path for an image file within a module
+  String getImagePath(String moduleName, String imageFileName) {
+    moduleName = moduleName.trim().replaceAll(" ", "_");
+    return 'resources/images/$imageFileName';
+  }
+
+  /// Method to get the full path for an audio file within a module,
+  /// considering language locale
+  String getAudioPath(
+      String moduleName, String audioFileName, String langLocale) {
+    moduleName = moduleName.trim().replaceAll(" ", "_");
+    return 'resources/$langLocale/audio/$audioFileName';
+  }
+
+  static String _getResourcePath() {
+    return "resources";
+  }
+
+  static String _getImagePath() {
+    return "${_getResourcePath()}/images";
+  }
+
+  static String _getLanguagePath(String language) {
+    return "${_getResourcePath()}/$language";
+  }
+
+  static String _getAudioPath(String language) {
+    return "${_getLanguagePath(language)}/audio";
+  }
+
+  static Future<Uint8List?> createInitialNewLanguageCSV(String jsonData) async {
+    JSONDataExtractor extractor = JSONDataExtractor();
+    Uint8List? csvData =
+        await extractor.extractTextDataFromJSONAsCSVBytes(jsonData);
+    return csvData;
+  }
+
+  static String _getLanguageFromJSONData(String jsonData) {
+    JSONDataExtractor extractor = JSONDataExtractor();
+    String languageAsString = extractor.extractLanguageFromJSON(jsonData);
+    return languageAsString;
+  }
+
+  static String getInitialCSVFilePath(String jsonData) {
+    String dataLanguage = _getLanguageFromJSONData(jsonData);
+    return '${_getLanguagePath(dataLanguage)}/$dataLanguage.csv';
+  }
+
+  static String _getInitialAudioDirectoryPath(String jsonData) {
+    String dataLanguage = _getLanguageFromJSONData(jsonData);
+    return '${_getAudioPath(dataLanguage)}';
   }
 }

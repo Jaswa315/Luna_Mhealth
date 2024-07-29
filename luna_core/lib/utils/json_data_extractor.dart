@@ -18,7 +18,7 @@ class JSONDataExtractor {
 
     for (var element in textData) {
       String line =
-          '"${element['uid']}","${element['text']}","${element['text']}"';
+          '"${element['textID']}","${element['text']}","${element['text']}"';
       csvData.add(line);
     }
 
@@ -41,11 +41,10 @@ class JSONDataExtractor {
     // Recursive function to traverse the JSON
     void recursiveSearch(dynamic element) {
       if (element is Map<String, dynamic>) {
-        if (element['type'] == 'text' &&
-            element.containsKey('uid') &&
+        if (element.containsKey('textID') &&
             element.containsKey('text')) {
           collectedTextNodes
-              .add({'uid': element['uid'], 'text': element['text']});
+              .add({'textID': element['textID'], 'text': element['text']});
         }
         element.forEach((key, value) {
           recursiveSearch(value);
@@ -77,3 +76,5 @@ class JSONDataExtractor {
     return moduleData['module']?['language'] ?? 'en-us';
   }
 }
+
+
