@@ -51,6 +51,7 @@ class TextComponent extends Component {
       Container(
           width: width * screenSize.width,
           height: height * screenSize.height,
+          padding: EdgeInsets.all(16.0),
           child: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
