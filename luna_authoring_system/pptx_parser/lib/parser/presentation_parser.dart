@@ -464,13 +464,14 @@ class PresentationParser {
     node.imageName = json['p:nvPicPr']['p:cNvPr']['_name'];
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
-    String audioRelsLink = json['p:nvPicPr']['p:nvPr'].isNotEmpty &&
-            json['p:nvPicPr']['p:nvPr'].containsKey('a:audioFile') &&
-            json['p:nvPicPr']['p:nvPr']['a:audioFile'].isNotEmpty &&
-            json['p:nvPicPr']['p:nvPr']['a:audioFile'].containsKey('_r:link') &&
-            json['p:nvPicPr']['p:nvPr']['a:audioFile']['_r:link'].isNotEmpty
-        ? json['p:nvPicPr']['p:nvPr']['a:audioFile']['_r:link']
-        : "";
+    String? audioRelsLink = "";
+    try {
+      audioRelsLink =
+          json['p:nvPicPr']?['p:nvPr']?['a:audioFile']?['_r:link'] ?? "";
+    } catch (e) {
+      LogManager().logTrace(
+          "Empty audioRelsLink cannot be parsed.", LunaSeverityLevel.Error);
+    }
 
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
@@ -547,14 +548,13 @@ class PresentationParser {
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    String shape = json.containsKey('p:spPr') &&
-            json['p:spPr'].isNotEmpty &&
-            json['p:spPr'].containsKey('a:prstGeom') &&
-            json['p:spPr']['a:prstGeom'].isNotEmpty &&
-            json['p:spPr']['a:prstGeom'].containsKey('_prst') &&
-            json['p:spPr']['a:prstGeom']['_prst'].isNotEmpty
-        ? json['p:spPr']['a:prstGeom']['_prst']
-        : 'rect';
+    String? shape = "rect";
+    try {
+      shape = json['p:spPr']?['a:prstGeom']?['_prst'] ?? "rect";
+    } catch (e) {
+      LogManager()
+          .logTrace("Empty _prst cannot be parsed.", LunaSeverityLevel.Error);
+    }
 
     ShapeNode node = ShapeNode();
 

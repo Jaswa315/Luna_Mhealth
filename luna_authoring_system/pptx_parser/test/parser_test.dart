@@ -10,16 +10,21 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
 import 'package:luna_core/utils/logging.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:flutter/widgets.dart';
 
 const String assetsFolder = 'test/test_assets';
 
 Future<Map<String, dynamic>> toMapFromPath(String fileName) async {
+  LogManager.createInstance();
   File file = File("$assetsFolder/$fileName");
   PresentationParser parser = PresentationParser(file);
   return parser.toMap();
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  GlobalConfiguration().loadFromAsset("app_settings");
   group('Tests for the PPTX Parser', () {
     test('A Textbox has content', () async {
       // Arrange
