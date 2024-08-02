@@ -16,15 +16,18 @@ import 'package:flutter/widgets.dart';
 const String assetsFolder = 'test/test_assets';
 
 Future<Map<String, dynamic>> toMapFromPath(String fileName) async {
-  LogManager.createInstance();
   File file = File("$assetsFolder/$fileName");
   PresentationParser parser = PresentationParser(file);
   return parser.toMap();
 }
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  GlobalConfiguration().loadFromAsset("app_settings");
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    await GlobalConfiguration().loadFromAsset("app_settings");
+    await LogManager.createInstance();
+  });
+
   group('Tests for the PPTX Parser', () {
     test('A Textbox has content', () async {
       // Arrange

@@ -109,7 +109,7 @@ class PresentationParser {
       return false;
     }
 
-    String? placeholderType = "";
+    String placeholderType = "";
 
     try {
       placeholderType = json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] ?? "";
@@ -466,7 +466,7 @@ class PresentationParser {
     node.imageName = json['p:nvPicPr']['p:cNvPr']['_name'];
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
-    String? audioRelsLink = "";
+    String audioRelsLink = "";
     try {
       audioRelsLink =
           json['p:nvPicPr']?['p:nvPr']?['a:audioFile']?['_r:link'] ?? "";
@@ -551,7 +551,7 @@ class PresentationParser {
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    String? shape = "rect";
+    String shape = "rect";
     try {
       shape = json['p:spPr']?['a:prstGeom']?['_prst'] ?? "rect";
     } catch (e) {
