@@ -115,7 +115,8 @@ class PresentationParser {
       placeholderType = json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] ?? "";
     } catch (e) {
       LogManager().logTrace(
-          "Empty placeholder cannot be parsed.", LunaSeverityLevel.Error);
+          "Cannot access to json['p:nvSpPr']['p:nvPr']['p:ph']['_type'] in $json\nParsing as \"\" by default.",
+          LunaSeverityLevel.Error);
     }
 
     if (json['p:nvSpPr']['p:cNvSpPr'].isNotEmpty &&
@@ -471,7 +472,8 @@ class PresentationParser {
           json['p:nvPicPr']?['p:nvPr']?['a:audioFile']?['_r:link'] ?? "";
     } catch (e) {
       LogManager().logTrace(
-          "Empty audioRelsLink cannot be parsed.", LunaSeverityLevel.Error);
+          "Cannot access to json['p:nvPicPr']['p:nvPr']['a:audioFile']['_r:link'] in $json\nParsing as \"\" by default.",
+          LunaSeverityLevel.Error);
     }
 
     node.path = slideRelationship?[relsLink];
@@ -553,8 +555,9 @@ class PresentationParser {
     try {
       shape = json['p:spPr']?['a:prstGeom']?['_prst'] ?? "rect";
     } catch (e) {
-      LogManager()
-          .logTrace("Empty _prst cannot be parsed.", LunaSeverityLevel.Error);
+      LogManager().logTrace(
+          "Cannot access to json['p:spPr']['a:prstGeom']['_prst'] in $json\nParsing as \"rect\" by default.",
+          LunaSeverityLevel.Error);
     }
 
     ShapeNode node = ShapeNode();
@@ -629,8 +632,9 @@ class PresentationParser {
     try {
       node.wrap = json['a:bodyPr']?['_wrap'] ?? "rect";
     } catch (e) {
-      LogManager()
-          .logTrace("Empty _wrap cannot be parsed", LunaSeverityLevel.Error);
+      LogManager().logTrace(
+          "Cannot access to json['a:bodyPr']['_wrap'] in $json\nParsing as \"rect\" by default.",
+          LunaSeverityLevel.Error);
     }
 
     var pObj = json['a:p'];
