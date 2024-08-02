@@ -105,7 +105,6 @@ class PresentationParser {
   }
 
   bool _isTextBox(Map<String, dynamic> json) {
-    
     if (!json.containsKey('p:nvSpPr')) {
       return false;
     }
@@ -498,12 +497,7 @@ class PresentationParser {
   PrsNode _parseTransform(Map<String, dynamic> json) {
     // helper function to get transform data from json
     Transform _getTransformData(Map<String, dynamic> json) {
-      Map<String, dynamic>? xfrm = json.containsKey('p:spPr') &&
-              json['p:spPr'].isNotEmpty &&
-              json['p:spPr'].containsKey('a:xfrm') &&
-              json['p:spPr']['a:xfrm'].isNotEmpty
-          ? json['p:spPr']['a:xfrm']
-          : null;
+      Map<String, dynamic>? xfrm = json['p:spPr']?['a:xfrm'];
 
       if (xfrm == null) {
         LogManager().logTrace(
