@@ -109,13 +109,14 @@ class PresentationParser {
       return false;
     }
 
-    String placeholderType = json['p:nvSpPr']['p:nvPr'].isNotEmpty &&
-            json['p:nvSpPr']['p:nvPr'].containsKey('p:ph') &&
-            json['p:nvSpPr']['p:nvPr']['p:ph'].isNotEmpty &&
-            json['p:nvSpPr']['p:nvPr']['p:ph'].containsKey('_type') &&
-            json['p:nvSpPr']['p:nvPr']['p:ph']['_type'].isNotEmpty
-        ? json['p:nvSpPr']['p:nvPr']['p:ph']['_type']
-        : "";
+    String? placeholderType = "";
+
+    try {
+      placeholderType = json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] ?? "";
+    } catch (e) {
+      LogManager().logTrace(
+          "Empty placeholder cannot be parsed.", LunaSeverityLevel.Error);
+    }
 
     if (json['p:nvSpPr']['p:cNvSpPr'].isNotEmpty &&
             json['p:nvSpPr']['p:cNvSpPr'].containsKey('_txBox') &&
@@ -623,12 +624,14 @@ class PresentationParser {
   PrsNode _parseTextBody(Map<String, dynamic> json) {
     TextBodyNode node = TextBodyNode();
 
-    node.wrap = json.containsKey('a:bodyPr') &&
-            json['a:bodyPr'].isNotEmpty &&
-            json['a:bodyPr'].containsKey('_wrap') &&
-            json['a:bodyPr']['_wrap'].isNotEmpty
-        ? json['a:bodyPr']['_wrap']
-        : 'rect';
+    node.wrap = "rect";
+
+    try {
+      node.wrap = json['a:bodyPr']?['_wrap'] ?? "rect";
+    } catch (e) {
+      LogManager()
+          .logTrace("Empty _wrap cannot be parsed", LunaSeverityLevel.Error);
+    }
 
     var pObj = json['a:p'];
     if (pObj is List) {
@@ -645,12 +648,14 @@ class PresentationParser {
   PrsNode _parseTextPara(Map<String, dynamic> json) {
     TextParagraphNode node = TextParagraphNode();
 
-    node.alignment = json.containsKey('a:pPr') &&
-            json['a:pPr'].isNotEmpty &&
-            json['a:pPr'].containsKey('_algn') &&
-            json['a:pPr']['_algn'].isNotEmpty
-        ? json['a:pPr']['_algn']
-        : 'l';
+    node.alignment = "l";
+
+    try {
+      node.alignment = json['a:pPr']?['_algn'] ?? 'l';
+    } catch (e) {
+      LogManager().logTrace(
+          "Empty _algn is parsed as \"l\" by default", LunaSeverityLevel.Error);
+    }
 
     var rObj = json['a:r'];
 
