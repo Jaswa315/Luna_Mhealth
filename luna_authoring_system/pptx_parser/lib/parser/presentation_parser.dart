@@ -109,15 +109,10 @@ class PresentationParser {
       return false;
     }
 
-    String placeholderType = "";
-
-    try {
-      placeholderType = json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] ?? "";
-    } catch (e) {
-      LogManager().logTrace(
-          "Cannot access to json['p:nvSpPr']['p:nvPr']['p:ph']['_type'] in $json\nParsing as \"\" by default.",
-          LunaSeverityLevel.Error);
-    }
+    // element must have nvPr to have placeholder
+    String placeholderType = json['p:nvSpPr']?['p:nvPr'].isNotEmpty
+        ? (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] ?? "")
+        : "";
 
     if (json['p:nvSpPr']['p:cNvSpPr'].isNotEmpty &&
             json['p:nvSpPr']['p:cNvSpPr'].containsKey('_txBox') &&
@@ -466,15 +461,9 @@ class PresentationParser {
     node.imageName = json['p:nvPicPr']['p:cNvPr']['_name'];
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
-    String audioRelsLink = "";
-    try {
-      audioRelsLink =
-          json['p:nvPicPr']?['p:nvPr']?['a:audioFile']?['_r:link'] ?? "";
-    } catch (e) {
-      LogManager().logTrace(
-          "Cannot access to json['p:nvPicPr']['p:nvPr']['a:audioFile']['_r:link'] in $json\nParsing as \"\" by default.",
-          LunaSeverityLevel.Error);
-    }
+    String audioRelsLink = json['p:nvPicPr']['p:nvPr'].isNotEmpty
+        ? (json['p:nvPicPr']['p:nvPr']['a:audioFile']?['_r:link'] ?? "")
+        : "";
 
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
@@ -551,14 +540,9 @@ class PresentationParser {
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    String shape = "rect";
-    try {
-      shape = json['p:spPr']?['a:prstGeom']?['_prst'] ?? "rect";
-    } catch (e) {
-      LogManager().logTrace(
-          "Cannot access to json['p:spPr']['a:prstGeom']['_prst'] in $json\nParsing as \"rect\" by default.",
-          LunaSeverityLevel.Error);
-    }
+    String shape = json['p:spPr'].isNotEmpty
+        ? (json['p:spPr']?['a:prstGeom']?['_prst'] ?? 'rect')
+        : "rect";
 
     ShapeNode node = ShapeNode();
 
@@ -627,15 +611,9 @@ class PresentationParser {
   PrsNode _parseTextBody(Map<String, dynamic> json) {
     TextBodyNode node = TextBodyNode();
 
-    node.wrap = "rect";
-
-    try {
-      node.wrap = json['a:bodyPr']?['_wrap'] ?? "rect";
-    } catch (e) {
-      LogManager().logTrace(
-          "Cannot access to json['a:bodyPr']['_wrap'] in $json\nParsing as \"rect\" by default.",
-          LunaSeverityLevel.Error);
-    }
+    node.wrap = json['a:bodyPr'].isNotEmpty
+        ? (json['a:bodyPr']?['_wrap'] ?? "rect")
+        : "rect";
 
     var pObj = json['a:p'];
     if (pObj is List) {
@@ -652,14 +630,8 @@ class PresentationParser {
   PrsNode _parseTextPara(Map<String, dynamic> json) {
     TextParagraphNode node = TextParagraphNode();
 
-    node.alignment = "l";
-
-    try {
-      node.alignment = json['a:pPr']?['_algn'] ?? 'l';
-    } catch (e) {
-      LogManager().logTrace(
-          "Empty _algn is parsed as \"l\" by default", LunaSeverityLevel.Error);
-    }
+    // TODO: get from defaultTextStyle in presentation.xml
+    node.alignment = json['a:pPr']?['_algn'] ?? 'l';
 
     var rObj = json['a:r'];
 
