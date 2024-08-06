@@ -7,7 +7,9 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:pptx_parser/parser/presentation_tree.dart';
-import 'package:pptx_parser/utils/parser_tools.dart';
+import 'package:luna_core/utils/logging.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 /// CategoryGameEditorParser parses specific slides that follows Luna Category Game Editor Slide.
 const String keyPicture = 'p:pic';
@@ -151,8 +153,7 @@ class CategoryGameEditorParser {
 
     for (var element in slideLayoutShapeTree) {
       // Store Category box transform
-      var descr = ParserTools.getNullableValue(
-          element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+      var descr = element['p:nvSpPr']?['p:cNvPr']?['_descr'];
       switch (descr) {
         case keyLunaCategoryContainer:
           categoryContainerTransform.add(
@@ -167,13 +168,12 @@ class CategoryGameEditorParser {
 
       // Store placeholder transform
       Map<String, dynamic> result = {};
-      var ph =
-          ParserTools.getNullableValue(element, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
+      var ph = element['p:nvSpPr']?['p:nvPr']?['p:ph'];
       var spPr = element['p:spPr'];
-      if (ph != null &&
-          ph.containsKey('_idx') &&
-          (ParserTools.getNullableValue(spPr, ['a:xfrm']) != null) &&
-          (ph['_type'] == null ||
+
+      if (ph?['_idx'] != null &&
+          spPr.containsKey('a:xfrm') &&
+          (ph?['_type'] == null ||
               ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
         result[ph['_idx']] = _parseCategoryTransform(element);
       }
@@ -211,13 +211,13 @@ class CategoryGameEditorParser {
   }
 
   PrsNode _parseCategoryTransform(Map<String, dynamic> json) {
-    var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
-        ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
-        ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
+    var nvPr = json['p:nvPicPr']?['p:nvPr'] ??
+        json['p:nvSpPr']?['p:nvPr'] ??
+        json['p:nvCxnPr']?['p:nvPr'];
 
-    if (ParserTools.getNullableValue(nvPr, ['p:ph']) != null) {
-      String phIdx = nvPr['p:ph']['_idx'];
-      if (placeholderToTransform.containsKey(phIdx)) {
+    if (nvPr.isNotEmpty) {
+      String? phIdx = nvPr['p:ph']?['_idx'];
+      if (phIdx != null && placeholderToTransform.containsKey(phIdx)) {
         return placeholderToTransform[phIdx];
       }
     }

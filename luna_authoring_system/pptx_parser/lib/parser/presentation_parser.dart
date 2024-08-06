@@ -15,7 +15,6 @@ import 'package:xml2json/xml2json.dart';
 import 'package:uuid/uuid.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:pptx_parser/parser/category_game_editor_parser.dart';
-import 'package:pptx_parser/utils/parser_tools.dart';
 
 // From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
@@ -106,11 +105,19 @@ class PresentationParser {
   }
 
   bool _isTextBox(Map<String, dynamic> json) {
-    if (ParserTools.getNullableValue(
-                json, ['p:nvSpPr', 'p:cNvSpPr', '_txBox']) ==
-            '1' ||
-        ['body', 'title'].contains(ParserTools.getNullableValue(
-            json, ['p:nvSpPr', 'p:nvPr', 'p:ph', '_type']))) {
+    if (!json.containsKey('p:nvSpPr')) {
+      return false;
+    }
+
+    // element must have nvPr to have placeholder
+    String placeholderType = json['p:nvSpPr']?['p:nvPr'].isNotEmpty
+        ? (json['p:nvSpPr']?['p:nvPr']?['p:ph']?['_type'] ?? "")
+        : "";
+
+    if (json['p:nvSpPr']['p:cNvSpPr'].isNotEmpty &&
+            json['p:nvSpPr']['p:cNvSpPr'].containsKey('_txBox') &&
+            json['p:nvSpPr']['p:cNvSpPr']['_txBox'] == '1' ||
+        ['body', 'title'].contains(placeholderType)) {
       return true;
     } else {
       return false;
@@ -213,8 +220,7 @@ class PresentationParser {
 
     for (var element in slideMasterShapeTree) {
       // get the alt text of the shape
-      var descr = ParserTools.getNullableValue(
-          element, ['p:nvSpPr', 'p:cNvPr', '_descr']);
+      var descr = element['p:nvSpPr']?['p:cNvPr']?['_descr'];
       switch (descr) {
         case keyLunaLeftPadding:
           padding["left"] =
@@ -230,8 +236,7 @@ class PresentationParser {
         json['p:sldMaster']['p:cSld']['p:spTree'][keyPicture];
     for (var element in slideMasterPicTree) {
       // get the alt text of the shape
-      var descr = ParserTools.getNullableValue(
-          element, ['p:nvPicPr', 'p:cNvPr', '_descr']);
+      var descr = element['p:nvPicPr']?['p:cNvPr']?['_descr'];
       switch (descr) {
         case keyLunaTopSystemBar:
           padding["top"] =
@@ -335,12 +340,12 @@ class PresentationParser {
       Map<String, dynamic> json) {
     Map<String, dynamic> result = {};
 
-    var ph = ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr', 'p:ph']);
-    var spPr = json['p:spPr'];
-    if (ph != null &&
-        ph.containsKey('_idx') &&
-        (ParserTools.getNullableValue(spPr, ['a:xfrm']) != null) &&
-        (ph['_type'] == null ||
+    var ph = json['p:nvSpPr']['p:nvPr']?['p:ph'];
+    var spPr = json['p:spPr'].isEmpty ? null : json['p:spPr'];
+
+    if (ph?['_idx'] != null &&
+        spPr?['a:xfrm'] != null &&
+        (ph?['_type'] == null ||
             ['body', 'title', 'subTitle', 'pic'].contains(ph['_type']))) {
       result[ph['_idx']] = _parseTransform(json);
     }
@@ -387,8 +392,10 @@ class PresentationParser {
       // if sldId is Map, it only contains one slide in that section
       // if sldId is List, it has at least 2 slides in that section
 
-      var sectionData =
-          ParserTools.getNullableValue(section, ['p14:sldIdLst', 'p14:sldId']);
+      var sectionData = null;
+      if (section['p14:sldIdLst'].isNotEmpty) {
+        sectionData = section['p14:sldIdLst']['p14:sldId'];
+      }
 
       if (sectionData != null) {
         if (sectionData is Map<String, dynamic>) {
@@ -454,14 +461,14 @@ class PresentationParser {
     node.imageName = json['p:nvPicPr']['p:cNvPr']['_name'];
     node.altText = json['p:nvPicPr']['p:cNvPr']['_descr'];
     String relsLink = json['p:blipFill']['a:blip']['_r:embed'];
-    String audioRelsLink = "";
-    audioRelsLink = ParserTools.getNullableValue(
-            json['p:nvPicPr'], ['p:nvPr', 'a:audioFile', '_r:link']) ??
-        "";
+    String audioRelsLink = json['p:nvPicPr']['p:nvPr'].isNotEmpty
+        ? (json['p:nvPicPr']['p:nvPr']['a:audioFile']?['_r:link'] ?? "")
+        : "";
+
     node.path = slideRelationship?[relsLink];
     node.audioPath = slideRelationship?[audioRelsLink];
-    node.hyperlink = _getHyperlink(ParserTools.getNullableValue(
-        json['p:nvPicPr'], ['p:cNvPr', 'a:hlinkClick']));
+    node.hyperlink =
+        _getHyperlink(json['p:nvPicPr']?['p:cNvPr']?['a:hlinkClick']);
 
     // initiated transform
     node.transform = _parseTransform(json) as Transform;
@@ -483,7 +490,8 @@ class PresentationParser {
   PrsNode _parseTransform(Map<String, dynamic> json) {
     // helper function to get transform data from json
     Transform _getTransformData(Map<String, dynamic> json) {
-      var xfrm = json['p:spPr']?['a:xfrm'];
+      Map<String, dynamic>? xfrm = json['p:spPr']?['a:xfrm'];
+
       if (xfrm == null) {
         LogManager().logTrace(
             'Invalid transform to parse: ${json['p:spPr']}\n May have a placeholder instead.',
@@ -503,12 +511,13 @@ class PresentationParser {
     }
 
     // Check for transform in placeholder
-    var nvPr = ParserTools.getNullableValue(json, ['p:nvPicPr', 'p:nvPr']) ??
-        ParserTools.getNullableValue(json, ['p:nvSpPr', 'p:nvPr']) ??
-        ParserTools.getNullableValue(json, ['p:nvCxnPr', 'p:nvPr']);
+    var nvPr = json['p:nvPicPr']?['p:nvPr'] ??
+        json['p:nvSpPr']?['p:nvPr'] ??
+        json['p:nvCxnSpPr']?['p:nvPr'];
 
     if (placeholderToTransform.isNotEmpty &&
-        ParserTools.getNullableValue(nvPr, ['p:ph']) != null) {
+        nvPr.isNotEmpty &&
+        nvPr['p:ph'] != null) {
       String? phIdx = nvPr['p:ph']['_idx'];
 
       if (phIdx != null) {
@@ -531,29 +540,25 @@ class PresentationParser {
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {
-    String shape =
-        ParserTools.getNullableValue(json, ['p:spPr', 'a:prstGeom', '_prst']) ==
-                null
-            ? 'rect'
-            : json['p:spPr']['a:prstGeom']['_prst'];
+    String shape = json['p:spPr'].isNotEmpty
+        ? (json['p:spPr']?['a:prstGeom']?['_prst'] ?? 'rect')
+        : "rect";
 
     ShapeNode node = ShapeNode();
 
-    node.transform = _parseTransform(json);
-
-    // A Shape can have textBody
-    if (!_isTextBox(json) &&
-        ParserTools.getNullableValue(json, ['p:txBody']) != null) {
+    if (!_isTextBox(json) && json['p:txBody'] != null) {
       node.textBody = _parseTextBody(json['p:txBody']);
     } else {
       node.textBody = null;
     }
 
-    node.audioPath = slideRelationship?[ParserTools.getNullableValue(
-        json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
+    node.transform = _parseTransform(json);
 
-    node.hyperlink = _getHyperlink(ParserTools.getNullableValue(
-        json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
+    node.audioPath = slideRelationship?[json['p:nvSpPr']?['p:cNvPr']
+        ?['a:hlinkClick']?['a:snd']?['_r:embed']];
+
+    node.hyperlink =
+        _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']);
 
     switch (shape) {
       case 'rect':
@@ -592,10 +597,10 @@ class PresentationParser {
   PrsNode _parseTextBox(Map<String, dynamic> json) {
     TextBoxNode node = TextBoxNode();
 
-    node.audioPath = slideRelationship?[ParserTools.getNullableValue(
-        json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick', 'a:snd', '_r:embed'])];
-    node.hyperlink = _getHyperlink(ParserTools.getNullableValue(
-        json, ['p:nvSpPr', 'p:cNvPr', 'a:hlinkClick']));
+    node.audioPath = slideRelationship?[json['p:nvSpPr']?['p:cNvPr']
+        ?['a:hlinkClick']?['a:snd']?['_r:embed']];
+    node.hyperlink =
+        _getHyperlink(json['p:nvSpPr']?['p:cNvPr']?['a:hlinkClick']);
 
     node.children.add(_parseBasicShape(json));
     node.children.add(_parseTextBody(json['p:txBody']));
@@ -606,11 +611,11 @@ class PresentationParser {
   PrsNode _parseTextBody(Map<String, dynamic> json) {
     TextBodyNode node = TextBodyNode();
 
-    node.wrap = ParserTools.getNullableValue(json, ['a:bodyPr']) == null
-        ? "rect"
-        : ParserTools.getNullableValue(json, ['a:bodyPr', '_wrap']);
-    var pObj = json['a:p'];
+    node.wrap = json['a:bodyPr'].isNotEmpty
+        ? (json['a:bodyPr']?['_wrap'] ?? "rect")
+        : "rect";
 
+    var pObj = json['a:p'];
     if (pObj is List) {
       for (var element in pObj) {
         node.children.add(_parseTextPara(element));
@@ -625,7 +630,9 @@ class PresentationParser {
   PrsNode _parseTextPara(Map<String, dynamic> json) {
     TextParagraphNode node = TextParagraphNode();
 
-    node.alignment = ParserTools.getNullableValue(json, ['a:pPr', 'align']);
+    // TODO: get from defaultTextStyle in presentation.xml
+    node.alignment = json['a:pPr']?['_algn'] ?? 'l';
+
     var rObj = json['a:r'];
 
     if (rObj is List) {
@@ -647,7 +654,7 @@ class PresentationParser {
     String? sizeStr = json['a:rPr']['_sz'];
     node.size = sizeStr != null ? int.parse(sizeStr) : null;
     // ToDo: Colors will come from either directly with srgbClr or schemeClr.  Need to map both
-    // if schemeClr, need to lookup against correct themeX.xml    
+    // if schemeClr, need to lookup against correct themeX.xml
     node.color = json['a:rPr']?['a:solidFill']?['a:srgbClr']?['_val'];
     node.highlightColor = json['a:rPr']?['a:highlight']?['a:srgbClr']?['_val'];
     node.language = json['a:rPr']['_lang'];
