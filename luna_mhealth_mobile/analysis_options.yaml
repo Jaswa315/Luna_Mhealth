@@ -41,3 +41,4 @@ linter:
     - unnecessary_new
     - unnecessary_await_in_return
     - avoid_void_async
+    - avoid_print
