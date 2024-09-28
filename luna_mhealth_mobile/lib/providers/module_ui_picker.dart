@@ -46,7 +46,7 @@ class ModuleUIPicker with ChangeNotifier {
       await loadAvailableModules();
     } catch (e) {
       // Handle the error here
-      print('Error occurred while selecting and storing module file: $e');
+      // print('Error occurred while selecting and storing module file: $e');
     }
   }
 

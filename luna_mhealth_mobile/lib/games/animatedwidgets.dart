@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 /// 
 class ShakeWidget extends AnimatedWidget {
-  /// ShakeWidget constructur
+  ///
   const ShakeWidget(
       {required AnimationController controller,
       required Widget child,
@@ -37,7 +37,7 @@ class ShakeWidget extends AnimatedWidget {
 
 ///
 class ZoomWidget extends AnimatedWidget {
-  /// ZoomWidget constructor
+  ///
   const ZoomWidget(
       {required AnimationController controller,
       required Widget child,

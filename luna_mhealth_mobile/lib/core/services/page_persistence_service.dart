@@ -15,7 +15,7 @@ class PagePersistenceService {
   /// Returns the index of the last visited page for the given [moduleId].
   /// If no last visited page is found, returns 0.
   /// The [moduleId] parameter represents the unique identifier of the module.
-  // TODO: implement the strong key [moduleId] to prevent conflicts
+  // todo: implement the strong key [moduleId] to prevent conflicts
   Future<int> loadLastVisitedPage(String moduleId) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt('lastPage_$moduleId') ?? 0;
@@ -26,7 +26,7 @@ class PagePersistenceService {
   /// The [pageIndex] parameter represents the index of the last visited page
   /// for the given [moduleId].
   /// The [moduleId] parameter represents the unique identifier of the module.
-  // TODO: implement the strong key [moduleId] to prevent conflicts
+  // todo: implement the strong key [moduleId] to prevent conflicts
   Future<void> saveLastVisitedPage(String moduleId, int pageIndex) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('lastPage_$moduleId', pageIndex);
