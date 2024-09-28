@@ -256,7 +256,7 @@ class PresentationParser {
     var slideRelationshipElement = jsonFromArchive(
             "ppt/slides/_rels/slide$slideNum.xml.rels")['Relationships']
         ['Relationship'];
-    var slideLayoutElement;
+    dynamic slideLayoutElement;
     if (slideRelationshipElement is List) {
       slideLayoutElement = slideRelationshipElement.firstWhere(
         (element) => element['_Type'] == keySlideLayoutSchema,
@@ -277,7 +277,7 @@ class PresentationParser {
     var slideLayoutRelationshipElement = jsonFromArchive(
             "ppt/slideLayouts/_rels/slideLayout$slideLayoutIndex.xml.rels")[
         'Relationships']['Relationship'];
-    var slideMasterElement;
+    dynamic slideMasterElement;
     if (slideLayoutRelationshipElement is List) {
       slideMasterElement = slideLayoutRelationshipElement.firstWhere(
         (element) => element['_Type'] == keySlideMasterSchema,
@@ -392,7 +392,7 @@ class PresentationParser {
       // if sldId is Map, it only contains one slide in that section
       // if sldId is List, it has at least 2 slides in that section
 
-      var sectionData = null;
+      dynamic sectionData;
       if (section['p14:sldIdLst'].isNotEmpty) {
         sectionData = section['p14:sldIdLst']['p14:sldId'];
       }
@@ -489,7 +489,7 @@ class PresentationParser {
 
   PrsNode _parseTransform(Map<String, dynamic> json) {
     // helper function to get transform data from json
-    Transform _getTransformData(Map<String, dynamic> json) {
+    Transform getTransformData(Map<String, dynamic> json) {
       Map<String, dynamic>? xfrm = json['p:spPr']?['a:xfrm'];
 
       if (xfrm == null) {
@@ -527,7 +527,7 @@ class PresentationParser {
         } else {
           LogManager().logTrace('Invalid placeholder to parse: $phIdx',
               LunaSeverityLevel.Warning);
-          var node = _getTransformData(json);
+          var node = getTransformData(json);
           // update placeholder map
           placeholderToTransform[phIdx] = node;
           return node;
@@ -536,7 +536,7 @@ class PresentationParser {
     }
 
     // Return default transform if no placeholder or transform found
-    return _getTransformData(json);
+    return getTransformData(json);
   }
 
   PrsNode _parseBasicShape(Map<String, dynamic> json) {

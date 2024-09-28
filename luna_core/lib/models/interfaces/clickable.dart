@@ -12,8 +12,10 @@ import 'package:flutter/gestures.dart';
 ///
 /// Implementing classes must provide an implementation for the [onClick] method.
 mixin Clickable {
+  /// handle click
   void onClick();
 
+  /// handle tap gesture as click
   GestureRecognizer getTapGestureRecognizer() {
     return TapGestureRecognizer()..onTap = onClick;
   }

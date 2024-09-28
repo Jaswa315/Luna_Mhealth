@@ -7,10 +7,8 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
-
 import '../../enums/component_type.dart';
 import '../component.dart';
-import 'package:luna_core/utils/conversion.dart';
 
 /// Represents a text component that can be used in the Luna mHealth Mobile app.
 ///
@@ -26,10 +24,15 @@ class TextComponent extends Component {
     // this.fontSize = 16.0,
     // this.fontStyle = FontStyle.normal,
     // this.color = Colors.black,
+    /// children of component
     required this.textChildren,
+    /// x position of component
     required double x,
+    /// y position of component
     required double y,
+    /// width of component
     required double width,
+    /// height of component
     required double height,
   }) : super(
           type: ComponentType.text,
@@ -93,15 +96,24 @@ class TextComponent extends Component {
   void onClick() {}
 }
 
+/// String of text with given font 
 class TextPart {
+  /// string value of text
   String text;
+  /// font size of text
   double fontSize;
+  /// font style of text
   FontStyle fontStyle;
+  /// font weight of text
   FontWeight fontWeight;
+  /// underline decoration of text
   TextDecoration fontUnderline;
+  /// optional id of text
   int? textID;
+  /// optional color of text
   Color? color;
 
+  /// construct a new instance of [TextPart] with the given parameters
   TextPart(
       {required this.text,
       this.fontSize = 16.0,
@@ -111,17 +123,19 @@ class TextPart {
       this.textID,
       this.color});
 
+  /// return the span of this [TextPart]
   TextSpan getTextSpan() {
     return TextSpan(
         text: text,
         style: TextStyle(
-            color: this.color,
-            fontStyle: this.fontStyle,
-            fontSize: this.fontSize,
-            fontWeight: this.fontWeight,
-            decoration: this.fontUnderline));
+            color: color,
+            fontStyle: fontStyle,
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            decoration: fontUnderline));
   }
 
+  /// construct new instance of [TextPart] from json
   static TextPart fromJson(Map<String, dynamic> json) {
     return TextPart(
         text: json['text'],
@@ -138,6 +152,7 @@ class TextPart {
             : TextDecoration.none);
   }
 
+  /// construct new json instance from [TextPart]
   Map<String, dynamic> toJson() => {
         'text': text,
         'textID': textID,

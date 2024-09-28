@@ -6,7 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'package:flutter/foundation.dart';
 import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 import 'package:uuid/uuid.dart';
 
@@ -65,14 +64,14 @@ class Module extends Item {
   factory Module.fromJson(Map<String, dynamic> json) {
     var slidesJson = json['module']['pages'] as List<dynamic>;
 
-    final category_games = (json['module']['games'] as List<dynamic>?)
+    final categoryGames = (json['module']['games'] as List<dynamic>?)
         ?.map((slideJson) => GameContext.fromJson(slideJson))
         .toList() ?? [];
 
     // ToDo: Fix category_games dependency here.  A standard page shouldn't need the games context at assignment time
     // Probably should have the games context as a first class context singleton and access from within component or page
     var pages =
-        slidesJson.map((slideJson) => Page.fromJson(slideJson, gameContexts: category_games)).toList();
+        slidesJson.map((slideJson) => Page.fromJson(slideJson, gameContexts: categoryGames)).toList();
 
     var sectionMap =
         Map<String, List<String>>.from(json['module']['section']);
@@ -87,7 +86,7 @@ class Module extends Item {
       slideCount: json['module']['slideCount'] as int,
       section: sectionMap,
       pages: pages,
-      games: category_games,
+      games: categoryGames,
       width: (json['module']['width'] as num).toDouble(),
       height: (json['module']['height'] as num).toDouble(),
       name: json['module']['name']

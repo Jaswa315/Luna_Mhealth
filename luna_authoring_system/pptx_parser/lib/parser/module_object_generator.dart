@@ -83,7 +83,7 @@ class ModuleObjectGenerator {
         pageComponents.add(_createDivider(child));
       } else {
         // ToDo: use exception handling and logging instead of print
-        print('ParseTree conversion not supported: ${child.name}');
+        // print('ParseTree conversion not supported: ${child.name}');
       }
     }
     Page pageObj = Page(slideId: data.slideId, components: pageComponents);

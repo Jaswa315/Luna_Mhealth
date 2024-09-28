@@ -1,28 +1,28 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:collection';
 import 'dart:ui';
 
-// Handles localization tasks by managing a map of localized strings indexed by UIDs.
-// This class is responsible for parsing CSV data into a map for efficient lookup of localized strings.
+/// Handles localization tasks by managing a map of localized strings indexed by UIDs.
+/// This class is responsible for parsing CSV data into a map for efficient lookup of localized strings.
 class LocalizedText extends IterableBase<String> {
   final Map<int, String> _localizedStrings = {};
   Locale _locale;
   int _idCounter = 1;
 
-  // Constructor that initializes from CSV data with optional locale parameter
-  // If the locale is null, fetch the device locale and use it.
-  // If the fetched locale is not available, fall back to English (US).
+  /// Constructor that initializes from CSV data with optional locale parameter
+  /// If the locale is null, fetch the device locale and use it.
+  /// If the fetched locale is not available, fall back to English (US).
   LocalizedText(Uint8List csvBytes, [Locale? locale])
-      : _locale = locale ?? window.locale {
+      : _locale = locale ?? PlatformDispatcher.instance.locale {
     _parseCsvToMap(csvBytes);
     _locale = _getAvailableLocale(_locale);
   }
 
-  // Locale getter
+  /// Locale getter
   Locale get locale => _locale;
 
-  // Locale setter
+  /// Locale setter
   set locale(Locale newLocale) {
     _locale = _getAvailableLocale(newLocale);
   }
@@ -68,22 +68,22 @@ class LocalizedText extends IterableBase<String> {
     }
   }
 
-  // Getter for specific string by UID
-  // Retrieves a localized string by its UID
-  // Returns the localized string associated with the provided UID, if found.
-  // "Text not found" if the UID does not exist in the localization map.
+  /// Getter for specific string by UID
+  /// Retrieves a localized string by its UID
+  /// Returns the localized string associated with the provided UID, if found.
+  /// "Text not found" if the UID does not exist in the localization map.
   String getString(int uid) {
     return _localizedStrings[uid] ?? "Text not found";
   }
 
-  // Setter that adds or changes a string and returns its UID
+  /// Setter that adds or changes a string and returns its UID
   int addString(String toAdd) {
     int id = _idCounter++;
     _localizedStrings[id] = toAdd;
     return id;
   }
 
-  // Generate the CSV string from the internal map
+  /// Generate the CSV string from the internal map
   String generateCsvContent() {
     StringBuffer csvBuffer = StringBuffer();
     csvBuffer.writeln("UID,localizedText");
@@ -93,7 +93,7 @@ class LocalizedText extends IterableBase<String> {
     return csvBuffer.toString();
   }
 
-  // Return the CSV data as bytes
+  /// Return the CSV data as bytes
   Uint8List getCsvBytes() {
     String csvContent = generateCsvContent();
     return Uint8List.fromList(utf8.encode(csvContent));

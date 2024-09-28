@@ -7,9 +7,6 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:pptx_parser/parser/presentation_tree.dart';
-import 'package:luna_core/utils/logging.dart';
-import 'package:global_configuration/global_configuration.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 /// CategoryGameEditorParser parses specific slides that follows Luna Category Game Editor Slide.
 const String keyPicture = 'p:pic';

@@ -28,5 +28,5 @@ enum ComponentType {
   audio,
 
   ///Represents a category game component,
-  category_game,
+  categoryGame,
 }
