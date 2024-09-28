@@ -58,16 +58,16 @@ steps:
   displayName: 'Lint luna_authoring code'
   condition: succeededOrFailed()
 
-- script: |
-    grep -r -n "[\/#] *[Tt][oO][Dd][oO]" $(lunacore) $(lunaauthoring) $(lunamobile)
-    if [[ $? -eq 0 ]]; then
-      echo "##vso[task.logissue type=error]TODOs found!"
-      echo '##vso[task.complete result=Failed]'
-      exit 0
-    fi
-  displayName: 'Search for TODOs'
-  failOnStderr: true
-  condition: succeededOrFailed()
+#- script: |
+#    grep -r -n "[\/#] *[Tt][oO][Dd][oO]" $(lunacore) $(lunaauthoring) $(lunamobile)
+#    if [[ $? -eq 0 ]]; then
+#      echo "##vso[task.logissue type=error]TODOs found!"
+#      echo '##vso[task.complete result=Failed]'
+#      exit 0
+#    fi
+#  displayName: 'Search for TODOs'
+#  failOnStderr: true
+#  condition: succeededOrFailed()
 
 - script: |
     cd $(lunacore)

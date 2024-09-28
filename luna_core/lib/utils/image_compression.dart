@@ -33,17 +33,17 @@ class ImageCompression {
     );
 
     // Create File object from XFile
-    final compressedFile = File(compressedXFile!.path);
+    //final compressedFile = File(compressedXFile!.path);
 
-    final originalSize = file.lengthSync() / 1024; // Convert to KB
-    final compressedSize = compressedFile.lengthSync() / 1024; // Convert to KB
-    final difference = originalSize - compressedSize;
-    final compressionRatio = originalSize / compressedSize;
+    //final originalSize = file.lengthSync() / 1024; // Convert to KB
+    //final compressedSize = compressedFile.lengthSync() / 1024; // Convert to KB
+    //final difference = originalSize - compressedSize;
+    //final compressionRatio = originalSize / compressedSize;
 
-    print('Original Size: ${originalSize.toStringAsFixed(2)} KB');
-    print('Compressed Size: ${compressedSize.toStringAsFixed(2)} KB');
-    print('Difference: ${difference.toStringAsFixed(2)} KB');
-    print('Compression Ratio: ${compressionRatio.toStringAsFixed(2)}');
+    //print('Original Size: ${originalSize.toStringAsFixed(2)} KB');
+    //print('Compressed Size: ${compressedSize.toStringAsFixed(2)} KB');
+    //print('Difference: ${difference.toStringAsFixed(2)} KB');
+    //print('Compression Ratio: ${compressionRatio.toStringAsFixed(2)}');
 
     return compressedXFile;
   }
@@ -57,33 +57,34 @@ class ImageCompression {
   /// The compression process adjusts the quality and size of the images.
   static Future<List<XFile?>> compressImageFiles(List<File> files) async {
     final compressedFiles = <XFile?>[];
-    double totalOriginalSize = 0;
-    double totalCompressedSize = 0;
-    print('Compressing ${files.length} files...');
+    //double totalOriginalSize = 0;
+    //double totalCompressedSize = 0;
+    //print('Compressing ${files.length} files...');
 
+  
     for (final file in files) {
-      final originalSize = await file.lengthSync() / 1024; // Convert to KB
-      totalOriginalSize += originalSize;
+      //final originalSize = await file.lengthSync() / 1024; // Convert to KB
+      //totalOriginalSize += originalSize;
       final compressedFile = await compressImageFile(file);
       compressedFiles.add(compressedFile);
-      final compressedSize =
-          await compressedFile!.length() / 1024; // Convert to KB
-      totalCompressedSize += compressedSize;
+      //final compressedSize =
+      //    await compressedFile!.length() / 1024; // Convert to KB
+      //totalCompressedSize += compressedSize;
     }
 
-    print('Compression complete.');
-    print(
-      'Total original files size: ${totalOriginalSize.toStringAsFixed(2)} KB',
-    );
-    print(
-      'Total compressed files size: ${totalCompressedSize.toStringAsFixed(2)} KB',
-    );
-    print(
-      'Difference: ${(totalOriginalSize - totalCompressedSize).toStringAsFixed(2)} KB',
-    );
-    print(
-      'Compression ratio: ${(totalOriginalSize / totalCompressedSize).toStringAsFixed(2)}',
-    );
+    //print('Compression complete.');
+    //print(
+    //  'Total original files size: ${totalOriginalSize.toStringAsFixed(2)} KB',
+    //);
+    //print(
+    //  'Total compressed files size: ${totalCompressedSize.toStringAsFixed(2)} KB',
+    //);
+    //print(
+    //  'Difference: ${(totalOriginalSize - totalCompressedSize).toStringAsFixed(2)} KB',
+    //);
+    //print(
+    //  'Compression ratio: ${(totalOriginalSize / totalCompressedSize).toStringAsFixed(2)}',
+    //);
 
     return compressedFiles;
   }

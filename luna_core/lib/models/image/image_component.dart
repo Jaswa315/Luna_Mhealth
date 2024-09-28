@@ -19,6 +19,7 @@ import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 class ImageComponent extends Component {
   /// The path to the image file.
   String imagePath;
+  /// Optional hyperlink associated with the component
   String? hyperlink;
 
   /// Constructs a new instance of [ImageComponent] with the given [imagePath], [x], [y], [width], and [height].

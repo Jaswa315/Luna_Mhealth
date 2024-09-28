@@ -10,7 +10,6 @@
 /// A page can contain multiple components.
 
 import 'dart:convert';
-import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/item.dart';
 import 'package:luna_mhealth_mobile/games/gamecontext.dart';

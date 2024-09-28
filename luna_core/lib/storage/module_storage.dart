@@ -247,6 +247,7 @@ class ModuleStorage {
     });
   }
 
+  /// add directory path to module
   Future<bool> addFolderToModule(
       String moduleName, String directoryPath) async {
     if (!directoryPath.endsWith('/')) {
@@ -291,7 +292,7 @@ class ModuleStorage {
       }
 
       if (await _updateOrAddAssetToArchive(
-          archive, assetFileName, assetBytes!)) {
+          archive, assetFileName, assetBytes)) {
         return _saveArchiveToFileSystem(moduleName, archive);
       }
       return false;

@@ -357,8 +357,10 @@ class DartLogger implements ILunaLogger {
   void _initializeLogging() {
     Logger.root.level = Level.ALL;
     Logger.root.onRecord.listen((record) {
+      // ignore: avoid_print
       print('${record.level.name}: ${record.time}: ${record.message}:\n');
       if (record.error != null && record.stackTrace != null) {
+        // ignore: avoid_print
         print('${record.error}: \n${record.stackTrace}\n');
       }
     });

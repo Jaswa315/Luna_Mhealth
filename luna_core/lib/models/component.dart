@@ -23,9 +23,13 @@ import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 abstract class Component extends Item with ChangeNotifier, Clickable{
   /// The type of the component.
   final ComponentType type;
+  /// x position of component
   final double x;
+  /// y position of component
   final double y;
+  /// width of component
   final double width;
+  /// height of component
   final double height;
 
   /// The position and size of the component represented as a Rect.
@@ -65,7 +69,7 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
         return TextComponent.fromJson(json);
       case ComponentType.divider:
         return DividerComponent.fromJson(json);
-      case ComponentType.category_game:
+      case ComponentType.categoryGame:
         return CategoryGame.fromJson(json, games);
       default:
         throw Exception('Unsupported component type: $type.toString()');
@@ -78,5 +82,5 @@ const Map<String, ComponentType> _typeMapping = {
   'image': ComponentType.image,
   'text': ComponentType.text,
   'divider': ComponentType.divider,
-  'category_game': ComponentType.category_game,
+  'category_game': ComponentType.categoryGame,
 };

@@ -4,10 +4,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_mhealth_mobile/core/constants/constants.dart';
 import 'package:luna_mhealth_mobile/games/animatedwidgets.dart';
@@ -15,9 +12,12 @@ import 'package:luna_mhealth_mobile/games/gameconstants.dart';
 import 'package:luna_mhealth_mobile/games/gamecontext.dart';
 import 'package:provider/provider.dart';
 
+///
 class GameContainer extends StatefulWidget {
+  /// GameContainer constructor
   const GameContainer({super.key, required this.gameContext});
 
+  ///
   final GameContext gameContext;
 
   @override
@@ -32,18 +32,18 @@ class _GameContainerState extends State<GameContainer> {
     return Column(children: [
       Expanded(
           child: ProviderContainer(
-        key: Key("game_${counter}"),
+        key: Key("game_$counter"),
         gameContext: widget.gameContext,
       )),
       GameButton(
-          text: TEXT_RESET_GAME,
+          text: textResetGame,
           onTap: () {
             setState(() {
               counter++;
             });
           }),
       GameButton(
-          text: TEXT_NEW_CATEGORY,
+          text: textNewCategory,
           onTap: () {
             setState(() {
               counter++;
@@ -53,9 +53,12 @@ class _GameContainerState extends State<GameContainer> {
   }
 }
 
+///
 class ProviderContainer extends StatelessWidget {
+  /// ProviderContainer constructor
   const ProviderContainer({super.key, required this.gameContext});
 
+  ///
   final GameContext gameContext;
 
   @override
@@ -73,7 +76,9 @@ class ProviderContainer extends StatelessWidget {
   }
 }
 
+///
 class GameInstanceWidget extends StatelessWidget {
+  ///
   const GameInstanceWidget({super.key});
 
   @override
@@ -82,14 +87,14 @@ class GameInstanceWidget extends StatelessWidget {
 
     return Column(
       children: [
-        Text("${TEXT_PROMPT} ${game.targetCategory.category_name}",
-            textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+        Text("$textPrompt ${game.targetCategory.categoryName}",
+            textScaler: TextScaler.linear(gameFontSize)),
         if (game.gameState == GameState.active)
-          Text("", textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+          Text("", textScaler: TextScaler.linear(gameFontSize)),
         if (game.gameState == GameState.won)
-          Text(TEXT_WIN, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+          Text(textWin, textScaler: TextScaler.linear(gameFontSize)),
         if (game.gameState == GameState.lost)
-          Text(TEXT_LOST, textScaler: TextScaler.linear(GAME_FONT_SIZE)),
+          Text(textLost, textScaler: TextScaler.linear(gameFontSize)),
         GameGrid(columns: 3, children: game.getTiles()),
         LivesRemainingDisplay(livesRemaining: game.incorrectRemaining),
       ],
@@ -97,9 +102,12 @@ class GameInstanceWidget extends StatelessWidget {
   }
 }
 
+///
 class LivesRemainingDisplay extends StatelessWidget {
+  ///
   const LivesRemainingDisplay({required this.livesRemaining, super.key});
 
+  ///
   final int livesRemaining;
 
   @override
@@ -107,14 +115,14 @@ class LivesRemainingDisplay extends StatelessWidget {
     List<Widget> livesDisplay = List.empty(growable: true);
     //livesDisplay.add(SizedBox(width: 30,));
     livesDisplay.add(Text(
-      "${TEXT_MISTAKES_REMAINING}",
-      textScaler: TextScaler.linear(GAME_FONT_SIZE),
+      "$textMistakesRemaining",
+      textScaler: TextScaler.linear(gameFontSize),
     ));
 
     for (int i = 0; i < livesRemaining; i++) {
       livesDisplay.add(Icon(
         Icons.circle,
-        color: COLOR_MISTAKES_REMAINING,
+        color: colorMistakesRemaining,
       ));
     }
     //livesDisplay.add(SizedBox(width: 30,));
@@ -125,7 +133,9 @@ class LivesRemainingDisplay extends StatelessWidget {
   }
 }
 
+///
 class Game with ChangeNotifier {
+  ///
   Game({required this.gameContext}) {
     RandomCategoryIterator iterator = RandomCategoryIterator();
 
@@ -137,20 +147,27 @@ class Game with ChangeNotifier {
       tiles.add(createTile());
     }
 
-    incorrectRemaining = STARTING_MISTAKES;
+    incorrectRemaining = startingMistakes;
   }
 
+  ///
   late Category targetCategory;
 
+  ///
   GameContext gameContext;
 
+  ///
   late List<Widget> tiles;
 
+  ///
   GameState gameState = GameState.active;
 
+  ///
   int correctRemaining = 0;
+  ///
   int incorrectRemaining = 0;
 
+  ///
   Widget createTile() {
     RandomCategoryIterator iterator = RandomCategoryIterator();
 
@@ -167,43 +184,55 @@ class Game with ChangeNotifier {
     );
   }
 
+  ///
   List<Widget> getTiles() {
     return tiles;
   }
 
+  ///
   TileState scoreTile(TileWidget tile) {
     if (tile.category == targetCategory) {
       correctRemaining--;
-      return TileState.selected_correct;
+      return TileState.selectedCorrect;
     } else {
       incorrectRemaining--;
-      return TileState.selected_incorrect;
+      return TileState.selectedIncorrect;
     }
   }
 
+  ///
   void checkForEndGame() {
     if (correctRemaining == 0) {
       //Game won
-      _ChangeGameState(GameState.won);
+      _changeGameState(GameState.won);
     }
 
     if (incorrectRemaining == 0) {
       //Game lost
 
-      _ChangeGameState(GameState.lost);
+      _changeGameState(GameState.lost);
     }
   }
 
-  void _ChangeGameState(GameState newState) {
+  void _changeGameState(GameState newState) {
     gameState = newState;
 
     notifyListeners();
   }
 }
 
-enum GameState { active, won, lost }
+///
+enum GameState {
+  /// 
+  active, 
+  ///
+  won,
+  ///
+  lost 
+}
 
 //ITERATORS
+///
 abstract class CategoryIterator {
   ///Pick a  tiles from a given game context
   Category pickCategory(GameContext gameContext);
@@ -234,7 +263,9 @@ class RandomCategoryIterator extends CategoryIterator {
   }
 }
 
+///
 class GameGrid extends StatelessWidget {
+  ///
   const GameGrid(
       {super.key, required int columns, required List<Widget> children})
       : _columns = columns,
@@ -254,10 +285,14 @@ class GameGrid extends StatelessWidget {
   }
 }
 
+///
 class TileWidget extends StatefulWidget {
+  ///
   const TileWidget({super.key, required this.category, required this.member});
 
+  ///
   final Category category;
+  ///
   final CategoryMember member;
 
   @override
@@ -297,7 +332,7 @@ class _TileWidgetState extends State<TileWidget>
 
     if (game.gameState != GameState.active) {
       if (state == TileState.unselected) {
-        state = TileState.unselected_locked;
+        state = TileState.unselectedLocked;
         controller.forward();
       }
     }
@@ -321,23 +356,23 @@ class _TileWidgetState extends State<TileWidget>
             //TileRender(drawBorder: (state == TileState.unselected), image: widget.member.image,),
             if (state == TileState.unselected) tileRender,
 
-            if (state == TileState.selected_correct)
+            if (state == TileState.selectedCorrect)
               ZoomWidget(
                   controller: controller, child: tileRender, intensity: 15),
-            if (state == TileState.selected_incorrect)
+            if (state == TileState.selectedIncorrect)
               ShakeWidget(
                   controller: controller, child: tileRender, intensity: 10),
-            if (state == TileState.unselected_locked) tileRender,
+            if (state == TileState.unselectedLocked) tileRender,
             //if (state == TileState.selected_incorrect) ShakeWidget(controller: controller, child: tileRender, intensity: 10),
 
-            if (state == TileState.selected_correct)
+            if (state == TileState.selectedCorrect)
               TileCheckmarkRender(
                   icon:
-                      Icon(Icons.check_circle, color: COLOR_CORRECT, size: 40)),
-            if (state == TileState.selected_incorrect)
+                      Icon(Icons.check_circle, color: colorCorrect, size: 40)),
+            if (state == TileState.selectedIncorrect)
               TileCheckmarkRender(
                   icon: Icon(Icons.remove_circle,
-                      color: COLOR_INCORRECT, size: 40)),
+                      color: colorIncorrect, size: 40)),
           ],
         ),
       ),
@@ -350,7 +385,7 @@ class _TileWidgetState extends State<TileWidget>
     }
 
     setState(() {
-      state = game.scoreTile(this.widget);
+      state = game.scoreTile(widget);
       controller.forward();
     });
 
@@ -358,22 +393,32 @@ class _TileWidgetState extends State<TileWidget>
   }
 }
 
+
+///
 enum TileState {
+  ///
   unselected,
-  unselected_locked,
-  selected_correct,
-  selected_incorrect
+  ///
+  unselectedLocked,
+  ///
+  selectedCorrect,
+  ///
+  selectedIncorrect
 }
 
+///
 class TileRender extends StatelessWidget {
+  ///
   const TileRender({super.key, required this.drawBorder, required this.image});
 
+  ///
   final bool drawBorder;
+  ///
   final String image;
 
   @override
   Widget build(BuildContext context) {
-    BoxBorder? border = null;
+    BoxBorder? border;
 
     if (drawBorder) {
       border = Border.all(
@@ -430,9 +475,12 @@ class TileRender extends StatelessWidget {
   }
 }
 
+///
 class TileCheckmarkRender extends StatelessWidget {
+  ///
   const TileCheckmarkRender({super.key, required this.icon});
 
+  ///
   final Icon icon;
 
   @override
@@ -446,10 +494,13 @@ class TileCheckmarkRender extends StatelessWidget {
 
 ///Bubled Circle Style
 class GameButton extends StatelessWidget {
+  ///
   const GameButton({super.key, required this.text, required this.onTap});
 
+  ///
   final String text;
 
+  ///
   final Function() onTap;
 
   @override
@@ -460,8 +511,8 @@ class GameButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(30))),
       child: GestureDetector(
         child: Text(
-          " ${text} ",
-          textScaler: TextScaler.linear(GAME_FONT_SIZE),
+          " $text ",
+          textScaler: TextScaler.linear(gameFontSize),
         ),
         onTap: onTap,
       ),

@@ -83,12 +83,11 @@ class ImageExtractor {
   /// - `savedImages`: A set to keep track of already saved images to avoid duplicates.
   Future<void> _saveImageNode(
       ImageNode node, String imagesDir, Set<String> savedImages) async {
-    if (node.path != null && !savedImages.contains(node.path)) {
-      String imagePath = node.path!;
+    if (!savedImages.contains(node.path)) {
+      String imagePath = node.path;
       savedImages.add(imagePath);
       File imageFile = File(p.join(imagesDir, p.basename(imagePath)));
 
-      String newPath = p.join('resources/images', p.basename(imagePath));
       String archiveFilePath = p.join('ppt/media', p.basename(imagePath));      
 
       ArchiveFile image = _parser.extractFileFromZip(archiveFilePath);

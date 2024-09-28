@@ -9,6 +9,7 @@
 
 import 'package:flutter/material.dart';
 
+/// return [Color] from hex string
 Color? hexToColor(String? hexString) {
   if (hexString != null) {
     String hex = hexString.replaceFirst("#", '');

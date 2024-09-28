@@ -6,7 +6,6 @@ import 'package:luna_core/storage/module_resource_factory.dart';
 import 'parser/presentation_parser.dart';
 import 'parser/presentation_tree.dart';
 import 'parser/image_extractor.dart';
-import 'package:luna_core/localization/localized_text.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_storage.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -20,15 +19,15 @@ Future<void> main(List<String> arguments) async {
   await GlobalConfiguration().loadFromAsset("app_settings");
   await LogManager.createInstance();
 
-  const int _BATCH_SIZE = 10;
+  const int batchSize = 10;
 
   if (arguments.length < 4) {
-    print(
-        'Usage: dart main.dart <pptx_file_path> <localization_file_path> <output_dir> <module_name>');
+    //print(
+    //   'Usage: dart main.dart <pptx_file_path> <localization_file_path> <output_dir> <module_name>');
 
     // Helper code for debugging purposes.
     // ToDo: Remove when more polished
-    final String samplePPTName = 'Pregnancy-sample.pptx';
+    const String samplePPTName = 'Pregnancy-sample.pptx';
     arguments = [
       // You'll need to change this or add the sample module to autoload the module.
       // Files are under /Users/username/Library/Containers/com.example.pptParser/Data by default on Macos
@@ -101,7 +100,7 @@ Future<void> main(List<String> arguments) async {
       imageMap["resources/images/$fileName"] = imageBytes;
       counter++;
 
-      if (counter > _BATCH_SIZE) {
+      if (counter > batchSize) {
         await moduleStorage.addModuleAssets(moduleName, imageMap);
         counter = 0;
         imageMap.clear();
@@ -121,7 +120,7 @@ Future<void> main(List<String> arguments) async {
   // await moduleStorage.addModuleAsset(moduleName,
   //    "resources/localization/$localizationFileName", localizationBytes);
 
-  print('Package created successfully at $outputDir');
+  // print('Package created successfully at $outputDir');
   SystemNavigator.pop();
 }
 

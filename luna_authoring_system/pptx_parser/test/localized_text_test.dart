@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:collection';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
-import '../../../luna_core/lib/localization/localized_text.dart';
+import 'package:luna_core/localization/localized_text.dart';
 
 void main() {
   group('LocalizedText', () {
@@ -13,8 +12,8 @@ void main() {
 
     // Test fallback to English (US)
     test('Fallback to English (US)', () {
-      final localizedText = LocalizedText(sampleCsv, Locale('de'));
-      expect(localizedText.locale, Locale('en', 'US'));
+      final localizedText = LocalizedText(sampleCsv, const Locale('de'));
+      expect(localizedText.locale, const Locale('en', 'US'));
       expect(localizedText.getString(1), 'Hello');
     });
 

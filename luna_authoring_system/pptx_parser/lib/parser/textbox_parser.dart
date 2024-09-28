@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 Map<String, String> mapTextBoxes(dynamic jsonData) {
   final Map<String, String> textBoxMap = {};
   var slides = jsonData['Presentation']['children'];
@@ -38,16 +35,4 @@ Map<String, String> mapTextBoxes(dynamic jsonData) {
     }
   }
   return textBoxMap;
-}
-
-void main() {
-  var jsonFilePath = 'module.json';
-  try {
-    var jsonString = File(jsonFilePath).readAsStringSync();
-    var jsonData = jsonDecode(jsonString);
-    var textBoxMap = mapTextBoxes(jsonData);
-    print(textBoxMap);
-  } catch (e) {
-    print('There was an error reading the JSON data: $e');
-  }
 }

@@ -18,15 +18,8 @@ import 'module_storage.dart';
 
 /// An archive handler that provides methods to handle Luna files.
 class ModuleResourceFactory {
-  /// The name of the image module.
-  static String _imageModuleName = '';
-
-  /// The module storage instance.
-  static String get moduleName => _imageModuleName;
-
-  static set moduleName(String value) {
-    _imageModuleName = value;
-  }
+  /// The name of the module.
+  static String moduleName = '';
 
   /// The module storage instance.
   static ModuleStorage moduleStorage = ModuleStorage();
@@ -58,7 +51,7 @@ class ModuleResourceFactory {
     return await LogManager().logFunction('ModuleHandler.addModule', () async {
       Module module =
           await moduleStorage.createEmptyModuleFile(moduleName, jsonData);
-      await _PopulateModuleDataWithInitialAssets(moduleName, jsonData);
+      await _populateModuleDataWithInitialAssets(moduleName, jsonData);
 
       return module;
     });
@@ -72,7 +65,7 @@ class ModuleResourceFactory {
     return moduleStorage.importModuleFile(moduleName, fileData);
   }
 
-  static Future<bool> _PopulateModuleDataWithInitialAssets(
+  static Future<bool> _populateModuleDataWithInitialAssets(
       String moduleName, String jsonData) async {
     await moduleStorage.addFolderToModule(moduleName, _getImagePath());
 
@@ -152,6 +145,7 @@ class ModuleResourceFactory {
     return "${_getLanguagePath(language)}/audio";
   }
 
+  /// get csv data from json string
   static Future<Uint8List?> createInitialNewLanguageCSV(String jsonData) async {
     JSONDataExtractor extractor = JSONDataExtractor();
     Uint8List? csvData =
@@ -165,6 +159,7 @@ class ModuleResourceFactory {
     return languageAsString;
   }
 
+  /// get file path for csv file
   static String getInitialCSVFilePath(String jsonData) {
     String dataLanguage = _getLanguageFromJSONData(jsonData);
     return '${_getLanguagePath(dataLanguage)}/$dataLanguage.csv';
