@@ -13,7 +13,7 @@ import 'package:luna_core/controllers/navigation_controller.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
-import 'package:luna_mhealth_mobile/core/constants/constants.dart';
+import 'package:luna_mobile/core/constants/constants.dart';
 
 /// Represents an image component that can be rendered and clicked.
 class ImageComponent extends Component {

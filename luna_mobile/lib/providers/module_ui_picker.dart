@@ -11,7 +11,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
-import 'package:luna_mhealth_mobile/core/services/file_management_service.dart';
+import 'package:luna_mobile/core/services/file_management_service.dart';
 
 /// A provider class that manages the state and functionality of a module.
 ///

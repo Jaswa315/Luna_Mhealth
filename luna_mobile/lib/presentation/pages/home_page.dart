@@ -9,11 +9,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_mhealth_mobile/core/constants/constants.dart';
-import 'package:luna_mhealth_mobile/core/services/page_builder_service.dart';
-import 'package:luna_mhealth_mobile/core/services/page_persistence_service.dart';
-import 'package:luna_mhealth_mobile/presentation/pages/module_page.dart';
-import 'package:luna_mhealth_mobile/providers/module_ui_picker.dart';
+import 'package:luna_mobile/core/constants/constants.dart';
+import 'package:luna_mobile/core/services/page_builder_service.dart';
+import 'package:luna_mobile/core/services/page_persistence_service.dart';
+import 'package:luna_mobile/presentation/pages/module_page.dart';
+import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
 
 /// The home page of the application.

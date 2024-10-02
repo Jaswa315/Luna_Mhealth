@@ -19,7 +19,7 @@ import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/istorage_provider.dart';
 
 import 'package:luna_core/utils/logging.dart';
-import 'package:luna_mhealth_mobile/core/constants/constants.dart';
+import 'package:luna_mobile/core/constants/constants.dart';
 
 // ToDo: Refactor module storage to clean up redundancy/perf
 

@@ -12,7 +12,7 @@
 import 'dart:convert';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/item.dart';
-import 'package:luna_mhealth_mobile/games/gamecontext.dart';
+import 'package:luna_mobile/games/gamecontext.dart';
 
 import 'component.dart';
 

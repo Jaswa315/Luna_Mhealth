@@ -9,8 +9,8 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
-import 'package:luna_mhealth_mobile/games/game.dart';
-import 'package:luna_mhealth_mobile/games/gamecontext.dart';
+import 'package:luna_mobile/games/game.dart';
+import 'package:luna_mobile/games/gamecontext.dart';
 
 /// Represents an image component that can be rendered and clicked.
 class CategoryGame extends Component {

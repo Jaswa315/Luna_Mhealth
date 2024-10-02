@@ -40,8 +40,8 @@ dependencies:
     sdk: flutter
   flutter_image_compress: ^2.1.0
   global_configuration: ^2.0.0
-  luna_mhealth_mobile:
-    path: ../luna_mhealth_mobile
+  luna_mobile:
+    path: ../luna_mobile
   mockito: ^5.4.4
   package_info: ^2.0.2
   path_provider: ^2.1.2

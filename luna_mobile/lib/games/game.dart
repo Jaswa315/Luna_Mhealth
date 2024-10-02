@@ -6,10 +6,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
-import 'package:luna_mhealth_mobile/core/constants/constants.dart';
-import 'package:luna_mhealth_mobile/games/animatedwidgets.dart';
-import 'package:luna_mhealth_mobile/games/gameconstants.dart';
-import 'package:luna_mhealth_mobile/games/gamecontext.dart';
+import 'package:luna_mobile/core/constants/constants.dart';
+import 'package:luna_mobile/games/animatedwidgets.dart';
+import 'package:luna_mobile/games/gameconstants.dart';
+import 'package:luna_mobile/games/gamecontext.dart';
 import 'package:provider/provider.dart';
 
 ///

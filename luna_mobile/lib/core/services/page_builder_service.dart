@@ -15,7 +15,7 @@ import 'package:luna_core/renderers/irenderer.dart';
 import 'package:luna_core/renderers/renderer_factory.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_core/utils/scale_utilities.dart';
-import 'package:luna_mhealth_mobile/core/constants/constants.dart';
+import 'package:luna_mobile/core/constants/constants.dart';
 
 /// A class that provides services for managing module pages.
 class ModulePageBuilderService {

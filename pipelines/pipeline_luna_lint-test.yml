@@ -12,6 +12,14 @@ trigger: none
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  - name: lunacore
+    value: luna_core
+  - name: lunaauthoring
+    value: luna_authoring_system/pptx_parser
+  - name: lunamobile
+    value: luna_mobile
+
 steps:
 - script: |
     git clone https://github.com/flutter/flutter.git -b 3.22.3
@@ -45,7 +53,7 @@ steps:
       echo '##vso[task.complete result=Failed]'
       exit 0
     fi
-  displayName: 'Lint luna_mhealth_mobile code'
+  displayName: 'Lint luna_mobile code'
   condition: succeededOrFailed()
 
 - script: |

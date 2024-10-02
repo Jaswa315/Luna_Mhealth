@@ -391,10 +391,10 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
-  luna_mhealth_mobile:
+  luna_mobile:
     dependency: transitive
     description:
-      path: "../../luna_mhealth_mobile"
+      path: "../../luna_mobile"
       relative: true
     source: path
     version: "1.0.0+1"

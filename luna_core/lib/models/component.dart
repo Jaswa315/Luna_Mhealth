@@ -15,7 +15,7 @@ import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
-import 'package:luna_mhealth_mobile/games/gamecontext.dart';
+import 'package:luna_mobile/games/gamecontext.dart';
 
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
