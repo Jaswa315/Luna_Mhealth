@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemNavigator, rootBundle;
+import 'package:global_configuration/global_configuration.dart';
+import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
+import 'package:luna_core/storage/module_storage.dart';
+import 'package:luna_core/utils/logging.dart';
+import 'package:path/path.dart' as p;
+import 'parser/image_extractor.dart';
+import 'parser/module_object_generator.dart';
 import 'parser/presentation_parser.dart';
 import 'parser/presentation_tree.dart';
-import 'parser/image_extractor.dart';
-import 'package:luna_core/models/module.dart';
-import 'package:luna_core/storage/module_storage.dart';
-import 'package:global_configuration/global_configuration.dart';
-import 'package:luna_core/utils/logging.dart';
-import 'dart:typed_data';
-import 'parser/module_object_generator.dart';
-import 'package:path/path.dart' as p;
+
 
 Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -124,7 +125,7 @@ Future<void> main(List<String> arguments) async {
   SystemNavigator.pop();
 }
 
-// Helper function to get PresentationNode from PresentationParser
+/// Helper function to get PresentationNode from PresentationParser
 Future<PresentationNode> getPresentationNode(PresentationParser parser) async {
   PrsNode prsNode = await parser.toPrsNode();
   if (prsNode is PresentationNode) {

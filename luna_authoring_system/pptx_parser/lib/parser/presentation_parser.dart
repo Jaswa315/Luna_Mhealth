@@ -6,15 +6,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'package:archive/archive.dart';
-import 'presentation_tree.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:xml/xml.dart';
-import 'package:xml2json/xml2json.dart';
-import 'package:uuid/uuid.dart';
+import 'package:archive/archive.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:pptx_parser/parser/category_game_editor_parser.dart';
+import 'package:uuid/uuid.dart';
+import 'package:xml/xml.dart';
+import 'package:xml2json/xml2json.dart';
+import 'presentation_tree.dart';
 
 // From MS-PPTX Documentation
 const String keyPicture = 'p:pic';

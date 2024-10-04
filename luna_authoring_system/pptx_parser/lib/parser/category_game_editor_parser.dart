@@ -17,11 +17,12 @@ const String keyLunaCategoryTitleAndImage =
 
 class CategoryGameEditorParser {
   static const String keyLunaCategoryTheme = "category_game";
-
+  /// List of transform data
   List<Map<String, dynamic>> categoryContainerTransform = [];
   Map<String, dynamic>? slideRelationship = {};
   Map<String, dynamic> placeholderToTransform = {};
 
+  /// Constructs a new instance of [CategoryGameEditorParser].
   CategoryGameEditorParser();
 
   PrsNode parseCategoryGameEditor(
