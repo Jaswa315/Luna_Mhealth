@@ -167,8 +167,8 @@ class TextParagraphNode extends PrsNode {
   }
 }
 
-// A TextNode is one text token from powerpoint. There can be multiple
-// text tokens in a text box. They are separated by text formatting.
+/// A TextNode is one text token from powerpoint. There can be multiple
+/// text tokens in a text box. They are separated by text formatting.
 class TextNode extends PrsNode {
   late final bool italics;
   late final bool bold;
@@ -258,7 +258,7 @@ class ConnectionNode extends PrsNode {
   }
 }
 
-// Page Image
+/// Page Image
 class ImageNode extends PrsNode {
   late final String? imageName;
   late final String path;

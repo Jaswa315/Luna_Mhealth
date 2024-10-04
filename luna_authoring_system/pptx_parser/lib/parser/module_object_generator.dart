@@ -1,21 +1,26 @@
 import 'dart:ui';
+
+import 'package:luna_core/models/component.dart';
+
+import 'package:luna_core/models/image/image_component.dart';
+import 'package:luna_core/models/module.dart';
+import 'package:luna_core/models/page.dart';
+import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/text/text_component.dart';
+import 'package:luna_core/utils/conversion.dart';
 import 'package:pptx_parser/parser/presentation_parser.dart';
 import 'package:pptx_parser/parser/presentation_tree.dart';
-import 'package:luna_core/models/page.dart';
-import 'package:luna_core/models/module.dart';
-import 'package:luna_core/models/component.dart';
-import 'package:luna_core/models/text/text_component.dart';
-import 'package:luna_core/models/image/image_component.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:pptx_parser/utils/size_converter.dart';
-import 'package:luna_core/utils/conversion.dart';
 
-// import 'package:luna_core/utils/logging.dart';
-// Font size is described as 100 * point value.
-// OpenXML: http://officeopenxml.com/drwSp-text-runProps.php
+
+/// import 'package:luna_core/utils/logging.dart';
+/// Font size is described as 100 * point value.
+/// OpenXML: http://officeopenxml.com/drwSp-text-runProps.php
 const sizeToPointFactor = 100;
-const defaultFontSize = 1600; // 16.0 pt * 100
+/// 16.0 pt * 100
+const defaultFontSize = 1600; 
 
+/// Constructs a new instance of [ModuleObjectGenerator].
 class ModuleObjectGenerator {
   late final PresentationParser parser;
   late double _slideWidth;

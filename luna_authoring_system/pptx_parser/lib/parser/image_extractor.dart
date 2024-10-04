@@ -1,15 +1,18 @@
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:path/path.dart' as p;
-import 'presentation_tree.dart';
 import 'presentation_parser.dart';
+import 'presentation_tree.dart';
 
+/// A class to retrieve images from a presentation
 class ImageExtractor {
   final PresentationParser _parser;
 
+  /// Constructs a new instance of [ImageExtractor].
   ImageExtractor(this._parser);
 
-  void extractImages(String outputDir) async {
+  /// Extracts images from a a presentation and saves them to [outputDir]
+  Future<void> extractImages(String outputDir) async {
     PresentationNode root = await _getPresentationNode();
     _extractImagesFromPresentation(root, outputDir);
   }
