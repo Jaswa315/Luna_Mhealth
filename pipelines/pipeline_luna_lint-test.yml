@@ -16,7 +16,7 @@ variables:
   - name: lunacore
     value: luna_core
   - name: lunaauthoring
-    value: luna_authoring_system/pptx_parser
+    value: luna_authoring_system
   - name: lunamobile
     value: luna_mobile
 
