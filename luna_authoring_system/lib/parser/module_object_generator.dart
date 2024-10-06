@@ -1,16 +1,15 @@
+
 import 'dart:ui';
-
 import 'package:luna_core/models/component.dart';
-
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/utils/conversion.dart';
-import 'package:pptx_parser/parser/presentation_parser.dart';
-import 'package:pptx_parser/parser/presentation_tree.dart';
-import 'package:pptx_parser/utils/size_converter.dart';
+import '../utils/size_converter.dart';
+import 'presentation_parser.dart';
+import 'presentation_tree.dart';
 
 
 /// import 'package:luna_core/utils/logging.dart';
