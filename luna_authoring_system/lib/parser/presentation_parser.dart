@@ -10,10 +10,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:luna_core/utils/logging.dart';
-import 'package:pptx_parser/parser/category_game_editor_parser.dart';
 import 'package:uuid/uuid.dart';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
+import 'category_game_editor_parser.dart';
 import 'presentation_tree.dart';
 
 // From MS-PPTX Documentation
