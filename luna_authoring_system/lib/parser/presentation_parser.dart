@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:luna_core/utils/logging.dart';
+import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
@@ -80,7 +81,7 @@ class PresentationParser {
   ArchiveFile extractFileFromZip(String filePath) {
     var bytes = _file.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
-    return archive.firstWhere((file) => file.name == filePath);
+    return archive.firstWhere((file) => p.equals(file.name,filePath));
   }
 
   XmlDocument _extractXMLFromZip(String xmlFilePath) {

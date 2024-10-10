@@ -180,8 +180,8 @@ void main() {
 
       final loadedFilesList = await storageProvider.getAllFiles();
 
-      expect(loadedFilesList[1], equals(testData1));
-      expect(loadedFilesList[0], equals(testData2));
+      expect(loadedFilesList[0], equals(testData1));
+      expect(loadedFilesList[1], equals(testData2));
     });
 
     test('Find Multiple Files - Subfolder', () async {
@@ -199,8 +199,8 @@ void main() {
       final loadedFilesList =
           await storageProvider.getAllFiles(container: "sub");
 
-      expect(loadedFilesList[1], equals(testData1));
-      expect(loadedFilesList[0], equals(testData2));
+      expect(loadedFilesList[0], equals(testData1));
+      expect(loadedFilesList[1], equals(testData2));
     });
 
     test('Find Multiple Files - child subfolder item access', () async {
@@ -218,8 +218,8 @@ void main() {
       final loadedFilesList = await storageProvider.getAllFiles();
 
       expect(loadedFilesList.length, equals(2));
-      expect(loadedFilesList[1], equals(testData1));
-      expect(loadedFilesList[0], equals(testData2));
+      expect(loadedFilesList[0], equals(testData1));
+      expect(loadedFilesList[1], equals(testData2));
     });
 
     test('Find Multiple Files - parent subfolder no access', () async {
