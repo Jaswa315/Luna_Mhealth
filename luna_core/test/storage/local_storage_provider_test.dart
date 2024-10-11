@@ -10,6 +10,7 @@
 
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:collection/collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:luna_core/storage/istorage_provider.dart';
@@ -179,9 +180,8 @@ void main() {
       await storageProvider.saveFile(fileName2, testData2);
 
       final loadedFilesList = await storageProvider.getAllFiles();
-
-      expect(loadedFilesList[0], equals(testData1));
-      expect(loadedFilesList[1], equals(testData2));
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)), isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)), isTrue);
     });
 
     test('Find Multiple Files - Subfolder', () async {
@@ -199,8 +199,8 @@ void main() {
       final loadedFilesList =
           await storageProvider.getAllFiles(container: "sub");
 
-      expect(loadedFilesList[0], equals(testData1));
-      expect(loadedFilesList[1], equals(testData2));
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)), isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)), isTrue);
     });
 
     test('Find Multiple Files - child subfolder item access', () async {
@@ -215,11 +215,11 @@ void main() {
       await storageProvider.saveFile(fileName2, testData2,
           createContainer: true);
 
-      final loadedFilesList = await storageProvider.getAllFiles();
+      final loadedFilesList =  await storageProvider.getAllFiles();
 
       expect(loadedFilesList.length, equals(2));
-      expect(loadedFilesList[0], equals(testData1));
-      expect(loadedFilesList[1], equals(testData2));
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)), isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)), isTrue);
     });
 
     test('Find Multiple Files - parent subfolder no access', () async {
