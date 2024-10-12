@@ -24,6 +24,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.dart_tool/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -160,3 +161,19 @@ cython_debug/
 
 
 data/
+
+# Flutter OS Specific Generated Files 
+# This can occur with flutter run while creating a .luna file
+.flutter-plugins
+.flutter-plugins-dependencies
+.idea
+parser.iml
+.metadata
+macos/
+test/widget_test.dart
+test\\test_output/images
+
+# Deal with these one at a time...
+# windows/
+# ios/
+# android/
