@@ -170,6 +170,7 @@ data/
 parser.iml
 .metadata
 macos/
+linux/
 test/widget_test.dart
 test\\test_output/images
 
