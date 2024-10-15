@@ -1,6 +1,0 @@
-#Use the luna_core analysis_options file
-include: ../luna_core/analysis_options.yaml
-
-linter:
-  rules:
-    public_member_api_docs: false

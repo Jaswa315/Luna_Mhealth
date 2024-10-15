@@ -10,21 +10,37 @@ import 'presentation_tree.dart';
 
 /// CategoryGameEditorParser parses specific slides that follows Luna Category Game Editor Slide.
 const String keyPicture = 'p:pic';
+///
 const String keyShape = 'p:sp';
+/// Container for this category
 const String keyLunaCategoryContainer = '{luna_category_container}';
+/// tile and Image for the contianer
 const String keyLunaCategoryTitleAndImage =
     '{luna_category_container_title_and_image}';
 
+/// 
 class CategoryGameEditorParser {
+  /// The theme for these categories is category game
   static const String keyLunaCategoryTheme = "category_game";
   /// List of transform data
   List<Map<String, dynamic>> categoryContainerTransform = [];
+  /// Slide relationship data.
   Map<String, dynamic>? slideRelationship = {};
+  /// Map to store the placeholders and their respective transforms.
   Map<String, dynamic> placeholderToTransform = {};
 
   /// Constructs a new instance of [CategoryGameEditorParser].
   CategoryGameEditorParser();
 
+  /// Parses the category game editor from the provided slide and layout data.
+  ///
+  /// [slideMap] contains the slide data.
+  /// [slideLayoutMap] contains the layout data for the slide.
+  /// [slideIdList] is a list of slide IDs.
+  /// [slideIndex] is the index of the current slide being processed.
+  /// [slideRelationship] is the relationship map for the slide.
+  ///
+  /// Returns a [PrsNode] representing the parsed node.
   PrsNode parseCategoryGameEditor(
       Map<String, dynamic> slideMap,
       Map<String, dynamic> slideLayoutMap,
