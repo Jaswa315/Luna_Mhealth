@@ -54,6 +54,7 @@ class Module extends Item {
     required this.slideCount,
     required this.section,
     required this.pages,
+    required this.games,
     required this.width,
     required this.height,
     required String name,
@@ -63,8 +64,20 @@ class Module extends Item {
   factory Module.fromJson(Map<String, dynamic> json) {
     var slidesJson = json['module']['pages'] as List<dynamic>;
 
+    final categoryGames = (json['module']['games'] as List<dynamic>?)
+        ?.map((slideJson) => GameContext.fromJson(slideJson))
+        .toList() ?? [];
+
+    // ToDo: Fix category_games dependency here.  A standard page shouldn't need the games context at assignment time
+    // Probably should have the games context as a first class context singleton and access from within component or page
+    var pages =
+        slidesJson.map((slideJson) => Page.fromJson(slideJson, gameContexts: categoryGames)).toList();
+
     var sectionMap =
         Map<String, List<String>>.from(json['module']['section']);
+    // if (json['category_games'] == null) {
+    //   throw FormatException('Expected a "category_games" field with an array value.');
+    // }
 
     return Module(      
       moduleId: json['module']['moduleId'] as String,
@@ -73,6 +86,7 @@ class Module extends Item {
       slideCount: json['module']['slideCount'] as int,
       section: sectionMap,
       pages: pages,
+      games: categoryGames,
       width: (json['module']['width'] as num).toDouble(),
       height: (json['module']['height'] as num).toDouble(),
       name: json['module']['name']
@@ -92,6 +106,9 @@ class Module extends Item {
         'pages': pages.map((page) => page.toJson()).toList(),
         'width': width,
         'height': height,
+        'games': []
+        //'games:' category_games,
+
       }
     };
   }

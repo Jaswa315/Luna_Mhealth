@@ -284,3 +284,70 @@ class ImageNode extends PrsNode {
     };
   }
 }
+
+class CategoryGameEditorNode extends PrsNode {
+  late final String slideId;
+
+  CategoryGameEditorNode() {
+    name = 'categoryGameEditor';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': name,
+      'category': children.map((child) => child.toJson()).toList()
+    };
+  }
+}
+
+class CategoryNode extends PrsNode {
+  CategoryGameTextNode? categoryName;
+  CategoryGameImageNode? categoryImage;
+
+  CategoryNode() {
+    name = 'category';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': name,
+      'categoryName': categoryName?.toJson(),
+      'categoryImage': categoryImage?.toJson(),
+      'categoryMembers': children.map((child) => child.toJson()).toList()
+    };
+  }
+}
+
+class CategoryGameTextNode extends PrsNode {
+  late String? text;
+  late PrsNode transform;
+
+  CategoryGameTextNode() {
+    name = 'categoryGameText';
+  }
+  @override
+  Map<String, dynamic> toJson() {
+    return {'type': name, 'text': text};
+  }
+}
+
+class CategoryGameImageNode extends PrsNode {
+  late String path;
+  late String? altText;
+  late PrsNode transform;
+
+  CategoryGameImageNode() {
+    name = 'categoryGameImage';
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': name,
+      'path': path,
+      'alttext': altText,
+    };
+  }
+}

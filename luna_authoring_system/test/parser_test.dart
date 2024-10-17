@@ -377,6 +377,99 @@ void main() {
       expect(text1, "text2");
     });
 
+    test('Category game editor is parsed as category and images', () async {
+      var filename = "Content and category game editor.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      String type0 = astJson['presentation']['slides'][0]['type'];
+      List<dynamic> category = astJson['presentation']['slides'][0]['category'];
+
+      expect(type0, 'categoryGameEditor');
+      expect(category.length, 3);
+    });
+
+    test('PPTX with one slide that follows slideLayout returns JSON file',
+        () async {
+      var filename = "Category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./slideLayout_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
+    });
+
+    test('PPTX with muliple slides that follows slideLayout returns JSON file',
+        () async {
+      var filename = "Content and category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./multiple_slideLayout_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
+    });
+
+    test('toJSON returns JSON file', () async {
+      var filename = "Content and category game editor.pptx";
+      File file = File("$assetsFolder/$filename");
+      PresentationParser parser = PresentationParser(file);
+
+      File json = await parser.toJSON("./toJSON_module.json");
+      bool fileExists = json.existsSync();
+
+      expect(fileExists, true);
+
+      if (fileExists) {
+        try {
+          await json.delete();
+        } catch (e) {
+          LogManager().logTrace(("Error occured while deleting file."),
+              LunaSeverityLevel.Verbose);
+        }
+      } else {
+        LogManager()
+            .logTrace(("File does not exist."), LunaSeverityLevel.Verbose);
+      }
+    });
+
+    test(
+        'Shapes out of bound in categoryGameEditor are stored in the last node',
+        () async {
+      var filename = "CategoryGameEditorOutOfBounds.pptx";
+      Map<String, dynamic> astJson = await toMapFromPath(filename);
+
+      List<dynamic> category = astJson['presentation']['slides'][0]['category'];
+
+      expect(category[2]["categoryMembers"][0]['text'], 'almonds');
+    });
+
     test('A Textbox has UID of 1', () async {
       // Arrange
       var filename = "TextBox-HelloWorld.pptx";
