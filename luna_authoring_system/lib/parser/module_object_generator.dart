@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/image/image_component.dart';
@@ -11,13 +10,13 @@ import '../utils/size_converter.dart';
 import 'presentation_parser.dart';
 import 'presentation_tree.dart';
 
-
 /// import 'package:luna_core/utils/logging.dart';
 /// Font size is described as 100 * point value.
 /// OpenXML: http://officeopenxml.com/drwSp-text-runProps.php
 const sizeToPointFactor = 100;
+
 /// 16.0 pt * 100
-const defaultFontSize = 1600; 
+const defaultFontSize = 1600;
 
 /// Constructs a new instance of [ModuleObjectGenerator].
 class ModuleObjectGenerator {
@@ -56,17 +55,17 @@ class ModuleObjectGenerator {
 
     /// The width and height are in EMU values.
     Module moduleObj = Module(
-        id: data.moduleID,
-        moduleId: data.moduleID,
-        title: data.title,
-        name: fileName,
-        author: data.author,
-        slideCount: data.children.length,
-        section: {},
-        pages: pages,
-        width: data.width,
-        height: data.height,
-        games: []);
+      id: data.moduleID,
+      moduleId: data.moduleID,
+      title: data.title,
+      name: fileName,
+      author: data.author,
+      slideCount: data.children.length,
+      section: {},
+      pages: pages,
+      width: data.width,
+      height: data.height,
+    );
     return moduleObj;
   }
 
@@ -184,9 +183,4 @@ class ModuleObjectGenerator {
         height:
             SizeConverter.getSizePercentY(tsr.size.y, _slideHeight, _padding));
   }
-
-  // TODO: Create Necessary Components
-  //
-
-  // TODO: Create Game Components
 }
