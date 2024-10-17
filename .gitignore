@@ -4,6 +4,7 @@
 **/macos/
 **/linux/
 **/windows/
+**/web/
 
 # Ignore other specific folders at all levels
 **/bin/
