@@ -16,23 +16,34 @@ import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 import 'presentation_tree.dart';
 
-// From MS-PPTX Documentation
+/// From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
+/// The XML key for a shape element in a PowerPoint presentation.
 const String keyShape = 'p:sp';
+/// The XML key for a connection shape element in a PowerPoint presentation.
 const String keyConnectionShape = 'p:cxnSp';
+/// The schema URL for the slide layout relationships in PowerPoint presentations.
 const String keySlideLayoutSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout";
+/// The schema URL for the slide master relationships in PowerPoint presentations.
 const String keySlideMasterSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster";
+/// The schema URL for theme relationships in PowerPoint presentations.
 const String keyThemeSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
 
 // contant value for padding
+/// value representing the custom design name for Luna.
 const String keyLunaCustomDesign = "Pregnancy Symptoms and Conditions";
+/// The placeholder for the Luna top system bar.
 const String keyLunaTopSystemBar = "{luna top_system_bar}";
+/// The placeholder for the Luna bottom system bar.
 const String keyLunaBottomSystemBar = "{luna bottom_system_bar}";
+/// The placeholder for the Luna left padding value.
 const String keyLunaLeftPadding = "{luna left_padding}";
+/// The placeholder for the Luna right padding value.
 const String keyLunaRightPadding = "{luna right_padding}";
+/// A map representing zero padding values for all sides (left, top, right, bottom).
 const Map<String, double> zeroPadding = {
   "left": 0,
   "top": 0,
@@ -40,32 +51,48 @@ const Map<String, double> zeroPadding = {
   "bottom": 0
 };
 
+/// A parser class for handling PowerPoint presentations.
 class PresentationParser {
   // removed static so the localization_test and parser_test work
   late final File _file;
+  /// A UUID generator instance for generating unique identifiers.
   static const uuidGenerator = Uuid();
-  // for audio and hyperlink
+  /// for audio and hyperlink
   Map<String, dynamic>? slideRelationship;
+  /// The index of the current slide being processed.
   int? slideIndex;
+  /// The total number of slides in the presentation.
   int? slideCount;
   // for slides made upon a slideLayout
+  /// A map that transforms placeholders to corresponding values for slides made upon a slide layout.
   Map<String, dynamic> placeholderToTransform = {};
   int _nextTextNodeUID = 1;
 
+<<<<<<< HEAD
+=======
+  /// An instance of the CategoryGameEditorParser for handling category game editing.
+  CategoryGameEditorParser categoryGameEditorParser =
+      CategoryGameEditorParser();
+
+  /// Creates a [PresentationParser] instance with the given [file].
+>>>>>>> 5f59810654ec9917fee21571b43bc51bb34d9658
   PresentationParser(File file) {
     _file = file;
   }
 
+  /// Parses the PowerPoint presentation and returns a [PrsNode].
   Future<PrsNode> toPrsNode() async {
     PresentationParser parser = PresentationParser(_file);
     return parser._parsePresentation();
   }
 
+  /// Converts the presentation to a map representation.
   Future<Map<String, dynamic>> toMap() async {
     PrsNode prsTree = await toPrsNode();
     return prsTree.toJson();
   }
 
+  /// Writes the presentation data to a JSON file at the specified [outputPath]
   Future<File> toJSON(String outputPath) async {
     Map<String, dynamic> astJson = await toMap();
     String jsonString = jsonEncode(astJson);
@@ -74,6 +101,7 @@ class PresentationParser {
     return outputFile;
   }
 
+  /// Extracts a file from a zip archive.
   ArchiveFile extractFileFromZip(String filePath) {
     var bytes = _file.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
@@ -96,6 +124,9 @@ class PresentationParser {
     return jsonDecode(xml2json.toParkerWithAttrs());
   }
 
+  /// Converts an XML file from a zip archive to JSON.
+  /// [filePath] - Path of the XML file in the archive.
+  /// Returns the JSON representation of the extracted XML.
   dynamic jsonFromArchive(String filePath) {
     XmlDocument doc = _extractXMLFromZip(filePath);
     return _xmlDocumentToJson(doc);
