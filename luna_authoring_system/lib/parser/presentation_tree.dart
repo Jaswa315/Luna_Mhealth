@@ -9,13 +9,16 @@
 import 'dart:ui';
 
 /// Possible shape geometry in a presentation
-enum ShapeGeometry { 
+enum ShapeGeometry {
   /// an ellipse shape
-  ellipse, 
+  ellipse,
+
   /// a recangle shape
   rectangle,
+
   /// a line shape
-  line }
+  line
+}
 
 /// From MS-ODRAW 1.1 Glossary
 const double emuToPointFactor = 12700;
@@ -30,6 +33,7 @@ mixin ToJson {
 class Point2D with ToJson {
   /// x location
   final double x;
+
   /// y location
   final double y;
 
@@ -46,6 +50,7 @@ class Point2D with ToJson {
 class Transform extends PrsNode with ToJson {
   /// offset of the transform
   late final Point2D offset;
+
   /// size of the transform
   late final Point2D size;
 
@@ -62,6 +67,7 @@ class Transform extends PrsNode with ToJson {
 class PrsNode with ToJson {
   /// name of prsnode
   late String name;
+
   /// nodes children
   List<PrsNode> children = [];
 
@@ -80,27 +86,35 @@ class PrsNode with ToJson {
 class PresentationNode extends PrsNode {
   /// module id
   late final String moduleID;
+
   /// title
   late final String title;
+
   /// author
   late final String author;
+
   /// number of slides
   late final int slideCount;
+
   /// section
   late final Map<String, dynamic> section;
+
   /// width of this node
   late final double width;
+
   /// height of this node
   late final double height;
+
   /// language locale of prs node
   late final Locale langLocale;
 
   /// default placeholder for default section
   static const String defaultSection = 'Default Section';
+
   /// default language locale
   static const Locale defaultlangLocale = Locale('en', 'US');
 
-/// A constructor for the [PresentationNode]
+  /// A constructor for the [PresentationNode]
   PresentationNode() {
     name = 'presentation';
     //TODO: get locale info dynamically
@@ -130,11 +144,11 @@ class PresentationNode extends PrsNode {
 class SlideNode extends PrsNode {
   /// ID for the slide
   late final String slideId;
-  /// left, top, right, bottom padding of the slide
-  late final Map<String, double>
-      padding; 
 
-/// Constructor for a [SlideNode] sets name to "slide"
+  /// left, top, right, bottom padding of the slide
+  late final Map<String, double> padding;
+
+  /// Constructor for a [SlideNode] sets name to "slide"
   SlideNode() {
     name = 'slide';
   }
@@ -154,6 +168,7 @@ class SlideNode extends PrsNode {
 class TextBoxNode extends PrsNode {
   /// audio location for the textbox
   late final String? audioPath;
+
   /// hyperlink for the text
   late final int? hyperlink;
 
@@ -219,22 +234,31 @@ class TextParagraphNode extends PrsNode {
 class TextNode extends PrsNode {
   /// Setting for it text has italics
   late final bool italics;
+
   /// Setting for it text has bold
   late final bool bold;
+
   /// Setting for it text has underline
   late final bool underline;
+
   /// Setting for font size of text
   late final int? size;
+
   /// UID for text
   late int? uid;
+
   /// Color of text
   late final String? color;
+
   /// Highlight color of text
   late final String? highlightColor;
+
   /// Language for the text
   late final String? language;
+
   /// Actual text of the text
   late final String? text;
+
   /// Hyperlink for the text
   late final int? hyperlink;
 
@@ -282,12 +306,16 @@ class BodyNode extends PrsNode {
 class ShapeNode extends PrsNode {
   /// Transform of this shape
   late final PrsNode? transform;
+
   /// The type of geometry this shape has
   late final ShapeGeometry shape;
+
   /// Possible audio path location for this shape
   late final String? audioPath;
+
   /// Possible hyperlink for this shape
   late final int? hyperlink;
+
   /// Possible textBody for this shape
   late final PrsNode? textBody;
 
@@ -311,10 +339,13 @@ class ShapeNode extends PrsNode {
 class ConnectionNode extends PrsNode {
   /// Default half of the line width
   static const double defaultHalfLineWidth = 6350;
+
   /// Transform for this connection node
   late final Transform transform;
+
   /// Weight of the connection
   late final double weight;
+
   /// Shape of the connection
   late final ShapeGeometry shape;
 
@@ -337,14 +368,19 @@ class ConnectionNode extends PrsNode {
 class ImageNode extends PrsNode {
   /// Name of the image
   late final String? imageName;
+
   /// Path of the image
   late final String path;
+
   /// Alternate text for the image
   late final String? altText;
+
   /// Audio path for the iamge
   late final String? audioPath;
+
   /// Hyperlink for the image
   late final int? hyperlink;
+
   /// Transform for the image
   late Transform transform;
 
