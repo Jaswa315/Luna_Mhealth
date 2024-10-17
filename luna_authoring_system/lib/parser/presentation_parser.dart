@@ -68,14 +68,6 @@ class PresentationParser {
   Map<String, dynamic> placeholderToTransform = {};
   int _nextTextNodeUID = 1;
 
-<<<<<<< HEAD
-=======
-  /// An instance of the CategoryGameEditorParser for handling category game editing.
-  CategoryGameEditorParser categoryGameEditorParser =
-      CategoryGameEditorParser();
-
-  /// Creates a [PresentationParser] instance with the given [file].
->>>>>>> 5f59810654ec9917fee21571b43bc51bb34d9658
   PresentationParser(File file) {
     _file = file;
   }
