@@ -9,7 +9,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/enums/item_type.dart';
-import 'package:luna_core/models/games/category_game.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
@@ -69,8 +68,6 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
         return TextComponent.fromJson(json);
       case ComponentType.divider:
         return DividerComponent.fromJson(json);
-      case ComponentType.categoryGame:
-        return CategoryGame.fromJson(json, games);
       default:
         throw Exception('Unsupported component type: $type.toString()');
     }
@@ -82,5 +79,4 @@ const Map<String, ComponentType> _typeMapping = {
   'image': ComponentType.image,
   'text': ComponentType.text,
   'divider': ComponentType.divider,
-  'category_game': ComponentType.categoryGame,
 };

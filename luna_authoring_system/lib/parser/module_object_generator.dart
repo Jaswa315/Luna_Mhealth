@@ -184,9 +184,4 @@ class ModuleObjectGenerator {
         height:
             SizeConverter.getSizePercentY(tsr.size.y, _slideHeight, _padding));
   }
-
-  // TODO: Create Necessary Components
-  //
-
-  // TODO: Create Game Components
 }

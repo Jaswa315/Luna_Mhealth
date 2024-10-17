@@ -14,7 +14,6 @@ import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
-import 'category_game_editor_parser.dart';
 import 'presentation_tree.dart';
 
 // From MS-PPTX Documentation
@@ -53,9 +52,6 @@ class PresentationParser {
   Map<String, dynamic> placeholderToTransform = {};
   int _nextTextNodeUID = 1;
 
-  CategoryGameEditorParser categoryGameEditorParser =
-      CategoryGameEditorParser();
-
   PresentationParser(File file) {
     _file = file;
   }
@@ -81,7 +77,7 @@ class PresentationParser {
   ArchiveFile extractFileFromZip(String filePath) {
     var bytes = _file.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
-    return archive.firstWhere((file) => p.equals(file.name,filePath));
+    return archive.firstWhere((file) => p.equals(file.name, filePath));
   }
 
   XmlDocument _extractXMLFromZip(String xmlFilePath) {
@@ -178,34 +174,25 @@ class PresentationParser {
       String? slideLayoutName = slideLayoutInfo[0];
       int? slideLayoutIndex = slideLayoutInfo[1];
       int? slideMasterIndex = slideLayoutInfo[2];
+
       PrsNode slide = PrsNode();
       slideRelationship = _parseSlideRels(i);
-      if (slideLayoutName == CategoryGameEditorParser.keyLunaCategoryTheme) {
-        slide = categoryGameEditorParser.parseCategoryGameEditor(
-            jsonFromArchive("ppt/slides/slide$slideIndex.xml"),
-            jsonFromArchive(
-                "ppt/slideLayouts/slideLayout$slideLayoutIndex.xml"),
-            parsedSlideIdList,
-            slideIndex!,
-            slideRelationship);
+      slide = _parseSlide(parsedSlideIdList);
+
+      if (slideLayoutName == keyLunaCustomDesign) {
+        SlideNode contentSlide = slide as SlideNode;
+        Map<String, double> padding = _parsePadding(jsonFromArchive(
+            "ppt/slideMasters/slideMaster$slideMasterIndex.xml"));
+        contentSlide.padding = padding;
+        slide = contentSlide as PrsNode;
       } else {
-        slide = _parseSlide(parsedSlideIdList);
-        if (slideLayoutName == keyLunaCustomDesign) {
-          SlideNode contentSlide = slide as SlideNode;
-          Map<String, double> padding = _parsePadding(jsonFromArchive(
-              "ppt/slideMasters/slideMaster$slideMasterIndex.xml"));
-          contentSlide.padding = padding;
-          slide = contentSlide as PrsNode;
-        } else {
-          SlideNode contentSlide = slide as SlideNode;
-          contentSlide.padding = zeroPadding;
-          slide = contentSlide as PrsNode;
-        }
+        SlideNode contentSlide = slide as SlideNode;
+        contentSlide.padding = zeroPadding;
+        slide = contentSlide as PrsNode;
       }
       node.children.add(slide);
       placeholderToTransform = {};
     }
-
     return node;
   }
 
