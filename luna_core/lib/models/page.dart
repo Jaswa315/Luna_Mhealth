@@ -12,8 +12,6 @@
 import 'dart:convert';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/item.dart';
-import 'package:luna_mobile/games/gamecontext.dart';
-
 import 'component.dart';
 
 /// Represents a page in the application.
@@ -28,10 +26,11 @@ class Page extends Item {
   final List<Component> components;
 
   /// Constructs a new instance of [Page].
-  Page({    
+  Page({
     required this.slideId,
-    List<Component>? components, 
-  }) : components = components ?? [], super(itemType: ItemType.page);
+    List<Component>? components,
+  })  : components = components ?? [],
+        super(itemType: ItemType.page);
 
   /// Gets the list of components in the page.
   List<Component> get getPageComponents => List.unmodifiable(components);
@@ -47,18 +46,16 @@ class Page extends Item {
   }
 
   /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
-  /// ToDo: Fix parameter dependency on GameContext
-  factory Page.fromJson(Map<String, dynamic> json,
-      {List<GameContext> gameContexts = const []}) {
+  factory Page.fromJson(Map<String, dynamic> json) {
     if (json['type'] != ItemType.page.name) {
       throw FormatException('Only page type components are allowed');
     }
 
     List<Component> components = (json['shapes'] as List<dynamic>)
-        .map((shapeJson) => Component.fromJson(shapeJson, games: gameContexts))
+        .map((shapeJson) => Component.fromJson(shapeJson))
         .toList();
 
-    return Page(      
+    return Page(
       slideId: json['slideId'] as String,
       components: components,
     );
