@@ -24,6 +24,7 @@
 build/
 .idea
 project.iml
+luna_mobile/.gitignore
 
 # Flutter Repo-specific
 /dev/integration_tests/**/xcuserdata
@@ -62,7 +63,7 @@ linked_*.ds
 unlinked.ds
 unlinked_spec.ds
 data/
-test/widget_test.dart
+**/test/widget_test.dart
 luna_authoring_system/test\\test_output/images
 
 # Exceptions to above rules.
