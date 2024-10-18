@@ -20,14 +20,15 @@ const defaultFontSize = 1600;
 
 /// Constructs a new instance of [ModuleObjectGenerator].
 class ModuleObjectGenerator {
+  ///
   late final PresentationParser parser;
   late double _slideWidth;
   late double _slideHeight;
   late Map<String, double> _padding;
   //late final PrsNode _root;
-
+  ///
   ModuleObjectGenerator(this.parser);
-
+  ///
   Future<Module> generateLunaModule(String fileName) async {
     PrsNode root = await parser.toPrsNode();
     return _createModule(root, fileName);
