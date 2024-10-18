@@ -24,6 +24,7 @@
 build/
 .idea
 project.iml
+luna_mobile/.gitignore
 
 # Flutter Repo-specific
 /dev/integration_tests/**/xcuserdata
