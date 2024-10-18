@@ -18,16 +18,21 @@ import 'presentation_tree.dart';
 
 /// From MS-PPTX Documentation
 const String keyPicture = 'p:pic';
+
 /// The XML key for a shape element in a PowerPoint presentation.
 const String keyShape = 'p:sp';
+
 /// The XML key for a connection shape element in a PowerPoint presentation.
 const String keyConnectionShape = 'p:cxnSp';
+
 /// The schema URL for the slide layout relationships in PowerPoint presentations.
 const String keySlideLayoutSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout";
+
 /// The schema URL for the slide master relationships in PowerPoint presentations.
 const String keySlideMasterSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster";
+
 /// The schema URL for theme relationships in PowerPoint presentations.
 const String keyThemeSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
@@ -35,14 +40,19 @@ const String keyThemeSchema =
 // contant value for padding
 /// value representing the custom design name for Luna.
 const String keyLunaCustomDesign = "Pregnancy Symptoms and Conditions";
+
 /// The placeholder for the Luna top system bar.
 const String keyLunaTopSystemBar = "{luna top_system_bar}";
+
 /// The placeholder for the Luna bottom system bar.
 const String keyLunaBottomSystemBar = "{luna bottom_system_bar}";
+
 /// The placeholder for the Luna left padding value.
 const String keyLunaLeftPadding = "{luna left_padding}";
+
 /// The placeholder for the Luna right padding value.
 const String keyLunaRightPadding = "{luna right_padding}";
+
 /// A map representing zero padding values for all sides (left, top, right, bottom).
 const Map<String, double> zeroPadding = {
   "left": 0,
@@ -55,12 +65,16 @@ const Map<String, double> zeroPadding = {
 class PresentationParser {
   // removed static so the localization_test and parser_test work
   late final File _file;
+
   /// A UUID generator instance for generating unique identifiers.
   static const uuidGenerator = Uuid();
+
   /// for audio and hyperlink
   Map<String, dynamic>? slideRelationship;
+
   /// The index of the current slide being processed.
   int? slideIndex;
+
   /// The total number of slides in the presentation.
   int? slideCount;
   // for slides made upon a slideLayout
@@ -192,11 +206,9 @@ class PresentationParser {
 
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
-      // TODO: Separate getting slideLayoutName and slideLayoutIndex
       List<dynamic> slideLayoutInfo = _lookAheadTheme(i);
       String? slideLayoutName = slideLayoutInfo[0];
-      int? slideLayoutIndex = slideLayoutInfo[1];
-      int? slideMasterIndex = slideLayoutInfo[2];
+      int? slideMasterIndex = slideLayoutInfo[1];
       PrsNode slide = PrsNode();
       slideRelationship = _parseSlideRels(i);
 
@@ -323,7 +335,7 @@ class PresentationParser {
         ? ""
         : jsonFromArchive("ppt/theme/theme$themeIndex.xml")['a:theme']['_name'];
 
-    return [themeName, slideLayoutIndex, slideMasterIndex];
+    return [themeName, slideMasterIndex];
   }
 
   Map<String, dynamic> _parseSlideRels(int slideNum) {
