@@ -6,7 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'package:luna_mobile/games/gamecontext.dart';
 import 'package:uuid/uuid.dart';
 
 import '../enums/item_type.dart';
@@ -36,9 +35,6 @@ class Module extends Item {
   /// The pages (slides) in the presentation.
   final List<Page> pages;
 
-  ///The games in the module
-  final List<GameContext> games;
-
   /// The width of the module.
   final double width;
 
@@ -47,14 +43,13 @@ class Module extends Item {
 
   /// Constructs a new [Module] instance.
   Module({
-    String? id,    
+    String? id,
     required this.moduleId,
     required this.title,
     required this.author,
     required this.slideCount,
     required this.section,
     required this.pages,
-    required this.games,
     required this.width,
     required this.height,
     required String name,
@@ -64,33 +59,21 @@ class Module extends Item {
   factory Module.fromJson(Map<String, dynamic> json) {
     var slidesJson = json['module']['pages'] as List<dynamic>;
 
-    final categoryGames = (json['module']['games'] as List<dynamic>?)
-        ?.map((slideJson) => GameContext.fromJson(slideJson))
-        .toList() ?? [];
-
-    // ToDo: Fix category_games dependency here.  A standard page shouldn't need the games context at assignment time
-    // Probably should have the games context as a first class context singleton and access from within component or page
     var pages =
-        slidesJson.map((slideJson) => Page.fromJson(slideJson, gameContexts: categoryGames)).toList();
+        slidesJson.map((slideJson) => Page.fromJson(slideJson)).toList();
 
-    var sectionMap =
-        Map<String, List<String>>.from(json['module']['section']);
-    // if (json['category_games'] == null) {
-    //   throw FormatException('Expected a "category_games" field with an array value.');
-    // }
+    var sectionMap = Map<String, List<String>>.from(json['module']['section']);
 
-    return Module(      
-      moduleId: json['module']['moduleId'] as String,
-      title: json['module']['title'] as String,
-      author: json['module']['author'] as String,
-      slideCount: json['module']['slideCount'] as int,
-      section: sectionMap,
-      pages: pages,
-      games: categoryGames,
-      width: (json['module']['width'] as num).toDouble(),
-      height: (json['module']['height'] as num).toDouble(),
-      name: json['module']['name']
-    );
+    return Module(
+        moduleId: json['module']['moduleId'] as String,
+        title: json['module']['title'] as String,
+        author: json['module']['author'] as String,
+        slideCount: json['module']['slideCount'] as int,
+        section: sectionMap,
+        pages: pages,
+        width: (json['module']['width'] as num).toDouble(),
+        height: (json['module']['height'] as num).toDouble(),
+        name: json['module']['name']);
   }
 
   /// Converts the [Module] object to a JSON map.
@@ -106,9 +89,6 @@ class Module extends Item {
         'pages': pages.map((page) => page.toJson()).toList(),
         'width': width,
         'height': height,
-        'games': []
-        //'games:' category_games,
-
       }
     };
   }

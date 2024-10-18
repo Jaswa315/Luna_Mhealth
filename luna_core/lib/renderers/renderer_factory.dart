@@ -6,9 +6,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'package:luna_core/models/games/category_game.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
-import 'package:luna_core/renderers/category_game_renderer.dart';
 import 'package:luna_core/renderers/divider_component_renderer.dart';
 
 import '../models/image/image_component.dart';
@@ -23,7 +21,6 @@ class RendererFactory {
     ImageComponent: ImageComponentRenderer(),
     TextComponent: TextComponentRenderer(),
     DividerComponent: DividerComponentRenderer(),
-    CategoryGame: CategoryGameRenderer(),
   };
 
   /// Returns the renderer for the specified component type.

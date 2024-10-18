@@ -6,7 +6,6 @@ import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'package:pptx_parser/parser/image_extractor.dart';
 import 'dart:io';
 
-
 const String assetsFolder = 'test/test_assets';
 const String outputDirName = 'test/test_output';
 const String pptxName = "Images.pptx";
@@ -19,15 +18,14 @@ Future<PresentationNode> toPresentationNodeFromPath(String fileName) async {
 }
 */
 
-PresentationParser parser_example(String fileName){
-    File file = File("$assetsFolder/$fileName");
-    PresentationParser parser = PresentationParser(file);
-    return parser;
+PresentationParser parser_example(String fileName) {
+  File file = File("$assetsFolder/$fileName");
+  PresentationParser parser = PresentationParser(file);
+  return parser;
 }
 
 void main() {
   group('Tests for the Image Parser', () {
-
     setUpAll(() {
       final outputDir = Directory(outputDirName);
       if (!outputDir.existsSync()) {
@@ -35,20 +33,18 @@ void main() {
       }
     });
 
-    test('An image is extracted', () async{
+    test('An image is extracted', () async {
       PresentationParser newParser = parser_example(pptxName);
-      ImageExtractor ie =  ImageExtractor(newParser);
+      ImageExtractor ie = ImageExtractor(newParser);
       await ie.extractImages(outputDirName);
       expect(File('$outputDirName/images/image1.png').existsSync(), true);
-
     });
-    test('An image is extracted when given Windows style paths', () async{
+    test('An image is extracted when given Windows style paths', () async {
       var outputDirWindows = "test\\test_output";
       PresentationParser newParser = parser_example(pptxName);
-      ImageExtractor ie =  ImageExtractor(newParser);
+      ImageExtractor ie = ImageExtractor(newParser);
       await ie.extractImages(outputDirWindows);
       expect(File("$outputDirWindows/images/image1.png").existsSync(), true);
-
     });
     test('An Image has image path and cropping info', () async {
       /* TODO: fix test
@@ -154,7 +150,6 @@ void main() {
         testDirectory.deleteSync(recursive: false);
       }
     });
-
   });
 }
 
@@ -173,4 +168,3 @@ Future<void> clearTestFiles() async {
     }
   }
 }
-

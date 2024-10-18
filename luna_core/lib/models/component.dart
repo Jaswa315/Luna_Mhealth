@@ -9,26 +9,28 @@
 import 'package:flutter/widgets.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/enums/item_type.dart';
-import 'package:luna_core/models/games/category_game.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
-import 'package:luna_mobile/games/gamecontext.dart';
 
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
 /// Components can be rendered on the screen.
-abstract class Component extends Item with ChangeNotifier, Clickable{
+abstract class Component extends Item with ChangeNotifier, Clickable {
   /// The type of the component.
   final ComponentType type;
+
   /// x position of component
   final double x;
+
   /// y position of component
   final double y;
+
   /// width of component
   final double width;
+
   /// height of component
   final double height;
 
@@ -58,9 +60,8 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
   /// Converts a JSON object to a Component object.
   ///
   /// This method takes a [json] object and returns a Component object based on the 'type' field in the JSON.
-  /// ToDo: fix game context parameter dependency
-  static Component fromJson(Map<String, dynamic> json,
-      {List<GameContext> games = const []}) {
+
+  static Component fromJson(Map<String, dynamic> json) {
     ComponentType? type = _typeMapping[json['type']];
     switch (type) {
       case ComponentType.image:
@@ -69,8 +70,6 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
         return TextComponent.fromJson(json);
       case ComponentType.divider:
         return DividerComponent.fromJson(json);
-      case ComponentType.categoryGame:
-        return CategoryGame.fromJson(json, games);
       default:
         throw Exception('Unsupported component type: $type.toString()');
     }
@@ -81,6 +80,5 @@ abstract class Component extends Item with ChangeNotifier, Clickable{
 const Map<String, ComponentType> _typeMapping = {
   'image': ComponentType.image,
   'text': ComponentType.text,
-  'divider': ComponentType.divider,
-  'category_game': ComponentType.categoryGame,
+  'divider': ComponentType.divider
 };

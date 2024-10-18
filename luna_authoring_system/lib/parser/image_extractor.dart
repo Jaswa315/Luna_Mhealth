@@ -91,7 +91,7 @@ class ImageExtractor {
       savedImages.add(imagePath);
       File imageFile = File(p.join(imagesDir, p.basename(imagePath)));
 
-      String archiveFilePath = p.join('ppt/media', p.basename(imagePath));      
+      String archiveFilePath = p.join('ppt/media', p.basename(imagePath));
 
       ArchiveFile image = _parser.extractFileFromZip(archiveFilePath);
       imageFile.writeAsBytes(image.content as List<int>);
