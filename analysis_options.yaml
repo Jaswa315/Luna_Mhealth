@@ -1,4 +1,6 @@
 analyzer:
+ plugins:
+    - dart_code_linter
  strong-mode:
   implicit-casts: false
  errors:
@@ -42,3 +44,13 @@ linter:
     - unnecessary_await_in_return
     - avoid_void_async
     - avoid_print
+
+dart_code_linter:
+  metrics:
+    cyclomatic-complexity: 1
+    number-of-parameters: 1
+    maximum-nesting-level: 1
+  metrics-exclude:
+    - luna_authoring_system/test/**
+    - luna_core/test/**
+    - luna_mobile/test/**
