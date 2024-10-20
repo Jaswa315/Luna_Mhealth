@@ -18,22 +18,26 @@ const String kTestAssetsPath = 'test/storage/testassets';
 void main() {
   group('Module Class Tests', () {
     // Test initialization of the Module
-    test('Module is created with expected properties', () {
-      /* TODO: fix test
+    test('Creating a module has expected properties.', () {
       final module = Module(
         title: 'This is title',
+        author: 'Test Author',
+        slideCount: 0,
         pages: [],
         width: 100.0,
         height: 200.0,
+        name: 'module_name'
       );
 
       expect(module.id, isNotNull); // ID is auto-generated if not provided
       expect(module.title, 'This is title');
+      expect(module.author, 'Test Author');
+      expect(module.slideCount, 0);
       expect(module.pages, isEmpty);
       expect(module.width, 100.0);
       expect(module.height, 200.0);
+      expect(module.name, 'module_name');
       expect(module.itemType, ItemType.module);
-      */
     });
 
     // Test initialization of the Module with ID
