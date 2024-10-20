@@ -18,7 +18,7 @@ const String kTestAssetsPath = 'test/storage/testassets';
 void main() {
   group('Module Class Tests', () {
     // Test initialization of the Module
-    test('Creating a module has expected properties.', () {
+    test('Module is created with expected properties', () {
       final module = Module(
         title: 'This is title',
         author: 'Test Author',
