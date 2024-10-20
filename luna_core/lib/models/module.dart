@@ -23,7 +23,6 @@ class Module extends Item {
   final double width;
   final double height;
 
-  /// Constructs a new [Module] instance.
   Module({
     String? moduleId,
     required this.title,
