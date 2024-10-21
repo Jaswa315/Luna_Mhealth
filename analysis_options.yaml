@@ -23,7 +23,6 @@ linter:
     - directives_ordering
     - curly_braces_in_flow_control_structures
     - package_api_docs
-    - public_member_api_docs
     - comment_references
     - prefer_adjacent_string_concatenation
     - prefer_interpolation_to_compose_strings

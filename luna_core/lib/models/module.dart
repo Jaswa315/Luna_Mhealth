@@ -6,8 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// ignore_for_file: public_member_api_docs - Comments are redundant of the variable names., public_member_api_docs
-
 import 'package:uuid/uuid.dart';
 
 import '../enums/item_type.dart';
