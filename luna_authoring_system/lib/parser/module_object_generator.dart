@@ -56,13 +56,11 @@ class ModuleObjectGenerator {
 
     /// The width and height are in EMU values.
     Module moduleObj = Module(
-      id: data.moduleID,
       moduleId: data.moduleID,
       title: data.title,
       name: fileName,
       author: data.author,
       slideCount: data.children.length,
-      section: {},
       pages: pages,
       width: data.width,
       height: data.height,
