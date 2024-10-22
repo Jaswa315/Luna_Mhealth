@@ -1,6 +1,6 @@
 analyzer:
  plugins:
-    - dart_code_linter
+  - dart_code_linter
  strong-mode:
   implicit-casts: false
  errors:
@@ -47,10 +47,8 @@ linter:
 
 dart_code_linter:
   metrics:
-    cyclomatic-complexity: 1
-    number-of-parameters: 1
-    maximum-nesting-level: 1
+    cyclomatic-complexity: 5
+    number-of-parameters: 4
+    maximum-nesting-level: 5
   metrics-exclude:
-    - luna_authoring_system/test/**
-    - luna_core/test/**
-    - luna_mobile/test/**
+   - '**/test/**'
