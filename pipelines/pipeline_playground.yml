@@ -8,13 +8,6 @@
 #   6. Runs tests on luna authoring agent
 
 trigger: none
-schedules:
-- cron: '0 10 * * *' #10:00 AM UTC
-  displayName: Daily 3:00AM PST build 
-  branches:
-    include:
-    - main
-
 
 pool:
   vmImage: ubuntu-latest
@@ -108,12 +101,6 @@ steps:
   displayName: 'Run luna_authoring_system tests'
   condition: succeededOrFailed()
 
-- task: PublishCodeCoverageResults@2
-  displayName: 'Publish coverage results'
-  condition: succeededOrFailed()
-  inputs:
-    summaryFileLocation: '**/coverage-*.xml' 
-
 #Download most recent code coverage from main
 - task: DownloadPipelineArtifact@2
   condition: succeededOrFailed()
@@ -123,11 +110,17 @@ steps:
     pipeline: '44'
     project: 'mHealth Education App'
     specificBuildWithTriggering: false
-    buildVersionToDownload: 'latestFromBranch'
+    buildVersionToDownload: 'latest'
     allowPartiallySucceededBuilds : true
-    branchName: 'refs/heads/main' 
+    #branchName: 'main' 
     itemPattern: '**/coverage-*.xml' 
     targetPath: './$(main_cov_folder)' 
+
+- task: PublishCodeCoverageResults@2
+  displayName: 'Publish coverage results'
+  condition: succeededOrFailed()
+  inputs:
+    summaryFileLocation: '**/coverage-*.xml' 
 
 #calculate coverage from last run in main versus coverage in this run
 - task: PowerShell@2
