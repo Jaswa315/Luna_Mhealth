@@ -69,12 +69,14 @@ void main() {
 
       final module = Module.fromJson(json);
 
-      expect(module.moduleId, isNotNull);
-      expect(module.title, 'This is title');
-      expect(module.pages, isEmpty);
-      expect(module.width, 100.0);
-      expect(module.height, 200.0);
-      expect(module.itemType, ItemType.module);
+      assert(module.moduleId, isNotNull);
+      assert(module.title, 'This is title');
+      assert(module.author, 'John Doe');
+      assert(module.slideCount, 0);
+      assert(module.pages, isEmpty);
+      assert(module.width, 100.0);
+      assert(module.height, 200.0);
+      assert(module.itemType, ItemType.module);
     });
 
     // Test deserialization of Module from JSON with slides
