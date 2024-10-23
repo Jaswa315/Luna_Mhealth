@@ -53,24 +53,28 @@ void main() {
       expect(module.id, '1');
     });
 
-    // Test deserialization of Module from JSON
     test('Deserialization of Module from JSON', () {
-      /* TODO: fix test
       final json = {
-        'module_name': 'This is title',
-        'slides': [],
-        'dimensions': {'width': 100, 'height': 200},
+        'module': {
+          'moduleId': '12345',
+          'title': 'This is title',
+          'author': 'John Doe',
+          'slideCount': 0,
+          'pages': [],
+          'width': 100.0,
+          'height': 200.0,
+          'name': 'Sample Module'
+        }
       };
 
       final module = Module.fromJson(json);
 
-      expect(module.id, isNotNull); // ID is auto-generated
+      expect(module.moduleId, isNotNull);
       expect(module.title, 'This is title');
       expect(module.pages, isEmpty);
       expect(module.width, 100.0);
       expect(module.height, 200.0);
       expect(module.itemType, ItemType.module);
-      */
     });
 
     // Test deserialization of Module from JSON with slides
