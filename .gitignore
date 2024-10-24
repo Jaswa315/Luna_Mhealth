@@ -1,7 +1,6 @@
 # Ignore platform-specific directories at all levels
 **/ios/
 **/android/
-**/macos/
 **/linux/
 **/windows/
 **/web/
@@ -14,6 +13,20 @@
 
 # macOS Specific
 .DS_Store
+**/Flutter/ephemeral/
+**/Pods/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/ephemeral
+**/xcuserdata/
+**/macos/Runner/Assets.xcassets/
+**/macos/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+**/macos/Runner.xcworkspace/contents.xcworkspacedata
+**/macos/RunnerTests/RunnerTests.swift
+**/macos/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# Xcode-related
+**/dgph
+**/xcuserdata/
 
 # Flutter Generated Files 
 .flutter-plugins
