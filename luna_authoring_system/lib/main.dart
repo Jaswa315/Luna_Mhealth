@@ -42,7 +42,7 @@ Future<void> main(List<String> arguments) async {
 
     ByteData pptAsset = await rootBundle.load('assets/$samplePPTName');
     File file = File(samplePPTName);
-    await file.writeAsBytes(pptAsset.buffer.asUint8List());
+    await file.writeAsBytes(pptAsset.buffer.asUint8List(), mode:FileMode.write);
 
     //return;
   }

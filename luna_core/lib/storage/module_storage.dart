@@ -170,7 +170,10 @@ class ModuleStorage {
       String fullModulePath = _getModuleFileNameWithPath(moduleName);
 
       if (await _storageProvider.isFileExists(fullModulePath)) {
-        throw Exception("Module already exists: $moduleFileName");
+        LogManager().logTrace(
+          "Module '$moduleFileName' already exists and will be overwritten",
+          LunaSeverityLevel.Warning,
+        );
       }
 
       Archive moduleArchive = Archive();
