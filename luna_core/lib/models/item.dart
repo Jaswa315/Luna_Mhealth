@@ -7,8 +7,10 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'dart:convert';
-import 'package:uuid/uuid.dart';
+
 import 'package:luna_core/utils/types.dart';
+import 'package:uuid/uuid.dart';
+
 import '../enums/item_type.dart';
 
 /// Represents an item in the application.

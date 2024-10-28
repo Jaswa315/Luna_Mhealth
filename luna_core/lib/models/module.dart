@@ -6,12 +6,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'package:luna_core/utils/types.dart';
 import 'package:uuid/uuid.dart';
 
 import '../enums/item_type.dart';
 import 'item.dart';
 import 'page.dart';
-import 'package:luna_core/utils/types.dart';
 
 class Module extends Item {
   final String moduleId;
