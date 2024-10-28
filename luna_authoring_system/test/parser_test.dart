@@ -8,13 +8,14 @@
 
 import 'dart:io';
 import '../lib/parser/presentation_parser.dart';
+import '../lib/parser/presentation_tree.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
 
 const String assetsFolder = 'test/test_assets';
 
-Future<Map<String, dynamic>> toMapFromPath(String fileName) async {
+Future<Json> toMapFromPath(String fileName) async {
   File file = File("$assetsFolder/$fileName");
   PresentationParser parser = PresentationParser(file);
   return parser.toMap();
@@ -31,7 +32,7 @@ void main() {
     test('A Textbox has content', () async {
       // Arrange
       var filename = "TextBox-HelloWorld.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       // Act
       String pptText = astJson['presentation']['slides'][0]['shapes'][0]
@@ -43,7 +44,7 @@ void main() {
 
     test('N Textboxes have contents', () async {
       var filename = "TextBoxes.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
       String pptText0 = astJson['presentation']['slides'][0]['shapes'][0]
           ['children'][1]['paragraphs'][0]['textgroups'][0]['text'];
 
@@ -59,7 +60,7 @@ void main() {
     });
     test('An Image has image path', () async {
       var filename = "Image-Snorlax.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String imagePath =
           astJson['presentation']['slides'][0]['shapes'][0]['path'];
@@ -69,7 +70,7 @@ void main() {
 
     test('N Images has image paths', () async {
       var filename = "Images.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String imagePath0 =
           astJson['presentation']['slides'][0]['shapes'][0]['path'];
@@ -85,7 +86,7 @@ void main() {
 
     test('A Connection Shape is parsed as line', () async {
       var filename = "Shapes-Connection.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String shapeType =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -95,7 +96,7 @@ void main() {
 
     test('N Geometries have its own type', () async {
       var filename = "Shapes-Geometries.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -114,7 +115,7 @@ void main() {
 
     test('Z Order of shapes is preserved sequentially', () async {
       var filename = "Order.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][2]['type'];
@@ -128,17 +129,17 @@ void main() {
     test('Section has default section if the pptx file has no section',
         () async {
       var filename = "TextBox-HelloWorld.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
-      Map<String, dynamic> section = astJson['presentation']['section'];
+      Json section = astJson['presentation']['section'];
 
       expect(section.keys.toList()[0], "Default Section");
     });
 
     test('N Sections return a list of slides and section names', () async {
       var filename = "Sections.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
-      Map<String, dynamic> section = astJson['presentation']['section'];
+      Json astJson = await toMapFromPath(filename);
+      Json section = astJson['presentation']['section'];
       var slideIdList = section.values.toList();
 
       // Default Section : slide 1
@@ -154,7 +155,7 @@ void main() {
 
     test('Geometries are parsed with correct types', () async {
       var filename = "Shapes-Pictures-Texts-Lines.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -182,7 +183,7 @@ void main() {
 
     test('Empty PPTX has 0 shapes', () async {
       var filename = "Empty.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       int lenShapes = astJson['presentation']['slides'][0]['shapes'].length;
 
@@ -191,7 +192,7 @@ void main() {
 
     test('alt-text with line breaks is parsed without any error', () async {
       var filename = "Alt-txt-3Lines.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String altText =
           astJson['presentation']['slides'][0]['shapes'][0]['alttext'];
@@ -203,8 +204,8 @@ void main() {
     test('Same slides from the same file have the same slide id', () async {
       var filename1 = "Slide 1 and 2.pptx";
       var filename2 = "Slide 2 and 1.pptx";
-      Map<String, dynamic> astJson1 = await toMapFromPath(filename1);
-      Map<String, dynamic> astJson2 = await toMapFromPath(filename2);
+      Json astJson1 = await toMapFromPath(filename1);
+      Json astJson2 = await toMapFromPath(filename2);
 
       String pptx1slide1 = astJson1['presentation']['slides'][0]['slideId'];
       String pptx1slide2 = astJson1['presentation']['slides'][1]['slideId'];
@@ -218,9 +219,9 @@ void main() {
     test('Every slide has different slideId even if some slides are duplicated',
         () async {
       var filename = "Duplicated Slides.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
       int slideCount = astJson['presentation']['slideCount'];
-      Map<String, dynamic> section = astJson['presentation']['section'];
+      Json section = astJson['presentation']['section'];
 
       var slideIdList = section.values.toList();
       List<dynamic> total = [];
@@ -235,7 +236,7 @@ void main() {
 
     test('Audio is parsed for each shapes', () async {
       var filename = "Audios in Shapes.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String audioPath0 =
           astJson['presentation']['slides'][0]['shapes'][0]['audiopath'];
@@ -257,7 +258,7 @@ void main() {
     test('5 types of hyperlinks in Vanilla Shape are in hyperlink property',
         () async {
       var filename = "Hyperlinks-Shape.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       int hyperlink0 =
           astJson['presentation']['slides'][1]['shapes'][0]['hyperlink'];
@@ -282,7 +283,7 @@ void main() {
 
     test('5 types of hyperlinks in Text are in hyperlink property', () async {
       var filename = "Hyperlinks-Text.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       int hyperlink0 = astJson['presentation']['slides'][1]['shapes'][0]
           ['children'][1]['paragraphs'][0]['textgroups'][1]['hyperlink'];
@@ -305,7 +306,7 @@ void main() {
     test('5 types of hyperlinks in TextBox are in hyperlink property',
         () async {
       var filename = "Hyperlinks-TextBox.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       int hyperlink0 =
           astJson['presentation']['slides'][1]['shapes'][0]['hyperlink'];
@@ -327,7 +328,7 @@ void main() {
 
     test('5 types of hyperlinks in Image are in hyperlink property', () async {
       var filename = "Hyperlinks-Image.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       int hyperlink0 =
           astJson['presentation']['slides'][1]['shapes'][0]['hyperlink'];
@@ -349,7 +350,7 @@ void main() {
 
     test('Edgecases of hyperlinks are not parsed', () async {
       var filename = "Hyperlinks-Edgecases.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       int? hyperlink0 = astJson['presentation']['slides'][0]['hyperlink'];
       int? hyperlink1 = astJson['presentation']['slides'][1]['hyperlink'];
@@ -360,7 +361,7 @@ void main() {
 
     test('Basic shapes with texts have text content', () async {
       var filename = "Ellipse and rectangle shapes with textbox.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       String shapeType0 =
           astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -380,7 +381,7 @@ void main() {
     test('A Textbox has UID of 1', () async {
       // Arrange
       var filename = "TextBox-HelloWorld.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
 
       // Act
       int pptUID = astJson['presentation']['slides'][0]['shapes'][0]['children']
@@ -392,7 +393,7 @@ void main() {
 
     test('N Textboxes have assigned UIDs', () async {
       var filename = "TextBoxes.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
       int pptUID0 = astJson['presentation']['slides'][0]['shapes'][0]
           ['children'][1]['paragraphs'][0]['textgroups'][0]['uid'];
 
@@ -409,7 +410,7 @@ void main() {
 
     test('Padding values are parsed', () async {
       var filename = "Module with top and bottom bar.pptx";
-      Map<String, dynamic> astJson = await toMapFromPath(filename);
+      Json astJson = await toMapFromPath(filename);
       expect(astJson['presentation']['slides'][0]['padding']["left"], 178877.0);
       expect(astJson['presentation']['slides'][0]['padding']["top"], 271222.0);
       expect(
@@ -428,7 +429,7 @@ void main() {
   group('Non MVP', () {
     // test('N Connection Shapes are parsed as line', () async {
     //   var filename = "Shapes-Connections.pptx";
-    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+    //   Json astJson = await toMapFromPath(filename);
 
     //   String shapeType0 =
     //       astJson['presentation']['slides'][0]['shapes'][0]['type'];
@@ -444,7 +445,7 @@ void main() {
 
     // test('Language is denoted as [language-Region]', () async {
     //   var filename = "A Texbox written in English in South Korea Region.pptx";
-    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+    //   Json astJson = await toMapFromPath(filename);
 
     //   String language = astJson['presentation']['slides'][0]['shapes'][0]
     //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];
@@ -455,7 +456,7 @@ void main() {
     // test('Textboxes with different language have different [language-region]',
     //     () async {
     //   var filename = "Two Textboxes in English and Korean.pptx";
-    //   Map<String, dynamic> astJson = await toMapFromPath(filename);
+    //   Json astJson = await toMapFromPath(filename);
 
     //   String language1 = astJson['presentation']['slides'][0]['shapes'][0]
     //       ['children'][1]['paragraphs'][0]['textgroups'][0]['language'];

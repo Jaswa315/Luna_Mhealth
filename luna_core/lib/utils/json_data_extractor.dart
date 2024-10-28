@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:luna_core/utils/types.dart';
 // import 'package:luna_core/utils/logging.dart';
 
 /// Utility class that extracts data from JSON data strings
@@ -28,20 +29,20 @@ class JSONDataExtractor {
     return Uint8List.fromList(utf8.encode(_csvContent));
   }
 
-  List<Map<String, dynamic>> _extractTextUIDandStringsFromJSON(
+  List<Json> _extractTextUIDandStringsFromJSON(
       String jsonString) {
     JSONDataExtractor extractorTool = JSONDataExtractor();
     return extractorTool.getTextDataFromJSON(jsonString);
   }
 
   /// Function to extract text nodes from the JSON structure
-  List<Map<String, dynamic>> getTextDataFromJSON(String jsonData) {
-    Map<String, dynamic> dataAsMap = jsonDecode(jsonData);
-    List<Map<String, dynamic>> collectedTextNodes = [];
+  List<Json> getTextDataFromJSON(String jsonData) {
+    Json dataAsMap = jsonDecode(jsonData);
+    List<Json> collectedTextNodes = [];
 
     // Recursive function to traverse the JSON
     void recursiveSearch(dynamic element) {
-      if (element is Map<String, dynamic>) {
+      if (element is Json) {
         if (element.containsKey('textID') &&
             element.containsKey('text')) {
           collectedTextNodes
@@ -62,15 +63,15 @@ class JSONDataExtractor {
 
   /// function to extract language encoding string from json data
   String extractLanguageFromJSON(String jsonData) {
-    Map<String, dynamic> moduleData = jsonDecode(jsonData);
+    Json moduleData = jsonDecode(jsonData);
     // if (!dataAsMap.containsKey('module')) {
     //   //TODO: Log json data given doesn't have presentation key, which means given json Data is an outdated IR, probably from module storage
     //   // since the tests there have old IR module.json
     //   return "en-US";
     // }
     // // Directly access the 'presentation' object
-    // Map<String, dynamic> presentation =
-    //     dataAsMap['module'] as Map<String, dynamic>;
+    // Json presentation =
+    //     dataAsMap['module'] as Json;
     // // Retrieve the 'language' string
     // String language = presentation['language'] as String;
 

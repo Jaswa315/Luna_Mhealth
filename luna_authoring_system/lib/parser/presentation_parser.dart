@@ -8,12 +8,15 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:archive/archive.dart';
 import 'package:luna_core/utils/logging.dart';
+import 'package:luna_core/utils/types.dart';
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
+
 import 'presentation_tree.dart';
 
 /// From MS-PPTX Documentation
@@ -70,7 +73,7 @@ class PresentationParser {
   static const uuidGenerator = Uuid();
 
   /// for audio and hyperlink
-  Map<String, dynamic>? slideRelationship;
+  Json? slideRelationship;
 
   /// The index of the current slide being processed.
   int? slideIndex;
@@ -79,7 +82,7 @@ class PresentationParser {
   int? slideCount;
   // for slides made upon a slideLayout
   /// A map that transforms placeholders to corresponding values for slides made upon a slide layout.
-  Map<String, dynamic> placeholderToTransform = {};
+  Json placeholderToTransform = {};
   int _nextTextNodeUID = 1;
   ///
   PresentationParser(File file) {
@@ -93,14 +96,14 @@ class PresentationParser {
   }
 
   /// Converts the presentation to a map representation.
-  Future<Map<String, dynamic>> toMap() async {
+  Future<Json> toMap() async {
     PrsNode prsTree = await toPrsNode();
     return prsTree.toJson();
   }
 
   /// Writes the presentation data to a JSON file at the specified [outputPath]
   Future<File> toJSON(String outputPath) async {
-    Map<String, dynamic> astJson = await toMap();
+    Json astJson = await toMap();
     String jsonString = jsonEncode(astJson);
     File outputFile = File(outputPath);
     await outputFile.writeAsString(jsonString);
@@ -138,7 +141,7 @@ class PresentationParser {
     return _xmlDocumentToJson(doc);
   }
 
-  bool _isTextBox(Map<String, dynamic> json) {
+  bool _isTextBox(Json json) {
     if (!json.containsKey('p:nvSpPr')) {
       return false;
     }
@@ -183,13 +186,13 @@ class PresentationParser {
       for (var element in slideIdList) {
         parsedSlideIdList.add('S${element["_id"]}');
       }
-    } else if (slideIdList is Map<String, dynamic>) {
+    } else if (slideIdList is Json) {
       parsedSlideIdList.add('S${slideIdList["_id"]}');
     }
 
     if (presentationMap['p:presentation']['p:extLst'] == null ||
         presentationMap['p:presentation']['p:extLst']['p:ext']
-            is Map<String, dynamic> ||
+            is Json ||
         presentationMap['p:presentation']['p:extLst']['p:ext'][0]
                 ['p14:sectionLst'] ==
             null) {
@@ -232,7 +235,7 @@ class PresentationParser {
     return node;
   }
 
-  Map<String, double> _parsePadding(Map<String, dynamic> json) {
+  Map<String, double> _parsePadding(Json json) {
     Map<String, double> padding = {
       "left": 0,
       "top": 0,
@@ -286,7 +289,7 @@ class PresentationParser {
         (element) => element['_Type'] == keySlideLayoutSchema,
         orElse: () => "",
       );
-    } else if (slideRelationshipElement is Map<String, dynamic>) {
+    } else if (slideRelationshipElement is Json) {
       slideLayoutElement =
           slideRelationshipElement['_Type'] == keySlideLayoutSchema
               ? slideRelationshipElement
@@ -307,7 +310,7 @@ class PresentationParser {
         (element) => element['_Type'] == keySlideMasterSchema,
         orElse: () => "",
       );
-    } else if (slideLayoutRelationshipElement is Map<String, dynamic>) {
+    } else if (slideLayoutRelationshipElement is Json) {
       slideMasterElement =
           slideLayoutRelationshipElement['_Type'] == keySlideMasterSchema
               ? slideLayoutRelationshipElement
@@ -338,11 +341,11 @@ class PresentationParser {
     return [themeName, slideMasterIndex];
   }
 
-  Map<String, dynamic> _parseSlideRels(int slideNum) {
+  Json _parseSlideRels(int slideNum) {
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
     var rIdList = relsMap['Relationships']['Relationship'];
 
-    Map<String, dynamic> rIdToTarget = {};
+    Json rIdToTarget = {};
     if (rIdList is List) {
       for (var element in rIdList) {
         rIdToTarget[element['_Id']] = element['_Target'];
@@ -350,7 +353,7 @@ class PresentationParser {
           placeholderToTransform = _parseSlideLayout(element);
         }
       }
-    } else if (rIdList is Map<String, dynamic>) {
+    } else if (rIdList is Json) {
       rIdToTarget[rIdList['_Id']] = rIdList['_Target'];
       if (placeholderToTransform.isEmpty) {
         placeholderToTransform = _parseSlideLayout(rIdList);
@@ -360,9 +363,9 @@ class PresentationParser {
     return rIdToTarget;
   }
 
-  Map<String, dynamic> _parseTransformForPlaceholder(
-      Map<String, dynamic> json) {
-    Map<String, dynamic> result = {};
+  Json _parseTransformForPlaceholder(
+      Json json) {
+    Json result = {};
 
     var ph = json['p:nvSpPr']['p:nvPr']?['p:ph'];
     var spPr = json['p:spPr'].isEmpty ? null : json['p:spPr'];
@@ -376,8 +379,8 @@ class PresentationParser {
     return result;
   }
 
-  Map<String, dynamic> _parseSlideLayout(Map<String, dynamic> json) {
-    Map<String, dynamic> phToP = {};
+  Json _parseSlideLayout(Json json) {
+    Json phToP = {};
     if (json['_Type'] == keySlideLayoutSchema) {
       RegExp regex = RegExp(r"(?<=slideLayout)\d+(?=.xml)");
       int slideIndex =
@@ -393,7 +396,7 @@ class PresentationParser {
             for (var element in shapeTree[key]) {
               phToP.addAll(_parseTransformForPlaceholder(element));
             }
-          } else if (shapeTree[key] is Map<String, dynamic>) {
+          } else if (shapeTree[key] is Json) {
             phToP.addAll(_parseTransformForPlaceholder(shapeTree[key]));
           }
         }
@@ -403,8 +406,8 @@ class PresentationParser {
     return phToP;
   }
 
-  Map<String, dynamic> _parseSection(List<dynamic> json, List slideIdKeys) {
-    Map<String, dynamic> sectionWithSlide = {};
+  Json _parseSection(List<dynamic> json, List slideIdKeys) {
+    Json sectionWithSlide = {};
 
     int currentSlideNumber = 0;
 
@@ -422,7 +425,7 @@ class PresentationParser {
       }
 
       if (sectionData != null) {
-        if (sectionData is Map<String, dynamic>) {
+        if (sectionData is Json) {
           sectionWithSlide[currentSection].add(slideIdKeys[currentSlideNumber]);
           currentSlideNumber += 1;
         } else {
@@ -452,7 +455,7 @@ class PresentationParser {
             for (var element in picList) {
               node.children.add(_parseImage(element));
             }
-          } else if (picList is Map<String, dynamic>) {
+          } else if (picList is Json) {
             node.children.add(_parseImage(picList));
           }
         case keyShape:
@@ -461,7 +464,7 @@ class PresentationParser {
             for (var element in shapeObj) {
               node.children.add(_parseShape(element));
             }
-          } else if (shapeObj is Map<String, dynamic>) {
+          } else if (shapeObj is Json) {
             node.children.add(_parseShape(shapeObj));
           }
         case keyConnectionShape:
@@ -470,7 +473,7 @@ class PresentationParser {
             for (var element in connectionShapeObj) {
               node.children.add(_parseConnectionShape(element));
             }
-          } else if (connectionShapeObj is Map<String, dynamic>) {
+          } else if (connectionShapeObj is Json) {
             node.children.add(_parseConnectionShape(connectionShapeObj));
           }
       }
@@ -479,7 +482,7 @@ class PresentationParser {
     return node;
   }
 
-  PrsNode _parseImage(Map<String, dynamic> json) {
+  PrsNode _parseImage(Json json) {
     ImageNode node = ImageNode();
 
     node.imageName = json['p:nvPicPr']['p:cNvPr']['_name'];
@@ -502,7 +505,7 @@ class PresentationParser {
     return node;
   }
 
-  PrsNode _parseShape(Map<String, dynamic> json) {
+  PrsNode _parseShape(Json json) {
     if (_isTextBox(json)) {
       return _parseTextBox(json);
     }
@@ -511,10 +514,10 @@ class PresentationParser {
     return _parseBasicShape(json);
   }
 
-  PrsNode _parseTransform(Map<String, dynamic> json) {
+  PrsNode _parseTransform(Json json) {
     // helper function to get transform data from json
-    Transform getTransformData(Map<String, dynamic> json) {
-      Map<String, dynamic>? xfrm = json['p:spPr']?['a:xfrm'];
+    Transform getTransformData(Json json) {
+      Json? xfrm = json['p:spPr']?['a:xfrm'];
 
       if (xfrm == null) {
         LogManager().logTrace(
@@ -563,7 +566,7 @@ class PresentationParser {
     return getTransformData(json);
   }
 
-  PrsNode _parseBasicShape(Map<String, dynamic> json) {
+  PrsNode _parseBasicShape(Json json) {
     String shape = json['p:spPr'].isNotEmpty
         ? (json['p:spPr']?['a:prstGeom']?['_prst'] ?? 'rect')
         : "rect";
@@ -598,7 +601,7 @@ class PresentationParser {
     }
   }
 
-  PrsNode _parseConnectionShape(Map<String, dynamic> json) {
+  PrsNode _parseConnectionShape(Json json) {
     Transform transform = _parseTransform(json) as Transform;
 
     double weight =
@@ -618,7 +621,7 @@ class PresentationParser {
     }
   }
 
-  PrsNode _parseTextBox(Map<String, dynamic> json) {
+  PrsNode _parseTextBox(Json json) {
     TextBoxNode node = TextBoxNode();
 
     node.audioPath = slideRelationship?[json['p:nvSpPr']?['p:cNvPr']
@@ -632,7 +635,7 @@ class PresentationParser {
     return node;
   }
 
-  PrsNode _parseTextBody(Map<String, dynamic> json) {
+  PrsNode _parseTextBody(Json json) {
     TextBodyNode node = TextBodyNode();
 
     node.wrap = json['a:bodyPr'].isNotEmpty
@@ -644,14 +647,14 @@ class PresentationParser {
       for (var element in pObj) {
         node.children.add(_parseTextPara(element));
       }
-    } else if (pObj is Map<String, dynamic>) {
+    } else if (pObj is Json) {
       node.children.add(_parseTextPara(pObj));
     }
 
     return node;
   }
 
-  PrsNode _parseTextPara(Map<String, dynamic> json) {
+  PrsNode _parseTextPara(Json json) {
     TextParagraphNode node = TextParagraphNode();
 
     // TODO: get from defaultTextStyle in presentation.xml
@@ -663,13 +666,13 @@ class PresentationParser {
       for (var element in rObj) {
         node.children.add(_parseText(element));
       }
-    } else if (rObj is Map<String, dynamic>) {
+    } else if (rObj is Json) {
       node.children.add(_parseText(rObj));
     }
     return node;
   }
 
-  PrsNode _parseText(Map<String, dynamic> json) {
+  PrsNode _parseText(Json json) {
     TextNode node = TextNode();
 
     node.italics = (json['a:rPr']['_i'] == '1') ? true : false;
@@ -689,7 +692,7 @@ class PresentationParser {
     return node;
   }
 
-  int? _getHyperlink(Map<String, dynamic>? json) {
+  int? _getHyperlink(Json? json) {
     switch (json?['_action']) {
       case 'ppaction://hlinkshowjump?jump=nextslide':
         // PPTX does nothing for hyperlinks that goes to next slide at the last slide.

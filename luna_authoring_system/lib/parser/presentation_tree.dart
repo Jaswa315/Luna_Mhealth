@@ -7,6 +7,7 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'dart:ui';
+import 'package:luna_core/utils/types.dart';
 
 /// Possible shape geometry in a presentation
 enum ShapeGeometry {
@@ -26,7 +27,7 @@ const double emuToPointFactor = 12700;
 /// mixin to have classes implement toJson
 mixin ToJson {
   /// Ensure all toJson classes implement a toJson method which returns a map
-  Map<String, dynamic> toJson();
+  Json toJson();
 }
 
 /// a parsed 2D point from a presentation
@@ -41,7 +42,7 @@ class Point2D with ToJson {
   Point2D(this.x, this.y);
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {'x': x, 'y': y};
   }
 }
@@ -58,7 +59,7 @@ class Transform extends PrsNode with ToJson {
   Transform();
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {'offset': offset.toJson(), 'size': size.toJson()};
   }
 }
@@ -75,7 +76,7 @@ class PrsNode with ToJson {
   PrsNode();
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       name: {'children': children.map((child) => child.toJson()).toList()}
     };
@@ -97,7 +98,7 @@ class PresentationNode extends PrsNode {
   late final int slideCount;
 
   /// section
-  late final Map<String, dynamic> section;
+  late final Json section;
 
   /// width of this node
   late final double width;
@@ -122,7 +123,7 @@ class PresentationNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       name: {
         'type': name,
@@ -154,7 +155,7 @@ class SlideNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': name,
       'slideId': slideId,
@@ -178,7 +179,7 @@ class TextBoxNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': name,
       if (audioPath != null) 'audiopath': audioPath,
@@ -200,7 +201,7 @@ class TextBodyNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': name,
       'wrap': wrap,
@@ -220,7 +221,7 @@ class TextParagraphNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': name,
       'alignment': alignment,
@@ -268,7 +269,7 @@ class TextNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       // 'hyperlink': hyperlink,
       'type': name,
@@ -323,7 +324,7 @@ class ShapeNode extends PrsNode {
   ShapeNode();
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': shape.name,
       'transform': transform?.toJson(),
@@ -355,7 +356,7 @@ class ConnectionNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': name,
       'transform': transform.toJson(),
@@ -390,7 +391,7 @@ class ImageNode extends PrsNode {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': name,
       'path': path,

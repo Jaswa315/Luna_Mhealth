@@ -9,6 +9,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/item.dart';
+import 'package:luna_core/utils/types.dart';
 
 void main() {
   group('Item', () {
@@ -22,7 +23,7 @@ void main() {
       final item = Item(name: 'Test Item', itemType: ItemType.page);
       final json = item.toJson();
 
-      expect(json, isA<Map<String, dynamic>>());
+      expect(json, isA<Json>());
       expect(json['name'], equals('Test Item'));
       expect(json['itemType'], equals('page'));
 

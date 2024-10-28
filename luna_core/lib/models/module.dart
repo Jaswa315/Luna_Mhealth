@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 import '../enums/item_type.dart';
 import 'item.dart';
 import 'page.dart';
+import 'package:luna_core/utils/types.dart';
 
 class Module extends Item {
   final String moduleId;
@@ -34,7 +35,7 @@ class Module extends Item {
         super(id: moduleId, name: name, itemType: ItemType.module);
 
   /// A factory method that creates a [Module] from a JSON map.
-  factory Module.fromJson(Map<String, dynamic> json) {
+  factory Module.fromJson(Json json) {
     var slidesJson = json['module']['pages'] as List<dynamic>;
 
     var pages =
@@ -52,7 +53,7 @@ class Module extends Item {
   }
 
   /// Converts the [Module] object to a JSON map.
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'module': {
         'moduleId': moduleId,
