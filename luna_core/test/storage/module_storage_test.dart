@@ -19,6 +19,7 @@ import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/istorage_provider.dart';
 import 'package:luna_core/storage/local_storage_provider.dart';
 import 'package:luna_core/storage/module_storage.dart';
+import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -71,23 +72,18 @@ void main() {
       */
     });
 
-    test('Add Module - Exception: Already Exists', () async {
-      /* TODO: fix test
+    test('createEmptyModuleFile - Warning: Already Exists, Overwritten',
+        () async {
       String testModuleName = "TestModule";
-      String jsonModule =
-          File("$kTestAssetsPath/module.json").readAsStringSync();
-      Module expectData = Module.fromJson(jsonDecode(jsonModule));
-
+      String jsonData = File("$kTestAssetsPath/module.json").readAsStringSync();
       ModuleStorage moduleStorage =
           ModuleStorage(provider: storageProvider, userName: "");
 
-      Module testData =
-          await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
+      await ModuleResourceFactory.addModule(testModuleName, jsonData);
+      await ModuleResourceFactory.addModule(testModuleName, jsonData);
 
-      expect(() async {
-        await moduleStorage.createNewModuleFile(testModuleName, jsonModule);
-      }, throwsA(TypeMatcher<Exception>()));
-      */
+      expect(await File("$kApplicationDocumentsPath/TestModule.luna").exists(),
+          true);
     });
 
     test('Add Module - UserProfile', () async {

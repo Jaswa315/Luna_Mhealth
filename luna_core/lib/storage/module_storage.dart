@@ -170,7 +170,10 @@ class ModuleStorage {
       String fullModulePath = _getModuleFileNameWithPath(moduleName);
 
       if (await _storageProvider.isFileExists(fullModulePath)) {
-        throw Exception("Module already exists: $moduleFileName");
+        LogManager().logTrace(
+          "Module '$moduleFileName' already exists and will be overwritten",
+          LunaSeverityLevel.Warning,
+        );
       }
 
       Archive moduleArchive = Archive();
@@ -189,18 +192,23 @@ class ModuleStorage {
   /// ToDo: Simplify this with previously existing helpers
   Future<bool> importModuleFile(
       String moduleName, Uint8List archiveFileData) async {
-    return await LogManager().logFunction('ModuleStorage.addModuleFile',
-        () async {
-      String moduleFileName = _getModuleFileName(moduleName);
-      String fullModulePath = _getModuleFileNameWithPath(moduleName);
+    return await LogManager().logFunction(
+      'ModuleStorage.addModuleFile',
+      () async {
+        String moduleFileName = _getModuleFileName(moduleName);
+        String fullModulePath = _getModuleFileNameWithPath(moduleName);
 
-      if (await _storageProvider.isFileExists(fullModulePath)) {
-        throw Exception("Module already exists: $moduleFileName");
-      }
+        if (await _storageProvider.isFileExists(fullModulePath)) {
+          LogManager().logTrace(
+            "Module '$moduleFileName' already exists and will be overwritten",
+            LunaSeverityLevel.Warning,
+          );
+        }
 
-      return _storageProvider.saveFile(fullModulePath, archiveFileData,
-          createContainer: true);
-    });
+        return _storageProvider.saveFile(fullModulePath, archiveFileData,
+            createContainer: true);
+      },
+    );
   }
 
   /// Removes a Module from the storage provider
