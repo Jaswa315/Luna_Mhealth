@@ -11,6 +11,29 @@
 **/cache/
 **/junk/
 
+# General Android Platform directories to ignore in source code.
+**/android/.gradle/
+**/android/app/build/
+**/android/build/
+**/android/local.properties
+**/android/.settings/
+**/android/captures/
+**/android/**/build/
+
+# General iOS Platform directories to ignore in source code.
+**/ios/Flutter/.last_build_id
+**/ios/.symlinks/
+**/ios/Pods/
+**/ios/DerivedData/
+**/ios/.generated/
+**/ios/.dart_tool/
+**/ios/Flutter/App.framework/
+**/ios/Flutter/Flutter.framework/
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Runner.xcworkspace/
+**/ios/build/
+
 # macOS Specific
 .DS_Store
 **/Flutter/ephemeral/
