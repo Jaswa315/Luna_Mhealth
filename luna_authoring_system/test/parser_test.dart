@@ -10,6 +10,7 @@ import 'dart:io';
 import '../lib/parser/presentation_parser.dart';
 import '../lib/parser/presentation_tree.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_core/utils/types.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
 

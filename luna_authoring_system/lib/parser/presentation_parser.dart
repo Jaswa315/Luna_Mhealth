@@ -16,7 +16,6 @@ import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
-
 import 'presentation_tree.dart';
 
 /// From MS-PPTX Documentation
