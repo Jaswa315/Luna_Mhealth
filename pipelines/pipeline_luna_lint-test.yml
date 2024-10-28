@@ -108,6 +108,19 @@ steps:
   displayName: 'Run luna_authoring_system tests'
   condition: succeededOrFailed()
 
+- script: |
+    cd $(lunamobile)
+    flutter pub get
+  displayName: 'Get Flutter packages for the luna mobile system'
+  condition: succeededOrFailed()
+
+- script: |
+    cd $(lunamobile)
+    flutter test --machine --coverage | tojunit --output ../test-mobile-results.xml
+    cobertura convert --output ../coverage-mobile.xml
+  displayName: 'Run luna_mobile tests'
+  condition: succeededOrFailed()
+
 - task: PublishCodeCoverageResults@2
   displayName: 'Publish coverage results'
   condition: succeededOrFailed()
