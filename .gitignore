@@ -13,14 +13,14 @@
 
 # Android related
 **/android/**/gradle-wrapper.jar
-.gradle/
+**/android/.gradle/
 **/android/captures/
 **/android/gradlew
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
-*.jks
+**/.jks
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
