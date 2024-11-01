@@ -7,6 +7,8 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'dart:convert';
+
+import 'package:luna_core/utils/types.dart';
 import 'package:uuid/uuid.dart';
 
 import '../enums/item_type.dart';
@@ -29,7 +31,7 @@ class Item {
       : id = id ?? Uuid().v4(); // Generates a new UUID if none is provided
 
   /// Converts an [Item] into a JSON map.
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'id': id,
       'name': name,
@@ -38,7 +40,7 @@ class Item {
   }
 
   /// Creates an [Item] from a JSON map.
-  factory Item.fromJson(Map<String, dynamic> json) {
+  factory Item.fromJson(Json json) {
     return Item(
       id: json['id'] as String?,
       name: json['name'] as String,

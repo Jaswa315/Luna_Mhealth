@@ -14,6 +14,7 @@ import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
+import 'package:luna_core/utils/types.dart';
 
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
@@ -61,7 +62,7 @@ abstract class Component extends Item with ChangeNotifier, Clickable {
   ///
   /// This method takes a [json] object and returns a Component object based on the 'type' field in the JSON.
 
-  static Component fromJson(Map<String, dynamic> json) {
+  static Component fromJson(Json json) {
     ComponentType? type = _typeMapping[json['type']];
     switch (type) {
       case ComponentType.image:

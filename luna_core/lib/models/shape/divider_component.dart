@@ -9,6 +9,7 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
+import 'package:luna_core/utils/types.dart';
 
 /// Represents a divider component that can be used in the Luna mHealth Mobile app.
 class DividerComponent extends Component {
@@ -59,7 +60,7 @@ class DividerComponent extends Component {
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': type.name,
       'x': bounds.left,
@@ -77,7 +78,7 @@ class DividerComponent extends Component {
   /// Returns a new instance of [DividerComponent] with the data from the JSON object.
   /// Throws an [Exception] if the JSON object is missing required fields.
 
-  static DividerComponent fromJson(Map<String, dynamic> json) {
+  static DividerComponent fromJson(Json json) {
     return DividerComponent(
       x: json['x'].toDouble(),
       y: json['y'].toDouble(),

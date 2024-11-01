@@ -13,6 +13,7 @@ import 'package:luna_core/controllers/navigation_controller.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
+import 'package:luna_core/utils/types.dart';
 import 'package:luna_mobile/core/constants/constants.dart';
 
 /// Represents an image component that can be rendered and clicked.
@@ -70,7 +71,7 @@ class ImageComponent extends Component {
 
   /// Creates an [ImageComponent] from a JSON map.
   /// Updated the fromJson method to include moduleName
-  static ImageComponent fromJson(Map<String, dynamic> json) {
+  static ImageComponent fromJson(Json json) {
     return ImageComponent(
         imagePath: json['image_path'],
         x: json['x'].toDouble(),
@@ -80,7 +81,7 @@ class ImageComponent extends Component {
         hyperlink: json['hyperlink']);
   }
 
-  Map<String, dynamic> toJson() => {
+  Json toJson() => {
         'type': super.type.name,
         'image_path': imagePath,
         'x': bounds.left,

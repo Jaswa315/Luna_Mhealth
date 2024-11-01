@@ -7,6 +7,8 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
+import 'package:luna_core/utils/types.dart';
+
 import '../../enums/component_type.dart';
 import '../component.dart';
 
@@ -68,7 +70,7 @@ class TextComponent extends Component {
   ///
   /// The [json] parameter is a JSON object that contains the data for the [TextComponent].
   /// Returns a new instance of [TextComponent] with the data from the JSON object.
-  static TextComponent fromJson(Map<String, dynamic> json) {
+  static TextComponent fromJson(Json json) {
     List<TextPart> children = (json['textParts'] as List)
         .map((textPartJson) => TextPart.fromJson(textPartJson))
         .toList();
@@ -82,7 +84,7 @@ class TextComponent extends Component {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Json toJson() => {
         'type': ComponentType.text.name,
         'textParts': textChildren.map((textPart) => textPart.toJson()).toList(),
         'x': x,
@@ -136,7 +138,7 @@ class TextPart {
   }
 
   /// construct new instance of [TextPart] from json
-  static TextPart fromJson(Map<String, dynamic> json) {
+  static TextPart fromJson(Json json) {
     return TextPart(
         text: json['text'],
         textID: json['textID'],
@@ -153,7 +155,7 @@ class TextPart {
   }
 
   /// construct new json instance from [TextPart]
-  Map<String, dynamic> toJson() => {
+  Json toJson() => {
         'text': text,
         'textID': textID,
         'fontSize': fontSize,

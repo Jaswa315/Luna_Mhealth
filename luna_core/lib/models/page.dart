@@ -12,6 +12,7 @@
 import 'dart:convert';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/item.dart';
+import 'package:luna_core/utils/types.dart';
 import 'component.dart';
 
 /// Represents a page in the application.
@@ -46,7 +47,7 @@ class Page extends Item {
   }
 
   /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
-  factory Page.fromJson(Map<String, dynamic> json) {
+  factory Page.fromJson(Json json) {
     if (json['type'] != ItemType.page.name) {
       throw FormatException('Only page type components are allowed');
     }
@@ -62,7 +63,7 @@ class Page extends Item {
   }
 
   /// Converts a Page into a JSON map.
-  Map<String, dynamic> toJson() {
+  Json toJson() {
     return {
       'type': super.itemType.name,
       'slideId': slideId,
