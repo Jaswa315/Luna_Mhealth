@@ -1,9 +1,9 @@
 # Context
-<Describe what problem we are trying to solve.>
+Describe what problem we are trying to solve.
 # Changes
-<What did you change in the code? What files were added, removed, affected? What methods in the files were changed?>
+What did you change in the code? What files were added, removed, affected? What methods in the files were changed?
 # Test Results
-<Screenshot output of E2E tests, relevant to PR>
+Screenshot output of tests, relevant to PR
 
 # Checklist
 
