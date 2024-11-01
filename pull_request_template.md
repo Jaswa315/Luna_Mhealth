@@ -1,11 +1,21 @@
+## Pull Request Details
+
+- **Repository Name:** `$(Build.Repository.Name)`
+- **Source Branch:** `$(System.PullRequest.SourceBranch)`
+- **Target Branch:** `$(System.PullRequest.TargetBranch)`
+
 # Context
-
+Describe what problem we are trying to solve.
 # Changes
-
+What did you change in the code? What files were added, removed, affected? What methods in the files were changed?
 # Test Results
+Screenshot output of E2E tests, relevant to PR
 
 # Checklist
-Before submitting this PR, please make sure:
+
+## Before submitting this PR, please make sure all boxes are checked:
+
+### Pull Request
 - [ ] Are errors handled by throwing/catching exceptions?
 - [ ] Are all names descriptive (classes, methods, variables)?
 - [ ] Does the method/class have a single responsibility?
