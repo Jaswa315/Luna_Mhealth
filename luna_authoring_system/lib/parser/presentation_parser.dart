@@ -40,8 +40,6 @@ const String keyThemeSchema =
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
 
 // contant value for padding
-/// value representing the custom design name for Luna.
-const String keyLunaCustomDesign = "Pregnancy Symptoms and Conditions";
 
 /// The placeholder for the Luna top system bar.
 const String keyLunaTopSystemBar = "{luna top_system_bar}";
@@ -54,14 +52,6 @@ const String keyLunaLeftPadding = "{luna left_padding}";
 
 /// The placeholder for the Luna right padding value.
 const String keyLunaRightPadding = "{luna right_padding}";
-
-/// A map representing zero padding values for all sides (left, top, right, bottom).
-const Map<String, double> zeroPadding = {
-  "left": 0,
-  "top": 0,
-  "right": 0,
-  "bottom": 0
-};
 
 /// A parser class for handling PowerPoint presentations.
 class PresentationParser {
@@ -83,6 +73,7 @@ class PresentationParser {
   /// A map that transforms placeholders to corresponding values for slides made upon a slide layout.
   Json placeholderToTransform = {};
   int _nextTextNodeUID = 1;
+
   ///
   PresentationParser(File file) {
     _file = file;
@@ -190,8 +181,7 @@ class PresentationParser {
     }
 
     if (presentationMap['p:presentation']['p:extLst'] == null ||
-        presentationMap['p:presentation']['p:extLst']['p:ext']
-            is Json ||
+        presentationMap['p:presentation']['p:extLst']['p:ext'] is Json ||
         presentationMap['p:presentation']['p:extLst']['p:ext'][0]
                 ['p14:sectionLst'] ==
             null) {
@@ -208,25 +198,9 @@ class PresentationParser {
 
     for (int i = 1; i <= node.slideCount; i++) {
       slideIndex = i;
-      List<dynamic> slideLayoutInfo = _lookAheadTheme(i);
-      String? slideLayoutName = slideLayoutInfo[0];
-      int? slideMasterIndex = slideLayoutInfo[1];
       PrsNode slide = PrsNode();
       slideRelationship = _parseSlideRels(i);
-
       slide = _parseSlide(parsedSlideIdList);
-      if (slideLayoutName == keyLunaCustomDesign) {
-        SlideNode contentSlide = slide as SlideNode;
-        Map<String, double> padding = _parsePadding(jsonFromArchive(
-            "ppt/slideMasters/slideMaster$slideMasterIndex.xml"));
-        contentSlide.padding = padding;
-        slide = contentSlide as PrsNode;
-      } else {
-        SlideNode contentSlide = slide as SlideNode;
-        contentSlide.padding = zeroPadding;
-        slide = contentSlide as PrsNode;
-      }
-
       node.children.add(slide);
       placeholderToTransform = {};
     }
@@ -277,69 +251,6 @@ class PresentationParser {
     return padding;
   }
 
-  List<dynamic> _lookAheadTheme(int slideNum) {
-    // get slide layout index
-    var slideRelationshipElement = jsonFromArchive(
-            "ppt/slides/_rels/slide$slideNum.xml.rels")['Relationships']
-        ['Relationship'];
-    dynamic slideLayoutElement;
-    if (slideRelationshipElement is List) {
-      slideLayoutElement = slideRelationshipElement.firstWhere(
-        (element) => element['_Type'] == keySlideLayoutSchema,
-        orElse: () => "",
-      );
-    } else if (slideRelationshipElement is Json) {
-      slideLayoutElement =
-          slideRelationshipElement['_Type'] == keySlideLayoutSchema
-              ? slideRelationshipElement
-              : "";
-    }
-    int slideLayoutIndex = int.parse(RegExp(r"(?<=slideLayout)\d+(?=.xml)")
-            .firstMatch(slideLayoutElement['_Target'])
-            ?.group(0) ??
-        "1");
-
-    // get slide master index
-    var slideLayoutRelationshipElement = jsonFromArchive(
-            "ppt/slideLayouts/_rels/slideLayout$slideLayoutIndex.xml.rels")[
-        'Relationships']['Relationship'];
-    dynamic slideMasterElement;
-    if (slideLayoutRelationshipElement is List) {
-      slideMasterElement = slideLayoutRelationshipElement.firstWhere(
-        (element) => element['_Type'] == keySlideMasterSchema,
-        orElse: () => "",
-      );
-    } else if (slideLayoutRelationshipElement is Json) {
-      slideMasterElement =
-          slideLayoutRelationshipElement['_Type'] == keySlideMasterSchema
-              ? slideLayoutRelationshipElement
-              : "";
-    }
-    int slideMasterIndex = int.parse(RegExp(r"(?<=slideMaster)\d+(?=.xml)")
-            .firstMatch(slideMasterElement['_Target'])
-            ?.group(0) ??
-        "1");
-
-    // get theme index
-    List<dynamic> slideMasterRelsList = jsonFromArchive(
-            "ppt/slideMasters/_rels/slideMaster$slideMasterIndex.xml.rels")[
-        'Relationships']['Relationship'];
-    var themeElement = slideMasterRelsList.firstWhere(
-        (element) => element['_Type'] == keyThemeSchema,
-        orElse: () => "");
-    int themeIndex = int.parse(RegExp(r"(?<=theme)\d+(?=.xml)")
-            .firstMatch(themeElement['_Target'])
-            ?.group(0) ??
-        "-1");
-
-    // get Theme name
-    String? themeName = themeIndex == -1
-        ? ""
-        : jsonFromArchive("ppt/theme/theme$themeIndex.xml")['a:theme']['_name'];
-
-    return [themeName, slideMasterIndex];
-  }
-
   Json _parseSlideRels(int slideNum) {
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
     var rIdList = relsMap['Relationships']['Relationship'];
@@ -362,8 +273,7 @@ class PresentationParser {
     return rIdToTarget;
   }
 
-  Json _parseTransformForPlaceholder(
-      Json json) {
+  Json _parseTransformForPlaceholder(Json json) {
     Json result = {};
 
     var ph = json['p:nvSpPr']['p:nvPr']?['p:ph'];
@@ -445,6 +355,7 @@ class PresentationParser {
     var slideMap = jsonFromArchive("ppt/slides/slide$slideIndex.xml");
     var shapeTree = slideMap['p:sld']['p:cSld']['p:spTree'];
     node.slideId = slideIdList[slideIndex! - 1];
+    node.padding = SlideNode.zeroPadding;
 
     shapeTree.forEach((key, value) {
       switch (key) {
