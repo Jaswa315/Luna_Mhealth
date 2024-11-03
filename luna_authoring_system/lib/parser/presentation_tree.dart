@@ -149,6 +149,14 @@ class SlideNode extends PrsNode {
   /// left, top, right, bottom padding of the slide
   late final Map<String, double> padding;
 
+  /// A map representing zero padding values for all sides (left, top, right, bottom).
+  static const Map<String, double> zeroPadding = {
+    "left": 0,
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+  };
+
   /// Constructor for a [SlideNode] sets name to "slide"
   SlideNode() {
     name = 'slide';
