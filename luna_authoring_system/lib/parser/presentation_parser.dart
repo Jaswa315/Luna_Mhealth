@@ -208,49 +208,6 @@ class PresentationParser {
     return node;
   }
 
-  Map<String, double> _parsePadding(Json json) {
-    Map<String, double> padding = {
-      "left": 0,
-      "top": 0,
-      "right": 0,
-      "bottom": 0
-    };
-    var slideMasterShapeTree =
-        json['p:sldMaster']['p:cSld']['p:spTree'][keyShape];
-
-    for (var element in slideMasterShapeTree) {
-      // get the alt text of the shape
-      var descr = element['p:nvSpPr']?['p:cNvPr']?['_descr'];
-      switch (descr) {
-        case keyLunaLeftPadding:
-          padding["left"] =
-              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cx']);
-          break;
-        case keyLunaRightPadding:
-          padding["right"] =
-              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cx']);
-          break;
-      }
-    }
-    var slideMasterPicTree =
-        json['p:sldMaster']['p:cSld']['p:spTree'][keyPicture];
-    for (var element in slideMasterPicTree) {
-      // get the alt text of the shape
-      var descr = element['p:nvPicPr']?['p:cNvPr']?['_descr'];
-      switch (descr) {
-        case keyLunaTopSystemBar:
-          padding["top"] =
-              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cy']);
-          break;
-        case keyLunaBottomSystemBar:
-          padding["bottom"] =
-              double.parse(element['p:spPr']['a:xfrm']['a:ext']['_cy']);
-          break;
-      }
-    }
-    return padding;
-  }
-
   Json _parseSlideRels(int slideNum) {
     var relsMap = jsonFromArchive("ppt/slides/_rels/slide$slideNum.xml.rels");
     var rIdList = relsMap['Relationships']['Relationship'];
