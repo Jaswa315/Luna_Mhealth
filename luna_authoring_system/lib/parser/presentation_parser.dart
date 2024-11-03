@@ -41,12 +41,6 @@ const String keyThemeSchema =
 
 // contant value for padding
 
-/// The placeholder for the Luna top system bar.
-const String keyLunaTopSystemBar = "{luna top_system_bar}";
-
-/// The placeholder for the Luna bottom system bar.
-const String keyLunaBottomSystemBar = "{luna bottom_system_bar}";
-
 /// The placeholder for the Luna left padding value.
 const String keyLunaLeftPadding = "{luna left_padding}";
 
