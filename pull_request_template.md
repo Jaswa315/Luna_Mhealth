@@ -47,4 +47,4 @@ Why did you change code?
 - [ ] Does the PR NOT include updates to the developer’s environment (e.g., version of Flutter)?
 
 
-  For a more comprehensive checklist, please visit the Luna mHealth Code Checklist at https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing
+  For a more comprehensive checklist, please visit the [Luna mHealth Code Checklist](https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing)
