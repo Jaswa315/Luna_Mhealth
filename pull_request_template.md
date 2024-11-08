@@ -1,9 +1,10 @@
 # Context
 Describe what problem we are trying to solve.
 # Changes
-What did you change in the code? What files were added, removed, affected? What methods in the files were changed?
-# Test Results
-Screenshot output of tests, relevant to PR
+What did you change in the code?
+Why did you change code?
+# Notes
+
 
 # Checklist
 
@@ -12,16 +13,13 @@ Screenshot output of tests, relevant to PR
 ### Pull Request
 - [ ] Are errors handled by throwing/catching exceptions?
 - [ ] Are all names descriptive (classes, methods, variables)?
+- [ ] Does the code align with the DRY Principle? [see Don't Repeat Yourself (DRY)]
+- [ ] Does the code handle edge cases well?
 - [ ] Does the method/class have a single responsibility?
 - [ ] Is the logic simple and clear?
 - [ ] Does code follow SOLID principles?
 - [ ] Does work follow KISS principle?
-- [ ] Uses simplest algorithm for today’s known use cases?
-- [ ] Uses simplest data structure for today’s known use cases?
 - [ ] Is the PR about one thing? (not multiple; just say no to PR creep)
-- [ ] Are code comments limited to “why?” or “how?” for very complicated things?
-- [ ] Do method comments clearly describe the method’s contract?
-- [ ] No secrets such as configuration strings, certificates, passwords in PR?
 
 ### Understandability
 - [ ] Do you understand the code?
@@ -37,13 +35,6 @@ Screenshot output of tests, relevant to PR
 - [ ] Is the PR “right sized”?
 - [ ] Is the PR a small chunk of tightly-coupled code changes? [Not a mega-PR.]
 - [ ] Was there a new branch for each user story or bug, at least?
-- [ ] Is there appropriate telemetry in the code?
-
-### Maintainability
-- [ ] Does the code align with the DRY Principle? [see Don't Repeat Yourself (DRY)]
-- [ ] Does the code not have duplicate lines of code?
-- [ ] Does the code not duplicate lines of code found elsewhere in the project?
-- [ ] Does the code have duplicate patterns related to the data (repeating / like use of data)?
 
 ### Test Coverage
 - [ ] Is there a unit test for each code path?
@@ -55,10 +46,5 @@ Screenshot output of tests, relevant to PR
 - [ ] Are there unit tests for expected exceptions that the production code might throw?
 - [ ] Does the PR NOT include updates to the developer’s environment (e.g., version of Flutter)?
 
-### Correctness
-- [ ] **Input Validation**
-  - [ ] Does the code check that the inputs are valid?
-  - [ ] Does the code gracefully handle incorrect input values?
-  - [ ] Are correct error responses returned, as appropriate? (4XX - not found, bad request | 5XX - server error | 2XX - OK)
-  - [ ] Are the endpoint choices and verbs logical?
-  - [ ] Does the code handle edge cases well?
+
+  For a more comprehensive checklist, please visit the Luna mHealth Code Checklist at https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing
