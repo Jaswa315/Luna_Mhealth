@@ -28,7 +28,7 @@ Future<void> main(List<String> arguments) async {
 
     // Helper code for debugging purposes.
     // ToDo: Remove when more polished
-    const String samplePPTName = 'Pregnancy-sample.pptx';
+    const String samplePPTName = 'Mini-Pregnancy_module 100.pptx';
     arguments = [
       // You'll need to change this or add the sample module to autoload the module.
       // Files are under /Users/username/Library/Containers/com.example.pptParser/Data by default on Macos

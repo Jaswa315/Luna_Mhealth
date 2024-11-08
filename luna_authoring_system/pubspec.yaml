@@ -76,9 +76,8 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
-    - assets/Luna_sample_module.pptx
     - assets/cfg/app_settings.json
-    - assets/Pregnancy-sample.pptx
+    - assets/Mini-Pregnancy_module 100.pptx
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
