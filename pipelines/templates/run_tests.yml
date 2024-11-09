@@ -1,0 +1,23 @@
+#Template to run flutter tests in provided folder (package_path)
+#This template does not publish test results. 
+parameters:
+- name: package_path  
+  default: ''
+- name: package_name  
+  default: ''
+- name: cur_cov_folder
+  default: current_coverage
+
+
+steps:
+- script: |
+    cd ${{ parameters.package_path }}
+    flutter pub get
+  displayName: 'Get Flutter packages for the ${{ parameters.package_name }}'
+
+- script: |
+    mkdir -p ${{ parameters.cur_cov_folder }}
+    cd ${{ parameters.package_path }}
+    flutter test --machine --coverage | tojunit --output ../test-${{ parameters.package_name }}-results.xml
+    cobertura convert --output ../${{ parameters.cur_cov_folder }}/coverage-${{ parameters.package_name }}.xml
+  displayName: 'Run ${{ parameters.package_name }} tests'

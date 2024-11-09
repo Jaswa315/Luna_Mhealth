@@ -9,7 +9,6 @@ class SizeConverter {
     double length =
         slideWidth - (padding['left'] ?? 0) - (padding['right'] ?? 0);
     double subtrahend = padding['left'] ?? 0;
-
     return (numerator - subtrahend) / length;
   }
 

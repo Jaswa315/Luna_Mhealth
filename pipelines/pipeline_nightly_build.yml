@@ -1,9 +1,23 @@
-# Lint and Testing pipeline for Luna mHealth
-# YML that gets run when a PR is requested
+# Nightly Build for Luna mHealth
 trigger: none
+schedules:
+- cron: '0 10 * * *' #10:00 AM UTC
+  displayName: Daily 3:00AM PST build 
+  branches:
+    include:
+    - main
+
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    mac:
+      imageName: 'macOS-latest'
+    windows:
+      imageName: 'windows-latest'
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: $(imageName)
 
 variables:
   - name: package_folders

@@ -1,0 +1,70 @@
+#Template to publish test and coverage results for dart. 
+parameters:
+- name: coverage_report_compare_id
+  default: '45'
+- name: main_cov_folder
+  default: main_coverage
+- name: cur_cov_folder
+  default: current_coverage
+
+steps:
+#Download most recent code coverage from main
+- task: DownloadPipelineArtifact@2
+  condition: succeededOrFailed()
+  displayName: 'Get most recent coverage from main'
+  inputs:
+    buildType: 'specific'
+    pipeline: ${{ parameters.coverage_report_compare_id }}
+    project: 'mHealth Education App'
+    specificBuildWithTriggering: false
+    buildVersionToDownload: 'latestFromBranch'
+    allowPartiallySucceededBuilds : true
+    branchName: 'refs/heads/main' 
+    itemPattern: '**/coverage-*.xml' 
+    targetPath: './${{ parameters.main_cov_folder }}'
+  continueOnError: true
+
+#calculate coverage from last run in main versus coverage in this run
+- task: PowerShell@2
+  displayName: 'Calculate code coverage change'
+  condition: succeededOrFailed()
+  inputs:
+    targetType: 'inline'
+    script: |
+      function Get-TotalCoverage {
+        param ($CoverageFiles)
+        if ($CoverageFiles.length -eq 0) { return 0}
+        $totalLines = 0
+        $coveredLined = 0
+        foreach($file in $CoverageFiles){
+          Write-Host $file
+          [xml]$cov = Get-Content -Path $file
+          $coveredLined += $cov.coverage[1].'lines-covered'
+          $totalLines += $cov.coverage[1].'lines-valid'
+        }
+        return $coveredLined/$totalLines
+      }
+      #Get Current coverage
+      $curCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Path ./${{ parameters.cur_cov_folder }} -Filter "coverage-*.xml" | ForEach-Object { $_.FullName })
+      #Get Main Coverage
+      $mainCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Filter "coverage-*.xml" -Recurse -Path ./${{ parameters.main_cov_folder }} | ForEach-Object { $_.FullName })
+      if ($curCov -lt $mainCov){
+        $errMsg = "Code Coverage decreased by {0}%" -f ([math]::Round((($mainCov - $curCov)*100),2))
+        Write-Host "##vso[task.logissue type=error]$errMsg"
+        Write-Host "##vso[task.complete result=SucceededWithIssues]"
+      }
+      exit 0
+
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/test-*.xml'
+    testRunTitle: 'Publish Flutter Test Results'
+    failTaskOnFailedTests: true
+
+- task: PublishCodeCoverageResults@2
+  displayName: 'Publish coverage results'
+  condition: succeededOrFailed()
+  inputs:
+    summaryFileLocation: '**/${{ parameters.cur_cov_folder }}/coverage-*.xml' 
