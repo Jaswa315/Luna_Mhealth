@@ -23,12 +23,12 @@ void main() {
   setUp(() {
     PathProviderPlatform.instance = MockPathProviderPlatform();
   });
-  
+
   group('Cache Dir Exists Tests', () {
     setUp(() async {
       await new Directory(testJunkPath).create();
     });
-      
+
     test('Cache Dir Has One File', () async {
       await new File(testJunkPath + '/test_file.txt').create();
       List<String> cacheContents = await listCacheDirContents();

@@ -4,7 +4,7 @@ import 'package:luna_core/utils/types.dart';
 // import 'package:luna_core/utils/logging.dart';
 
 /// Utility class that extracts data from JSON data strings
-// ToDo:  This should be a static class / static methods 
+// ToDo:  This should be a static class / static methods
 class JSONDataExtractor {
   /// default constructor
   JSONDataExtractor();
@@ -79,5 +79,3 @@ class JSONDataExtractor {
     return moduleData['module']?['language'] ?? 'en-us';
   }
 }
-
-

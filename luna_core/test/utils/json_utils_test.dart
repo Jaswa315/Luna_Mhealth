@@ -7,7 +7,7 @@ import 'testassets/json_utils_test_data.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  late Map<String, String> jsonDataMap; 
+  late Map<String, String> jsonDataMap;
   group('JSON Data Extractor Class Tests', () {
     setUpAll(() async {
       //LogManager.createInstance();

@@ -3,7 +3,7 @@
 
 class AppConstants {
   /// App name
-  static const String appName = 'Luna';  
+  static const String appName = 'Luna';
 
   /// Error messages
   static const String noImageErrorMessage = 'No image to display.';

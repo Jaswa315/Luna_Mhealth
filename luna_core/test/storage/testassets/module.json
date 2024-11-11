@@ -1,109 +1,109 @@
 {
     "module": {
-        "moduleId": "3cba4726-a7e1-483b-a36a-8617efa67931",
-        "title": "PowerPoint Presentation",
-        "name": "PregnancySample",
         "author": "Jon Socha",
-        "slideCount": 1,
+        "height": 6931025.0,
+        "moduleId": "3cba4726-a7e1-483b-a36a-8617efa67931",
+        "name": "PregnancySample",
         "pages": [
             {
-                "type": "page",
-                "slideId": "S257",
                 "shapes": [
                     {
-                        "type": "text",
+                        "height": 0.08291298906005966,
                         "textParts": [
                             {
-                                "text": "Go to emergency TODAY if you have any of these symptoms",
-                                "textID": 1,
+                                "color": 4290772992,
                                 "fontSize": 12.0,
                                 "fontStyle": "",
-                                "color": 4290772992,
+                                "fontUnderline": "",
                                 "fontWeight": "bold",
-                                "fontUnderline": ""
+                                "text": "Go to emergency TODAY if you have any of these symptoms",
+                                "textID": 1
                             }
                         ],
-                        "x": 0.03231554389034704,
-                        "y": 0.0009307425669363478,
+                        "type": "text",
                         "width": 0.6942680081656459,
-                        "height": 0.08291298906005966
+                        "x": 0.03231554389034704,
+                        "y": 0.0009307425669363478
                     },
                     {
-                        "type": "text",
+                        "height": 0.07556847652403505,
                         "textParts": [
                             {
+                                "color": null,
+                                "fontSize": 16.0,
+                                "fontStyle": "",
+                                "fontUnderline": "",
+                                "fontWeight": "",
                                 "text": "Trouble Breathing ",
-                                "textID": 2,
-                                "fontSize": 16.0,
-                                "fontStyle": "",
-                                "color": null,
-                                "fontWeight": "",
-                                "fontUnderline": ""
+                                "textID": 2
                             }
                         ],
-                        "x": 0.03494954797317002,
-                        "y": 0.9235015023030504,
+                        "type": "text",
                         "width": 0.45686030912802567,
-                        "height": 0.07556847652403505
+                        "x": 0.03494954797317002,
+                        "y": 0.9235015023030504
                     },
                     {
-                        "type": "text",
+                        "height": 0.07258695503190365,
                         "textParts": [
                             {
+                                "color": null,
+                                "fontSize": 16.0,
+                                "fontStyle": "",
+                                "fontUnderline": "",
+                                "fontWeight": "",
                                 "text": "Violent Thoughts ",
-                                "textID": 3,
-                                "fontSize": 16.0,
-                                "fontStyle": "",
-                                "color": null,
-                                "fontWeight": "",
-                                "fontUnderline": ""
+                                "textID": 3
                             }
                         ],
-                        "x": 0.03869699620880723,
-                        "y": 0.46122802904332333,
+                        "type": "text",
                         "width": 0.45686060075823853,
-                        "height": 0.07258695503190365
+                        "x": 0.03869699620880723,
+                        "y": 0.46122802904332333
                     },
                     {
-                        "type": "text",
+                        "height": 0.07545896891152463,
                         "textParts": [
                             {
+                                "color": null,
+                                "fontSize": 16.0,
+                                "fontStyle": "",
+                                "fontUnderline": "",
+                                "fontWeight": "",
                                 "text": "Seizures",
-                                "textID": 4,
-                                "fontSize": 16.0,
-                                "fontStyle": "",
-                                "color": null,
-                                "fontWeight": "",
-                                "fontUnderline": ""
+                                "textID": 4
                             }
                         ],
-                        "x": 0.5068019830854477,
-                        "y": 0.9235015023030504,
+                        "type": "text",
                         "width": 0.45576465441819775,
-                        "height": 0.07545896891152463
+                        "x": 0.5068019830854477,
+                        "y": 0.9235015023030504
                     },
                     {
-                        "type": "text",
+                        "height": 0.07342636911567914,
                         "textParts": [
                             {
-                                "text": "Cheat Pain ",
-                                "textID": 5,
+                                "color": null,
                                 "fontSize": 16.0,
                                 "fontStyle": "",
-                                "color": null,
+                                "fontUnderline": "",
                                 "fontWeight": "",
-                                "fontUnderline": ""
+                                "text": "Cheat Pain ",
+                                "textID": 5
                             }
                         ],
-                        "x": 0.5068019830854477,
-                        "y": 0.46122802904332333,
+                        "type": "text",
                         "width": 0.4554928550597842,
-                        "height": 0.07342636911567914
+                        "x": 0.5068019830854477,
+                        "y": 0.46122802904332333
                     }
-                ]
+                ],
+                "slideId": "S257",
+                "type": "page"
             }
         ],
-        "width": 3429000.0,
-        "height": 6931025.0
+        "slideCount": 1,
+        "title": "PowerPoint Presentation",
+        "width": 3429000.0
     }
 }

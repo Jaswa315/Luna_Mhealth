@@ -26,7 +26,7 @@ class MockComponent extends Component implements Clickable {
           height: 100,
         );
 
-  
+
   @override
   Future<Widget> render() async {
     // Return a placeholder widget for now.

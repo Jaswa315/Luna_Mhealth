@@ -1,8 +1,8 @@
 #Template to lint dart code in package_path
 parameters:
-- name: package_path  
+- name: package_path
   default: ''
-- name: package_name  
+- name: package_name
   default: ''
 
 steps:

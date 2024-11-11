@@ -1,4 +1,4 @@
-#Template to install prerequisites for running any fluttter items. 
+#Template to install prerequisites for running any fluttter items.
 parameters:
 - name: flutter_version
   default: 3.22.3
@@ -17,7 +17,7 @@ steps:
     cd ${{ parameters.flutter_pkg }}
     flutter pub get
     flutter pub global activate junitreport
-    flutter pub global activate cobertura 
+    flutter pub global activate cobertura
     echo "##vso[task.prependpath]$HOME/.pub-cache/bin"
   displayName: 'Activate Junitreport and Cobertura'
   condition: ne( variables['Agent.OS'], 'Windows_NT' )
@@ -25,7 +25,7 @@ steps:
 #while bash scripts are available on windows, there are subtle differences that make just using powershell easier for this task
 - powershell: |
     git clone https://github.com/flutter/flutter.git -b ${{ parameters.flutter_version }} $(System.DefaultWorkingDirectory)/flutter
-    Write-Host "##vso[task.prependpath]$(System.DefaultWorkingDirectory)/flutter/bin" 
+    Write-Host "##vso[task.prependpath]$(System.DefaultWorkingDirectory)/flutter/bin"
   condition: eq( variables['Agent.OS'], 'Windows_NT' )
   displayName: 'Install Flutter SDK (Windows)'
 
@@ -35,11 +35,7 @@ steps:
     cd ${{ parameters.flutter_pkg }}
     flutter pub get
     flutter pub global activate junitreport
-    flutter pub global activate cobertura 
+    flutter pub global activate cobertura
     Write-Host "##vso[task.prependpath]C:\Users\VssAdministrator\AppData\Local\Pub\Cache\bin"
   condition: eq( variables['Agent.OS'], 'Windows_NT' )
   displayName: 'Activate Junitreport and Cobertura (Windows)'
-
-
-
-  

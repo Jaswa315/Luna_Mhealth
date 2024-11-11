@@ -1,7 +1,7 @@
 {
-  "StorageProviderType": "Local",
-  "UseApplicationInsightsLogging": true,
-  "UseDartLogging": true,
-  "AppInsightsInstrumentationKey": "586044d7-f63e-49e2-9735-6e0f9d15884c",
-  "AppInsightsConnectionString": "InstrumentationKey=586044d7-f63e-49e2-9735-6e0f9d15884c;IngestionEndpoint=https://westus2-2.in.applicationinsights.azure.com/;LiveEndpoint=https://westus2.livediagnostics.monitor.azure.com/"
+    "AppInsightsConnectionString": "InstrumentationKey=586044d7-f63e-49e2-9735-6e0f9d15884c;IngestionEndpoint=https://westus2-2.in.applicationinsights.azure.com/;LiveEndpoint=https://westus2.livediagnostics.monitor.azure.com/",
+    "AppInsightsInstrumentationKey": "586044d7-f63e-49e2-9735-6e0f9d15884c",
+    "StorageProviderType": "Local",
+    "UseApplicationInsightsLogging": true,
+    "UseDartLogging": true
 }

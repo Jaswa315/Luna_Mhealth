@@ -61,7 +61,7 @@ class ImageCompression {
     //double totalCompressedSize = 0;
     //print('Compressing ${files.length} files...');
 
-  
+
     for (final file in files) {
       //final originalSize = await file.lengthSync() / 1024; // Convert to KB
       //totalOriginalSize += originalSize;

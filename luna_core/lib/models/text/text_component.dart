@@ -98,7 +98,7 @@ class TextComponent extends Component {
   void onClick() {}
 }
 
-/// String of text with given font 
+/// String of text with given font
 class TextPart {
   /// string value of text
   String text;
