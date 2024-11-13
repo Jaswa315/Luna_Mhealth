@@ -47,7 +47,6 @@ Please visit the [Luna mHealth Code Checklist](https://docs.google.com/document/
 - [ ] No dev environment updates?
 
 ### Correctness
-- **Input Validation**
   - [ ] Inputs validated?
   - [ ] Handles incorrect inputs?
   - [ ] Correct error responses?
