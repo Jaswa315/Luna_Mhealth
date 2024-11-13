@@ -33,7 +33,7 @@ steps:
     cd $(lunacore)
     flutter pub get
     flutter pub global activate junitreport
-    flutter pub global activate cobertura 
+    flutter pub global activate cobertura
     echo "##vso[task.setvariable variable=PATH]${PATH}:$HOME/.pub-cache/bin"
   displayName: 'Get Flutter packages for core module'
 
@@ -112,15 +112,15 @@ steps:
     specificBuildWithTriggering: false
     buildVersionToDownload: 'latest'
     allowPartiallySucceededBuilds : true
-    #branchName: 'main' 
-    itemPattern: '**/coverage-*.xml' 
-    targetPath: './$(main_cov_folder)' 
+    #branchName: 'main'
+    itemPattern: '**/coverage-*.xml'
+    targetPath: './$(main_cov_folder)'
 
 - task: PublishCodeCoverageResults@2
   displayName: 'Publish coverage results'
   condition: succeededOrFailed()
   inputs:
-    summaryFileLocation: '**/coverage-*.xml' 
+    summaryFileLocation: '**/coverage-*.xml'
 
 #calculate coverage from last run in main versus coverage in this run
 - task: PowerShell@2

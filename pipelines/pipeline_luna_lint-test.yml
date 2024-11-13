@@ -11,15 +11,15 @@ variables:
 
 steps:
 
-- template: templates/install_prereqs.yml 
+- template: templates/install_prereqs.yml
 
 - ${{ each folder in split(variables.package_folders, ',') }}:
   - template: templates/lint_luna.yml
-    parameters: 
+    parameters:
       package_path: ${{ folder }}
       package_name: ${{ folder }}
   - template: templates/run_tests.yml
-    parameters: 
+    parameters:
       package_path: ${{ folder }}
       package_name: ${{ folder }}
 

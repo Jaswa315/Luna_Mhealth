@@ -1,9 +1,9 @@
 #Template to run flutter tests in provided folder (package_path)
-#This template does not publish test results. 
+#This template does not publish test results.
 parameters:
-- name: package_path  
+- name: package_path
   default: ''
-- name: package_name  
+- name: package_name
   default: ''
 - name: cur_cov_folder
   default: current_coverage

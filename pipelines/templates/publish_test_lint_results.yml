@@ -1,4 +1,4 @@
-#Template to publish test and coverage results for dart. 
+#Template to publish test and coverage results for dart.
 parameters:
 - name: coverage_report_compare_id
   default: '45'
@@ -19,8 +19,8 @@ steps:
     specificBuildWithTriggering: false
     buildVersionToDownload: 'latestFromBranch'
     allowPartiallySucceededBuilds : true
-    branchName: 'refs/heads/main' 
-    itemPattern: '**/coverage-*.xml' 
+    branchName: 'refs/heads/main'
+    itemPattern: '**/coverage-*.xml'
     targetPath: './${{ parameters.main_cov_folder }}'
   continueOnError: true
 
@@ -67,4 +67,4 @@ steps:
   displayName: 'Publish coverage results'
   condition: succeededOrFailed()
   inputs:
-    summaryFileLocation: '**/${{ parameters.cur_cov_folder }}/coverage-*.xml' 
+    summaryFileLocation: '**/${{ parameters.cur_cov_folder }}/coverage-*.xml'

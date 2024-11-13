@@ -20,6 +20,7 @@ import 'package:luna_mobile/core/constants/constants.dart';
 class ImageComponent extends Component {
   /// The path to the image file.
   String imagePath;
+
   /// Optional hyperlink associated with the component
   String? hyperlink;
 

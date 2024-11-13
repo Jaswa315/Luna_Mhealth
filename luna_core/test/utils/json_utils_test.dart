@@ -7,7 +7,7 @@ import 'testassets/json_utils_test_data.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  late Map<String, String> jsonDataMap; 
+  late Map<String, String> jsonDataMap;
   group('JSON Data Extractor Class Tests', () {
     setUpAll(() async {
       //LogManager.createInstance();
@@ -21,7 +21,8 @@ void main() {
 
       JSONDataExtractor generator = JSONDataExtractor();
 
-      Uint8List? csvBytes = await generator.extractTextDataFromJSONAsCSVBytes(data);
+      Uint8List? csvBytes =
+          await generator.extractTextDataFromJSONAsCSVBytes(data);
 
       expect(csvBytes, isNotNull, reason: "CSV bytes should not be null.");
       expect(csvBytes, isNotEmpty, reason: "CSV bytes should not be empty.");

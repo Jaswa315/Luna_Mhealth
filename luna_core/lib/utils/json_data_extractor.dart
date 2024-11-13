@@ -4,7 +4,7 @@ import 'package:luna_core/utils/types.dart';
 // import 'package:luna_core/utils/logging.dart';
 
 /// Utility class that extracts data from JSON data strings
-// ToDo:  This should be a static class / static methods 
+// ToDo:  This should be a static class / static methods
 class JSONDataExtractor {
   /// default constructor
   JSONDataExtractor();
@@ -29,8 +29,7 @@ class JSONDataExtractor {
     return Uint8List.fromList(utf8.encode(_csvContent));
   }
 
-  List<Json> _extractTextUIDandStringsFromJSON(
-      String jsonString) {
+  List<Json> _extractTextUIDandStringsFromJSON(String jsonString) {
     JSONDataExtractor extractorTool = JSONDataExtractor();
     return extractorTool.getTextDataFromJSON(jsonString);
   }
@@ -43,8 +42,7 @@ class JSONDataExtractor {
     // Recursive function to traverse the JSON
     void recursiveSearch(dynamic element) {
       if (element is Json) {
-        if (element.containsKey('textID') &&
-            element.containsKey('text')) {
+        if (element.containsKey('textID') && element.containsKey('text')) {
           collectedTextNodes
               .add({'textID': element['textID'], 'text': element['text']});
         }
@@ -79,5 +77,3 @@ class JSONDataExtractor {
     return moduleData['module']?['language'] ?? 'en-us';
   }
 }
-
-
