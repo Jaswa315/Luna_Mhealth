@@ -13,23 +13,25 @@
 Please visit the [Luna mHealth Code Checklist](https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing)
 
 ### Pull Request
+- [ ] Right-sized PR?
 - [ ] Errors handled with exceptions?
 - [ ] Descriptive names?
 - [ ] Single responsibility?
-- [ ] Logic simple?
+- [ ] Simple logic?
 - [ ] Follows SOLID principles?
 - [ ] Follows KISS principle?
 - [ ] Simplest algorithm?
 - [ ] Simplest data structure?
-- [ ] PR scope focused?
+- [ ] Focused PR?
 - [ ] Comments explain “why” or complex “how”?
 - [ ] Method comments define contract?
 - [ ] No sensitive info?
 
 ### Understandability
-- [ ] Code understandable?
-- [ ] PR right-sized?
-- [ ] Small code chunk changes?
+- [ ] Understandable code?
+- [ ] Short methods?
+- [ ] Low cyclomatic complexity?
+- [ ] No magic literals?
 - [ ] New branch per story/bug?
 - [ ] Telemetry added?
 
@@ -46,8 +48,8 @@ Please visit the [Luna mHealth Code Checklist](https://docs.google.com/document/
 
 ### Correctness
 - **Input Validation**
-  - [ ] Valid inputs checked?
+  - [ ] Inputs validated?
   - [ ] Handles incorrect inputs?
   - [ ] Correct error responses?
   - [ ] Logical endpoints/verbs?
-  - [ ] Edge cases handled?
+  - [ ] Handled edge cases?
