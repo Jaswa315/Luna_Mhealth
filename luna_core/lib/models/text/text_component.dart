@@ -28,12 +28,16 @@ class TextComponent extends Component {
     // this.color = Colors.black,
     /// children of component
     required this.textChildren,
+
     /// x position of component
     required double x,
+
     /// y position of component
     required double y,
+
     /// width of component
     required double width,
+
     /// height of component
     required double height,
   }) : super(
@@ -102,16 +106,22 @@ class TextComponent extends Component {
 class TextPart {
   /// string value of text
   String text;
+
   /// font size of text
   double fontSize;
+
   /// font style of text
   FontStyle fontStyle;
+
   /// font weight of text
   FontWeight fontWeight;
+
   /// underline decoration of text
   TextDecoration fontUnderline;
+
   /// optional id of text
   int? textID;
+
   /// optional color of text
   Color? color;
 

@@ -28,6 +28,7 @@ class ModuleObjectGenerator {
   //late final PrsNode _root;
   ///
   ModuleObjectGenerator(this.parser);
+
   ///
   Future<Module> generateLunaModule(String fileName) async {
     PrsNode root = await parser.toPrsNode();

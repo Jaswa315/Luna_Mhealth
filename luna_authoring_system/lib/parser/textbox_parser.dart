@@ -8,7 +8,8 @@ Map<String, String> mapTextBoxes(dynamic jsonData) {
     var slideContent = slide['Slide']['children'];
 
     // Filter text boxes only
-    var textBoxes = slideContent.where((element) => element['TextBox'] != null).toList();
+    var textBoxes =
+        slideContent.where((element) => element['TextBox'] != null).toList();
 
     for (var i = 0; i < textBoxes.length; i++) {
       // Initialize the key
@@ -17,7 +18,9 @@ Map<String, String> mapTextBoxes(dynamic jsonData) {
       // Extract text from the text box
       List<String> textSegments = [];
       var textBox = textBoxes[i]['TextBox'];
-      var textBodies = textBox['children'].where((element) => element['TextBody'] != null).toList();
+      var textBodies = textBox['children']
+          .where((element) => element['TextBody'] != null)
+          .toList();
 
       for (var textBody in textBodies) {
         var paragraphs = textBody['TextBody']['children'];

@@ -36,7 +36,8 @@ void main() {
 
     setUp(() {
       // Use fake path provider to account for non-mobile unit tests
-      storageProvider = LocalStorageProvider.withPathPlatformProvider(FakePathProviderPlatform());
+      storageProvider = LocalStorageProvider.withPathPlatformProvider(
+          FakePathProviderPlatform());
     });
 
     test('Save - Result', () async {
@@ -180,8 +181,10 @@ void main() {
       await storageProvider.saveFile(fileName2, testData2);
 
       final loadedFilesList = await storageProvider.getAllFiles();
-      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)), isTrue);
-      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)), isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)),
+          isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)),
+          isTrue);
     });
 
     test('Find Multiple Files - Subfolder', () async {
@@ -199,8 +202,10 @@ void main() {
       final loadedFilesList =
           await storageProvider.getAllFiles(container: "sub");
 
-      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)), isTrue);
-      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)), isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)),
+          isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)),
+          isTrue);
     });
 
     test('Find Multiple Files - child subfolder item access', () async {
@@ -215,11 +220,13 @@ void main() {
       await storageProvider.saveFile(fileName2, testData2,
           createContainer: true);
 
-      final loadedFilesList =  await storageProvider.getAllFiles();
+      final loadedFilesList = await storageProvider.getAllFiles();
 
       expect(loadedFilesList.length, equals(2));
-      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)), isTrue);
-      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)), isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData1)),
+          isTrue);
+      expect(loadedFilesList.any((check_list) => check_list.equals(testData2)),
+          isTrue);
     });
 
     test('Find Multiple Files - parent subfolder no access', () async {

@@ -29,8 +29,7 @@ class JSONDataExtractor {
     return Uint8List.fromList(utf8.encode(_csvContent));
   }
 
-  List<Json> _extractTextUIDandStringsFromJSON(
-      String jsonString) {
+  List<Json> _extractTextUIDandStringsFromJSON(String jsonString) {
     JSONDataExtractor extractorTool = JSONDataExtractor();
     return extractorTool.getTextDataFromJSON(jsonString);
   }
@@ -43,8 +42,7 @@ class JSONDataExtractor {
     // Recursive function to traverse the JSON
     void recursiveSearch(dynamic element) {
       if (element is Json) {
-        if (element.containsKey('textID') &&
-            element.containsKey('text')) {
+        if (element.containsKey('textID') && element.containsKey('text')) {
           collectedTextNodes
               .add({'textID': element['textID'], 'text': element['text']});
         }

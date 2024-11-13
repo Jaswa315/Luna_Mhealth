@@ -9,7 +9,9 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 // use test junk folder
 const String testJunkPath = 'test/junk';
 
-class MockPathProviderPlatform extends Mock with MockPlatformInterfaceMixin implements PathProviderPlatform {
+class MockPathProviderPlatform extends Mock
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
   //Override getTemporaryPath so that getTemporaryDirectory works outside android/ios devices
   @override
   Future<String> getTemporaryPath() async {
@@ -18,7 +20,6 @@ class MockPathProviderPlatform extends Mock with MockPlatformInterfaceMixin impl
 }
 
 void main() {
-
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() {
     PathProviderPlatform.instance = MockPathProviderPlatform();
@@ -32,19 +33,17 @@ void main() {
     test('Cache Dir Has One File', () async {
       await new File(testJunkPath + '/test_file.txt').create();
       List<String> cacheContents = await listCacheDirContents();
-      expect(cacheContents.length,1);
+      expect(cacheContents.length, 1);
     });
 
     test('Cache Dir Has Zero Files', () async {
       List<String> cacheContents = await listCacheDirContents();
-      expect(cacheContents.length,0);
+      expect(cacheContents.length, 0);
     });
 
     tearDown(() async {
       // clear out all files in the test folder
       await new Directory(testJunkPath).delete(recursive: true);
     });
-
   });
-
 }

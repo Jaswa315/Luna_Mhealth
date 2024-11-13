@@ -16,3 +16,10 @@ repos:
         args:
           - --autofix
           - --indent=4
+-   repo: local
+    hooks:
+    -   id: format-dart
+        name: format dart
+        language: system
+        entry: dart format --set-exit-if-changed
+        files: \.dart$

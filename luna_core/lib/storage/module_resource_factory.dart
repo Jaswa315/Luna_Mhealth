@@ -91,8 +91,8 @@ class ModuleResourceFactory {
   /// Gets the audio with the given name and language locale from the stored module.
   static Future<Uint8List?> getAudioBytes(
       String moduleName, String audioFileName, String langLocale) async {
-    return moduleStorage.getAsset(moduleName,
-        '${_getAudioPath(langLocale)}/$audioFileName');
+    return moduleStorage.getAsset(
+        moduleName, '${_getAudioPath(langLocale)}/$audioFileName');
   }
 
   /// Adds an image asset to a Module.luna archive package.

@@ -21,7 +21,8 @@ void main() {
 
       JSONDataExtractor generator = JSONDataExtractor();
 
-      Uint8List? csvBytes = await generator.extractTextDataFromJSONAsCSVBytes(data);
+      Uint8List? csvBytes =
+          await generator.extractTextDataFromJSONAsCSVBytes(data);
 
       expect(csvBytes, isNotNull, reason: "CSV bytes should not be null.");
       expect(csvBytes, isNotEmpty, reason: "CSV bytes should not be empty.");

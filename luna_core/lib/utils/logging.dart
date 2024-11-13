@@ -326,7 +326,7 @@ class LogManager {
 class VersionManager {
   static String _cachedVersion = "Unknown";
 
-/// Returns the current version of the application.
+  /// Returns the current version of the application.
   Future<String> getAppVersion() async {
     if (_cachedVersion == "Unknown") {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
