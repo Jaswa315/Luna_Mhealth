@@ -23,3 +23,8 @@ repos:
         language: system
         entry: dart format --set-exit-if-changed
         files: \.dart$
+    -   id: analyze-flutter
+        name: analyze flutter
+        language: system
+        entry: flutter analyze
+        pass_filenames: false
