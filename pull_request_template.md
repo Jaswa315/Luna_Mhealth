@@ -1,50 +1,54 @@
 # Context
-Describe what problem we are trying to solve.
-# Changes
-What did you change in the code?
-Why did you change code?
-# Notes
+- Describe problem.
 
+# Change Summary
+- Code changes?
+- Reason for change?
+
+# Notes
 
 # Checklist
 
-## Before submitting this PR, please make sure all boxes are checked:
+## Before submitting this PR, please make sure all boxes are checked
+Please visit the [Luna mHealth Code Checklist](https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing)
 
 ### Pull Request
-- [ ] Are errors handled by throwing/catching exceptions?
-- [ ] Are all names descriptive (classes, methods, variables)?
-- [ ] Does the code align with the DRY Principle? [see Don't Repeat Yourself (DRY)]
-- [ ] Does the code handle edge cases well?
-- [ ] Does the method/class have a single responsibility?
-- [ ] Is the logic simple and clear?
-- [ ] Does code follow SOLID principles?
-- [ ] Does work follow KISS principle?
-- [ ] Is the PR about one thing? (not multiple; just say no to PR creep)
+- [ ] Right-sized PR?
+- [ ] Errors handled with exceptions?
+- [ ] Descriptive names?
+- [ ] Single responsibility?
+- [ ] Simple logic?
+- [ ] Follows SOLID principles?
+- [ ] Follows KISS principle?
+- [ ] Simplest algorithm?
+- [ ] Simplest data structure?
+- [ ] Focused PR?
+- [ ] Comments explain “why” or complex “how”?
+- [ ] Method comments define contract?
+- [ ] No sensitive info?
 
 ### Understandability
-- [ ] Do you understand the code?
-- [ ] Does each method name clearly describe what that method does?
-- [ ] Does each class name clearly describe what that class does?
-- [ ] Are code comments limited to describing rationales for code design, rather than what the code does?
-- [ ] Is each method less than ~30 lines of code? [see Short methods]
-- [ ] Does the code have low cyclomatic complexity? [see Cyclomatic complexity]
-- [ ] Does the code use constants for all magic literals?
-- [ ] Are there meaningful, necessary triple slashed comments (for Dart documentation) for all public functions?
+- [ ] Understandable code?
+- [ ] Short methods?
+- [ ] Low cyclomatic complexity?
+- [ ] No magic literals?
+- [ ] New branch per story/bug?
+- [ ] Telemetry added?
 
-### Process
-- [ ] Is the PR “right sized”?
-- [ ] Is the PR a small chunk of tightly-coupled code changes? [Not a mega-PR.]
-- [ ] Was there a new branch for each user story or bug, at least?
+### Maintainability
+- [ ] Follows DRY?
+- [ ] No duplicate lines?
+- [ ] No redundant patterns?
 
 ### Test Coverage
-- [ ] Is there a unit test for each code path?
-- [ ] Does each unit test only test a single test case?
-- [ ] Do the unit tests NOT use loops?
-- [ ] Do the unit tests NOT use conditional branches?
-- [ ] Do test methods have too many asserts?
-- [ ] Are the set of unit tests sufficient and testing happy path, edge, and negative cases?
-- [ ] Are there unit tests for expected exceptions that the production code might throw?
-- [ ] Does the PR NOT include updates to the developer’s environment (e.g., version of Flutter)?
+- [ ] Unit test each path?
+- [ ] Single test case per unit test?
+- [ ] Expected exceptions tested?
+- [ ] No dev environment updates?
 
-
-  For a more comprehensive checklist, please visit the [Luna mHealth Code Checklist](https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing)
+### Correctness
+  - [ ] Inputs validated?
+  - [ ] Handles incorrect inputs?
+  - [ ] Correct error responses?
+  - [ ] Logical endpoints/verbs?
+  - [ ] Handled edge cases?
