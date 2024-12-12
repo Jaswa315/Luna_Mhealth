@@ -14,10 +14,8 @@ import 'package:luna_core/utils/emu.dart';
 part 'pptx_tree.g.dart';
 
 abstract class PptxTree implements Built<PptxTree, PptxTreeBuilder> {
-  @nullable
-  EMU get width;
-  @nullable
-  EMU get height;
+  EMU? get width;
+  EMU? get height;
 
   PptxTree._();
 
