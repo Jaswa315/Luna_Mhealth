@@ -19,9 +19,9 @@ class EMU {
   int value;
 
   EMU(this.value) {
-    if (value < 0) {
+    if (value <= 0) {
       LogManager().logTrace(
-        'value must be a non-negative integer, but got $value',
+        'value must be a positive integer, but got $value',
         LunaSeverityLevel.Warning,
       );
     }
