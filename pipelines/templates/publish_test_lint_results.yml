@@ -45,6 +45,12 @@ steps:
         return $coveredLined/$totalLines
       }
       #Get Current coverage
+      if (-Not (Test-Path ./${{ parameters.cur_cov_folder }})){
+        $errMsg = "Coverage file not found. This can occur if there are previous issues in the pipeline, ensure all linting and testing issues are resolved" 
+        Write-Host "##vso[task.logissue type=warning]$errMsg"
+        Write-Host "##vso[task.complete result=SucceededWithIssues]"
+        exit 0
+      }
       $curCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Path ./${{ parameters.cur_cov_folder }} -Filter "coverage-*.xml" | ForEach-Object { $_.FullName })
       #Get Main Coverage
       $mainCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Filter "coverage-*.xml" -Recurse -Path ./${{ parameters.main_cov_folder }} | ForEach-Object { $_.FullName })
