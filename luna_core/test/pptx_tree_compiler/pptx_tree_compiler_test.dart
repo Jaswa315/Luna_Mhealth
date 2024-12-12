@@ -6,9 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/services.dart' show SystemNavigator, rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
