@@ -13,17 +13,12 @@
 /// https://c-rex.net/samples/ooxml/e1/Part4/OOXML_P4_DOCX_sldSz_topic_ID0EULOGB.html
 /// https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-odraw/40cd0cf9-f038-4603-b790-252d93e3e8fd
 
-import 'package:luna_core/utils/logging.dart';
-
 class EMU {
   int value;
 
   EMU(this.value) {
     if (value <= 0) {
-      LogManager().logTrace(
-        'value must be a positive integer, but got $value',
-        LunaSeverityLevel.Warning,
-      );
+      throw ArgumentError('Value cannot be negative: $value');
     }
   }
 }
