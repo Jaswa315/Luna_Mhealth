@@ -51,21 +51,21 @@ class _$PptxTree extends PptxTree {
 class PptxTreeBuilder implements Builder<PptxTree, PptxTreeBuilder> {
   _$PptxTree? _$v;
 
-  EMU? _width;
-  EMU? get width => _$this._width;
-  set width(EMU? width) => _$this._width = width;
+  EMUBuilder? _width;
+  EMUBuilder get width => _$this._width ??= new EMUBuilder();
+  set width(EMUBuilder? width) => _$this._width = width;
 
-  EMU? _height;
-  EMU? get height => _$this._height;
-  set height(EMU? height) => _$this._height = height;
+  EMUBuilder? _height;
+  EMUBuilder get height => _$this._height ??= new EMUBuilder();
+  set height(EMUBuilder? height) => _$this._height = height;
 
   PptxTreeBuilder();
 
   PptxTreeBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _width = $v.width;
-      _height = $v.height;
+      _width = $v.width?.toBuilder();
+      _height = $v.height?.toBuilder();
       _$v = null;
     }
     return this;
@@ -86,7 +86,23 @@ class PptxTreeBuilder implements Builder<PptxTree, PptxTreeBuilder> {
   PptxTree build() => _build();
 
   _$PptxTree _build() {
-    final _$result = _$v ?? new _$PptxTree._(width: width, height: height);
+    _$PptxTree _$result;
+    try {
+      _$result = _$v ??
+          new _$PptxTree._(width: _width?.build(), height: _height?.build());
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'width';
+        _width?.build();
+        _$failedField = 'height';
+        _height?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'PptxTree', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

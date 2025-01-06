@@ -6,8 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-library pptx;
-
 import 'package:built_value/built_value.dart';
 import 'package:luna_core/utils/emu.dart';
 
