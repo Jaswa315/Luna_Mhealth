@@ -21,6 +21,8 @@ void main() {
 
       bool isValid = DataTreeValidator.isComponentInBounds(
           moduleWidth, moduleHeight, componentRightX, componentBottomY);
+
+      expect(isValid, false);
     });
   });
 }
