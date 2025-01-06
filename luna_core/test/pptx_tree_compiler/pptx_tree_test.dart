@@ -38,5 +38,25 @@ void main() {
       expect(pptxTree.width, null);
       expect(pptxTree.height, null);
     });
+
+    test('width can be updated with EMU value', () async {
+      PptxTree pptxTree = PptxTree();
+      int width = 1;
+
+      pptxTree = pptxTree
+          .rebuild((b) => b..width = EMU((b) => b..value = width).toBuilder());
+
+      expect(pptxTree.width?.value, width);
+    });
+
+    test('height can be updated with EMU value', () async {
+      PptxTree pptxTree = PptxTree();
+      int height = 1;
+
+      pptxTree = pptxTree.rebuild(
+          (b) => b..height = EMU((b) => b..value = height).toBuilder());
+
+      expect(pptxTree.height?.value, height);
+    });
   });
 }
