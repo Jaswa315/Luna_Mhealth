@@ -6,8 +6,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+/// Validator class with helper functions to for Luna data tree values.
 class DataTreeValidator {
-  static bool isComponentInBounds(double moduleMaxWidth, double moduleMaxHeight, double componentBottomRightX, double componentBottomRightY) {
-    return componentBottomRightX <= moduleMaxWidth && componentBottomRightY <= moduleMaxHeight;
+  /// Checks if a component is within the specified module boundaries.
+  ///
+  /// Returns `true` if both component's bottom-right coordinates (`componentBottomRightX`, `componentBottomRightY`)
+  /// are within the `moduleMaxWidth` and `moduleMaxHeight`.
+  static bool isComponentInBounds(double moduleMaxWidth, double moduleMaxHeight,
+      double componentBottomRightX, double componentBottomRightY) {
+    return componentBottomRightX <= moduleMaxWidth &&
+        componentBottomRightY <= moduleMaxHeight;
   }
 }
