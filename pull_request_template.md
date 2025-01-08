@@ -10,7 +10,7 @@
 # Checklist
 
 ## Before submitting this PR, please make sure all boxes are checked
-The full checklist is available at[Luna mHealth Code Checklist](https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing)
+The full checklist is available at [Luna mHealth Code Checklist](https://docs.google.com/document/d/1uwLg5870LtvyxgchD7Cz7HWUYzQWyyVghyBRTG7YKMA/edit?usp=sharing)
 
 ### Pull Request
 - [ ] Right-sized PR?
@@ -24,6 +24,7 @@ The full checklist is available at[Luna mHealth Code Checklist](https://docs.goo
 - [ ] Simplest data structure?
 - [ ] Focused PR?
 - [ ] Comments explain “why” or complex “how”?
+- [ ] Class documentation added?
 - [ ] Method comments define contract?
 - [ ] No sensitive info?
 
