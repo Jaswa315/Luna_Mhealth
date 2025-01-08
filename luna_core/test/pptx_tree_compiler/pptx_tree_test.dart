@@ -32,13 +32,6 @@ void main() {
       expect(pptxTree.height, null);
     });
 
-    test('PptxTree is initialized with null values', () async {
-      PptxTree pptxTree = PptxTree();
-
-      expect(pptxTree.width, null);
-      expect(pptxTree.height, null);
-    });
-
     test('width can be updated with EMU value', () async {
       PptxTree pptxTree = PptxTree();
       int width = 1;
