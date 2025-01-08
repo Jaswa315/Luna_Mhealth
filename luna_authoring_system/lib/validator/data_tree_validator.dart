@@ -11,10 +11,10 @@ class DataTreeValidator {
   /// Checks if a component is within the specified module boundaries.
   ///
   /// Returns `true` if both component's bottom-right coordinates (`componentBottomRightX`, `componentBottomRightY`)
-  /// are within the `moduleMaxWidth` and `moduleMaxHeight`.
-  static bool isComponentInBounds(double moduleMaxWidth, double moduleMaxHeight,
+  /// are within the `modulePageWidth` and `modulePageHeight`.
+  static bool isComponentInBounds(double modulePageWidth, double modulePageHeight,
       double componentBottomRightX, double componentBottomRightY) {
-    return componentBottomRightX <= moduleMaxWidth &&
-        componentBottomRightY <= moduleMaxHeight;
+    return componentBottomRightX <= modulePageWidth &&
+        componentBottomRightY <= modulePageHeight;
   }
 }

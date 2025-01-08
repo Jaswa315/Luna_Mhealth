@@ -14,13 +14,13 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Data Tree Validator Test', () {
     test('Given module and component bottom right coordinates, validate out of bounds component as false', () {
-      double moduleWidth = 500.0;
-      double moduleHeight = 500.0;
+      double modulePageWidth = 500.0;
+      double modulePageHeight = 500.0;
       double componentRightX = 480.0 + 100.0;
       double componentBottomY = 480.0 + 100.0;
 
       bool isValid = DataTreeValidator.isComponentInBounds(
-          moduleWidth, moduleHeight, componentRightX, componentBottomY);
+          modulePageWidth, modulePageHeight, componentRightX, componentBottomY);
 
       expect(isValid, false);
     });
