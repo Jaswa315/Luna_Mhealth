@@ -1,18 +1,13 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-library pptx;
-
 import 'package:built_value/built_value.dart';
 import 'package:luna_core/utils/emu.dart';
 
 part 'pptx_tree.g.dart';
 
+/// The PptxTree represents the PowerPoint data as a tree.
+/// It stores every data we need to build a luna module,
+/// containing pptx meta data, slide master, slide layout, slide, and section data.
+/// For more information, check the domain diagram at this url.
+/// https://app.diagrams.net/#G1oO_dalj6fEq2QAfdHzyQPQiMiSi9CpXE#%7B%22pageId%22%3A%22JfLex2GAHqd8IyoLERXG%22%7D
 abstract class PptxTree implements Built<PptxTree, PptxTreeBuilder> {
   EMU? get width;
   EMU? get height;
