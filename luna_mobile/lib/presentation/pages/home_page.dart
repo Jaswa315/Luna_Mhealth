@@ -15,6 +15,8 @@ import 'package:luna_mobile/core/services/page_persistence_service.dart';
 import 'package:luna_mobile/presentation/pages/module_page.dart';
 import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:luna_mobile/presentation/pages/need_help_page.dart';
+import 'package:luna_mobile/presentation/pages/settings_page.dart';
 
 /// The home page of the application.
 class HomePage extends StatefulWidget {
@@ -68,6 +70,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed, // Ensures equal spacing
+        selectedItemColor: Colors.black, // Selected item color
+        unselectedItemColor: Colors.black, //Unselected item color
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -81,6 +86,10 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(CupertinoIcons.add_circled),
             label: 'Add Module',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.question_circle),
+            label: 'Need Help', // New Button
+          ),
         ],
         onTap: (index) {
           _onBottomNavigationItemTapped(context, index);
@@ -91,10 +100,27 @@ class _HomePageState extends State<HomePage> {
 }
 
 void _onBottomNavigationItemTapped(BuildContext context, int index) {
-  if (index == 2) {
-    // Handle Add Module action
-    Provider.of<ModuleUIPicker>(context, listen: false)
-        .selectAndStoreModuleFile();
+  switch (index) {
+    case 1:
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SettingsPage(),
+        ),
+      );
+      break;
+    case 2:
+      Provider.of<ModuleUIPicker>(context, listen: false)
+          .selectAndStoreModuleFile();
+      break;
+    case 3:
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NeedHelpPage(),
+        ),
+      );
+      break;
   }
 }
 
