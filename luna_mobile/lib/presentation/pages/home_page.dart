@@ -43,13 +43,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppConstants.appName),
-        actions: [
-          IconButton(
-            onPressed: () => Provider.of<ModuleUIPicker>(context, listen: false)
-                .selectAndStoreModuleFile(),
-            icon: const Icon(CupertinoIcons.add_circled),
-          ),
-        ],
       ),
       body: Center(
         child: Consumer<ModuleUIPicker>(
@@ -65,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return Text('Error: \${snapshot.error}');
                       } else {
                         return const Text('No modules available');
                       }
@@ -84,12 +77,24 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.add_circled),
+            label: 'Add Module',
+          ),
         ],
         onTap: (index) {
-          // No functionality yet
+          _onBottomNavigationItemTapped(context, index);
         },
       ),
     );
+  }
+}
+
+void _onBottomNavigationItemTapped(BuildContext context, int index) {
+  if (index == 2) {
+    // Handle Add Module action
+    Provider.of<ModuleUIPicker>(context, listen: false)
+        .selectAndStoreModuleFile();
   }
 }
 
