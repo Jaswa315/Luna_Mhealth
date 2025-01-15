@@ -13,10 +13,10 @@ import 'package:luna_mobile/core/constants/constants.dart';
 import 'package:luna_mobile/core/services/page_builder_service.dart';
 import 'package:luna_mobile/core/services/page_persistence_service.dart';
 import 'package:luna_mobile/presentation/pages/module_page.dart';
-import 'package:luna_mobile/providers/module_ui_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:luna_mobile/presentation/pages/need_help_page.dart';
 import 'package:luna_mobile/presentation/pages/settings_page.dart';
+import 'package:luna_mobile/providers/module_ui_picker.dart';
+import 'package:provider/provider.dart';
 
 /// The home page of the application.
 class HomePage extends StatefulWidget {
