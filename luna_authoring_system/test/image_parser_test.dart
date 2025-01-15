@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:pptx_parser/parser/presentation_parser.dart';
 import 'package:pptx_parser/parser/presentation_tree.dart';
 import 'package:pptx_parser/parser/image_extractor.dart';
@@ -39,8 +40,8 @@ void main() {
       await ie.extractImages(outputDirName);
       expect(File('$outputDirName/images/image1.png').existsSync(), true);
     });
-    test('An image is extracted when given Windows style paths', () async {
-      var outputDirWindows = "test\\test_output";
+    test('An image is extracted when given OS agnostic style paths', () async {
+      var outputDirWindows = path.join('test', 'test_output');
       PresentationParser newParser = parser_example(pptxName);
       ImageExtractor ie = ImageExtractor(newParser);
       await ie.extractImages(outputDirWindows);
