@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:luna_core/luna_data_model_compiler/pptx_tree_compiler/pptx_tree.dart';
+import 'package:luna_authoring_system/luna_data_model_compiler/pptx_tree_compiler/pptx_tree.dart';
 import 'package:luna_core/utils/emu.dart';
 
 void main() {
