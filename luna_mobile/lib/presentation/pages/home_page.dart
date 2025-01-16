@@ -101,7 +101,14 @@ class _HomePageState extends State<HomePage> {
 
 void _onBottomNavigationItemTapped(BuildContext context, int index) {
   switch (index) {
-    case 1:
+    case 0: // Home
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (route) => false, // Clear the stack to avoid duplicate pages
+      );
+      break;
+    case 1: // Settings
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -109,15 +116,31 @@ void _onBottomNavigationItemTapped(BuildContext context, int index) {
         ),
       );
       break;
-    case 2:
+    case 2: // Add Module
       Provider.of<ModuleUIPicker>(context, listen: false)
           .selectAndStoreModuleFile();
       break;
-    case 3:
+    case 3: // Need Help
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => NeedHelpPage(),
+        ),
+      );
+      break;
+    default:
+      // Handle unexpected index
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Invalid menu selection'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
         ),
       );
       break;
