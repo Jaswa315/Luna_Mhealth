@@ -66,7 +66,7 @@ class LinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print(
+    debugPrint(
         "LinePainter: Start=($startX, $startY), End=($endX, $endY), Thickness=$thickness");
 
     final paint = Paint()
