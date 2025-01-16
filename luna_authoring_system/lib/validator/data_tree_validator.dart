@@ -15,9 +15,12 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree.dart';
 class DataTreeValidator { 
   DataTreeValidator();
 
+  /// Checks if entire PptxTree is valid.
+  /// 
+  /// Returns `true` if the given PptxTree passes all validation checks.
   bool isDataTreeValid(PptxTree pptxTree) {
     if(pptxTree.width == null || pptxTree.height == null) return false;
-    
+
     return true;
   }
 
