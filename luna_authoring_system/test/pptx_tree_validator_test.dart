@@ -13,19 +13,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_authoring_system/validator/data_tree_validator.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
   group('Data Tree Validator Test', () {
-    late DataTreeValidator dataTreeValidator;
-
-    setUp(() {
-      dataTreeValidator = DataTreeValidator();
-    });
-
     test(
         'Given module and component bottom right coordinates, validate out of bounds component as false',
         () {
+      DataTreeValidator dataTreeValidator = DataTreeValidator(PptxTree());
       double modulePageWidth = 500.0;
       double modulePageHeight = 500.0;
       double componentRightX = 480.0 + 100.0;
@@ -38,16 +34,18 @@ void main() {
     });
 
     test('A data tree with 0 width and 0 height assigned is invalid', () {
-      bool isValid = dataTreeValidator
-          .isDataTreeModuleDimensionsValid(0, 0);
+      DataTreeValidator dataTreeValidator = DataTreeValidator(PptxTree());
+      bool isValid = dataTreeValidator.isDataTreeModuleDimensionsValid(0, 0);
       expect(isValid, false);
     });
 
-    test('Empty data tree is invalid', () {
-      PptxTree pptxTree = PptxTree();
-      bool isValid = dataTreeValidator
-          .isDataTreeValid(pptxTree);
-      expect(isValid, false);
+    test('Empty validation hook with no implementation returns false and throws an error', () {
+      DataTreeValidator dataTreeValidator = DataTreeValidator(PptxTree());
+
+      expect(
+          () => dataTreeValidator.validate(),
+          throwsA(isA<Exception>().having((e) => e.toString(), 'message',
+              contains("Validator is not implemented"))));
     });
   });
 }

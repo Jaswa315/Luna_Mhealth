@@ -13,15 +13,17 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree.dart';
 /// converted into a Luna module, with the intent to check for
 /// corner cases on data variables within the data tree.
 class DataTreeValidator { 
-  DataTreeValidator();
+  late PptxTree dataTree;
+
+  DataTreeValidator(PptxTree pptxTree) {
+    dataTree = pptxTree;
+  }
 
   /// Checks if entire PptxTree is valid.
   /// 
-  /// Returns `true` if the given PptxTree passes all validation checks.
-  bool isDataTreeValid(PptxTree pptxTree) {
-    if(pptxTree.width == null || pptxTree.height == null) return false;
-
-    return true;
+  /// Throws error with reason if the given PptxTree does not a validation check.
+  bool validate() {
+    throw Exception("Validator is not implemented");
   }
 
   /// Checks if module width and height are valid values. 
