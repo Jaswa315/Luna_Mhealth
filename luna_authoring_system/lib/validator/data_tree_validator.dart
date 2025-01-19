@@ -6,12 +6,25 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree.dart';
+
 /// The Data Tree Validator class' purpose is to 
 /// check if all the values in a pptx data tree are valid to be
 /// converted into a Luna module, with the intent to check for
 /// corner cases on data variables within the data tree.
 class DataTreeValidator { 
-  DataTreeValidator();
+  late PptxTree dataTree;
+
+  DataTreeValidator(PptxTree pptxTree) {
+    dataTree = pptxTree;
+  }
+
+  /// Checks if entire PptxTree is valid.
+  /// 
+  /// Throws error with reason if the given PptxTree does not a validation check.
+  bool validate() {
+    throw Exception("Validator is not implemented");
+  }
 
   /// Checks if module width and height are valid values. 
   /// 
