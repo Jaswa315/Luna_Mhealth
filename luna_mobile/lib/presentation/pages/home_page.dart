@@ -44,15 +44,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppConstants.appName),
+        title: const Text(
+          AppConstants.appName,
+          style: TextStyle(
+            fontFamily: 'Bookerly', // Custom Kindle-style font
+            fontSize: 26, // Larger font size for Luna title
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.white,
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: Consumer<ModuleUIPicker>(
           builder: (context, moduleProvider, child) {
             return moduleProvider.areModulesLoaded
-                ? ListView.builder(
+                ? ListView.separated(
                     itemCount: moduleProvider.moduleList.length,
-                    itemBuilder: _buildModuleListItem,
+                    itemBuilder: (context, index) =>
+                        _buildModuleListItem(context, index),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 10, // Add spacing between items
+                    ),
                   )
                 : FutureBuilder(
                     future: moduleProvider.loadAvailableModules(),
@@ -60,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Text('Error: \${snapshot.error}');
+                        return Text('Error: ${snapshot.error}');
                       } else {
                         return const Text('No modules available');
                       }
@@ -70,9 +84,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Ensures equal spacing
-        selectedItemColor: Colors.black, // Selected item color
-        unselectedItemColor: Colors.black, //Unselected item color
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white, // White navigation bar background
+        selectedItemColor:
+            const Color(0xFF0078D4), // Kindle Blue for the selected icon
+        unselectedItemColor: const Color(0xFF808080), //Unselected item color
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -148,11 +164,23 @@ void _onBottomNavigationItemTapped(BuildContext context, int index) {
 }
 
 Widget _buildModuleListItem(BuildContext context, int index) {
-  final module =
-      Provider.of<ModuleUIPicker>(context, listen: false).moduleList[index];
-  return ListTile(
-    title: Text(module.title),
-    onTap: () => _navigateToModulePage(context, module),
+  final moduleProvider = Provider.of<ModuleUIPicker>(context, listen: false);
+  final module = moduleProvider.moduleList[index];
+
+  // Assign a default title if the module title is empty or null
+  final moduleTitle =
+      (module.title.trim() == '') ? 'module_${index + 1}' : module.title;
+
+  return Container(
+    color: Colors.white, // Set white background for each module
+    child: ListTile(
+      title: Text(
+        moduleTitle,
+        style: const TextStyle(fontSize: 16),
+      ),
+      trailing: const Icon(Icons.arrow_forward_ios), // Add > icon
+      onTap: () => _navigateToModulePage(context, module),
+    ),
   );
 }
 
