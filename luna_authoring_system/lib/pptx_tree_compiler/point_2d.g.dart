@@ -8,9 +8,9 @@ part of 'point_2d.dart';
 
 class _$Point2D extends Point2D {
   @override
-  final double x;
+  final EMU x;
   @override
-  final double y;
+  final EMU y;
 
   factory _$Point2D([void Function(Point2DBuilder)? updates]) =>
       (new Point2DBuilder()..update(updates))._build();
@@ -54,21 +54,21 @@ class _$Point2D extends Point2D {
 class Point2DBuilder implements Builder<Point2D, Point2DBuilder> {
   _$Point2D? _$v;
 
-  double? _x;
-  double? get x => _$this._x;
-  set x(double? x) => _$this._x = x;
+  EMUBuilder? _x;
+  EMUBuilder get x => _$this._x ??= new EMUBuilder();
+  set x(EMUBuilder? x) => _$this._x = x;
 
-  double? _y;
-  double? get y => _$this._y;
-  set y(double? y) => _$this._y = y;
+  EMUBuilder? _y;
+  EMUBuilder get y => _$this._y ??= new EMUBuilder();
+  set y(EMUBuilder? y) => _$this._y = y;
 
   Point2DBuilder();
 
   Point2DBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _x = $v.x;
-      _y = $v.y;
+      _x = $v.x.toBuilder();
+      _y = $v.y.toBuilder();
       _$v = null;
     }
     return this;
@@ -89,10 +89,22 @@ class Point2DBuilder implements Builder<Point2D, Point2DBuilder> {
   Point2D build() => _build();
 
   _$Point2D _build() {
-    final _$result = _$v ??
-        new _$Point2D._(
-            x: BuiltValueNullFieldError.checkNotNull(x, r'Point2D', 'x'),
-            y: BuiltValueNullFieldError.checkNotNull(y, r'Point2D', 'y'));
+    _$Point2D _$result;
+    try {
+      _$result = _$v ?? new _$Point2D._(x: x.build(), y: y.build());
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'x';
+        x.build();
+        _$failedField = 'y';
+        y.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'Point2D', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
