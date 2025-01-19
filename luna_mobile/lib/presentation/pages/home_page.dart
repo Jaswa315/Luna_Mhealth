@@ -168,9 +168,8 @@ Widget _buildModuleListItem(BuildContext context, int index) {
   final module = moduleProvider.moduleList[index];
 
   // Assign a default title if the module title is empty or null
-  final moduleTitle = (module.title == null || module.title!.trim().isEmpty)
-      ? 'module_${index + 1}'
-      : module.title!;
+  final moduleTitle =
+      (module.title.trim() == '') ? 'module_${index + 1}' : module.title;
 
   return Container(
     color: Colors.white, // Set white background for each module
