@@ -3,6 +3,9 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_loader.dart';
 import 'package:luna_core/utils/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
+/// The PptxParser takes a .pptx file and is capable of making a
+/// PptxTree object that represents given PowerPoint file.
+/// It will only parse the required info to form a luna module.
 class PptxParser {
   late PptxLoader _pptxLoader;
 

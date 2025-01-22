@@ -5,7 +5,7 @@ import 'package:luna_core/utils/emu.dart';
 
 void main() {
   group('Tests for PptxParser', () {
-    test('parsePptx initialze PptxTree', () async {
+    test('parsePptx method initialzes PptxTree object.', () async {
       PptxParser pptxParser = PptxParser('test/test_assets/A line.pptx');
       PptxTree pptxTree = PptxTree();
 
