@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/renderers/divider_component_renderer.dart';
+import 'package:luna_core/renderers/line_painter.dart';
 
 void main() {
   testWidgets('DividerComponentRenderer creates a proper line',
@@ -12,7 +13,7 @@ void main() {
       y: 0.15, // 15% from the top
       width: 0.8, // 80% of the screen width
       height: 0.0, // Flat horizontal line
-      thickness: 1.2, // 1.2 pixels thick
+      thickness: 2.0, // 2.0 pixels thick
       color: Colors.blue, // Blue line
     );
 

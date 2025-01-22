@@ -8,24 +8,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/renderers/line_painter.dart';
 import 'base_component_renderer.dart';
 
-/// A renderer class for the DividerComponent.
+/// A renderer class for the `DividerComponent`.
+///
+/// This class is responsible for rendering a divider component on the screen
+/// based on the specified properties such as position, size, thickness, and color.
+/// It uses the `LinePainter` to draw the divider on a canvas.
 class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
+  /// Renders the given `DividerComponent` as a widget.
+  ///
+  /// [component] is expected to be of type `DividerComponent`, which contains
+  /// properties such as `x`, `y`, `width`, `height`, `thickness`, and `color`.
+  /// [screenSize] provides the dimensions of the screen or parent container
+  /// within which the component will be rendered.
+  ///
+  /// Throws an [ArgumentError] if the component is not of type `DividerComponent`.
   @override
   Widget renderComponent(dynamic component, Size screenSize) {
     if (component is DividerComponent) {
       return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          // Dynamically calculate start and end positions based on current constraints
+          // Dynamically calculate the start and end positions based on the current constraints
           final double startX = component.x * constraints.maxWidth;
           final double startY = component.y * constraints.maxHeight;
           final double endX = (component.width) * constraints.maxWidth;
           final double endY = (component.height) * constraints.maxHeight;
 
-          final double thicknessInPixels =
-              component.thickness; // Convert EMU to points
+          // Retrieve the thickness of the divider in pixels
+          final double thicknessInPixels = component.thickness;
 
+          // Return a CustomPaint widget that uses the LinePainter to render the divider
           return CustomPaint(
             painter: LinePainter(
               startX: startX,
@@ -40,49 +54,10 @@ class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
         },
       );
     } else {
+      // Throw an error if the provided component is not a DividerComponent
       throw ArgumentError(
-          'Invalid component type for DividerComponentRenderer');
+        'Invalid component type for DividerComponentRenderer',
+      );
     }
-  }
-}
-
-/// A custom painter for drawing the line.
-class LinePainter extends CustomPainter {
-  final double startX;
-  final double startY;
-  final double endX;
-  final double endY;
-  final double thickness;
-  final Color color;
-
-  LinePainter({
-    required this.startX,
-    required this.startY,
-    required this.endX,
-    required this.endY,
-    required this.thickness,
-    required this.color,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    debugPrint(
-        "LinePainter: Start=($startX, $startY), End=($endX, $endY), Thickness=$thickness");
-
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = thickness
-      ..style = PaintingStyle.stroke;
-
-    canvas.drawLine(
-      Offset(startX, startY),
-      Offset(endX, endY),
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true; // Always repaint for dynamic rendering
   }
 }
