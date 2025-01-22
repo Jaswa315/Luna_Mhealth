@@ -8,13 +8,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:luna_core/models/module.dart';
 import 'package:luna_mobile/core/constants/constants.dart';
-import 'package:luna_mobile/core/services/page_builder_service.dart';
-import 'package:luna_mobile/core/services/page_persistence_service.dart';
-import 'package:luna_mobile/presentation/pages/module_page.dart';
 import 'package:luna_mobile/presentation/pages/need_help_page.dart';
 import 'package:luna_mobile/presentation/pages/settings_page.dart';
+import 'package:luna_mobile/presentation/pages/start_learning_page.dart';
 import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -42,6 +39,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -54,33 +54,71 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         backgroundColor: Colors.white,
+        elevation: 1, // Subtle shadow under the AppBar
       ),
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Consumer<ModuleUIPicker>(
-          builder: (context, moduleProvider, child) {
-            return moduleProvider.areModulesLoaded
-                ? ListView.separated(
-                    itemCount: moduleProvider.moduleList.length,
-                    itemBuilder: (context, index) =>
-                        _buildModuleListItem(context, index),
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 10, // Add spacing between items
-                    ),
-                  )
-                : FutureBuilder(
-                    future: moduleProvider.loadAvailableModules(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        return const Text('No modules available');
-                      }
+      backgroundColor: Colors.grey[200],
+      body: Container(
+        color: Colors.grey[200], // Background color for the body
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20), // Space below the AppBar
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StartLearningPage(),
+                        ),
+                      );
                     },
-                  );
-          },
+                    child: Container(
+                      width: screenWidth * 0.8,
+                      height: screenHeight * 0.32,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 12.0,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16.0),
+                            child: Image.asset(
+                              'assets/images/start_learning.jpg',
+                              width: screenWidth * 0.8,
+                              height: screenHeight * 0.32 * 0.8,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Start Learning',
+                            style: TextStyle(
+                              fontFamily: 'Bookerly',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -161,40 +199,4 @@ void _onBottomNavigationItemTapped(BuildContext context, int index) {
       );
       break;
   }
-}
-
-Widget _buildModuleListItem(BuildContext context, int index) {
-  final moduleProvider = Provider.of<ModuleUIPicker>(context, listen: false);
-  final module = moduleProvider.moduleList[index];
-
-  // Assign a default title if the module title is empty or null
-  final moduleTitle =
-      (module.title.trim() == '') ? 'module_${index + 1}' : module.title;
-
-  return Container(
-    color: Colors.white, // Set white background for each module
-    child: ListTile(
-      title: Text(
-        moduleTitle,
-        style: const TextStyle(fontSize: 16),
-      ),
-      trailing: const Icon(Icons.arrow_forward_ios), // Add > icon
-      onTap: () => _navigateToModulePage(context, module),
-    ),
-  );
-}
-
-void _navigateToModulePage(BuildContext context, Module module) {
-  ModulePageBuilderService pageServices = ModulePageBuilderService();
-  PagePersistenceService persistenceService = PagePersistenceService();
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ModulePage(
-        module: module,
-        pageServices: pageServices,
-        persistenceService: persistenceService,
-      ),
-    ),
-  );
 }

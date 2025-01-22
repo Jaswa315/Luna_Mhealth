@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_mobile/presentation/pages/home_page.dart';
+import 'package:luna_mobile/presentation/pages/start_learning_page.dart';
 import 'package:luna_mobile/presentation/pages/need_help_page.dart';
 import 'package:luna_mobile/presentation/pages/settings_page.dart';
+import 'package:luna_mobile/presentation/pages/module_page.dart';
 import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +46,18 @@ void main() {
     // Ensure the BottomNavigationBar is rendered on the HomePage
     expect(find.byType(BottomNavigationBar), findsOneWidget);
   }
+
+  testWidgets('Verify Start Learning button functionality',
+      (WidgetTester tester) async {
+    await setupHomePage(tester);
+
+    // Simulate a tap on the "Start Learning" button
+    await tester.tap(find.text('Start Learning'));
+    await tester.pumpAndSettle(); // Wait for any animations or UI updates
+
+    // Confirm that the StartLearningPage is displayed
+    expect(find.byType(StartLearningPage), findsOneWidget);
+  });
 
   testWidgets('Verify Add New Module button functionality',
       (WidgetTester tester) async {
@@ -127,17 +141,84 @@ void main() {
     final mockModuleUIPicker = MockModuleUIPicker();
     mockModuleUIPicker.mockModules = mockModules;
     mockModuleUIPicker.areModulesLoaded = true;
+  });
 
-    // Load HomePage with mock provider
-    await setupHomePage(tester, mockModuleUIPicker);
+  testWidgets('Verify modules are displayed on Start Learning Page',
+      (WidgetTester tester) async {
+    final mockModules = [
+      Module(
+        title: 'Module 1',
+        author: 'Author 1',
+        slideCount: 10,
+        pages: [],
+        width: 1024,
+        height: 768,
+        name: 'Module 1 Name',
+      ),
+      Module(
+        title: 'Module 2',
+        author: 'Author 2',
+        slideCount: 5,
+        pages: [],
+        width: 1024,
+        height: 768,
+        name: 'Module 2 Name',
+      ),
+    ];
+
+    final mockModuleUIPicker = MockModuleUIPicker();
+    mockModuleUIPicker.mockModules = mockModules;
+    mockModuleUIPicker.areModulesLoaded = true;
+
+    // Load StartLearningPage with mock provider
+    await tester.pumpWidget(
+      ChangeNotifierProvider<ModuleUIPicker>.value(
+        value: mockModuleUIPicker,
+        child: MaterialApp(
+          home: StartLearningPage(),
+        ),
+      ),
+    );
 
     // Verify module titles in the UI
-    for (int i = 0; i < mockModules.length; i++) {
-      final expectedTitle = (mockModules[i].title.trim().isEmpty)
-          ? 'module_${i + 1}' // Default title format
-          : mockModules[i].title;
-
-      expect(find.text(expectedTitle), findsOneWidget);
+    for (final module in mockModules) {
+      expect(find.text(module.title), findsOneWidget);
     }
+  });
+
+  testWidgets('Verify navigation to ModulePage on module tap',
+      (WidgetTester tester) async {
+    final mockModules = [
+      Module(
+        title: 'Module 1',
+        author: 'Author 1',
+        slideCount: 10,
+        pages: [],
+        width: 1024,
+        height: 768,
+        name: 'Module 1 Name',
+      ),
+    ];
+
+    final mockModuleUIPicker = MockModuleUIPicker();
+    mockModuleUIPicker.mockModules = mockModules;
+    mockModuleUIPicker.areModulesLoaded = true;
+
+    // Load StartLearningPage with mock provider
+    await tester.pumpWidget(
+      ChangeNotifierProvider<ModuleUIPicker>.value(
+        value: mockModuleUIPicker,
+        child: MaterialApp(
+          home: StartLearningPage(),
+        ),
+      ),
+    );
+
+    // Tap on the first module
+    await tester.tap(find.text('Module 1'));
+    await tester.pumpAndSettle(); // Wait for any navigation animations
+
+    // Confirm that ModulePage is displayed
+    expect(find.byType(ModulePage), findsOneWidget);
   });
 }
