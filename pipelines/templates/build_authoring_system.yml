@@ -1,0 +1,30 @@
+# Template to build out the luna_authoring_system
+# parameters are such that macos or linux could be targeted
+# end result of this template is a .zip file containing build files in $(package_name) directory
+parameters:
+- name: build_os  # operating system for which to build
+  default: 'windows'
+- name: target_dir # directory where zip file will be placed
+  default: '.'
+- name: package_name # name of the zip file
+  default: 'WindowsBuild'
+- name: release_directory # directory where the build is initially created. Windows needs /x64/runner/release. Macos is /runner/Release. See  https://docs.flutter.dev/release/breaking-changes/windows-build-architecture
+  default: "/x64/runner/Release"
+
+steps:
+  - task: PowerShell@2
+    displayName: 'Build Flutter ${{ parameters.build_os }} App'
+    condition: succeededOrFailed()
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd "luna_authoring_system"
+        flutter clean
+        flutter pub get
+        flutter create --platforms=${{ parameters.build_os }} .
+        flutter build ${{ parameters.build_os }}
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: "$(Build.SourcesDirectory)/luna_authoring_system/build/${{ parameters.build_os }}/${{ parameters.release_directory }}"
+      archiveType: 'zip'
+      archiveFile: "${{ parameters.target_dir }}/${{ parameters.package_name }}.zip"
