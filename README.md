@@ -1,6 +1,4 @@
-# luna_mobile
-
-Welcome to our Luna mHealth repository.
+# Welcome to our Luna mHealth repository.
 For new onboarders, please check out and add to our [Onboarding Document](https://docs.google.com/document/d/1QCq0Zyi3qi2nkaMmSxh-R5hc02W5n2M66UqNIxYlZFc/edit?usp=sharing)
 
 # New Luna mHealth Team Members (Spring 2024 and beyond)
