@@ -78,6 +78,7 @@ flutter:
   assets:
     - assets/test_data/
     - assets/cfg/app_settings.json
+    - assets/images/start_learning.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
