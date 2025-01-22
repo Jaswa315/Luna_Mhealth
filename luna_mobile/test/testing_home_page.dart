@@ -11,6 +11,8 @@ import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
 
 // Mock ModuleUIPicker for testing
+/// A mock implementation of `ModuleUIPicker` for unit testing purposes.
+/// It simulates the behavior of the provider without requiring real data or async operations.
 class MockModuleUIPicker extends ModuleUIPicker {
   List<Module> mockModules = [];
   bool areModulesLoaded = false;
@@ -28,6 +30,7 @@ class MockModuleUIPicker extends ModuleUIPicker {
 
 void main() {
   // Create a reusable setup function to reduce redundancy
+  /// Initializes the `HomePage` with a `ChangeNotifierProvider` for testing.
   Future<void> setupHomePage(WidgetTester tester,
       [MockModuleUIPicker? mockModuleUIPicker]) async {
     // Use the provided mockModuleUIPicker or create a new one
@@ -101,7 +104,7 @@ void main() {
     // Mock modules with different title cases
     final mockModules = [
       Module(
-        title: 'Module 1',
+        title: 'Module 1', // Proper title
         author: 'Author 1',
         slideCount: 10,
         pages: [],
@@ -110,7 +113,7 @@ void main() {
         name: 'Module 1 Name',
       ),
       Module(
-        title: '',
+        title: '', // Empty title
         author: 'Author 2',
         slideCount: 5,
         pages: [],
@@ -119,7 +122,7 @@ void main() {
         name: 'Unnamed Module',
       ),
       Module(
-        title: '', // Empty title instead of null
+        title: '', // Another empty title
         author: 'Author 3',
         slideCount: 7,
         pages: [],
@@ -128,7 +131,7 @@ void main() {
         name: 'No Title Module',
       ),
       Module(
-        title: 'Module 4',
+        title: 'Module 4', // Another proper title
         author: 'Author 4',
         slideCount: 12,
         pages: [],
