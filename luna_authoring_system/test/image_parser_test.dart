@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
-import 'package:pptx_parser/parser/presentation_parser.dart';
-import 'package:pptx_parser/parser/presentation_tree.dart';
-import 'package:pptx_parser/parser/image_extractor.dart';
+import 'package:luna_authoring_system/parser/presentation_parser.dart';
+import 'package:luna_authoring_system/parser/presentation_tree.dart';
+import 'package:luna_authoring_system/parser/image_extractor.dart';
 import 'dart:io';
 
 const String assetsFolder = 'test/test_assets';
