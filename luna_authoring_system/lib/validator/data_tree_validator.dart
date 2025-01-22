@@ -7,7 +7,7 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/exception/validation_exception.dart';
+import 'package:luna_authoring_system/validator/exception/authoring_system_data_tree_validation_exception.dart';
 
 /// The Data Tree Validator class' purpose is to 
 /// check if all the values in a pptx data tree are valid to be
@@ -24,7 +24,7 @@ class DataTreeValidator {
   /// 
   /// Throws error with reason if the given PptxTree does not a validation check.
   bool validate() {
-    throw ValidationException("Validator is not implemented");
+    throw AuthoringSystemDataTreeValidationException("Validator is not implemented");
   }
 
   /// Checks if module width and height are valid values. 

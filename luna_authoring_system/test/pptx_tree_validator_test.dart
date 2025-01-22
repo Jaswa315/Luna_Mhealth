@@ -13,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_authoring_system/validator/data_tree_validator.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/exception/validation_exception.dart';
+import 'package:luna_authoring_system/validator/exception/authoring_system_data_tree_validation_exception.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +45,7 @@ void main() {
 
       expect(
           () => dataTreeValidator.validate(),
-          throwsA(isA<ValidationException>().having((e) => e.toString(), 'message',
+          throwsA(isA<AuthoringSystemDataTreeValidationException>().having((e) => e.toString(), 'message',
               contains("Validator is not implemented"))));
     });
   });
