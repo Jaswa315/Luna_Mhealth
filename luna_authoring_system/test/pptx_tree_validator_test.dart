@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_authoring_system/validator/data_tree_validator.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree.dart';
+import 'package:luna_authoring_system/validator/exception/validation_exception.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -39,12 +40,12 @@ void main() {
       expect(isValid, false);
     });
 
-    test('Empty validation hook with no implementation returns false and throws an error', () {
+    test('Empty validation hook with no implementation returns false and throws a validation error', () {
       DataTreeValidator dataTreeValidator = DataTreeValidator(PptxTree());
 
       expect(
           () => dataTreeValidator.validate(),
-          throwsA(isA<Exception>().having((e) => e.toString(), 'message',
+          throwsA(isA<ValidationException>().having((e) => e.toString(), 'message',
               contains("Validator is not implemented"))));
     });
   });
