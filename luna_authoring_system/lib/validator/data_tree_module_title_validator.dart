@@ -11,9 +11,6 @@ class DataTreeModuleTitleValidator implements IDataTreeValidator {
     final PptxTree _dataTree;
 
     /// Constructs a `DataTreeModuleTitleValidator` with a [PptxTree].
-    ///
-    /// The provided [dataTree] is the `PptxTree` instance that the validator will check.
-    /// It must not be null.
     DataTreeModuleTitleValidator(this._dataTree);
 
     /// Validates the title of the `_dataTree`.
