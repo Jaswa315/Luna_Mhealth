@@ -34,15 +34,22 @@ steps:
       function Get-TotalCoverage {
         param ($CoverageFiles)
         if ($CoverageFiles.length -eq 0) { return 0}
-        $totalLines = 0
-        $coveredLined = 0
+        [int]$totalLines = 0
+        [int]$coveredLined = 0
         foreach($file in $CoverageFiles){
           Write-Host $file
           [xml]$cov = Get-Content -Path $file
-          $coveredLined += $cov.coverage[1].'lines-covered'
-          $totalLines += $cov.coverage[1].'lines-valid'
+          $coveredLined += [int]$cov.coverage[1].'lines-covered'
+          $totalLines += [int]$cov.coverage[1].'lines-valid'
         }
-        return $coveredLined/$totalLines
+
+        #cast to int one last time due to powershell typing being wonky
+        $intTotal = [int]$totalLines
+
+        if ($intTotal -lt 3) { return 0 } 
+
+        return $coveredLined/$intTotal
+
       }
       #Get Current coverage
       if (-Not (Test-Path ./${{ parameters.cur_cov_folder }})){
