@@ -1,0 +1,22 @@
+#Template to provide a task to test if a file exists
+#if the file exists, the task succeeds, otherwise the task fails with an error. 
+parameters:
+- name: path 
+  default: $(Build.SourcesDirectory)
+- name: file_name
+  default: 'license.txt'
+
+steps:
+- task: PowerShell@2
+  displayName: 'Check if ${{ parameters.file_name  }} exists '
+  inputs:
+    targetType: 'inline'
+    script: |
+      #Get Main Coverage
+      $path = Join-Path -path ${{  parameters.path  }} -childpath ${{  parameters.file_name  }}
+      $fileExists = Test-Path -LiteralPath $path
+      if ($fileExists -eq $false) {
+        Write-Host "##vso[task.logissue type=error] $path not found"
+        Write-Host "##vso[task.complete result=Failed]"
+      }
+      exit 0

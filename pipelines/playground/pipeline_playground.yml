@@ -1,160 +1,28 @@
 # Lint and Testing pipeline for Luna mHealth
-# This pipeline does the following:
-#   1. Installs Flutter on the agent
-#   2. Gets Flutter packages for core
-#   3. Runs flutter analyze on the 3 modules
-#   4. Rune tests on luna_core
-#   5. Installs packages for luna_authoring_system
-#   6. Runs tests on luna authoring agent
-
+# YML that gets run when a PR is requested
 trigger: none
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
-  - name: lunacore
-    value: luna_core
-  - name: lunaauthoring
-    value: luna_authoring_system
-  - name: lunamobile
-    value: luna_mobile
-  - name: main_cov_folder
-    value: main_coverage
+  - name: package_folders
+    value: luna_core, luna_authoring_system, luna_mobile
 
 steps:
 
-- script: |
-    git clone https://github.com/flutter/flutter.git -b 3.22.3
-    echo "##vso[task.setvariable variable=PATH]${PATH}:`pwd`/flutter/bin"
-  displayName: 'Install Flutter SDK'
+- template: ../templates/install_prereqs.yml
 
-- script: |
-    cd $(lunacore)
-    flutter pub get
-    flutter pub global activate junitreport
-    flutter pub global activate cobertura
-    echo "##vso[task.setvariable variable=PATH]${PATH}:$HOME/.pub-cache/bin"
-  displayName: 'Get Flutter packages for core module'
+# - ${{ each folder in split(variables.package_folders, ',') }}:
+#   - template: templates/lint_luna.yml
+#     parameters:
+#       package_path: ${{ folder }}
+#       package_name: ${{ folder }}
+#   - template: templates/run_tests.yml
+#     parameters:
+#       package_path: ${{ folder }}
+#       package_name: ${{ folder }}
 
-- script: |
-    cd $(lunacore)
-    flutter analyze
-    if [[ $? -eq 1 ]]; then
-      echo "##vso[task.logissue type=error]Luna_core Linting issues found!"
-      echo '##vso[task.complete result=Failed]'
-      exit 0
-    fi
-  displayName: 'Lint luna_core code'
-  condition: succeededOrFailed()
+# - template: templates/publish_test_lint_results.yml
 
-- script: |
-    cd $(lunamobile)
-    flutter analyze
-    if [[ $? -eq 1 ]]; then
-      echo "##vso[task.logissue type=error]Luna_mobile Linting issues found!"
-      echo '##vso[task.complete result=Failed]'
-      exit 0
-    fi
-  displayName: 'Lint luna_mobile code'
-  condition: succeededOrFailed()
-
-- script: |
-    cd $(lunaauthoring)
-    flutter analyze
-    if [[ $? -eq 1 ]]; then
-      echo "##vso[task.logissue type=error]Luna_authoring Linting issues found!"
-      echo '##vso[task.complete result=Failed]'
-      exit 0
-    fi
-  displayName: 'Lint luna_authoring code'
-  condition: succeededOrFailed()
-
-#- script: |
-#    grep -r -n "[\/#] *[Tt][oO][Dd][oO]" $(lunacore) $(lunaauthoring) $(lunamobile)
-#    if [[ $? -eq 0 ]]; then
-#      echo "##vso[task.logissue type=error]TODOs found!"
-#      echo '##vso[task.complete result=Failed]'
-#      exit 0
-#    fi
-#  displayName: 'Search for TODOs'
-#  failOnStderr: true
-#  condition: succeededOrFailed()
-
-- script: |
-    cd $(lunacore)
-    flutter test --machine --coverage | tojunit --output ../test-core-results.xml
-    cobertura convert --output ../coverage-core.xml
-  displayName: 'Run luna_core tests'
-  condition: succeededOrFailed()
-
-- script: |
-    cd $(lunaauthoring)
-    flutter pub get
-  displayName: 'Get Flutter packages for the luna authoring system'
-  condition: succeededOrFailed()
-
-- script: |
-    cd $(lunaauthoring)
-    flutter test --machine --coverage | tojunit --output ../test-authoring-results.xml
-    cobertura convert --output ../coverage-authoring.xml
-  displayName: 'Run luna_authoring_system tests'
-  condition: succeededOrFailed()
-
-#Download most recent code coverage from main
-- task: DownloadPipelineArtifact@2
-  condition: succeededOrFailed()
-  displayName: 'Get most recent coverage from main'
-  inputs:
-    buildType: 'specific'
-    pipeline: '44'
-    project: 'mHealth Education App'
-    specificBuildWithTriggering: false
-    buildVersionToDownload: 'latest'
-    allowPartiallySucceededBuilds : true
-    #branchName: 'main'
-    itemPattern: '**/coverage-*.xml'
-    targetPath: './$(main_cov_folder)'
-
-- task: PublishCodeCoverageResults@2
-  displayName: 'Publish coverage results'
-  condition: succeededOrFailed()
-  inputs:
-    summaryFileLocation: '**/coverage-*.xml'
-
-#calculate coverage from last run in main versus coverage in this run
-- task: PowerShell@2
-  displayName: 'Calculate code coverage change'
-  condition: succeededOrFailed()
-  inputs:
-    targetType: 'inline'
-    script: |
-      function Get-TotalCoverage {
-        param ($CoverageFiles)
-        $totalLines = 0
-        $coveredLined = 0
-        foreach($file in $CoverageFiles){
-          [xml]$cov = Get-Content $file
-          $coveredLined += $cov.coverage[1].'lines-covered'
-          $totalLines += $cov.coverage[1].'lines-valid'
-        }
-        return $coveredLined/$totalLines
-      }
-      #Get Current coverage
-      $curCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Filter "coverage*.xml")
-      #Get Main Coverage
-      $mainCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Filter "coverage*.xml" -Recurse -Path ./$(main_cov_folder))
-      if ($curCov -lt $mainCov){
-        $errMsg = "Code Coverage decreased by {0}%" -f ([math]::Round((($mainCov - $curCov)*100),2))
-        Write-Host "##vso[task.logissue type=error]$errMsg"
-        Write-Host "##vso[task.complete result=SucceededWithIssues]"
-      }
-      exit 0
-
-- task: PublishTestResults@2
-  displayName: 'Publish test results'
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    testRunTitle: 'Publish Flutter Test Results'
-    failTaskOnFailedTests: true
+- template: ../templates/test_file_existence.yml
