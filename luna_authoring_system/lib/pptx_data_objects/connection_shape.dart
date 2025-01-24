@@ -1,0 +1,19 @@
+import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
+import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
+import 'package:luna_core/utils/emu.dart';
+
+/// The ConnectionShape represents the connectors in the PowerPoint.
+/// weight represents the thickness of the connector.
+/// The ShapeType is set to connection whenever a builder is created.
+class ConnectionShape implements Shape {
+  EMU weight;
+
+  @override
+  Transform transform;
+
+  ConnectionShape(this.weight, this.transform);
+
+  @override
+  ShapeType get type => ShapeType.connection;
+}
