@@ -22,11 +22,19 @@ class DividerComponent extends Component {
   /// The style of the divider.
   BorderStyle style;
 
+  /// A mapping of integer values to BorderStyle values.
+  /// This mapping is used to convert integer values from the JSON object to BorderStyle values.
+  static final Map<int, BorderStyle> styleMapping = {
+    1: BorderStyle.solid, // Solid line
+    2: BorderStyle.none, // No line (use none for now as dotted is unsupported)
+    3: BorderStyle.none, // Dashed line (Flutter doesn't support directly)
+  };
+
   /// Constructs a new instance of [DividerComponent] with the given parameters.
   DividerComponent({
-    this.color = const Color.fromARGB(255, 43, 116, 179),
-    this.thickness = 5.0,
-    this.style = BorderStyle.solid,
+    required this.color,
+    required this.thickness,
+    required this.style,
     required double x,
     required double y,
     required double width,
@@ -69,7 +77,14 @@ class DividerComponent extends Component {
       'height': bounds.height,
       'color': color.value,
       'thickness': thickness,
-      'style': style.index,
+
+      /// Convert BorderStyle to integer
+      'style': styleMapping.entries
+          .firstWhere(
+            (entry) => entry.value == style,
+            orElse: () => MapEntry(1, BorderStyle.solid),
+          )
+          .key, // Default to solid
     };
   }
 
@@ -84,6 +99,9 @@ class DividerComponent extends Component {
       y: json['y'].toDouble(),
       width: json['width'].toDouble(),
       height: json['height'].toDouble(),
+      color: Color(json['color']),
+      thickness: json['thickness'].toDouble(),
+      style: styleMapping[json['style']] ?? BorderStyle.solid,
     );
   }
 
