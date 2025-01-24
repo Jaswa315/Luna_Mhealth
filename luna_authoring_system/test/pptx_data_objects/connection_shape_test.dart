@@ -28,5 +28,21 @@ void main() {
       expect(cShape.transform?.size?.x.value, 2);
       expect(cShape.transform?.size?.y.value, 3);
     });
+
+    test(
+        'An error is thrown when weight and transform are not initialzed at CTOR.',
+        () {
+      expect(
+        () => Function.apply(ConnectionShape.new, []),
+        throwsA(isA<NoSuchMethodError>()),
+      );
+    });
+
+    test('An error is thrown when only one argument is given at CTOR.', () {
+      expect(
+        () => Function.apply(ConnectionShape.new, []),
+        throwsA(isA<NoSuchMethodError>()),
+      );
+    });
   });
 }
