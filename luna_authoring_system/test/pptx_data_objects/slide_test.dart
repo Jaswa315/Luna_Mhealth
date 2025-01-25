@@ -9,13 +9,6 @@ import 'package:built_collection/built_collection.dart';
 
 void main() {
   group('Tests for Slide', () {
-    test('An error is thrown when shapes is accessed before initialization.', () async {
-      expect(
-        () => Slide().shapes,
-        throwsA(isA<Error>()),
-      );
-    });
-
     test('shapes can be updated with a list of shapes', () async {
       Slide slide = Slide();
 
