@@ -1,3 +1,4 @@
+import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/utils/emu.dart';
 
 /// The PptxTree represents the PowerPoint data as a tree.
@@ -11,6 +12,8 @@ class PptxTree {
 
   late EMU width;
   late EMU height;
+
+  late List<Slide> slides;
 
   PptxTree();
 }
