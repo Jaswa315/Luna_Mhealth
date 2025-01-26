@@ -1,3 +1,4 @@
+import 'package:luna_authoring_system/parser/presentation_parser.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_element.dart';
@@ -12,7 +13,7 @@ import 'package:luna_core/utils/types.dart';
 /// The PptxParser takes a .pptx file and is capable of making a
 /// PptxTree object that represents given PowerPoint file.
 /// It will only parse the required info to form a luna module.
-class PptxParser {
+class PptxParser extends PptxElement {
   late PptxLoader _pptxLoader;
   PptxTree _pptxTree = PptxTree();
 
@@ -22,22 +23,22 @@ class PptxParser {
 
   void _updateTitleAndAuthor() {
     Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
-    _pptxTree.title = coreMap['cp:coreProperties']['dc:title'];
-    _pptxTree.author = coreMap['cp:coreProperties']['dc:creator'];
+    _pptxTree.title = coreMap[eCoreProperties][eTitle];
+    _pptxTree.author = coreMap[eCoreProperties][eAuthor];
   }
 
   void _updateWidthAndHeight() {
     Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
     _pptxTree.width =
-        EMU(int.parse(presentationMap['p:presentation']['p:sldSz']['_cx']));
+        EMU(int.parse(presentationMap[ePresentation][eSlideSize][eCX]));
     _pptxTree.height =
-        EMU(int.parse(presentationMap['p:presentation']['p:sldSz']['_cy']));
+        EMU(int.parse(presentationMap[ePresentation][eSlideSize][eCY]));
   }
 
   int _getSlideCount() {
     Json appMap = _pptxLoader.getJsonFromPptx("docProps/app.xml");
 
-    return int.parse(appMap['Properties']['Slides']);
+    return int.parse(appMap[eProperties][eSlides]);
   }
 
   List<Shape> _parseShapes(Json shapeTree) {
@@ -45,7 +46,7 @@ class PptxParser {
 
     shapeTree.forEach((key, value) {
       switch (key) {
-        case PptxElement.keyConnectionShape:
+        case keyConnectionShape:
           shapes.add(_parseConnectionShape(shapeTree[key]));
           break;
       }
@@ -56,13 +57,13 @@ class PptxParser {
 
   Transform _parseTransform(Json transformMap) {
     Point2D offset = Point2D(
-      EMU(int.parse(transformMap['a:off']['_x'])),
-      EMU(int.parse(transformMap['a:off']['_y'])),
+      EMU(int.parse(transformMap[eOffset][eX])),
+      EMU(int.parse(transformMap[eOffset][eY])),
     );
 
     Point2D size = Point2D(
-      EMU(int.parse(transformMap['a:ext']['_cx'])),
-      EMU(int.parse(transformMap['a:ext']['_cy'])),
+      EMU(int.parse(transformMap[eSize][eCX])),
+      EMU(int.parse(transformMap[eSize][eCY])),
     );
 
     return Transform(
@@ -72,10 +73,10 @@ class PptxParser {
   }
 
   ConnectionShape _parseConnectionShape(Json connectionShapeMap) {
-    int cWeight = connectionShapeMap['p:spPr']['a:ln']?['_w'] ??
+    int cWeight = connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ??
         ConnectionShape.defaultHalfLineWeight.value;
     Transform transform =
-        _parseTransform(connectionShapeMap['p:spPr']['a:xfrm']);
+        _parseTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
     return ConnectionShape(
       EMU(cWeight),
@@ -88,8 +89,8 @@ class PptxParser {
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
       slide.shapes = _parseShapes(
-        _pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")['p:sld']['p:cSld']
-            ['p:spTree'],
+        _pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")[eSlide]
+            [eCommonSlideData][eShapeTree],
       );
       slides.add(slide);
     }
