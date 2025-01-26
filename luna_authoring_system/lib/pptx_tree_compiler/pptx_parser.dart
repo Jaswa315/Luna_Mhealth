@@ -69,7 +69,6 @@ class PptxParser {
       offset,
       size,
     );
-    ;
   }
 
   ConnectionShape _parseConnectionShape(Json connectionShapeMap) {
