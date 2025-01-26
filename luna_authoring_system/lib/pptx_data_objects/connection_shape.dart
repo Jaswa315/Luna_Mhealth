@@ -7,6 +7,7 @@ import 'package:luna_core/utils/emu.dart';
 /// weight represents the thickness of the connector.
 class ConnectionShape implements Shape {
   EMU weight;
+  static EMU defaultHalfLineWeight = EMU(6350);
 
   @override
   Transform transform;
