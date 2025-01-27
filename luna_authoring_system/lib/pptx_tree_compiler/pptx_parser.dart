@@ -41,7 +41,7 @@ class PptxParser extends PptxElement {
     return int.parse(appMap[eProperties][eSlides]);
   }
 
-  List<Shape> _parseShapes(Json shapeTree) {
+  List<Shape> _parseShapeTree(Json shapeTree) {
     List<Shape> shapes = [];
 
     shapeTree.forEach((key, value) {
@@ -88,7 +88,7 @@ class PptxParser extends PptxElement {
     List<Slide> slides = [];
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
-      slide.shapes = _parseShapes(
+      slide.shapes = _parseShapeTree(
         _pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")[eSlide]
             [eCommonSlideData][eShapeTree],
       );
