@@ -1,0 +1,29 @@
+# Build pipeline for luna mobile
+# builds the mobile app and publishes it as an apk file to the pipeline
+
+trigger: none
+
+pool:
+  vmImage: 'macOS-latest'
+
+variables:
+- group: 'Version Numbers' #this is a variable group in the library
+- name: 'mobile_path'
+  value: 'luna_mobile'
+- name: 'build_path'
+  value: 'build/app/outputs/flutter-apk/app-release.apk'
+
+name: $(version_numbers_luna_mobile).$(Rev:r) #increment build counter everytime build is run
+
+steps:
+
+- template: ../templates/install_prereqs.yml
+
+- template: ../templates/build_mobile_app.yml
+
+# publish mobile as an artifact
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(mobile_path)/$(build_path)'
+    artifact: "Luna_Mobile_$(Build.BuildNumber)"
+    publishLocation: 'pipeline' 
