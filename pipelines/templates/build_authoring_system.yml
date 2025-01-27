@@ -10,6 +10,8 @@ parameters:
   default: 'WindowsBuild'
 - name: release_directory # directory where the build is initially created. Windows needs /x64/runner/release. Macos is /runner/Release. See  https://docs.flutter.dev/release/breaking-changes/windows-build-architecture
   default: "/x64/runner/Release"
+- name: build_name
+  default: 0
 
 steps:
   - task: PowerShell@2
@@ -22,7 +24,7 @@ steps:
         flutter clean
         flutter pub get
         flutter create --platforms=${{ parameters.build_os }} .
-        flutter build ${{ parameters.build_os }}
+        flutter build ${{ parameters.build_os }} --build-name ${{  parameters.build_name  }}
   - task: ArchiveFiles@2
     inputs:
       rootFolderOrFile: "$(Build.SourcesDirectory)/luna_authoring_system/build/${{ parameters.build_os }}/${{ parameters.release_directory }}"

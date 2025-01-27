@@ -2,8 +2,21 @@
 # YML that gets run when a PR is requested
 trigger: none
 
+strategy:
+  matrix:
+    mac:
+      imageName: 'macOS-latest'
+      buildOS: 'macos'
+      package_name: 'MacBuild_$(Build.BuildNumber)'
+      release_dir: '/Build/Products/Release'
+    windows:
+      imageName: 'windows-latest'
+      buildOS: 'windows'
+      package_name: 'WindowsBuild_$(Build.BuildNumber)'
+      release_dir: '/x64/runner/Release'
+
 pool:
-  vmImage: ubuntu-latest
+  vmImage: $(imageName)
 
 variables:
   - name: package_folders
