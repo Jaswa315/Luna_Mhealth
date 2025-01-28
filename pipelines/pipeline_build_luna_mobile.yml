@@ -17,9 +17,9 @@ name: $(version_numbers_luna_mobile).$(Rev:r) #increment build counter everytime
 
 steps:
 
-- template: ../templates/install_prereqs.yml
+- template: templates/install_prereqs.yml
 
-- template: ../templates/build_mobile_app.yml
+- template: templates/build_mobile_app.yml
 
 # publish mobile as an artifact
 - task: PublishPipelineArtifact@1
