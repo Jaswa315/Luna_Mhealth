@@ -29,8 +29,8 @@ name: $(version_numbers_luna_authoring).$(Rev:r) #increment build counter everyt
 
 steps:
 
-- template: ../templates/install_prereqs.yml
-- template: ../templates/build_authoring_system.yml
+- template: templates/install_prereqs.yml
+- template: templates/build_authoring_system.yml
   parameters:
     build_os: $(buildOS)
     package_name: $(package_name)
