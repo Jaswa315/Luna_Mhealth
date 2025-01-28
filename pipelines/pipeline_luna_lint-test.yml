@@ -23,4 +23,6 @@ steps:
       package_path: ${{ folder }}
       package_name: ${{ folder }}
 
+- template: templates/test_file_existence.yml
+
 - template: templates/publish_test_lint_results.yml
