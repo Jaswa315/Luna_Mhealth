@@ -8,11 +8,10 @@ parameters:
 
 steps:
 - task: PowerShell@2
-  displayName: 'Check if ${{ parameters.file_name  }} exists '
+  displayName: 'Check if ${{ parameters.file_name  }} exists'
   inputs:
     targetType: 'inline'
     script: |
-      #Get Main Coverage
       $path = Join-Path -path ${{  parameters.path  }} -childpath ${{  parameters.file_name  }}
       $fileExists = Test-Path -LiteralPath $path
       if ($fileExists -eq $false) {
