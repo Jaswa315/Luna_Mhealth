@@ -37,6 +37,6 @@ void main() {
     await tester.pumpAndSettle(); // Wait for any animations or UI updates
 
     // Confirm that the about box is displayed
-    expect(find.text("Version:"), findsOneWidget);
+    expect(find.byType(AboutDialog), findsOneWidget);
   });
 }

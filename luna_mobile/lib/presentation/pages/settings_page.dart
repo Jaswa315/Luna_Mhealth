@@ -47,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
             SizedBox(height: 20),
             _buildAboutLuna(
               version: "0.0.0",
-              icon: Icons.text_fields,
+              icon: Icons.help,
             ),
           ],
         ),
@@ -110,11 +110,10 @@ class _SettingsPageState extends State<SettingsPage> {
       child: ListTile(
         leading: Icon(icon, color: Theme.of(context).primaryColor),
         title: Text("About Luna"),
-        trailing: Icon(Icons.arrow_forward_ios),
         onTap: () => showAboutDialog(
           context: context,
-          applicationName: "My App",
-          applicationVersion: "1.0.0",
+          applicationName: "Luna",
+          applicationVersion: "Version: $version",
         ),
       ),
     );
