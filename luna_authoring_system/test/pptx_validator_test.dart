@@ -7,8 +7,8 @@ import 'package:luna_authoring_system/validator/exception/authoring_system_data_
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Pptx Tree Validator Tests', () {
-    test('Pptx Tree Module Title cannot be empty', () {
+  group('Pptx Validator Tests', () {
+    test('Pptx Title cannot be empty', () {
       PptxTree pptxTree =
           PptxTree();
       pptxTree.title = "";
