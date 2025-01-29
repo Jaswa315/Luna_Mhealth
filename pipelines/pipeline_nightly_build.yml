@@ -21,7 +21,7 @@ pool:
 
 variables:
   - name: package_folders
-    value: luna_core, luna_authoring_system, luna_mobile
+    value: luna_core,luna_authoring_system,luna_mobile
 
 steps:
 

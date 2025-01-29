@@ -2,40 +2,27 @@
 # YML that gets run when a PR is requested
 trigger: none
 
-strategy:
-  matrix:
-    mac:
-      imageName: 'macOS-latest'
-      buildOS: 'macos'
-      package_name: 'MacBuild_$(Build.BuildNumber)'
-      release_dir: '/Build/Products/Release'
-    windows:
-      imageName: 'windows-latest'
-      buildOS: 'windows'
-      package_name: 'WindowsBuild_$(Build.BuildNumber)'
-      release_dir: '/x64/runner/Release'
-
 pool:
-  vmImage: $(imageName)
+  vmImage: ubuntu-latest
 
 variables:
   - name: package_folders
-    value: luna_core, luna_authoring_system, luna_mobile
+    value: luna_core,luna_authoring_system,luna_mobile
 
 steps:
 
 - template: ../templates/install_prereqs.yml
 
-# - ${{ each folder in split(variables.package_folders, ',') }}:
-#   - template: templates/lint_luna.yml
-#     parameters:
-#       package_path: ${{ folder }}
-#       package_name: ${{ folder }}
-#   - template: templates/run_tests.yml
-#     parameters:
-#       package_path: ${{ folder }}
-#       package_name: ${{ folder }}
-
-# - template: templates/publish_test_lint_results.yml
+- ${{ each folder in split(variables.package_folders, ',') }}:
+  - template: ../templates/lint_luna.yml
+    parameters:
+      package_path: ${{ folder }}
+      package_name: ${{ folder }}
+  - template: ../templates/run_tests.yml
+    parameters:
+      package_path: ${{ folder }}
+      package_name: ${{ folder }}
 
 - template: ../templates/test_file_existence.yml
+
+- template: ../templates/publish_test_lint_results.yml
