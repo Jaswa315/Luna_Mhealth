@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/models/interfaces/validator.dart';
+import 'package:luna_core/models/interfaces/i_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/validator/exception/authoring_system_data_tree_validation_exception.dart';
