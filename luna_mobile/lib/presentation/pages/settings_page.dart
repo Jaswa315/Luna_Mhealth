@@ -44,6 +44,11 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: Icons.text_fields,
               onLanguageSelected: _updateTextLanguage,
             ),
+            SizedBox(height: 20),
+            _buildAboutLuna(
+              version: "0.0.0",
+              icon: Icons.text_fields,
+            ),
           ],
         ),
       ),
@@ -96,4 +101,24 @@ class _SettingsPageState extends State<SettingsPage> {
       },
     );
   }
+
+  Widget _buildAboutLuna({
+    required String version,
+    required IconData icon,
+  }){
+    return Card(
+      child: ListTile(
+        leading: Icon(icon, color: Theme.of(context).primaryColor),
+        title: Text("About Luna"),
+        trailing: Icon(Icons.arrow_forward_ios),
+        onTap: () => showAboutDialog(
+          context: context,
+          applicationName: "My App",
+          applicationVersion: "1.0.0",
+        ),
+      ),
+    );
+
+  }
+
 }
