@@ -44,6 +44,11 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: Icons.text_fields,
               onLanguageSelected: _updateTextLanguage,
             ),
+            SizedBox(height: 20),
+            _buildAboutLuna(
+              version: "0.0.0",
+              icon: Icons.help,
+            ),
           ],
         ),
       ),
@@ -96,4 +101,25 @@ class _SettingsPageState extends State<SettingsPage> {
       },
     );
   }
+
+
+// builds an AboutDialog (in built flutter widget) using showAboutDialog.
+  Widget _buildAboutLuna({
+    required String version,
+    required IconData icon,
+  }){
+    return Card(
+      child: ListTile(
+        leading: Icon(icon, color: Theme.of(context).primaryColor),
+        title: Text("About Luna"),
+        onTap: () => showAboutDialog(
+          context: context,
+          applicationName: "Luna",
+          applicationVersion: "Version: $version",
+        ),
+      ),
+    );
+
+  }
+
 }
