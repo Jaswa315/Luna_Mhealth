@@ -102,6 +102,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+
+// builds an AboutDialog (in built flutter widget) using showAboutDialog.
   Widget _buildAboutLuna({
     required String version,
     required IconData icon,

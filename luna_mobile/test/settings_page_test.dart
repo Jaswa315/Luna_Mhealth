@@ -20,10 +20,6 @@ void main() {
       (WidgetTester tester) async {
     await setupSettingsPage(tester);
 
-    // Simulate a tap on the "Start Learning" button
-    //await tester.tap(find.text('Start Learning'));
-    //await tester.pumpAndSettle(); // Wait for any animations or UI updates
-
     // Confirm that the AboutTheAppButton is displayed
     expect(find.text("About Luna"), findsOneWidget);
   });
