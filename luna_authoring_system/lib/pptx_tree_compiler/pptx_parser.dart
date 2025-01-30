@@ -76,13 +76,14 @@ class PptxParser {
   }
 
   ConnectionShape _parseConnectionShape(Json connectionShapeMap) {
-    int cWeight = connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ??
-        ConnectionShape.defaultHalfLineWeight.value;
+    // TODO: Replace this with actual value from the .pptx archive instead of a default value.
+    int cWidth =
+        connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ?? 6350;
     Transform transform =
         _parseTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
     return ConnectionShape(
-      EMU(cWeight),
+      EMU(cWidth),
       transform,
     );
   }
