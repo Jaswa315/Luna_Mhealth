@@ -16,6 +16,17 @@ void main() {
     Set<ValidatorError> errors = validator.validate();
 
     expect(errors.length, 1);
-    expect(errors.first.errorType, ValidatorErrorType.pptxTitleIsEmpty);
+    expect(errors.first.errorType, ValidatorErrorType.pptxTitleHasNoVisibleCharacters);
+  });
+
+  test('Pptx Title must have visible characters', () {
+    PptxTree pptxTree = PptxTree();
+    pptxTree.title = "  ";
+    IValidator validator = PptxTitleValidator(pptxTree);
+
+    Set<ValidatorError> errors = validator.validate();
+
+    expect(errors.length, 1);
+    expect(errors.first.errorType, ValidatorErrorType.pptxTitleHasNoVisibleCharacters);
   });
 }

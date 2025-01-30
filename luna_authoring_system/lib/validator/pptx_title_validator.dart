@@ -13,8 +13,8 @@ class PptxTitleValidator implements IValidator {
   @override
   Set<ValidatorError> validate() {
     Set<ValidatorError> errors = {};
-    if (_pptxTree.title.isEmpty) {
-       errors.add(ValidatorError(ValidatorErrorType.pptxTitleIsEmpty));
+    if (_pptxTree.title.trim().isEmpty) {
+       errors.add(ValidatorError(ValidatorErrorType.pptxTitleHasNoVisibleCharacters));
     }
 
     return errors;
