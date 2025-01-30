@@ -21,13 +21,13 @@ class PptxParser extends PptxElement {
     _pptxLoader = PptxLoader(pptxFilePath);
   }
 
-  void _updateTitleAndAuthor() {
+  void _getTitleAndAuthor() {
     Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
     _pptxTree.title = coreMap[eCoreProperties][eTitle];
     _pptxTree.author = coreMap[eCoreProperties][eAuthor];
   }
 
-  void _updateWidthAndHeight() {
+  void _getWidthAndHeight() {
     Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
     _pptxTree.width =
         EMU(int.parse(presentationMap[ePresentation][eSlideSize][eCX]));
@@ -98,14 +98,14 @@ class PptxParser extends PptxElement {
     return slides;
   }
 
-  void _updateSlides() {
+  void _getSlides() {
     _pptxTree.slides = _getSlides();
   }
 
   PptxTree getPptxTree() {
-    _updateTitleAndAuthor();
-    _updateWidthAndHeight();
-    _updateSlides();
+    _getTitleAndAuthor();
+    _getWidthAndHeight();
+    _getSlides();
 
     return _pptxTree;
   }
