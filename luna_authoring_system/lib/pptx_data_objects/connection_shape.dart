@@ -6,13 +6,12 @@ import 'package:luna_core/utils/emu.dart';
 /// The ConnectionShape represents the connectors in the PowerPoint.
 /// weight represents the thickness of the connector.
 class ConnectionShape implements Shape {
-  EMU weight;
-  static EMU defaultHalfLineWeight = EMU(6350);
+  EMU width;
 
   @override
   Transform transform;
 
-  ConnectionShape(this.weight, this.transform);
+  ConnectionShape(this.width, this.transform);
 
   @override
   ShapeType get type => ShapeType.connection;
