@@ -47,7 +47,7 @@ class PptxParser extends PptxElement {
     shapeTree.forEach((key, value) {
       switch (key) {
         case keyConnectionShape:
-          shapes.add(_parseConnectionShape(shapeTree[key]));
+          shapes.add(_getConnectionShape(shapeTree[key]));
           break;
       }
     });
@@ -55,7 +55,7 @@ class PptxParser extends PptxElement {
     return shapes;
   }
 
-  Transform _parseTransform(Json transformMap) {
+  Transform _getTransform(Json transformMap) {
     Point2D offset = Point2D(
       EMU(int.parse(transformMap[eOffset][eX])),
       EMU(int.parse(transformMap[eOffset][eY])),
@@ -72,11 +72,11 @@ class PptxParser extends PptxElement {
     );
   }
 
-  ConnectionShape _parseConnectionShape(Json connectionShapeMap) {
+  ConnectionShape _getConnectionShape(Json connectionShapeMap) {
     int cWeight = connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ??
         ConnectionShape.defaultHalfLineWeight.value;
     Transform transform =
-        _parseTransform(connectionShapeMap[eShapeProperty][eTransform]);
+        _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
     return ConnectionShape(
       EMU(cWeight),
@@ -84,7 +84,7 @@ class PptxParser extends PptxElement {
     );
   }
 
-  List<Slide> _parseSlides() {
+  List<Slide> _getSlides() {
     List<Slide> slides = [];
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
@@ -99,7 +99,7 @@ class PptxParser extends PptxElement {
   }
 
   void _updateSlides() {
-    _pptxTree.slides = _parseSlides();
+    _pptxTree.slides = _getSlides();
   }
 
   PptxTree getPptxTree() {
