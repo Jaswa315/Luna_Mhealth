@@ -1,29 +1,22 @@
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/exception/authoring_system_data_tree_validation_exception.dart';
-import 'package:luna_core/models/interfaces/i_validator.dart';
+import 'package:luna_core/validator/i_validator.dart';
+import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validator_error_type.dart';
 
 /// A validator that checks the validity of the title of a `PptxTree`.
-///
-/// This class implements the `IValidator` and ensures that the
-/// title of the associated `PptxTree` is not empty. If the title is empty,
-/// it throws an `AuthoringSystemDataTreeValidationException` with a specific message.
 class PptxTitleValidator implements IValidator {
-    final PptxTree _dataTree;
+  final PptxTree _pptxTree;
 
-    /// Constructs a `PptxTitleValidator` with a [PptxTree].
-    PptxTitleValidator(this._dataTree);
+  /// Constructs a `PptxTitleValidator` with a [PptxTree].
+  PptxTitleValidator(this._pptxTree);
 
-    /// Validates the title of the `_dataTree`.
-    ///
-    /// Returns `true` if the title is not empty, indicating the validation passed.
-    /// Throws an [AuthoringSystemDataTreeValidationException] if the title is empty
-    /// with the message "Title cannot be empty".
-    @override
-    bool validate() {
-        if (_dataTree.title.isEmpty) {
-            throw AuthoringSystemDataTreeValidationException("Data Tree Module Title cannot be empty");
-        }
-        
-        return true;
+  @override
+  Set<ValidatorError> validate() {
+    Set<ValidatorError> errors = {};
+    if (_pptxTree.title.isEmpty) {
+       errors.add(ValidatorError(ValidatorErrorType.pptxTitleIsEmpty));
     }
+
+    return errors;
+  }
 }
