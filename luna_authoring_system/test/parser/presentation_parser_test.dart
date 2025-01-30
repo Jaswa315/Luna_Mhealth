@@ -7,7 +7,7 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'dart:io';
-import '../lib/parser/presentation_parser.dart';
+import 'package:luna_authoring_system/parser/presentation_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/utils/types.dart';
 import 'package:luna_core/utils/logging.dart';
