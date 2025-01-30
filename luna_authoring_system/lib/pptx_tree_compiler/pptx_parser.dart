@@ -24,13 +24,13 @@ class PptxParser {
     _pptxLoader = PptxLoader(pptxFilePath);
   }
 
-  void _getTitleAndAuthor() {
+  void _updateTitleAndAuthor() {
     Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
     _pptxTree.title = coreMap[eCoreProperties][eTitle];
     _pptxTree.author = coreMap[eCoreProperties][eAuthor];
   }
 
-  void _getWidthAndHeight() {
+  void _updateWidthAndHeight() {
     Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
     _pptxTree.width =
         EMU(int.parse(presentationMap[ePresentation][eSlideSize][eCX]));
@@ -75,7 +75,7 @@ class PptxParser {
     );
   }
 
-  ConnectionShape _parseConnectionShape(Json connectionShapeMap) {
+  ConnectionShape _getConnectionShape(Json connectionShapeMap) {
     // TODO: Replace this with actual value from the .pptx archive instead of a default value.
     int cWidth =
         connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ?? 6350;
@@ -88,7 +88,7 @@ class PptxParser {
     );
   }
 
-  void _getSlides() {
+  void _updateSlides() {
     List<Slide> slides = [];
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
@@ -103,9 +103,9 @@ class PptxParser {
   }
 
   PptxTree getPptxTree() {
-    _getTitleAndAuthor();
-    _getWidthAndHeight();
-    _getSlides();
+    _updateTitleAndAuthor();
+    _updateWidthAndHeight();
+    _updateSlides();
 
     return _pptxTree;
   }
