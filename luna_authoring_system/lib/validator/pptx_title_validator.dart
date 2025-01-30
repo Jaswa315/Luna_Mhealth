@@ -5,10 +5,9 @@ import 'package:luna_core/validator/validator_error.dart';
 import 'package:luna_core/validator/validator_error_type.dart';
 
 /// A validator that checks the validity of the title of a `PptxTree`.
-class PptxTitleValidator implements IValidator {
+class PptxTitleValidator extends IValidator {
   final PptxTree _pptxTree;
 
-  /// Constructs a `PptxTitleValidator` with a [PptxTree].
   PptxTitleValidator(this._pptxTree);
 
   @override
