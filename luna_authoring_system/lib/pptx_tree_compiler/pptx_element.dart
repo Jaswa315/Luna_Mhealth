@@ -69,10 +69,6 @@ const String eY = '_y';
 const String eCX = '_cx';
 
 /// The XML element for the height in EMUs.
-/// The height is applied against the Y axis,
-/// from bottom to top, as compared to y-axis
-/// growing top to bottom.
-/// http://officeopenxml.com/drwSp-size.php
 const String eCY = '_cy';
 
 /// The XML element for the line element in PowerPoint.

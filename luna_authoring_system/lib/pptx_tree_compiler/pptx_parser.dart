@@ -25,7 +25,6 @@ class PptxParser {
   }
 
   void _updateTitleAndAuthor() {
-    /// The XML element for the title of the PowerPoint.
     Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
     _pptxTree.title = coreMap[eCoreProperties][eTitle];
     _pptxTree.author = coreMap[eCoreProperties][eAuthor];
