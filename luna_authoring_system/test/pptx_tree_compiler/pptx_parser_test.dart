@@ -48,7 +48,7 @@ void main() {
       ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
 
       expect(cShape.type, ShapeType.connection);
-      expect(cShape.weight.value, 6350);
+      expect(cShape.width.value, 6350);
       expect(cShape.transform.offset.x.value, 2655518);
       expect(cShape.transform.offset.y.value, 2580362);
       expect(cShape.transform.size.x.value, 2755726);
