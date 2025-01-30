@@ -87,7 +87,7 @@ class PptxParser {
     );
   }
 
-  List<Slide> _getSlides() {
+  void _getSlides() {
     List<Slide> slides = [];
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
@@ -98,11 +98,7 @@ class PptxParser {
       slides.add(slide);
     }
 
-    return slides;
-  }
-
-  void _getSlides() {
-    _pptxTree.slides = _getSlides();
+    _pptxTree.slides = slides;
   }
 
   PptxTree getPptxTree() {
