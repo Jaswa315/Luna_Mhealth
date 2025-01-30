@@ -1,3 +1,4 @@
 enum ValidatorErrorType {
-  pptxTitleIsEmpty
+  pptxTitleHasNoVisibleCharacters,
+  pptxTitleIsTooLong
 }
