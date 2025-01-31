@@ -1,4 +1,7 @@
 enum ValidatorErrorType {
   pptxTitleHasNoVisibleCharacters,
-  pptxTitleIsTooLong
+  pptxTitleIsTooLong,
+  pptxWidthMustBePositive,
+  pptxHeightMustBePositive,
+  pptxWidthAndHeightMustBothBeInitialized
 }
