@@ -82,10 +82,7 @@ class PptxParser {
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
     // Extracts the flipVertical attribute from the connection shape's transform properties.
-    // The ?. operator ensures safe access without throwing an error if the attribute is absent.
-    // The value is stored as an integer (1 for true, 0 or missing for false), so it is converted to a string
-    // and compared to "1" to determine if the shape is flipped vertically.
-
+    // set to true if attribute is "1", false otherwise
     bool isFlippedVertically = connectionShapeMap[eShapeProperty]?[eTransform]
                 ?[flipVertical]
             ?.toString() ==
