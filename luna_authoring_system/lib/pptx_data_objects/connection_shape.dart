@@ -11,7 +11,9 @@ class ConnectionShape implements Shape {
   @override
   Transform transform;
 
-  ConnectionShape(this.width, this.transform);
+  bool isFlippedVertically;
+
+  ConnectionShape(this.width, this.transform, this.isFlippedVertically);
 
   @override
   ShapeType get type => ShapeType.connection;

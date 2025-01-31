@@ -54,5 +54,13 @@ void main() {
       expect(cShape.transform.size.x.value, 2755726);
       expect(cShape.transform.size.y.value, 1929008);
     });
+
+    ///testing in a pptx file where flipV = 1
+    test('flipV attribute is correctly parsed for connection shapes', () async {
+      PptxTree pptxTree = pptxParser.getPptxTree();
+      ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
+
+      expect(cShape.isFlippedVertically, isTrue);
+    });
   });
 }
