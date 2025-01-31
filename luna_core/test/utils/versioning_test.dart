@@ -6,25 +6,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'package:flutter_test/flutter_test.dart';
 
-class VersionManager {
-  static final VersionManager _instance = VersionManager._internal();
+void main() {
 
-  String _curVersion;
+  group('VersionManager Tests', () {
 
 
-  /// Returns a singleton instance of VersionManager 
-  factory VersionManager() {
-    return _instance;
-  }
-  
-  VersionManager._internal() : _curVersion = _setVersion();
-
-  /// Public getter to access `_curVersion`
-  String get version => _curVersion;
-
-  static String _setVersion() {
-    return "1.0.0"; 
-  }
+  });
 
 }
