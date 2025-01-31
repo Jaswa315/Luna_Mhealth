@@ -76,3 +76,6 @@ const String eLine = 'a:ln';
 
 /// The XML element for the width of connection shape.
 const String eLineWidth = '_w';
+
+/// The XML element that indicates the  vertical flip of connection shape.
+const String flipVertical = '_flipV';
