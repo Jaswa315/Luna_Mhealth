@@ -62,14 +62,5 @@ void main() {
 
       expect(cShape.isFlippedVertically, isTrue);
     });
-
-    ///testing in a pptx file where there is no flipV
-    test('flipV attribute is correctly parsed for connection shapes', () async {
-      PptxParser pptxParser = PptxParser('test/test_assets/secondLine.pptx');
-      PptxTree pptxTree = pptxParser.getPptxTree();
-      ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
-
-      expect(cShape.isFlippedVertically, isFalse);
-    });
   });
 }

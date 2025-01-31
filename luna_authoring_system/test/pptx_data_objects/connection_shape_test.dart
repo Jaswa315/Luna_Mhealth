@@ -6,12 +6,17 @@ import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_core/utils/emu.dart';
 
 void main() {
+  bool isFlippedVertically = false;
   group('Tests for ConnectionShape', () {
     test('The shape type of the connection shape is set by default.', () {
       EMU emu = EMU(0);
       ConnectionShape cShape = ConnectionShape(
         emu,
-        Transform(Point2D(emu, emu), Point2D(emu, emu)),
+        Transform(
+          Point2D(emu, emu),
+          Point2D(emu, emu),
+        ),
+        isFlippedVertically,
       );
 
       expect(cShape.type, ShapeType.connection);
@@ -21,6 +26,7 @@ void main() {
       ConnectionShape cShape = ConnectionShape(
         EMU(0),
         Transform(Point2D(EMU(0), EMU(1)), Point2D(EMU(2), EMU(3))),
+        isFlippedVertically,
       );
 
       expect(cShape.transform?.offset?.x.value, 0);
