@@ -66,7 +66,7 @@ void main() {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       VersionManager manager = VersionManager();
       manager.resetVersion();
-      expect(() => manager.version, throwsA(isA<UnimplementedError>()));
+      expect(() => manager.version, throwsA(isA<UnsupportedError>()));
 
     });
 

@@ -34,7 +34,7 @@ class VersionManager {
   /// Public getter to access `_curVersion`
   String get version {
     if (_curVersion == _emptyVersion){ 
-      throw UnimplementedError("Current Version not Set, call setVersion to proceed");
+      throw UnsupportedError("Current Version not Set, call setVersion to proceed");
     }
     
     return _curVersion;
