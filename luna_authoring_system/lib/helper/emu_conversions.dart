@@ -2,7 +2,7 @@ import 'package:luna_core/utils/emu.dart';
 
 /// Converts EMU values to a percentage (0-1 scale) relative to the slide size.
 /// This helps normalize positions and sizes for rendering.
-class EmuToPercentage {
+class EmuConversions {
   /// Converts an EMU value to a percentage relative to a total reference EMU value.
   ///
   /// - [currentValue]: The EMU value to be converted.
