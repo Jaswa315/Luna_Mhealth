@@ -19,7 +19,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 /// await setVersion() must be called prior to fetching the version and after singleton initilization.
 ///
 class VersionManager {
-  static final VersionManager _instance = VersionManager._internal();
+  static VersionManager _instance = VersionManager._internal();
 
   String _curVersion;
   static const String _emptyVersion = "-1";
@@ -48,8 +48,13 @@ class VersionManager {
   }
 
 
-  ///reset version. only should be used for testing
+  /// Reset version. only should be used for testing
   @visibleForTesting
   resetVersion(){_curVersion = _emptyVersion;}
+
+  /// Method to overide [VersionManager] instance
+  static resetInstance(VersionManager newInstance) {
+    _instance = newInstance;
+  }
 
 }
