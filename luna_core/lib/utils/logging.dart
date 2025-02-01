@@ -14,7 +14,7 @@ import 'package:device_info/device_info.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Enum representing the calibrated severity levels for logging.
 enum LunaSeverityLevel {
