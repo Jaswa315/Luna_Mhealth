@@ -6,7 +6,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'package:luna_core/utils/versioning.dart';
+import 'package:luna_core/utils/version_manager.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -57,8 +57,15 @@ void main() {
     test('VersionManager - Test Version Equivalence', () async {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       VersionManager manager = VersionManager();
-
+      await manager.setVersion();
       expect((packageInfo.version == manager.version), true);
+
+  });
+
+    test('VersionManager - Version fails if setVersion not called', () async {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      VersionManager manager = VersionManager();
+      expect(() => manager.version, throwsA(isA<UnimplementedError>()));
 
   });
 
