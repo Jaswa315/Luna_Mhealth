@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/renderers/divider_component_renderer.dart';
 import 'package:luna_core/renderers/line_painter.dart';
 
 void main() {
   testWidgets('DividerComponentRenderer creates a proper line',
       (WidgetTester tester) async {
-    // Create dummy data for DividerComponent
+    // Create dummy data for DividerComponent with start and end points
     final DividerComponent dummyComponent = DividerComponent(
-      x: 0.2, // 20% from the left
-      y: 0.15, // 15% from the top
-      width: 0.8, // 80% of the screen width
-      height: 0.0, // Flat horizontal line
-      thickness: 2.0, // 2.0 pixels thick
+      startPoint: Point2DPercentage(0.2, 0.15), // 20% from left, 15% from top
+      endPoint: Point2DPercentage(0.8, 0.15), // 80% from left, 15% from top
+      thickness: 2.0, // 2 pixels thick
       color: Colors.blue, // Blue line
     );
 
@@ -37,11 +36,11 @@ void main() {
     final LinePainter painter = customPaint.painter as LinePainter;
 
     // Assert the properties of the line
-    expect(painter.startX, 160.0); // 0.2 * 800
-    expect(painter.startY, 90.0); // 0.15 * 600
-    expect(painter.endX, 640.0); // 0.8 * 800
-    expect(painter.endY, 0.0); // Flat line
-    expect(painter.thickness, 2.0);
+    expect(painter.startX, closeTo(160.0, 0.00001)); // 0.2 * 800
+    expect(painter.startY, closeTo(90.0, 0.00001)); // 0.15 * 600
+    expect(painter.endX, closeTo(640.0, 0.00001)); // 0.8 * 800
+    expect(painter.endY, closeTo(90.0, 0.00001)); // Horizontal line
+    expect(painter.thickness, closeTo(2.0, 0.00001));
     expect(painter.color, Colors.blue);
   });
 }

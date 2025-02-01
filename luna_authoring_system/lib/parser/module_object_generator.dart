@@ -3,6 +3,7 @@ import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
+import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/utils/conversion.dart';
@@ -100,17 +101,22 @@ class ModuleObjectGenerator {
     }
 
     ConnectionNode cxn = root;
+    Point2D offset = cxn.transform.offset;
+    Point2D size = cxn.transform.size;
 
     return DividerComponent(
-        x: SizeConverter.getPointPercentX(
-            cxn.transform.offset.x, _slideWidth, _padding),
-        y: SizeConverter.getPointPercentY(
-            cxn.transform.offset.y, _slideHeight, _padding),
-        width: SizeConverter.getSizePercentX(
-            cxn.transform.size.x, _slideWidth, _padding),
-        height: SizeConverter.getSizePercentY(
-            cxn.transform.size.y, _slideHeight, _padding),
-        thickness: cxn.weight);
+      startPoint: Point2DPercentage(
+        SizeConverter.getPointPercentX(offset.x, _slideWidth, _padding),
+        SizeConverter.getPointPercentY(offset.y, _slideHeight, _padding),
+      ),
+      endPoint: Point2DPercentage(
+        SizeConverter.getPointPercentX(
+            offset.x + size.x, _slideWidth, _padding),
+        SizeConverter.getPointPercentY(
+            offset.y + size.y, _slideHeight, _padding),
+      ),
+      thickness: cxn.weight,
+    );
   }
 
   ImageComponent _createImage(PrsNode root) {
