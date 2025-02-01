@@ -9,26 +9,45 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
+import 'package:luna_core/models/point/point_2d_percentage.dart';
+import 'package:luna_core/renderers/divider_component_renderer.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// Represents a divider component that can be used in the Luna mHealth Mobile app.
-/// This component provides a horizontal line to separate content sections visually,
+/// This component provides a line to separate content sections visually,
 /// with customizable properties like color, thickness, and style.
 class DividerComponent extends Component {
+  /// The start point of the divider in percentage coordinates.
+  final Point2DPercentage startPoint;
+
+  /// The end point of the divider in percentage coordinates.
+  final Point2DPercentage endPoint;
+
   /// The color of the divider.
-  /// Defaults to a custom ARGB color (43, 116, 179).
   Color color;
 
   /// The thickness of the divider line in logical pixels.
-  /// Defaults to 5.0.
   double thickness;
 
   /// The style of the divider's border.
-  /// Defaults to a solid line (`BorderStyle.solid`).
   BorderStyle style;
 
+  /// Overrides `x, y, width, height` dynamically based on `startPoint` and `endPoint`.
+  static double _calculateWidth(
+    Point2DPercentage start,
+    Point2DPercentage end,
+  ) {
+    return (end.x - start.x).abs();
+  }
+
+  static double _calculateHeight(
+    Point2DPercentage start,
+    Point2DPercentage end,
+  ) {
+    return (end.y - start.y).abs();
+  }
+
   /// Constructs a new instance of [DividerComponent].
-  ///
   /// Parameters:
   /// - [color]: The color of the divider. Defaults to `Color.fromARGB(255, 43, 116, 179)`.
   /// - [thickness]: The thickness of the divider in logical pixels. Defaults to 5.0.
@@ -37,103 +56,69 @@ class DividerComponent extends Component {
   /// - [y]: The y-coordinate position of the divider's top-left corner.
   /// - [width]: The width of the divider.
   /// - [height]: The height of the divider.
+  /// - [startPoint]: The start point of the divider in percentage coordinates.
+  /// - [endPoint]: The end point of the divider in percentage coordinates.
   DividerComponent({
     this.color = const Color.fromARGB(255, 43, 116, 179),
     this.thickness = 5.0,
     this.style = BorderStyle.solid,
-    required double x,
-    required double y,
-    required double width,
-    required double height,
+    required this.startPoint,
+    required this.endPoint,
   }) : super(
           type: ComponentType.divider,
-          x: x,
-          y: y,
-          width: width,
-          height: height,
+          x: startPoint.x,
+          y: startPoint.y,
+          width: _calculateWidth(startPoint, endPoint),
+          height: _calculateHeight(startPoint, endPoint),
           name: 'DividerComponent',
         );
 
   /// Renders the divider as a [Widget].
-  ///
-  /// Parameters:
-  /// - [screenSize]: The size of the screen, used to calculate dimensions if needed.
-  ///
-  /// Returns:
-  /// A [Future] that resolves to a [Widget] rendering the divider with the specified
-  /// properties (color, thickness, and style).
   @override
-  Future<Widget> render(Size screenSize) {
-    return Future.value(
-      Container(
-        width: bounds.width,
-        height: bounds.height,
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: color,
-              width: thickness,
-              style: style,
-            ),
-          ),
-        ),
-      ),
-    );
+  Future<Widget> render(Size screenSize) async {
+    return DividerComponentRenderer().renderComponent(this, screenSize);
   }
 
   /// Converts the current [DividerComponent] instance to a JSON object.
-  ///
-  /// Returns:
-  /// A [Json] object containing all the properties of the divider, including:
-  /// - `type`: The component type (e.g., 'divider').
-  /// - `x`, `y`, `width`, `height`: The positional and dimensional attributes.
-  /// - `color`: The color of the divider as an integer value.
-  /// - `thickness`: The thickness of the divider.
-  /// - `style`: The style of the divider's border as an index.
+  /// Returns: A [Json] object containing all the properties of the divider.
   @override
   Json toJson() {
     return {
       'type': type.name,
-      'x': bounds.left,
-      'y': bounds.top,
-      'width': bounds.width,
-      'height': bounds.height,
-      'color': color.value, // Color represented as an integer
+      'startPoint': {'x': startPoint.x, 'y': startPoint.y},
+      'endPoint': {'x': endPoint.x, 'y': endPoint.y},
+      'color': color.value,
       'thickness': thickness,
-      'style': style.index, // BorderStyle represented by its index
+      'style': style.index,
     };
   }
 
   /// Creates a new [DividerComponent] instance from a JSON object.
-  ///
-  /// Parameters:
-  /// - [json]: A [Json] object containing the data to initialize the divider.
-  ///
-  /// Returns:
-  /// A [DividerComponent] instance with properties derived from the JSON object.
-  ///
-  /// Throws:
-  /// An [Exception] if the JSON is missing required fields like `x`, `y`, `width`, or `height`.
+  /// Parameters: - [json]: A [Json] object containing the data to initialize the divider.
+  /// Returns: A [DividerComponent] instance with properties derived from the JSON object.
+  /// Throws: An [Exception] if the JSON is missing required fields like `x`, `y`, `width`, or `height`.
   static DividerComponent fromJson(Json json) {
     return DividerComponent(
-      x: json['x'].toDouble(),
-      y: json['y'].toDouble(),
-      width: json['width'].toDouble(),
-      height: json['height'].toDouble(),
+      startPoint: Point2DPercentage(
+        json['startPoint']['x'].toDouble(),
+        json['startPoint']['y'].toDouble(),
+      ),
+      endPoint: Point2DPercentage(
+        json['endPoint']['x'].toDouble(),
+        json['endPoint']['y'].toDouble(),
+      ),
       color: json.containsKey('color')
-          ? Color(json['color']) // Extract color if present
-          : const Color.fromARGB(255, 43, 116, 179), // Default color
-      thickness: json.containsKey('thickness')
-          ? json['thickness'].toDouble() // Extract thickness if present
-          : 5.0, // Default thickness
+          ? Color(json['color'])
+          : const Color.fromARGB(255, 43, 116, 179),
+      thickness:
+          json.containsKey('thickness') ? json['thickness'].toDouble() : 5.0,
       style: json.containsKey('style')
-          ? BorderStyle.values[json['style']] // Extract style if present
-          : BorderStyle.solid, // Default style
+          ? BorderStyle.values[json['style']]
+          : BorderStyle.solid,
     );
   }
 
   /// Handles the click event on the divider component.
-  ///
   /// This method can be overridden to define specific behaviors when the divider
   /// is clicked (e.g., triggering a callback or navigating).
   @override

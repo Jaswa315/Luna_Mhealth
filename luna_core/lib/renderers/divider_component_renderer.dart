@@ -12,18 +12,14 @@ import 'package:luna_core/renderers/line_painter.dart';
 import 'base_component_renderer.dart';
 
 /// A renderer class for the `DividerComponent`.
-///
 /// This class is responsible for rendering a divider component on the screen
 /// based on the specified properties such as position, size, thickness, and color.
 /// It uses the `LinePainter` to draw the divider on a canvas.
 class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
   /// Renders the given `DividerComponent` as a widget.
-  ///
-  /// [component] is expected to be of type `DividerComponent`, which contains
-  /// properties such as `x`, `y`, `width`, `height`, `thickness`, and `color`.
+  ///[component] is expected to be of type `DividerComponent`
   /// [screenSize] provides the dimensions of the screen or parent container
   /// within which the component will be rendered.
-  ///
   /// Throws an [ArgumentError] if the component is not of type `DividerComponent`.
   @override
   Widget renderComponent(dynamic component, Size screenSize) {
@@ -31,10 +27,10 @@ class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
       return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // Dynamically calculate the start and end positions based on the current constraints
-          final double startX = component.x * constraints.maxWidth;
-          final double startY = component.y * constraints.maxHeight;
-          final double endX = (component.width) * constraints.maxWidth;
-          final double endY = (component.height) * constraints.maxHeight;
+          final double startX = component.startPoint.x * constraints.maxWidth;
+          final double startY = component.startPoint.y * constraints.maxHeight;
+          final double endX = component.endPoint.x * constraints.maxWidth;
+          final double endY = component.endPoint.y * constraints.maxHeight;
 
           // Retrieve the thickness of the divider in pixels
           final double thicknessInPixels = component.thickness;
