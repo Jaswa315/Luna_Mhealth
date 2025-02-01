@@ -60,14 +60,14 @@ void main() {
       await manager.setVersion();
       expect((packageInfo.version == manager.version), true);
 
-  });
+    });
 
     test('VersionManager - Version fails if setVersion not called', () async {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       VersionManager manager = VersionManager();
       expect(() => manager.version, throwsA(isA<UnimplementedError>()));
 
-  });
+    });
 
 
   });
