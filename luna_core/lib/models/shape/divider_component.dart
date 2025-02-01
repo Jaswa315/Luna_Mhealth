@@ -37,14 +37,14 @@ class DividerComponent extends Component {
     Point2DPercentage start,
     Point2DPercentage end,
   ) {
-    return (end.x - start.x).abs(); // Ensure width is always positive
+    return (end.x - start.x).abs();
   }
 
   static double _calculateHeight(
     Point2DPercentage start,
     Point2DPercentage end,
   ) {
-    return (end.y - start.y).abs(); // Ensure height is always positive
+    return (end.y - start.y).abs();
   }
 
   /// Constructs a new instance of [DividerComponent].
@@ -56,6 +56,8 @@ class DividerComponent extends Component {
   /// - [y]: The y-coordinate position of the divider's top-left corner.
   /// - [width]: The width of the divider.
   /// - [height]: The height of the divider.
+  /// - [startPoint]: The start point of the divider in percentage coordinates.
+  /// - [endPoint]: The end point of the divider in percentage coordinates.
   DividerComponent({
     this.color = const Color.fromARGB(255, 43, 116, 179),
     this.thickness = 5.0,
