@@ -5,6 +5,7 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 
@@ -45,5 +46,10 @@ class VersionManager {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _curVersion = packageInfo.version;
   }
+
+
+  ///reset version. only should be used for testing
+  @visibleForTesting
+  resetVersion(){_curVersion = _emptyVersion;}
 
 }

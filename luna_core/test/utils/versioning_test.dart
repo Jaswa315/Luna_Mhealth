@@ -65,6 +65,7 @@ void main() {
     test('VersionManager - Version fails if setVersion not called', () async {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       VersionManager manager = VersionManager();
+      manager.resetVersion();
       expect(() => manager.version, throwsA(isA<UnimplementedError>()));
 
     });
