@@ -36,9 +36,7 @@ class ModuleObjectGenerator {
 
     for (Slide child in root.slides) {
       //TODO: pass width and height value to translate into percentage
-      if (child is Slide) {
-        pages.add(_createPage(child));
-      }
+      pages.add(_createPage(child));
     }
 
     Module moduleObj = Module(
