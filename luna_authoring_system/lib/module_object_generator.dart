@@ -76,12 +76,12 @@ class ModuleObjectGenerator {
     // TODO: in parser, convert EMU values into Percentage, This should work w/o SizeCOnverter
     return DividerComponent(
       startPoint: Point2DPercentage(
-        xPointNumerator/_slideWidth,
-        yPointNumerator/_slideHeight,
+        xPointNumerator / _slideWidth,
+        yPointNumerator / _slideHeight,
       ),
       endPoint: Point2DPercentage(
-        xPointNumerator+sizeXValue/_slideWidth,
-        yPointNumerator+sizeYValue/_slideHeight,
+        xPointNumerator / _slideWidth + sizeXValue / _slideWidth,
+        yPointNumerator / _slideHeight + sizeYValue / _slideHeight,
       ),
       thickness: cxn.width.value,
     );
