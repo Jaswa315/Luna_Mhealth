@@ -6,8 +6,7 @@ class PercentageConversion {
   /// Converts a normalized [Point2DPercentage] into an absolute [Offset] in display pixels,
   /// based on the provided [containerSize].
   ///
-  /// The [point] should have x and y values between 0 and 1. The [containerSize] represents
-  /// the size of the screen or parent widget in display pixels.
+  /// The [containerSize] represents the size of the screen or parent widget in display pixels.
   ///
   /// Example:
   /// ```dart
