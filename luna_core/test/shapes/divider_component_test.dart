@@ -39,7 +39,7 @@ void main() {
         startPoint: Point2DPercentage(0.1, 0.2),
         endPoint: Point2DPercentage(0.4, 0.5),
         color: const Color(0xFF0D47A1),
-        thickness: 5.0,
+        thickness: 5,
         style: BorderStyle.solid,
       );
 
