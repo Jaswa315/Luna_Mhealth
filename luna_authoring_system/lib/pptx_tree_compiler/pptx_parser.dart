@@ -49,7 +49,7 @@ class PptxParser {
     shapeTree.forEach((key, value) {
       switch (key) {
         case eConnectionShape:
-          shapes.add(_parseConnectionShape(shapeTree[key]));
+          shapes.add(_getConnectionShape(shapeTree[key]));
           break;
       }
     });
@@ -57,7 +57,7 @@ class PptxParser {
     return shapes;
   }
 
-  Transform _parseTransform(Json transformMap) {
+  Transform _getTransform(Json transformMap) {
     Point2D offset = Point2D(
       EMU(int.parse(transformMap[eOffset][eX])),
       EMU(int.parse(transformMap[eOffset][eY])),
@@ -74,21 +74,27 @@ class PptxParser {
     );
   }
 
-  ConnectionShape _parseConnectionShape(Json connectionShapeMap) {
+  ConnectionShape _getConnectionShape(Json connectionShapeMap) {
     // TODO: Replace this with actual value from the .pptx archive instead of a default value.
-    int cWidth =
-        connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ?? 6350;
+    int cWidth = connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ?? 6350;
     Transform transform =
-        _parseTransform(connectionShapeMap[eShapeProperty][eTransform]);
+        _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
+
+    // Extracts the flipVertical attribute from the connection shape's transform properties.
+    // set to true if attribute is "1", false otherwise
+    bool isFlippedVertically = connectionShapeMap[eShapeProperty]?[eTransform]
+                ?[flipVertical]
+            ?.toString() ==
+        "1";
 
     return ConnectionShape(
       EMU(cWidth),
       transform,
-      false,
+      isFlippedVertically,
     );
   }
 
-  List<Slide> _parseSlides() {
+  void _updateSlides() {
     List<Slide> slides = [];
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
@@ -99,11 +105,7 @@ class PptxParser {
       slides.add(slide);
     }
 
-    return slides;
-  }
-
-  void _updateSlides() {
-    _pptxTree.slides = _parseSlides();
+    _pptxTree.slides = slides;
   }
 
   PptxTree getPptxTree() {
