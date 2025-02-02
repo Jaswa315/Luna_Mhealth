@@ -1,6 +1,5 @@
 library pptx_parser;
 
-import 'package:luna_authoring_system/parser/presentation_parser.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
@@ -49,7 +48,7 @@ class PptxParser {
 
     shapeTree.forEach((key, value) {
       switch (key) {
-        case keyConnectionShape:
+        case eConnectionShape:
           shapes.add(_getConnectionShape(shapeTree[key]));
           break;
       }
