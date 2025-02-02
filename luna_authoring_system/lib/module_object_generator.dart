@@ -8,7 +8,6 @@ import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
-import '../utils/size_converter.dart';
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
 /// Module and all descendant objects of a module. This includes Pages, Components, and other items inside a Module.
@@ -69,21 +68,20 @@ class ModuleObjectGenerator {
     Point2D offset = cxn.transform.offset;
     Point2D size = cxn.transform.size;
 
+    int xPointNumerator = offset.x.value;
+    int yPointNumerator = offset.y.value;
+    int sizeXValue = size.x.value;
+    int sizeYValue = size.y.value;
+
     // TODO: in parser, convert EMU values into Percentage, This should work w/o SizeCOnverter
     return DividerComponent(
       startPoint: Point2DPercentage(
-        SizeConverter.getPointPercentX(offset.x.value, _slideWidth),
-        SizeConverter.getPointPercentY(offset.y.value, _slideHeight),
+        xPointNumerator/_slideWidth,
+        yPointNumerator/_slideHeight,
       ),
       endPoint: Point2DPercentage(
-        SizeConverter.getPointPercentX(
-          offset.x.value + size.x.value,
-          _slideWidth,
-        ),
-        SizeConverter.getPointPercentY(
-          offset.y.value + size.y.value,
-          _slideHeight,
-        ),
+        xPointNumerator+sizeXValue/_slideWidth,
+        yPointNumerator+sizeYValue/_slideHeight,
       ),
       thickness: cxn.width.value,
     );
