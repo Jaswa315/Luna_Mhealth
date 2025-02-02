@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:luna_core/utils/version_manager.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -46,7 +47,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             SizedBox(height: 20),
             _buildAboutLuna(
-              version: "0.0.0",
               icon: Icons.help,
             ),
           ],
@@ -105,7 +105,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
 // builds an AboutDialog (in built flutter widget) using showAboutDialog.
   Widget _buildAboutLuna({
-    required String version,
     required IconData icon,
   }){
     return Card(
@@ -115,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
         onTap: () => showAboutDialog(
           context: context,
           applicationName: "Luna",
-          applicationVersion: "Version: $version",
+          applicationVersion: "Version: ${VersionManager().version}",
         ),
       ),
     );
