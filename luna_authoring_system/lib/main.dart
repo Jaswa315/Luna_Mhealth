@@ -1,28 +1,38 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:luna_authoring_system/module_object_generator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
 import 'package:luna_core/models/module.dart';
+import 'package:luna_core/storage/module_resource_factory.dart';
+import 'package:path/path.dart' as p;
 
-void main(List<String> args) {
-    if (args.length != 3) {
-      // ignore: avoid_print
-      print('Usage: dart main.dart <pptx_file_path> <output_dir> <module_name>');
-      
-      return null;
-    }
+Future<void> main(List<String> args) async {
+  if (args.length != 3) {
+    // ignore: avoid_print
+    print('Usage: dart main.dart <pptx_file_path> <output_dir> <module_name>');
 
-    //   'Usage: dart main.dart <pptx_file_path> <output_dir> <module_name>');
-    PptxParser pptxParser = PptxParser(args[0]);
-    // ignore: unused_local_variable
-    PptxTree pptxTree = pptxParser.getPptxTree();
-    
-    // ToDo: Integrate Pptx Tree Validator
+    return null;
+  }
 
-    // ToDo: Create ModuleObjectGenerator 
-    ModuleObjectGenerator moduleObjectGenerator = ModuleObjectGenerator(pptxTree);
-    Future<Module> module = moduleObjectGenerator.generateLunaModule();
+  String pptxFilePath = args[0];
+  String outputDir = args[1];
+  String moduleName = args[2];
 
-     // ToDo: Create .luna file with ModuleResourceFactory.addModuleAssets
-     
+  // Parse the presentation
+  PptxParser pptxParser = PptxParser(pptxFilePath);
+  PptxTree pptxTree = pptxParser.getPptxTree();
+
+  // ToDo: Integrate Pptx Tree Validator
+
+  ModuleObjectGenerator moduleObjectGenerator = ModuleObjectGenerator(pptxTree);
+  Module module = await moduleObjectGenerator.generateLunaModule();
+  String moduleJson = jsonEncode(module.toJson());
+  File moduleSchema = File(p.join(outputDir, '$moduleName.json'));
+  moduleSchema.writeAsString(moduleJson);
+
+  // Create the package (ZIP file) using ModuleStorage
+  // Save module JSON data into the archive
+  ModuleResourceFactory.addModule(moduleName, moduleJson);
 }
-  
