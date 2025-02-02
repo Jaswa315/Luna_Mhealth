@@ -109,7 +109,6 @@ void main() {
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 1 Name',
       ),
       Module(
         title: '', // Empty title
@@ -117,7 +116,6 @@ void main() {
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Unnamed Module',
       ),
       Module(
         title: '', // Another empty title
@@ -125,7 +123,6 @@ void main() {
         pages: [],
         width: 1024,
         height: 768,
-        name: 'No Title Module',
       ),
       Module(
         title: 'Module 4', // Another proper title
@@ -133,7 +130,6 @@ void main() {
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 4 Name',
       ),
     ];
 
@@ -151,7 +147,6 @@ void main() {
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 1 Name',
       ),
       Module(
         title: 'Module 2',
@@ -159,7 +154,6 @@ void main() {
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 2 Name',
       ),
     ];
 
@@ -192,7 +186,6 @@ void main() {
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 1 Name',
       ),
     ];
 
