@@ -6,7 +6,7 @@ import 'package:luna_core/renderers/divider_component_renderer.dart';
 import 'package:luna_core/renderers/line_painter.dart';
 
 void main() {
-  testWidgets('DividerComponentRenderer creates a proper line',
+  testWidgets('DividerComponentRenderer creates a proper line using Offset',
       (WidgetTester tester) async {
     // Create dummy data for DividerComponent with start and end points
     final DividerComponent dummyComponent = DividerComponent(
@@ -35,11 +35,13 @@ void main() {
     // Extract the LinePainter and validate its properties
     final LinePainter painter = customPaint.painter as LinePainter;
 
-    // Assert the properties of the line
-    expect(painter.startX, closeTo(160.0, 0.00001)); // 0.2 * 800
-    expect(painter.startY, closeTo(90.0, 0.00001)); // 0.15 * 600
-    expect(painter.endX, closeTo(640.0, 0.00001)); // 0.8 * 800
-    expect(painter.endY, closeTo(90.0, 0.00001)); // Horizontal line
+    // Expected Offset positions
+    final Offset expectedStart = Offset(160.0, 90.0); // 0.2 * 800, 0.15 * 600
+    final Offset expectedEnd = Offset(640.0, 90.0); // 0.8 * 800, 0.15 * 600
+
+    // Assert the properties of the line using Offset
+    expect(painter.start, equals(expectedStart));
+    expect(painter.end, equals(expectedEnd));
     expect(painter.thickness, closeTo(2.0, 0.00001));
     expect(painter.color, Colors.blue);
   });

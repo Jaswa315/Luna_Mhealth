@@ -9,11 +9,12 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/renderers/line_painter.dart';
+import 'package:luna_core/utils/percentage_conversion.dart';
 import 'base_component_renderer.dart';
 
 /// A renderer class for the `DividerComponent`.
 /// This class is responsible for rendering a divider component on the screen
-/// based on the specified properties such as position, size, thickness, and color.
+/// based on the specified properties such as start and end positions, thickness, and color.
 /// It uses the `LinePainter` to draw the divider on a canvas.
 class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
   /// Renders the given `DividerComponent` as a widget.
@@ -26,23 +27,17 @@ class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
     if (component is DividerComponent) {
       return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          // Dynamically calculate the start and end positions based on the current constraints
-          final double startX = component.startPoint.x * constraints.maxWidth;
-          final double startY = component.startPoint.y * constraints.maxHeight;
-          final double endX = component.endPoint.x * constraints.maxWidth;
-          final double endY = component.endPoint.y * constraints.maxHeight;
+          // Convert start and end points to absolute pixel positions
+          final Offset start = PercentageConversion.updatePercentageToDisplayPixel(component.startPoint,Size(constraints.maxWidth, constraints.maxHeight),);
 
-          // Retrieve the thickness of the divider in pixels
-          final double thicknessInPixels = component.thickness;
+          final Offset end = PercentageConversion.updatePercentageToDisplayPixel(component.endPoint,Size(constraints.maxWidth, constraints.maxHeight),);
 
           // Return a CustomPaint widget that uses the LinePainter to render the divider
           return CustomPaint(
             painter: LinePainter(
-              startX: startX,
-              startY: startY,
-              endX: endX,
-              endY: endY,
-              thickness: thicknessInPixels,
+              start: start,
+              end: end,
+              thickness: component.thickness,
               color: component.color,
             ),
             size: Size(constraints.maxWidth, constraints.maxHeight),
