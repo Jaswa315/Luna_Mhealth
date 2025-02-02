@@ -14,25 +14,28 @@ import 'item.dart';
 import 'page.dart';
 
 class Module extends Item {
-  final String moduleId;
-  final String title;
-  final String author;
-  final int slideCount;
-  final List<Page> pages;
-  final double width;
-  final double height;
+  late final String moduleId;
+  late final String title;
+  late final String author;
+  late List<Page> pages;
+  late final int width;
+  late final int height;
 
+  // Constructor with optional named parameters and default values
   Module({
     String? moduleId,
-    required this.title,
-    required this.author,
-    required this.slideCount,
-    required this.pages,
-    required this.width,
-    required this.height,
-    required String name,
+    String? title,
+    String? author,
+    List<Page>? pages,
+    int? width,
+    int? height,
   })  : moduleId = moduleId ?? Uuid().v4(),
-        super(id: moduleId, name: name, itemType: ItemType.module);
+        title = title ?? "Untitled",
+        author = author ?? "Unassigned Author",
+        pages = pages ?? [],
+        width = width ?? 0,
+        height = height ?? 0,
+        super(id: moduleId, itemType: ItemType.module);
 
   /// A factory method that creates a [Module] from a JSON map.
   factory Module.fromJson(Json json) {
@@ -42,14 +45,13 @@ class Module extends Item {
         slidesJson.map((slideJson) => Page.fromJson(slideJson)).toList();
 
     return Module(
-        moduleId: json['module']['moduleId'] as String,
-        title: json['module']['title'] as String,
-        author: json['module']['author'] as String,
-        slideCount: json['module']['slideCount'] as int,
-        pages: pages,
-        width: (json['module']['width'] as num).toDouble(),
-        height: (json['module']['height'] as num).toDouble(),
-        name: json['module']['name']);
+      moduleId: json['module']['moduleId'] as String,
+      title: json['module']['title'] as String,
+      author: json['module']['author'] as String,
+      pages: pages,
+      width: (json['module']['width'] as num).toInt(),
+      height: (json['module']['height'] as num).toInt(),
+    );
   }
 
   /// Converts the [Module] object to a JSON map.
@@ -58,13 +60,11 @@ class Module extends Item {
       'module': {
         'moduleId': moduleId,
         'title': title,
-        'name': super.name,
         'author': author,
-        'slideCount': slideCount,
         'pages': pages.map((page) => page.toJson()).toList(),
         'width': width,
         'height': height,
-      }
+      },
     };
   }
 

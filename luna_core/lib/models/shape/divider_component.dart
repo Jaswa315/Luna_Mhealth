@@ -1,11 +1,3 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 import 'package:flutter/material.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
@@ -27,7 +19,7 @@ class DividerComponent extends Component {
   Color color;
 
   /// The thickness of the divider line in logical pixels.
-  double thickness;
+  int thickness;
 
   /// The style of the divider's border.
   BorderStyle style;
@@ -60,7 +52,7 @@ class DividerComponent extends Component {
   /// - [endPoint]: The end point of the divider in percentage coordinates.
   DividerComponent({
     this.color = const Color.fromARGB(255, 43, 116, 179),
-    this.thickness = 5.0,
+    this.thickness = 5,
     this.style = BorderStyle.solid,
     required this.startPoint,
     required this.endPoint,

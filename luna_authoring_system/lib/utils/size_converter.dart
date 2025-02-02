@@ -5,10 +5,10 @@ class SizeConverter {
   /// [slideWidth] the slide width EMU value.
   /// [padding] the padding EMU value in the slide.
   static double getPointPercentX(
-      double numerator, double slideWidth, Map<String, double> padding) {
-    double length =
-        slideWidth - (padding['left'] ?? 0) - (padding['right'] ?? 0);
-    double subtrahend = padding['left'] ?? 0;
+      int numerator, int slideWidth) {
+    int length =
+        slideWidth;
+    int subtrahend = 0;
     return (numerator - subtrahend) / length;
   }
 
@@ -17,10 +17,10 @@ class SizeConverter {
   /// [slideHeight] the slide width EMU value.
   /// [padding] the padding EMU value in the slide.
   static double getPointPercentY(
-      double numerator, double slideHeight, Map<String, double> padding) {
-    double length =
-        slideHeight - (padding['top'] ?? 0) - (padding['bottom'] ?? 0);
-    double subtrahend = padding['top'] ?? 0;
+      int numerator, int slideHeight) {
+    int length =
+        slideHeight;
+    int subtrahend =  0;
 
     return (numerator - subtrahend) / length;
   }
@@ -30,9 +30,9 @@ class SizeConverter {
   /// [slideWidth] the slide width EMU value.
   /// [padding] the padding EMU value in the slide.
   static double getSizePercentX(
-      double numerator, double slideWidth, Map<String, double> padding) {
-    double length =
-        slideWidth - (padding['left'] ?? 0) - (padding['right'] ?? 0);
+      int numerator, int slideWidth) {
+    int length =
+        slideWidth;
 
     return numerator / length;
   }
@@ -42,9 +42,9 @@ class SizeConverter {
   /// [slideHeight] the slide height EMU value.
   /// [padding] the padding EMU value in the slide.
   static double getSizePercentY(
-      double numerator, double slideHeight, Map<String, double> padding) {
-    double length =
-        slideHeight - (padding['top'] ?? 0) - (padding['bottom'] ?? 0);
+      int numerator, int slideHeight) {
+    int length =
+        slideHeight;
 
     return numerator / length;
   }
