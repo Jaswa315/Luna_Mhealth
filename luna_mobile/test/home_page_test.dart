@@ -106,7 +106,6 @@ void main() {
       Module(
         title: 'Module 1', // Proper title
         author: 'Author 1',
-        slideCount: 10,
         pages: [],
         width: 1024,
         height: 768,
@@ -115,7 +114,6 @@ void main() {
       Module(
         title: '', // Empty title
         author: 'Author 2',
-        slideCount: 5,
         pages: [],
         width: 1024,
         height: 768,
@@ -124,7 +122,6 @@ void main() {
       Module(
         title: '', // Another empty title
         author: 'Author 3',
-        slideCount: 7,
         pages: [],
         width: 1024,
         height: 768,
@@ -133,7 +130,6 @@ void main() {
       Module(
         title: 'Module 4', // Another proper title
         author: 'Author 4',
-        slideCount: 12,
         pages: [],
         width: 1024,
         height: 768,
@@ -152,7 +148,6 @@ void main() {
       Module(
         title: 'Module 1',
         author: 'Author 1',
-        slideCount: 10,
         pages: [],
         width: 1024,
         height: 768,
@@ -161,7 +156,6 @@ void main() {
       Module(
         title: 'Module 2',
         author: 'Author 2',
-        slideCount: 5,
         pages: [],
         width: 1024,
         height: 768,
@@ -195,7 +189,6 @@ void main() {
       Module(
         title: 'Module 1',
         author: 'Author 1',
-        slideCount: 10,
         pages: [],
         width: 1024,
         height: 768,
