@@ -103,7 +103,7 @@ class DividerComponent extends Component {
           ? Color(json['color'])
           : const Color.fromARGB(255, 43, 116, 179),
       thickness:
-          json.containsKey('thickness') ? json['thickness'].toDouble() : 5.0,
+         json.containsKey('thickness') ? int.tryParse(json['thickness'].toString()) ?? 5 : 5,
       style: json.containsKey('style')
           ? BorderStyle.values[json['style']]
           : BorderStyle.solid,
