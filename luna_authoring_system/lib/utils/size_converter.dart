@@ -4,19 +4,14 @@ class SizeConverter {
   /// [numerator] the value in EMU needs to be translated.
   /// [slideWidth] the slide width EMU value.
   static double getPointPercentX(int numerator, int slideWidth) {
-    int length = slideWidth;
-    int subtrahend = 0;
-    return (numerator - subtrahend) / length;
+    return (numerator) / slideWidth;
   }
 
   /// Converts the EMU size value to percent in y-axis
   /// [numerator] the value in EMU needs to be translated.
   /// [slideHeight] the slide width EMU value.
   static double getPointPercentY(int numerator, int slideHeight) {
-    int length = slideHeight;
-    int subtrahend = 0;
-
-    return (numerator - subtrahend) / length;
+    return (numerator) / slideHeight;
   }
 
   /// Converts the EMU size value to percent width-wise
