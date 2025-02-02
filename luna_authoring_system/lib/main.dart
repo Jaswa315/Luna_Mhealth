@@ -13,7 +13,8 @@ Future<void> main(List<String> args) async {
     // ignore: avoid_print
     print('Usage: dart main.dart <pptx_file_path> <output_dir> <module_name>');
 
-    return null;
+    // Exit with code -1 to indicate an error
+    exit(-1);
   }
 
   String pptxFilePath = args[0];
