@@ -10,12 +10,12 @@ import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import '../utils/size_converter.dart';
 
-/// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of 
+/// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
 /// Module and all descendant objects of a module. This includes Pages, Components, and other items inside a Module.
-/// 
-/// Please view the Luna Domain module model rendering diagram at 
+///
+/// Please view the Luna Domain module model rendering diagram at
 /// https://app.diagrams.net/#G1oO_dalj6fEq2QAfdHzyQPQiMiSi9CpXE#%7B%22pageId%22%3A%22jMWzNvhAAJqccfFervB2%22%7D
-/// 
+///
 /// Our goal is to match that diagram implementation-wise
 class ModuleObjectGenerator {
   late final PptxTree pptxTree;
@@ -41,21 +41,18 @@ class ModuleObjectGenerator {
       }
     }
 
-    /// The width and height are in EMU values.
     Module moduleObj = Module(
-      // moduleId: root.moduleID,
       title: root.title,
       author: root.author,
       pages: pages,
       width: root.width.value,
       height: root.height.value,
     );
-    
+
     return moduleObj;
   }
 
   Page _createPage(Slide slide) {
-  
     List<Component> pageComponents = [];
     for (Shape child in slide.shapes!) {
       if (child is ConnectionShape) {
@@ -82,9 +79,13 @@ class ModuleObjectGenerator {
       ),
       endPoint: Point2DPercentage(
         SizeConverter.getPointPercentX(
-            offset.x.value + size.x.value, _slideWidth),
+          offset.x.value + size.x.value,
+          _slideWidth,
+        ),
         SizeConverter.getPointPercentY(
-            offset.y.value + size.y.value, _slideHeight),
+          offset.y.value + size.y.value,
+          _slideHeight,
+        ),
       ),
       thickness: cxn.width.value,
     );
