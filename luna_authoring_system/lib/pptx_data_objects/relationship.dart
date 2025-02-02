@@ -21,13 +21,14 @@ class Relationship {
   /// So this relationship is the mapping from rId10 to a particular object
   late String rID;
 
-  /// The target .xml that this relationship points to
-  late String target;
-
   /// The type of the target
   late String type;
 
-  Relationship();
+  /// The target .xml that this relationship points to
+  late String target;
+
+
+  Relationship(this.rID, this.type, this.target);
 }
 
 
