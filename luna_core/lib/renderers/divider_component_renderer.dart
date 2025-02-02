@@ -28,17 +28,9 @@ class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
       return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // Convert start and end points to absolute pixel positions
-          final Offset start =
-              PercentageConversion.updatePercentageToDisplayPixel(
-            component.startPoint,
-            Size(constraints.maxWidth, constraints.maxHeight),
-          );
+          final Offset start = PercentageConversion.updatePercentageToDisplayPixel(component.startPoint,Size(constraints.maxWidth, constraints.maxHeight),);
 
-          final Offset end =
-              PercentageConversion.updatePercentageToDisplayPixel(
-            component.endPoint,
-            Size(constraints.maxWidth, constraints.maxHeight),
-          );
+          final Offset end = PercentageConversion.updatePercentageToDisplayPixel(component.endPoint,Size(constraints.maxWidth, constraints.maxHeight),);
 
           // Return a CustomPaint widget that uses the LinePainter to render the divider
           return CustomPaint(
