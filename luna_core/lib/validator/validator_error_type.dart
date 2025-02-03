@@ -5,7 +5,4 @@ enum ValidatorErrorType {
   pptxWidthMustBePositive,
   pptxHeightMustBePositive,
   pptxWidthAndHeightMustBothBeInitialized,
-
-  // Mock validator errors for tests
-  mockValidatorErrorType,
 }

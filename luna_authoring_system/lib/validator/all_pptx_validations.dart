@@ -3,6 +3,10 @@ import 'package:luna_authoring_system/validator/pptx_dimensions_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_core/validator/validator_manager.dart';
 
+/// AllPPtxValidations is our "collection" of every PPTX Validator we want to run
+/// when we validate a pptxTree. If we create new PPTX validators and want to integrate them
+/// into our validation check ran on every pptx tree created in authoring system's main, we'd
+/// add it here.
 class AllPptxValidations {
   /// Returns a [ValidatorManager] with all PPTX validators added.
   static ValidatorManager getPptxValidationsToRun(PptxTree pptxTree) {
