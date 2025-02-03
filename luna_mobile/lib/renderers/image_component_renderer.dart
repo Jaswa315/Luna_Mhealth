@@ -6,7 +6,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import '../models/image/image_component.dart';
+import 'package:luna_core/models/image/image_component.dart';
 import 'base_component_renderer.dart';
 
 /// A class that extends the [BaseComponentRenderer] class to render an image component.

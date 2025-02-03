@@ -6,14 +6,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
-import 'package:luna_core/renderers/divider_component_renderer.dart';
+import 'package:luna_core/models/text/text_component.dart';
+import 'package:luna_mobile/renderers/divider_component_renderer.dart';
 
-import '../models/image/image_component.dart';
-import '../models/text/text_component.dart';
-import 'image_component_renderer.dart';
-import 'irenderer.dart';
-import 'text_component_renderer.dart';
+import 'package:luna_mobile/renderers/image_component_renderer.dart';
+import 'package:luna_mobile/renderers/irenderer.dart';
+import 'package:luna_mobile/renderers/text_component_renderer.dart';
 
 /// A factory class for creating component renderers.
 class RendererFactory {
