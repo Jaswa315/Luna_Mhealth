@@ -39,7 +39,8 @@ Future<void> main(List<String> args) async {
   if (errorList.isNotEmpty) {
     // Print all errors
     for (var error in errorList) {
-      // ignore: avoid_print - TODO: Later change to Log Statement
+      // TODO: Later change to Log Statement
+      // ignore: avoid_print 
       print('Validation Error: ${error.errorType}');
     }
     // Exit with code -1 to indicate validation failure
