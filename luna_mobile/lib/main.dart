@@ -15,7 +15,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GlobalConfiguration().loadFromAsset("app_settings");
   await LogManager.createInstance();
-  vm.VersionManager().setVersion();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
@@ -33,6 +32,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Future.microtask(() => vm.VersionManager().setVersion());
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
