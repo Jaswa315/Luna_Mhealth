@@ -34,11 +34,12 @@ Future<void> main(List<String> args) async {
   // Run Validation
   Set<ValidatorError> errorList = validatorManager.validateAll();
 
+  
   // Check for validation errors
   if (errorList.isNotEmpty) {
     // Print all errors
-    // TODO: Later change to Log Statement
     for (var error in errorList) {
+      // ignore: avoid_print - TODO: Later change to Log Statement
       print('Validation Error: ${error.errorType}');
     }
     // Exit with code -1 to indicate validation failure
