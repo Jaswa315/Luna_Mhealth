@@ -8,8 +8,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
-import 'package:luna_core/renderers/line_painter.dart';
 import 'package:luna_core/utils/percentage_conversion.dart';
+import 'package:luna_mobile/renderers/line_painter.dart';
+
 import 'base_component_renderer.dart';
 
 /// A renderer class for the `DividerComponent`.
@@ -28,9 +29,17 @@ class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
       return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // Convert start and end points to absolute pixel positions
-          final Offset start = PercentageConversion.updatePercentageToDisplayPixel(component.startPoint,Size(constraints.maxWidth, constraints.maxHeight),);
+          final Offset start =
+              PercentageConversion.updatePercentageToDisplayPixel(
+            component.startPoint,
+            Size(constraints.maxWidth, constraints.maxHeight),
+          );
 
-          final Offset end = PercentageConversion.updatePercentageToDisplayPixel(component.endPoint,Size(constraints.maxWidth, constraints.maxHeight),);
+          final Offset end =
+              PercentageConversion.updatePercentageToDisplayPixel(
+            component.endPoint,
+            Size(constraints.maxWidth, constraints.maxHeight),
+          );
 
           // Return a CustomPaint widget that uses the LinePainter to render the divider
           return CustomPaint(

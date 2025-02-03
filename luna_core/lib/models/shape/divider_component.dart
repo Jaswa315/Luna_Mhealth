@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
-import 'package:luna_core/renderers/divider_component_renderer.dart';
 import 'package:luna_core/utils/types.dart';
+import 'package:luna_mobile/renderers/divider_component_renderer.dart';
 
 /// Represents a divider component that can be used in the Luna mHealth Mobile app.
 /// This component provides a line to separate content sections visually,
@@ -102,8 +102,9 @@ class DividerComponent extends Component {
       color: json.containsKey('color')
           ? Color(json['color'])
           : const Color.fromARGB(255, 43, 116, 179),
-      thickness:
-         json.containsKey('thickness') ? int.tryParse(json['thickness'].toString()) ?? 5 : 5,
+      thickness: json.containsKey('thickness')
+          ? int.tryParse(json['thickness'].toString()) ?? 5
+          : 5,
       style: json.containsKey('style')
           ? BorderStyle.values[json['style']]
           : BorderStyle.solid,
