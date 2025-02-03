@@ -1,7 +1,11 @@
 enum ValidatorErrorType {
+  // PPTX Validation error types
   pptxTitleHasNoVisibleCharacters,
   pptxTitleIsTooLong,
   pptxWidthMustBePositive,
   pptxHeightMustBePositive,
-  pptxWidthAndHeightMustBothBeInitialized
+  pptxWidthAndHeightMustBothBeInitialized,
+
+  // Mock validator errors for tests
+  mockValidatorErrorType,
 }
