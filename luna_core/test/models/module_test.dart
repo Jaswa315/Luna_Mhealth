@@ -22,20 +22,16 @@ void main() {
       final module = Module(
           title: 'This is title',
           author: 'Test Author',
-          slideCount: 0,
           pages: [],
-          width: 100.0,
-          height: 200.0,
-          name: 'module_name');
+          width: 100,
+          height: 200,);
 
       expect(module.id, isNotNull); // ID is auto-generated if not provided
       expect(module.title, 'This is title');
       expect(module.author, 'Test Author');
-      expect(module.slideCount, 0);
       expect(module.pages, isEmpty);
-      expect(module.width, 100.0);
-      expect(module.height, 200.0);
-      expect(module.name, 'module_name');
+      expect(module.width, 100);
+      expect(module.height, 200);
       expect(module.itemType, ItemType.module);
     });
 
@@ -44,11 +40,9 @@ void main() {
           moduleId: '1',
           title: 'This is title',
           author: 'Test Author',
-          slideCount: 0,
           pages: [],
-          width: 100.0,
-          height: 200.0,
-          name: 'module_name');
+          width: 100,
+          height: 200,);
 
       expect(module.id, '1');
     });
@@ -59,10 +53,9 @@ void main() {
           'moduleId': '12345',
           'title': 'This is title',
           'author': 'John Doe',
-          'slideCount': 0,
           'pages': [],
-          'width': 100.0,
-          'height': 200.0,
+          'width': 100,
+          'height': 200,
           'name': 'Sample Module'
         }
       };
@@ -72,10 +65,9 @@ void main() {
       expect(module.moduleId, isNotNull);
       expect(module.title, 'This is title');
       expect(module.author, 'John Doe');
-      expect(module.slideCount, 0);
       expect(module.pages, isEmpty);
-      expect(module.width, 100.0);
-      expect(module.height, 200.0);
+      expect(module.width, 100);
+      expect(module.height, 200);
       expect(module.itemType, ItemType.module);
     });
 

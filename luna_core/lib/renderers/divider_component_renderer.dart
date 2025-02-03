@@ -37,7 +37,7 @@ class DividerComponentRenderer extends BaseComponentRenderer<DividerComponent> {
             painter: LinePainter(
               start: start,
               end: end,
-              thickness: component.thickness,
+              thickness: component.thickness.toDouble(),
               color: component.color,
             ),
             size: Size(constraints.maxWidth, constraints.maxHeight),

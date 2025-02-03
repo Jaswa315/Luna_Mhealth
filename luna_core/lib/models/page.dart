@@ -1,11 +1,3 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 /// Represents a page in the application.
 /// A page can contain multiple components.
 
@@ -20,15 +12,11 @@ import 'component.dart';
 /// A page contains a list of components that can be added or removed.
 /// It can be converted to and from a JSON map.
 class Page extends Item {
-  /// The unique identifier for the slide.
-  final String slideId;
-
   /// A list of components on the slide.
   final List<Component> components;
 
   /// Constructs a new instance of [Page].
   Page({
-    required this.slideId,
     List<Component>? components,
   })  : components = components ?? [],
         super(itemType: ItemType.page);
@@ -57,7 +45,6 @@ class Page extends Item {
         .toList();
 
     return Page(
-      slideId: json['slideId'] as String,
       components: components,
     );
   }
@@ -66,7 +53,6 @@ class Page extends Item {
   Json toJson() {
     return {
       'type': super.itemType.name,
-      'slideId': slideId,
       'shapes': components.map((c) => c.toJson()).toList(),
     };
   }

@@ -12,7 +12,7 @@ void main() {
     final DividerComponent dummyComponent = DividerComponent(
       startPoint: Point2DPercentage(0.2, 0.15), // 20% from left, 15% from top
       endPoint: Point2DPercentage(0.8, 0.15), // 80% from left, 15% from top
-      thickness: 2.0, // 2 pixels thick
+      thickness: 2, // 2 pixels thick
       color: Colors.blue, // Blue line
     );
 
@@ -42,7 +42,7 @@ void main() {
     // Assert the properties of the line using Offset
     expect(painter.start, equals(expectedStart));
     expect(painter.end, equals(expectedEnd));
-    expect(painter.thickness, closeTo(2.0, 0.00001));
+    expect(painter.thickness, closeTo(2, 0.00001));
     expect(painter.color, Colors.blue);
   });
 }

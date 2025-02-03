@@ -106,38 +106,30 @@ void main() {
       Module(
         title: 'Module 1', // Proper title
         author: 'Author 1',
-        slideCount: 10,
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 1 Name',
       ),
       Module(
         title: '', // Empty title
         author: 'Author 2',
-        slideCount: 5,
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Unnamed Module',
       ),
       Module(
         title: '', // Another empty title
         author: 'Author 3',
-        slideCount: 7,
         pages: [],
         width: 1024,
         height: 768,
-        name: 'No Title Module',
       ),
       Module(
         title: 'Module 4', // Another proper title
         author: 'Author 4',
-        slideCount: 12,
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 4 Name',
       ),
     ];
 
@@ -152,20 +144,16 @@ void main() {
       Module(
         title: 'Module 1',
         author: 'Author 1',
-        slideCount: 10,
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 1 Name',
       ),
       Module(
         title: 'Module 2',
         author: 'Author 2',
-        slideCount: 5,
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 2 Name',
       ),
     ];
 
@@ -195,11 +183,9 @@ void main() {
       Module(
         title: 'Module 1',
         author: 'Author 1',
-        slideCount: 10,
         pages: [],
         width: 1024,
         height: 768,
-        name: 'Module 1 Name',
       ),
     ];
 
