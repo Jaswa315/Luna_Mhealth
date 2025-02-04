@@ -1,10 +1,8 @@
 # Pipeline to rubn
 trigger: none
 
-
-# macOS-13 was the one of the few vmImages that did not get stuck creating an android emulator for 10 mins. 
 pool:
-  vmImage: macOS-13
+  vmImage: windows-latest
 
 variables:
   - name: package_path
@@ -18,42 +16,8 @@ steps:
 
 - template: ../templates/install_prereqs.yml
 
-# Start android emulator
-- task: Bash@3
-  inputs:
-    #targetType: 'filePath' # 'filePath' | 'inline'. Type. Default: filePath.
-    filePath: ./pipelines/scripts/start_android_emulator.sh
-  displayName: 'Start Android emulator'
-
-  # This is a placeholder for later dev to get the most recent build
-
-  # - task: DownloadPipelineArtifact@2
-  #   inputs:
-  #     source: 'specific'
-  #     pipeline: 1234  # ID of the pipeline that produced the artifact
-  #     runVersion: 'latest'
-  #     artifact: 'your-artifact-name'
-  #     path: '$(Build.SourcesDirectory)/downloaded-artifact'
-  #   displayName: 'Download Artifact from Another Pipeline'
+- template: ../templates/run_luna_authoring.yml
+  parameters:
+    operating_system: 'windows'
 
 
-# Create android flutter project
-- script: |
-    cd $(package_path)
-      flutter clean
-      flutter pub get
-      flutter create --platforms=android .
-  displayName: 'Get Flutter packages for the $(package_path)'
-
-- task: PowerShell@2
-  displayName: 'Run $(package_path) tests'
-  inputs:
-    targetType: 'inline'
-    script: |
-      cd $(package_path)
-      flutter drive --driver=$(driver_path) --target=$(test_folder)/luna_mobile_e2e_test.dart | Tee-Object -FilePath mobile_integration_tests.log
-      if (-not (Select-String -Path mobile_integration_tests.log -Pattern "All tests passed")) {
-        Write-Host "##vso[task.logissue type=error]$errMsg"
-        Write-Host "##vso[task.complete result=Failed]"
-        exit 1
-      }

@@ -1,0 +1,47 @@
+# This template runs the luna_authoring system to build
+# a luna file from a given pptx. 
+
+parameters:
+- name: pptx_path # path to input pptx, should be fully qualified
+  default: '$(Build.SourcesDirectory)/luna_authoring_system/assets/A Line.pptx'
+- name: module_name # file name for the module
+  default: 'luna_test'
+- name: operating_system
+  default: 'windows'
+
+steps:
+
+# Currently module storage
+- task: PowerShell@2
+  displayName: 'Set user profile variable (linux/mac)'
+  condition: ne( variables['Agent.OS'], 'Windows_NT' )
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=user_profile;]$HOME/Documents"
+
+- task: PowerShell@2
+  displayName: 'Set user profile variable (windows)'
+  condition: eq( variables['Agent.OS'], 'Windows_NT' )
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=user_profile;]$env:USERPROFILE\documents"
+
+- task: PowerShell@2
+  displayName: 'Run Luna Authoring System using Flutter'
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd "luna_authoring_system"
+      $pptx_file_path = "${{ parameters.pptx_path }}"
+      flutter create --platform=${{ parameters.operating_system }} .
+      $flutter_proc = Start-Process -FilePath "flutter" -ArgumentList "run --dart-define=pptxFilePath=`"$pptx_file_path`" --dart-define=moduleName=`"${{ parameters.module_name }}`"" -NoNewWindow -PassThru
+      Start-Sleep 240
+      Stop-Process $flutter_proc
+
+
+- template: test_file_existence.yml
+  parameters:
+    path: $(user_profile)
+    file_name: ${{ parameters.module_name }}.luna
