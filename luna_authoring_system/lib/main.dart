@@ -28,7 +28,7 @@ Future<void> main() async {
     // On Windows, Files are generated under C:\Users\username\Documents.
     // ignore: avoid_print
     print(
-      'Usage: flutter run --dart--define=pptxFilePath=<pptx_file_path> --dart-define=outputDir=<output_dir> --dart-define=moduleName=<module_name>',
+      'Usage: flutter run --dart--define=pptxFilePath=<pptx_file_path> --dart-define=moduleName=<module_name>',
     );
 
     // Exit with code -1 to indicate an error
