@@ -2,8 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
-import 'package:luna_core/renderers/divider_component_renderer.dart';
-import 'package:luna_core/renderers/line_painter.dart';
+import 'package:luna_mobile/renderers/divider_component_renderer.dart';
+import 'package:luna_mobile/renderers/line_painter.dart';
+
+/// A test wrapper to render the `DividerComponentRenderer`
+class TestApp extends StatelessWidget {
+  final DividerComponent dummyComponent;
+
+  const TestApp({super.key, required this.dummyComponent});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: DividerComponentRenderer()
+            .renderComponent(dummyComponent, const Size(800, 600)),
+      ),
+    );
+  }
+}
 
 void main() {
   testWidgets('DividerComponentRenderer creates a proper line using Offset',
@@ -16,15 +33,8 @@ void main() {
       color: Colors.blue, // Blue line
     );
 
-    // Render the DividerComponentRenderer with the dummy data
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: DividerComponentRenderer()
-              .renderComponent(dummyComponent, const Size(800, 600)),
-        ),
-      ),
-    );
+    // Render the TestApp with the dummy data
+    await tester.pumpWidget(TestApp(dummyComponent: dummyComponent));
 
     // Find the specific CustomPaint widget with LinePainter
     final CustomPaint customPaint = tester.widget<CustomPaint>(
