@@ -5,4 +5,8 @@ enum ValidatorErrorType {
   pptxWidthMustBePositive,
   pptxHeightMustBePositive,
   pptxWidthAndHeightMustBothBeInitialized,
+  point2DXPercentageLessThanZero,
+  point2DXPercentageGreaterThanOne,
+  point2DYPercentageLessThanZero,
+  point2DYPercentageGreaterThanOne,
 }

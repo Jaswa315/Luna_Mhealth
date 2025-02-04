@@ -1,3 +1,7 @@
+import 'package:luna_core/validator/point_2d_percentage_validator.dart';
+import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validator_manager.dart';
+
 class Point2DPercentage {
   /// Represents a point in a 2-dimensional space using normalized coordinates (0 to 1).
   ///
@@ -34,14 +38,22 @@ class Point2DPercentage {
   /// - 0.75 places the point 75% down from the top.
   final double y;
 
-  /// Creates a Point2DPercentage ensuring x and y are strictly within [0,1].
-  ///
-  /// Throws an ArgumentError if either value is out of range.
-  Point2DPercentage(double x, double y)
-      : x = (x < 0.0 || x > 1.0)
-            ? throw ArgumentError.value(x, 'x', 'Must be between 0 and 1')
-            : x,
-        y = (y < 0.0 || y > 1.0)
-            ? throw ArgumentError.value(y, 'y', 'Must be between 0 and 1')
-            : y;
+  /// Private constructor ensures values go through validation first.
+  const Point2DPercentage._(this.x, this.y);
+
+  /// Constructor that enforces validation using the validator class.
+  factory Point2DPercentage(double x, double y) {
+    // Run validation
+    ValidatorManager validatorManager = ValidatorManager();
+    validatorManager.addValidator(Point2DPercentageValidator(x, y));
+
+    Set<ValidatorError> errors = validatorManager.validateAll();
+    if (errors.isNotEmpty) {
+      throw ArgumentError(
+        "Invalid Point2DPercentage values detected: ${errors.map((e) => e.errorType).join(', ')}",
+      );
+    }
+
+    return Point2DPercentage._(x, y);
+  }
 }
