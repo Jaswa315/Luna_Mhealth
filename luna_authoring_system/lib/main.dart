@@ -45,6 +45,8 @@ Future<void> main() async {
   if (errorList.isNotEmpty) {
     // Print all errors
     for (var error in errorList) {
+      // TODO: Replace with Log
+      // ignore: avoid_print
       print('Validation Error: ${error.errorType}');
     }
     // Exit with code -1 to indicate validation failure
