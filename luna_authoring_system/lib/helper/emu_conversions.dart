@@ -17,4 +17,10 @@ class EmuConversions {
 
     return percentage;
   }
+
+  static double updateThicknessToDisplayPixels(EMU currentValue) {
+    double thickness = currentValue.value / 12700;
+
+    return thickness;
+  }
 }

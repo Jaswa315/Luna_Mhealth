@@ -19,7 +19,7 @@ class DividerComponent extends Component {
   Color color;
 
   /// The thickness of the divider line in logical pixels.
-  int thickness;
+  double thickness;
 
   /// The style of the divider's border.
   BorderStyle style;
@@ -103,7 +103,7 @@ class DividerComponent extends Component {
           ? Color(json['color'])
           : const Color.fromARGB(255, 43, 116, 179),
       thickness: json.containsKey('thickness')
-          ? int.tryParse(json['thickness'].toString()) ?? 5
+          ? double.tryParse(json['thickness'].toString()) ?? 5
           : 5,
       style: json.containsKey('style')
           ? BorderStyle.values[json['style']]

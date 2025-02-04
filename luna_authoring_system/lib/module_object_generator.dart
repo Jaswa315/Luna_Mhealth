@@ -1,4 +1,5 @@
 import 'package:luna_authoring_system/helper/connection_shape_helper.dart';
+import 'package:luna_authoring_system/helper/emu_conversions.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
@@ -66,6 +67,8 @@ class ModuleObjectGenerator {
   DividerComponent _createDivider(
     ConnectionShape cxn,
   ) {
+    double thicknessOfLine =
+        EmuConversions.updateThicknessToDisplayPixels(cxn.width);
     // Get computed start and end points
     final points = ConnectionShapeHelper.getStartAndEndPoints(
       cxn,
@@ -76,7 +79,7 @@ class ModuleObjectGenerator {
     return DividerComponent(
       startPoint: points['startPoint']!,
       endPoint: points['endPoint']!,
-      thickness: cxn.width.value,
+      thickness: thicknessOfLine,
     );
   }
 }

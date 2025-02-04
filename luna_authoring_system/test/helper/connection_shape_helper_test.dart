@@ -91,7 +91,7 @@ void main() {
           connectionShape, slideWidth, slideHeight);
 
       // Expected thickness conversion
-      int expectedThickness = 5;
+      double expectedThickness = 0.5;
 
       // Create DividerComponent
       final divider = DividerComponent(
