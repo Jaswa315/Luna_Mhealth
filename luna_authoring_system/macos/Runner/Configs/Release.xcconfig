@@ -1,2 +1,3 @@
 #include "../../Flutter/Flutter-Release.xcconfig"
 #include "Warnings.xcconfig"
+EXECUTABLE_NAME = luna_authoring_system
