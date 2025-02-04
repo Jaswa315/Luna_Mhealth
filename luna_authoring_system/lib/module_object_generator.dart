@@ -1,12 +1,12 @@
+import 'package:luna_authoring_system/helper/connection_shape_helper.dart';
+import 'package:luna_authoring_system/helper/emu_conversions.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
-import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
@@ -64,26 +64,22 @@ class ModuleObjectGenerator {
     return pageObj;
   }
 
-  DividerComponent _createDivider(ConnectionShape cxn) {
-    Point2D offset = cxn.transform.offset;
-    Point2D size = cxn.transform.size;
+  DividerComponent _createDivider(
+    ConnectionShape cxn,
+  ) {
+    double thicknessOfLine =
+        EmuConversions.updateThicknessToDisplayPixels(cxn.width);
+    // Get computed start and end points
+    final points = ConnectionShapeHelper.getStartAndEndPoints(
+      cxn,
+      _slideWidth,
+      _slideHeight,
+    );
 
-    int xPointNumerator = offset.x.value;
-    int yPointNumerator = offset.y.value;
-    int sizeXValue = size.x.value;
-    int sizeYValue = size.y.value;
-
-    // TODO: in parser, convert EMU values into Percentage, This should work w/o SizeCOnverter
     return DividerComponent(
-      startPoint: Point2DPercentage(
-        xPointNumerator / _slideWidth,
-        yPointNumerator / _slideHeight,
-      ),
-      endPoint: Point2DPercentage(
-        xPointNumerator / _slideWidth + sizeXValue / _slideWidth,
-        yPointNumerator / _slideHeight + sizeYValue / _slideHeight,
-      ),
-      thickness: cxn.width.value,
+      startPoint: points['startPoint']!,
+      endPoint: points['endPoint']!,
+      thickness: thicknessOfLine,
     );
   }
 }
