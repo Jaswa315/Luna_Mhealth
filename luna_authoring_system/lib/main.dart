@@ -26,6 +26,7 @@ Future<void> main() async {
   if (pptxFilePath == null || moduleName == null) {
     // Files are under Documents/ by default on Macos
     // On Windows, Files are generated under C:\Users\username\Documents.
+    // ignore: avoid_print
     print(
       'Usage: flutter run --dart--define=pptxFilePath=<pptx_file_path> --dart-define=outputDir=<output_dir> --dart-define=moduleName=<module_name>',
     );
