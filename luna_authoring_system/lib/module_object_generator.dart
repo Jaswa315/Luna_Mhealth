@@ -1,13 +1,11 @@
 import 'package:luna_authoring_system/helper/connection_shape_helper.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
-import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/models/shape/divider_component.dart';
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
