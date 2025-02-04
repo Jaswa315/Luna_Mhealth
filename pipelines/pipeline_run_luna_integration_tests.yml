@@ -1,4 +1,5 @@
-# Pipeline to rubn
+# Pipeline to run luna integration tests
+# This pipeline starts an android emulator and then uses flutter drive to test the mobile application
 trigger: none
 
 
@@ -21,7 +22,6 @@ steps:
 # Start android emulator
 - task: Bash@3
   inputs:
-    #targetType: 'filePath' # 'filePath' | 'inline'. Type. Default: filePath.
     filePath: ./pipelines/scripts/start_android_emulator.sh
   displayName: 'Start Android emulator'
 
@@ -45,6 +45,9 @@ steps:
       flutter create --platforms=android .
   displayName: 'Get Flutter packages for the $(package_path)'
 
+# Run the integration test
+# flutter drive does not have a --machine for outputing test results and converting to junit
+# Just fail the task if "All tests passed" isn't present
 - task: PowerShell@2
   displayName: 'Run $(package_path) tests'
   inputs:
@@ -53,7 +56,7 @@ steps:
       cd $(package_path)
       flutter drive --driver=$(driver_path) --target=$(test_folder)/luna_mobile_e2e_test.dart | Tee-Object -FilePath mobile_integration_tests.log
       if (-not (Select-String -Path mobile_integration_tests.log -Pattern "All tests passed")) {
-        Write-Host "##vso[task.logissue type=error]$errMsg"
+        Write-Host "##vso[task.logissue type=error]Integration Test Failed"
         Write-Host "##vso[task.complete result=Failed]"
         exit 1
       }
