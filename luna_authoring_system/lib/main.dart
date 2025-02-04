@@ -20,11 +20,10 @@ Future<void> main() async {
   await LogManager.createInstance();
 
   const String pptxFilePath = String.fromEnvironment('pptxFilePath');
-  const String outputDir = String.fromEnvironment('outputDir');
   const String moduleName = String.fromEnvironment('moduleName');
 
   // ignore: unnecessary_null_comparison
-  if (pptxFilePath == null || outputDir == null || moduleName == null) {
+  if (pptxFilePath == null || moduleName == null) {
     // Files are under Documents/ by default on Macos
     // On Windows, Files are generated under C:\Users\username\Documents.
     print(
