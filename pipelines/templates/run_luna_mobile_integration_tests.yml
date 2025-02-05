@@ -1,24 +1,16 @@
-# Pipeline to run luna integration tests
-# This pipeline starts an android emulator and then uses flutter drive to test the mobile application
-trigger: none
+# This template starts an android emulator and runs tests in the integration_test folder
+# for Luna mobile.
+# This template requires macos-13
 
-
-# macOS-13 was the one of the few vmImages that did not get stuck creating an android emulator for 10 mins. 
-pool:
-  vmImage: macOS-13
-
-variables:
+parameters:
   - name: package_path
-    value: 'luna_mobile'
+    default: 'luna_mobile'
   - name: driver_path
-    value: 'test_driver/drive_integrations.dart'
+    default: 'test_driver/drive_integrations.dart'
   - name: test_folder
-    value: 'integration_test'
+    default: 'integration_test'
 
 steps:
-
-- template: ../templates/install_prereqs.yml
-
 # Start android emulator
 - task: Bash@3
   inputs:
@@ -39,22 +31,22 @@ steps:
 
 # Create android flutter project
 - script: |
-    cd $(package_path)
+    cd ${{  parameters.package_path  }}
       flutter clean
       flutter pub get
       flutter create --platforms=android .
-  displayName: 'Get Flutter packages for the $(package_path)'
+  displayName: 'Get Flutter packages for the ${{  parameters.package_path  }}'
 
 # Run the integration test
 # flutter drive does not have a --machine for outputing test results and converting to junit
 # Just fail the task if "All tests passed" isn't present
 - task: PowerShell@2
-  displayName: 'Run $(package_path) tests'
+  displayName: 'Run ${{  parameters.package_path  }} tests'
   inputs:
     targetType: 'inline'
     script: |
-      cd $(package_path)
-      flutter drive --driver=$(driver_path) --target=$(test_folder)/luna_mobile_e2e_test.dart | Tee-Object -FilePath mobile_integration_tests.log
+      cd ${{ parameters.package_path  }}
+      flutter drive --driver=${{  parameters.driver_path  }} --target=${{  parameters.test_folder  }}/luna_mobile_e2e_test.dart | Tee-Object -FilePath mobile_integration_tests.log
       if (-not (Select-String -Path mobile_integration_tests.log -Pattern "All tests passed")) {
         Write-Host "##vso[task.logissue type=error]Integration Test Failed"
         Write-Host "##vso[task.complete result=Failed]"

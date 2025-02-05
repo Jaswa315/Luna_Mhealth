@@ -1,4 +1,6 @@
 # Nightly Build for Luna mHealth
+# Runs unit tests and then integration tests
+
 trigger: none
 schedules:
 - cron: '0 10 * * *' #10:00 AM UTC
@@ -7,34 +9,76 @@ schedules:
     include:
     - main
 
-strategy:
-  matrix:
-    linux:
-      imageName: 'ubuntu-latest'
-    mac:
-      imageName: 'macOS-latest'
-    windows:
-      imageName: 'windows-latest'
+jobs:
 
-pool:
-  vmImage: $(imageName)
+# Run unit tests.
+- job: UnitTests
+  displayName: "Run unit tests"
+  strategy:
+    matrix:
+      mac:
+        imageName: 'macOS-latest'
+      windows:
+        imageName: 'windows-latest'
 
-variables:
-  - name: package_folders
-    value: luna_core,luna_authoring_system,luna_mobile
+  pool:
+    vmImage: $(imageName)
 
-steps:
+  variables:
+    - name: package_folders
+      value: luna_core,luna_authoring_system,luna_mobile
 
-- template: templates/install_prereqs.yml
+  steps:
 
-- ${{ each folder in split(variables.package_folders, ',') }}:
-  - template: templates/lint_luna.yml
-    parameters:
-      package_path: ${{ folder }}
-      package_name: ${{ folder }}
-  - template: templates/run_tests.yml
-    parameters:
-      package_path: ${{ folder }}
-      package_name: ${{ folder }}
+  - template: templates/install_prereqs.yml
 
-- template: templates/publish_test_lint_results.yml
+  - ${{ each folder in split(variables.package_folders, ',') }}:
+    - template: templates/lint_luna.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+    - template: templates/run_tests.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+# Publish unit test results
+  - template: templates/publish_test_lint_results.yml
+
+# Run authoring end to end tests
+
+- job: EndToEnd_Authoring
+  displayName: "Run Luna Authoring to generate a .luna file"
+  dependsOn: UnitTests
+  strategy:
+    matrix:
+      mac:
+        imageName: 'macOS-latest'
+        osName: 'macos'
+      windows:
+        imageName: 'windows-latest'
+        osName: 'windows'
+
+  pool:
+    vmImage: $(imageName)
+
+  steps:
+
+    - template: templates/install_prereqs.yml
+  
+    - template: templates/run_luna_authoring.yml
+      parameters:
+        operating_system: $(osName)
+
+#Run mobile end to end tests.
+
+- job: EndToEnd_Mobile
+  displayName: "Run Luna Mobile integration tests"
+  dependsOn: EndToEnd_Authoring
+  pool:
+    vmImage: macos-13
+
+  steps:
+
+  - template: templates/install_prereqs.yml
+  
+  - template: templates/run_luna_mobile_integration_tests.yml
