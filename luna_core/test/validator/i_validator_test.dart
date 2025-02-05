@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/validator/i_validator.dart';
 import 'package:luna_core/validator/validator_error.dart';
-import 'package:luna_core/validator/validator_error_type.dart';
+// Import your new PPTX error classes.
+import 'package:luna_core/validator/pptx_errors.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -16,8 +17,8 @@ void main() {
     // Verify the results
     expect(errors.length, 1);
     expect(
-      errors.first.errorType,
-      ValidatorErrorType.pptxWidthAndHeightMustBothBeInitialized,
+      errors.first,
+      isA<PPTXWidthAndHeightMustBothBeInitializedError>(),
     );
   });
 
@@ -36,22 +37,18 @@ void main() {
     // Verify the results
     expect(errors.length, 2);
     expect(
-      errors.any(
-        (error) =>
-            error.errorType ==
-            ValidatorErrorType.pptxWidthAndHeightMustBothBeInitialized,
-      ),
-      true,
+      errors.any((error) => error is PPTXWidthAndHeightMustBothBeInitializedError),
+      isTrue,
     );
     expect(
-      errors.any(
-        (error) => error.errorType == ValidatorErrorType.pptxWidthMustBePositive,
-      ),
-      true,
+      errors.any((error) => error is PPTXWidthMustBePositiveError),
+      isTrue,
     );
   });
 
-  test('Combining three validators with one returning two errors should return four errors', () {
+  test(
+      'Combining three validators with one returning two errors should return four errors',
+      () {
     // Mock validator 1 that returns one error
     final mockValidator1 = _MockValidatorWithOneError();
 
@@ -70,66 +67,53 @@ void main() {
     // Verify the results
     expect(errors.length, 4);
     expect(
-      errors.any(
-        (error) =>
-            error.errorType ==
-            ValidatorErrorType.pptxWidthAndHeightMustBothBeInitialized,
-      ),
-      true,
+      errors.any((error) => error is PPTXWidthAndHeightMustBothBeInitializedError),
+      isTrue,
     );
     expect(
-      errors.any(
-        (error) => error.errorType == ValidatorErrorType.pptxWidthMustBePositive,
-      ),
-      true,
+      errors.any((error) => error is PPTXWidthMustBePositiveError),
+      isTrue,
     );
     expect(
-      errors.any(
-        (error) => error.errorType == ValidatorErrorType.pptxHeightMustBePositive,
-      ),
-      true,
+      errors.any((error) => error is PPTXHeightMustBePositiveError),
+      isTrue,
     );
     expect(
-      errors.any(
-        (error) => error.errorType == ValidatorErrorType.pptxTitleHasNoVisibleCharacters,
-      ),
-      true,
+      errors.any((error) => error is PPTXTitleHasNoVisibleCharactersError),
+      isTrue,
     );
   });
 }
 
-// Manually implemented mock validator class
+// Mock validator classes updated to use the new error classes:
+
 class _MockValidatorWithOneError implements IValidator {
   @override
   Set<ValidatorError> validate() {
-    // Return a set with a single error
+    // Return a set with a single error (using the new error class)
     return {
-      ValidatorError(
-        ValidatorErrorType.pptxWidthAndHeightMustBothBeInitialized,
-      ),
+      PPTXWidthAndHeightMustBothBeInitializedError(),
     };
   }
 }
 
-// Manually implemented mock validator class with another error
 class _MockValidatorWithAnotherError implements IValidator {
   @override
   Set<ValidatorError> validate() {
-    // Return a set with a single error
+    // Return a set with a single error (using the new error class)
     return {
-      ValidatorError(ValidatorErrorType.pptxWidthMustBePositive),
+      PPTXWidthMustBePositiveError(),
     };
   }
 }
 
-// Manually implemented mock validator class with two errors
 class _MockValidatorWithTwoErrors implements IValidator {
   @override
   Set<ValidatorError> validate() {
-    // Return a set with two errors
+    // Return a set with two errors (using the new error classes)
     return {
-      ValidatorError(ValidatorErrorType.pptxHeightMustBePositive),
-      ValidatorError(ValidatorErrorType.pptxTitleHasNoVisibleCharacters),
+      PPTXHeightMustBePositiveError(),
+      PPTXTitleHasNoVisibleCharactersError(),
     };
   }
 }
