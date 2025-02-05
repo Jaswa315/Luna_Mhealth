@@ -8,11 +8,11 @@ import 'package:luna_core/validator/validator_error.dart';
 ///
 /// This class implements [IValidator] and aggregates errors from all
 /// individual PPTX validators, such as [PptxTitleValidator] and [PptxDimensionsValidator].
-class PptxValidations implements IValidator {
+class PptxValidator implements IValidator {
   final PptxTree _pptxTree;
 
-  /// Creates an instance of [PptxValidations] for the given [PptxTree].
-  PptxValidations(this._pptxTree);
+  /// Creates an instance of [PptxValidator] for the given [PptxTree].
+  PptxValidator(this._pptxTree);
 
   @override
   Set<ValidatorError> validate() {

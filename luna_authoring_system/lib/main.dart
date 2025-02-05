@@ -39,7 +39,7 @@ Future<void> main() async {
   PptxTree pptxTree = pptxParser.getPptxTree();
 
   // Run all PPTX validations
-  Set<ValidatorError> errorList = PptxValidations(pptxTree).validate();
+  Set<ValidatorError> errorList = PptxValidator(pptxTree).validate();
 
   // Check for validation errors
   if (errorList.isNotEmpty) {
