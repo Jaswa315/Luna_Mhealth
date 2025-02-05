@@ -15,19 +15,19 @@ class Point2DPercentageValidator extends IValidator {
 
     if (x < 0.0) {
       errors.add(
-          ValidatorError(ValidatorErrorType.point2DXPercentageLessThanZero));
+          ValidatorError(ValidatorErrorType.point2DXPercentageLessThanZero),);
     }
     if (x > 1.0) {
       errors.add(
-          ValidatorError(ValidatorErrorType.point2DXPercentageGreaterThanOne));
+          ValidatorError(ValidatorErrorType.point2DXPercentageGreaterThanOne),);
     }
     if (y < 0.0) {
       errors.add(
-          ValidatorError(ValidatorErrorType.point2DYPercentageLessThanZero));
+          ValidatorError(ValidatorErrorType.point2DYPercentageLessThanZero),);
     }
     if (y > 1.0) {
       errors.add(
-          ValidatorError(ValidatorErrorType.point2DYPercentageGreaterThanOne));
+          ValidatorError(ValidatorErrorType.point2DYPercentageGreaterThanOne),);
     }
 
     return errors;
