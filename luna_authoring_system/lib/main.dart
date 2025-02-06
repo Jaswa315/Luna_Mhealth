@@ -38,25 +38,25 @@ Future<void> main() async {
   PptxParser pptxParser = PptxParser(pptxFilePath);
   PptxTree pptxTree = pptxParser.getPptxTree();
 
-  // Run all PPTX validations
+  // Run all PPTX validations.
   Set<ValidatorError> errorList = PptxValidator(pptxTree).validate();
 
-  // Check for validation errors
+  // Check for validation errors.
   if (errorList.isNotEmpty) {
-    // Print all errors
+    // Print all errors.
     for (var error in errorList) {
       // TODO: Replace with Log
       // ignore: avoid_print
-      print('Validation Error: ${error.errorType}');
+      print('Validation Error: ${error.errorCode}');
     }
-    // Exit with code -1 to indicate validation failure
+    // Exit with code -1 to indicate validation failure.
     exit(-1);
   }
 
   ModuleObjectGenerator moduleObjectGenerator = ModuleObjectGenerator(pptxTree);
   Module module = await moduleObjectGenerator.generateLunaModule();
   String moduleJson = jsonEncode(module.toJson());
-  
+
   // Create the package (ZIP file) using ModuleStorage
   // Save module JSON data into the archive
   ModuleResourceFactory.addModule(moduleName, moduleJson);
