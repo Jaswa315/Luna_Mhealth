@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/validator/i_validator.dart';
-import 'package:luna_authoring_system/validator/pptx_dimensions_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_core/validator/validator_error.dart';
-import 'package:luna_authoring_system/validator/pptx_dimension_errors.dart';
+import 'package:luna_authoring_system/validator/error/pptx_dimensions_validation_error.dart';
+import 'package:luna_authoring_system/validator/pptx_dimensions_validator.dart';
 import 'package:luna_core/utils/emu.dart';
 
 void main() {

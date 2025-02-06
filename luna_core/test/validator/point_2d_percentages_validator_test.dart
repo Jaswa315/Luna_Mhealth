@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/validator/point_2d_percentage_validator.dart';
+import 'package:luna_core/validator/error/point_2d_validation_error.dart';
 import 'package:luna_core/validator/validator_error.dart';
 
 void main() {

@@ -2,8 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-// Import the new error classes
-import 'package:luna_authoring_system/validator/pptx_title_errors.dart';
+import 'package:luna_authoring_system/validator/error/pptx_title_validation_error.dart';
 import 'package:luna_core/luna_constants.dart';
 import 'package:luna_core/validator/validator_error.dart';
 
