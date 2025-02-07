@@ -44,10 +44,10 @@ Future<void> main() async {
   // Check for validation errors.
   if (issueList.isNotEmpty) {
     // Print all errors.
-    for (var error in issueList) {
+    for (var issue in issueList) {
       // TODO: Replace with Log
       // ignore: avoid_print
-      print('Validation Error: ${error.issueCode}');
+      print('Validation Issue Found. Issue Code: ${issue.issueCode}');
     }
     // Exit with code -1 to indicate validation failure.
     exit(-1);
