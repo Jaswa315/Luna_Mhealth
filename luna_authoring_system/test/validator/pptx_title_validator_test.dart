@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/error/pptx_title_validation_error.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_title_issue.dart';
 import 'package:luna_core/luna_constants.dart';
-import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validation_issue.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -14,10 +14,10 @@ void main() {
     pptxTree.title = "";
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidatorError> errors = validator.validate();
+    final Set<ValidationIssue> issues = validator.validate();
 
-    expect(errors.length, 1);
-    expect(errors.first, isA<PPTXTitleHasNoVisibleCharactersError>());
+    expect(issues.length, 1);
+    expect(issues.first, isA<PPTXTitleHasNoVisibleCharacters>());
   });
 
   test('Pptx Title must have visible characters', () {
@@ -25,10 +25,10 @@ void main() {
     pptxTree.title = "  ";
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidatorError> errors = validator.validate();
+    final Set<ValidationIssue> issues = validator.validate();
 
-    expect(errors.length, 1);
-    expect(errors.first, isA<PPTXTitleHasNoVisibleCharactersError>());
+    expect(issues.length, 1);
+    expect(issues.first, isA<PPTXTitleHasNoVisibleCharacters>());
   });
 
   test('Pptx Title cannot be too long', () {
@@ -37,10 +37,10 @@ void main() {
     pptxTree.title = 'a' * (LunaConstants.maximumPptxTitleLength + 1);
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidatorError> errors = validator.validate();
+    final Set<ValidationIssue> issues = validator.validate();
 
-    expect(errors.length, 1);
-    expect(errors.first, isA<PPTXTitleIsTooLongError>());
+    expect(issues.length, 1);
+    expect(issues.first, isA<PPTXTitleIsTooLong>());
   });
 
   test('Pptx Title is just short enough', () {
@@ -48,8 +48,8 @@ void main() {
     pptxTree.title = 'a' * (LunaConstants.maximumPptxTitleLength);
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidatorError> errors = validator.validate();
+    final Set<ValidationIssue> issues = validator.validate();
 
-    expect(errors.isEmpty, true);
+    expect(issues.isEmpty, true);
   });
 }

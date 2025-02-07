@@ -45,7 +45,7 @@ class Point2DPercentage {
      final errors = Point2DPercentageValidator(x, y).validate();
     if (errors.isNotEmpty) {
       throw ArgumentError(
-        "Invalid Point2DPercentage values detected: ${errors.map((e) => e.errorCode).join(', ')}",
+        "Invalid Point2DPercentage values detected: ${errors.map((e) => e.issueCode).join(', ')}",
       );
     }
 

@@ -1,8 +1,8 @@
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/error/pptx_title_validation_error.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_title_issue.dart';
 import 'package:luna_core/luna_constants.dart';
 import 'package:luna_core/validator/i_validator.dart';
-import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validation_issue.dart';
 
 /// A validator that checks the validity of the title of a `PptxTree`.
 class PptxTitleValidator extends IValidator {
@@ -11,14 +11,14 @@ class PptxTitleValidator extends IValidator {
   PptxTitleValidator(this._pptxTree);
 
   @override
-  Set<ValidatorError> validate() {
-    final errors = <ValidatorError>{};
+  Set<ValidationIssue> validate() {
+    final errors = <ValidationIssue>{};
 
     if (_pptxTree.title.trim().isEmpty) {
-      errors.add(PPTXTitleHasNoVisibleCharactersError());
+      errors.add(PPTXTitleHasNoVisibleCharacters());
     }
     if (_pptxTree.title.length > LunaConstants.maximumPptxTitleLength) {
-      errors.add(PPTXTitleIsTooLongError());
+      errors.add(PPTXTitleIsTooLong());
     }
 
     return errors;
