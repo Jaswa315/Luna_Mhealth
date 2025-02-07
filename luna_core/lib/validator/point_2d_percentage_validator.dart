@@ -1,6 +1,6 @@
-import 'package:luna_core/validator/error/point_2d_validation_error.dart';
 import 'package:luna_core/validator/i_validator.dart';
-import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/issue/point_2d_issue.dart';
+import 'package:luna_core/validator/validation_issue.dart';
 
 /// Validator to check if a Point2DPercentage value is within the valid range [0.0, 1.0].
 class Point2DPercentageValidator extends IValidator {
@@ -10,22 +10,22 @@ class Point2DPercentageValidator extends IValidator {
   Point2DPercentageValidator(this.x, this.y);
 
   @override
-  Set<ValidatorError> validate() {
-    final errors = <ValidatorError>{};
+  Set<ValidationIssue> validate() {
+    final validationIssues = <ValidationIssue>{};
 
     if (x < 0.0) {
-      errors.add(Point2DXLessThanZeroError());
+      validationIssues.add(Point2DXLessThanZero());
     }
     if (x > 1.0) {
-      errors.add(Point2DXGreaterThanOneError());
+      validationIssues.add(Point2DXGreaterThanOne());
     }
     if (y < 0.0) {
-      errors.add(Point2DYLessThanZeroError());
+      validationIssues.add(Point2DYLessThanZero());
     }
     if (y > 1.0) {
-      errors.add(Point2DYGreaterThanOneError());
+      validationIssues.add(Point2DYGreaterThanOne());
     }
 
-    return errors;
+    return validationIssues;
   }
 }

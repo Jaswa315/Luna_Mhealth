@@ -2,9 +2,9 @@
 // We ignore these rules so we can catch LateInitializationError to validate if PptxTree width/height is initialized
 
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/error/pptx_dimensions_validation_error.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_dimensions_issue.dart';
 import 'package:luna_core/validator/i_validator.dart';
-import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validation_issue.dart';
 
 /// A validator that checks the validity of the dimensions of a `PptxTree`.
 class PptxDimensionsValidator extends IValidator {
@@ -13,8 +13,8 @@ class PptxDimensionsValidator extends IValidator {
   PptxDimensionsValidator(this._pptxTree);
 
   @override
-  Set<ValidatorError> validate() {
-    final errors = <ValidatorError>{};
+  Set<ValidationIssue> validate() {
+    final validationIssues = <ValidationIssue>{};
 
     try {
       // Simply accessing these properties will throw LateInitializationError if they are not initialized.
@@ -22,18 +22,18 @@ class PptxDimensionsValidator extends IValidator {
       var height = _pptxTree.height;
     } catch (LateInitializationError) {
       // Handle the error by adding a specific validation error.
-      errors.add(PPTXWidthAndHeightMustBothBeInitializedError());
+      validationIssues.add(PPTXWidthAndHeightMustBothBeInitialized());
 
-      return errors;
+      return validationIssues;
     }
 
     if (_pptxTree.width.value <= 0) {
-      errors.add(PPTXWidthMustBePositiveError());
+      validationIssues.add(PPTXWidthMustBePositive());
     }
     if (_pptxTree.height.value <= 0) {
-      errors.add(PPTXHeightMustBePositiveError());
+      validationIssues.add(PPTXHeightMustBePositive());
     }
 
-    return errors;
+    return validationIssues;
   }
 }

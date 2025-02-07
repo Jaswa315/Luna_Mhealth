@@ -10,7 +10,7 @@ import 'package:luna_authoring_system/validator/pptx_validator.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_core/utils/logging.dart';
-import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validation_issue.dart';
 
 Future<void> main() async {
   // initialize log manager
@@ -39,15 +39,15 @@ Future<void> main() async {
   PptxTree pptxTree = pptxParser.getPptxTree();
 
   // Run all PPTX validations.
-  Set<ValidatorError> errorList = PptxValidator(pptxTree).validate();
+  Set<ValidationIssue> issueList = PptxValidator(pptxTree).validate();
 
   // Check for validation errors.
-  if (errorList.isNotEmpty) {
+  if (issueList.isNotEmpty) {
     // Print all errors.
-    for (var error in errorList) {
+    for (var issue in issueList) {
       // TODO: Replace with Log
       // ignore: avoid_print
-      print('Validation Error: ${error.errorCode}');
+      print('Validation Issue Found. Issue Code: ${issue.issueCode}');
     }
     // Exit with code -1 to indicate validation failure.
     exit(-1);

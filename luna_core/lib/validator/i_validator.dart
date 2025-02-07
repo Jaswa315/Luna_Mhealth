@@ -1,5 +1,5 @@
-import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validation_issue.dart';
 
 abstract class IValidator {
-  Set<ValidatorError> validate();
+  Set<ValidationIssue> validate();
 }

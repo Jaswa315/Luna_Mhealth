@@ -2,7 +2,7 @@ import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/validator/pptx_dimensions_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_core/validator/i_validator.dart';
-import 'package:luna_core/validator/validator_error.dart';
+import 'package:luna_core/validator/validation_issue.dart';
 
 /// A composite validator that runs all PPTX validators.
 ///
@@ -15,8 +15,8 @@ class PptxValidator implements IValidator {
   PptxValidator(this._pptxTree);
 
   @override
-  Set<ValidatorError> validate() {
-    Set<ValidatorError> allErrors = {};
+  Set<ValidationIssue> validate() {
+    Set<ValidationIssue> allErrors = {};
 
     // Run all individual validators and aggregate errors
     allErrors.addAll(PptxTitleValidator(_pptxTree).validate());
