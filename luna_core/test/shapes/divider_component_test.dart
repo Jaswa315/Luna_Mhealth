@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 
-/// A test suite for the `DividerComponent` class.
+/// A test suite for the `LineComponent` class.
 /// This suite contains tests to ensure that the
-/// `DividerComponent` class correctly converts between JSON and DividerComponent objects.
+/// `LineComponent` class correctly converts between JSON and LineComponent objects.
 
 void main() {
-  group('DividerComponent Tests', () {
-    test('Converts JSON to DividerComponent correctly', () {
+  group('LineComponent Tests', () {
+    test('Converts JSON to LineComponent correctly', () {
       // Input JSON
       final json = {
-        'type': 'divider',
+        'type': 'line',
         'startPoint': {'x': 0.1, 'y': 0.2},
         'endPoint': {'x': 0.4, 'y': 0.5},
         'color': 0xFF0D47A1, // ARGB color value
@@ -20,22 +20,22 @@ void main() {
         'style': 1, // Solid style
       };
 
-      // Convert JSON to DividerComponent
-      final divider = DividerComponent.fromJson(json);
+      // Convert JSON to LineComponent
+      final line = LineComponent.fromJson(json);
 
       // Assertions
-      expect(divider.startPoint.x, closeTo(0.1, 0.00001));
-      expect(divider.startPoint.y, closeTo(0.2, 0.00001));
-      expect(divider.endPoint.x, closeTo(0.4, 0.00001));
-      expect(divider.endPoint.y, closeTo(0.5, 0.00001));
-      expect(divider.color, const Color(0xFF0D47A1));
-      expect(divider.thickness, closeTo(5.0, 0.00001)); // Thickness in pixels
-      expect(divider.style, BorderStyle.solid);
+      expect(line.startPoint.x, closeTo(0.1, 0.00001));
+      expect(line.startPoint.y, closeTo(0.2, 0.00001));
+      expect(line.endPoint.x, closeTo(0.4, 0.00001));
+      expect(line.endPoint.y, closeTo(0.5, 0.00001));
+      expect(line.color, const Color(0xFF0D47A1));
+      expect(line.thickness, closeTo(5.0, 0.00001)); // Thickness in pixels
+      expect(line.style, BorderStyle.solid);
     });
 
-    test('Converts DividerComponent to JSON correctly', () {
-      // Create a DividerComponent instance
-      final divider = DividerComponent(
+    test('Converts LineComponent to JSON correctly', () {
+      // Create a LineComponent instance
+      final line = LineComponent(
         startPoint: Point2DPercentage(0.1, 0.2),
         endPoint: Point2DPercentage(0.4, 0.5),
         color: const Color(0xFF0D47A1),
@@ -43,11 +43,11 @@ void main() {
         style: BorderStyle.solid,
       );
 
-      // Convert DividerComponent to JSON
-      final json = divider.toJson();
+      // Convert LineComponent to JSON
+      final json = line.toJson();
 
       // Assertions
-      expect(json['type'], 'divider');
+      expect(json['type'], 'line');
       expect(json['startPoint']['x'], closeTo(0.1, 0.00001));
       expect(json['startPoint']['y'], closeTo(0.2, 0.00001));
       expect(json['endPoint']['x'], closeTo(0.4, 0.00001));

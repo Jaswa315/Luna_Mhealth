@@ -12,7 +12,7 @@ import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/utils/types.dart';
 
@@ -69,8 +69,8 @@ abstract class Component extends Item with ChangeNotifier, Clickable {
         return ImageComponent.fromJson(json);
       case ComponentType.text:
         return TextComponent.fromJson(json);
-      case ComponentType.divider:
-        return DividerComponent.fromJson(json);
+      case ComponentType.line:
+        return LineComponent.fromJson(json);
       default:
         throw Exception('Unsupported component type: $type.toString()');
     }
@@ -81,5 +81,5 @@ abstract class Component extends Item with ChangeNotifier, Clickable {
 const Map<String, ComponentType> _typeMapping = {
   'image': ComponentType.image,
   'text': ComponentType.text,
-  'divider': ComponentType.divider
+  'line': ComponentType.line
 };

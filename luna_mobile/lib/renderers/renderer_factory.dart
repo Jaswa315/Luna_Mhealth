@@ -7,9 +7,9 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:luna_core/models/image/image_component.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
-import 'package:luna_mobile/renderers/divider_component_renderer.dart';
+import 'package:luna_mobile/renderers/line_component_renderer.dart';
 
 import 'package:luna_mobile/renderers/image_component_renderer.dart';
 import 'package:luna_mobile/renderers/irenderer.dart';
@@ -20,7 +20,7 @@ class RendererFactory {
   static final Map<Type, IRenderer> _renderers = {
     ImageComponent: ImageComponentRenderer(),
     TextComponent: TextComponentRenderer(),
-    DividerComponent: DividerComponentRenderer(),
+    LineComponent: LineComponentRenderer(),
   };
 
   /// Returns the renderer for the specified component type.

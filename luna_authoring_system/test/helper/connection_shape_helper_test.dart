@@ -3,7 +3,7 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/helper/connection_shape_helper.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/utils/emu.dart';
 
@@ -70,8 +70,8 @@ void main() {
     });
   });
 
-  group('_createDivider Tests', () {
-    test('Creates DividerComponent with correct thickness and points', () {
+  group('_createLine Tests', () {
+    test('Creates LineComponent with correct thickness and points', () {
       // Mock slide dimensions
       int slideWidth = 5000000;
       int slideHeight = 3000000;
@@ -93,19 +93,19 @@ void main() {
       // Expected thickness conversion
       double expectedThickness = 0.5;
 
-      // Create DividerComponent
-      final divider = DividerComponent(
+      // Create LineComponent
+      final line = LineComponent(
         startPoint: points['startPoint']!,
         endPoint: points['endPoint']!,
         thickness: expectedThickness,
       );
 
       // Assertions
-      expect(divider.startPoint.x, closeTo(0.2, 0.0001));
-      expect(divider.startPoint.y, closeTo(0.1667, 0.0001));
-      expect(divider.endPoint.x, closeTo(0.6, 0.0001));
-      expect(divider.endPoint.y, closeTo(0.5, 0.0001));
-      expect(divider.thickness, closeTo(expectedThickness, 0.0001));
+      expect(line.startPoint.x, closeTo(0.2, 0.0001));
+      expect(line.startPoint.y, closeTo(0.1667, 0.0001));
+      expect(line.endPoint.x, closeTo(0.6, 0.0001));
+      expect(line.endPoint.y, closeTo(0.5, 0.0001));
+      expect(line.thickness, closeTo(expectedThickness, 0.0001));
     });
   });
 }

@@ -3,7 +3,7 @@ import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
 import 'package:luna_authoring_system/module_object_generator.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/shape/line_component.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +24,6 @@ void main() {
 
     expect(generatedModule.pages.length, 1);
     expect(generatedModule.pages[0].components.length, 1);
-    expect(generatedModule.pages[0].components[0], isA<DividerComponent>());
+    expect(generatedModule.pages[0].components[0], isA<LineComponent>());
   });
 }
