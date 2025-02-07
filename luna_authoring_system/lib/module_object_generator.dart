@@ -7,7 +7,7 @@ import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/shape/line_component.dart';
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
 /// Module and all descendant objects of a module. This includes Pages, Components, and other items inside a Module.
@@ -53,7 +53,7 @@ class ModuleObjectGenerator {
     List<Component> pageComponents = [];
     for (Shape child in slide.shapes!) {
       if (child is ConnectionShape) {
-        pageComponents.add(_createDivider(child));
+        pageComponents.add(_createLine(child));
       } else {
         // ToDo: use exception handling and logging instead of print
         // print('ParseTree conversion not supported: ${child.name}');
@@ -64,7 +64,7 @@ class ModuleObjectGenerator {
     return pageObj;
   }
 
-  DividerComponent _createDivider(
+  LineComponent _createLine(
     ConnectionShape cxn,
   ) {
     double thicknessOfLine =
@@ -76,7 +76,7 @@ class ModuleObjectGenerator {
       _slideHeight,
     );
 
-    return DividerComponent(
+    return LineComponent(
       startPoint: points['startPoint']!,
       endPoint: points['endPoint']!,
       thickness: thicknessOfLine,

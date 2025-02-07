@@ -3,25 +3,25 @@ import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/utils/types.dart';
-import 'package:luna_mobile/renderers/divider_component_renderer.dart';
+import 'package:luna_mobile/renderers/line_component_renderer.dart';
 
-/// Represents a divider component that can be used in the Luna mHealth Mobile app.
+/// Represents a line component that can be used in the Luna mHealth Mobile app.
 /// This component provides a line to separate content sections visually,
 /// with customizable properties like color, thickness, and style.
-class DividerComponent extends Component {
-  /// The start point of the divider in percentage coordinates.
+class LineComponent extends Component {
+  /// The start point of the line in percentage coordinates.
   final Point2DPercentage startPoint;
 
-  /// The end point of the divider in percentage coordinates.
+  /// The end point of the line in percentage coordinates.
   final Point2DPercentage endPoint;
 
-  /// The color of the divider.
+  /// The color of the line.
   Color color;
 
-  /// The thickness of the divider line in logical pixels.
+  /// The thickness of the line line in logical pixels.
   double thickness;
 
-  /// The style of the divider's border.
+  /// The style of the line's border.
   BorderStyle style;
 
   /// Overrides `x, y, width, height` dynamically based on `startPoint` and `endPoint`.
@@ -39,40 +39,40 @@ class DividerComponent extends Component {
     return (end.y - start.y).abs();
   }
 
-  /// Constructs a new instance of [DividerComponent].
+  /// Constructs a new instance of [LineComponent].
   /// Parameters:
-  /// - [color]: The color of the divider. Defaults to `Color.fromARGB(255, 43, 116, 179)`.
-  /// - [thickness]: The thickness of the divider in logical pixels. Defaults to 5.0.
-  /// - [style]: The border style of the divider. Defaults to `BorderStyle.solid`.
-  /// - [x]: The x-coordinate position of the divider's top-left corner.
-  /// - [y]: The y-coordinate position of the divider's top-left corner.
-  /// - [width]: The width of the divider.
-  /// - [height]: The height of the divider.
-  /// - [startPoint]: The start point of the divider in percentage coordinates.
-  /// - [endPoint]: The end point of the divider in percentage coordinates.
-  DividerComponent({
+  /// - [color]: The color of the line. Defaults to `Color.fromARGB(255, 43, 116, 179)`.
+  /// - [thickness]: The thickness of the line in logical pixels. Defaults to 5.0.
+  /// - [style]: The border style of the line. Defaults to `BorderStyle.solid`.
+  /// - [x]: The x-coordinate position of the line's top-left corner.
+  /// - [y]: The y-coordinate position of the line's top-left corner.
+  /// - [width]: The width of the line.
+  /// - [height]: The height of the line.
+  /// - [startPoint]: The start point of the line in percentage coordinates.
+  /// - [endPoint]: The end point of the line in percentage coordinates.
+  LineComponent({
     this.color = const Color.fromARGB(255, 43, 116, 179),
     this.thickness = 5,
     this.style = BorderStyle.solid,
     required this.startPoint,
     required this.endPoint,
   }) : super(
-          type: ComponentType.divider,
+          type: ComponentType.line,
           x: startPoint.x,
           y: startPoint.y,
           width: _calculateWidth(startPoint, endPoint),
           height: _calculateHeight(startPoint, endPoint),
-          name: 'DividerComponent',
+          name: 'LineComponent',
         );
 
-  /// Renders the divider as a [Widget].
+  /// Renders the line as a [Widget].
   @override
   Future<Widget> render(Size screenSize) async {
-    return DividerComponentRenderer().renderComponent(this, screenSize);
+    return LineComponentRenderer().renderComponent(this, screenSize);
   }
 
-  /// Converts the current [DividerComponent] instance to a JSON object.
-  /// Returns: A [Json] object containing all the properties of the divider.
+  /// Converts the current [LineComponent] instance to a JSON object.
+  /// Returns: A [Json] object containing all the properties of the line.
   @override
   Json toJson() {
     return {
@@ -85,12 +85,12 @@ class DividerComponent extends Component {
     };
   }
 
-  /// Creates a new [DividerComponent] instance from a JSON object.
-  /// Parameters: - [json]: A [Json] object containing the data to initialize the divider.
-  /// Returns: A [DividerComponent] instance with properties derived from the JSON object.
+  /// Creates a new [LineComponent] instance from a JSON object.
+  /// Parameters: - [json]: A [Json] object containing the data to initialize the line.
+  /// Returns: A [LineComponent] instance with properties derived from the JSON object.
   /// Throws: An [Exception] if the JSON is missing required fields like `x`, `y`, `width`, or `height`.
-  static DividerComponent fromJson(Json json) {
-    return DividerComponent(
+  static LineComponent fromJson(Json json) {
+    return LineComponent(
       startPoint: Point2DPercentage(
         json['startPoint']['x'].toDouble(),
         json['startPoint']['y'].toDouble(),
@@ -111,8 +111,8 @@ class DividerComponent extends Component {
     );
   }
 
-  /// Handles the click event on the divider component.
-  /// This method can be overridden to define specific behaviors when the divider
+  /// Handles the click event on the line component.
+  /// This method can be overridden to define specific behaviors when the line
   /// is clicked (e.g., triggering a callback or navigating).
   @override
   void onClick() {

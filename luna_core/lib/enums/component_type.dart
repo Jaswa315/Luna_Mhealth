@@ -21,8 +21,8 @@ enum ComponentType {
   /// Represents a shape component.
   shape,
 
-  /// Represents a divider component.
-  divider,
+  /// Represents a line component.
+  line,
 
   /// Represents an audio component.
   audio,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/models/shape/divider_component.dart';
+import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
-import 'package:luna_mobile/renderers/divider_component_renderer.dart';
+import 'package:luna_mobile/renderers/line_component_renderer.dart';
 import 'package:luna_mobile/renderers/line_painter.dart';
 
-/// A test wrapper to render the `DividerComponentRenderer`
+/// A test wrapper to render the `LineComponentRenderer`
 class TestApp extends StatelessWidget {
-  final DividerComponent dummyComponent;
+  final LineComponent dummyComponent;
 
   const TestApp({super.key, required this.dummyComponent});
 
@@ -15,7 +15,7 @@ class TestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: DividerComponentRenderer()
+        body: LineComponentRenderer()
             .renderComponent(dummyComponent, const Size(800, 600)),
       ),
     );
@@ -23,10 +23,10 @@ class TestApp extends StatelessWidget {
 }
 
 void main() {
-  testWidgets('DividerComponentRenderer creates a proper line using Offset',
+  testWidgets('LineComponentRenderer creates a proper line using Offset',
       (WidgetTester tester) async {
-    // Create dummy data for DividerComponent with start and end points
-    final DividerComponent dummyComponent = DividerComponent(
+    // Create dummy data for LineComponent with start and end points
+    final LineComponent dummyComponent = LineComponent(
       startPoint: Point2DPercentage(0.2, 0.15), // 20% from left, 15% from top
       endPoint: Point2DPercentage(0.8, 0.15), // 80% from left, 15% from top
       thickness: 2, // 2 pixels thick
