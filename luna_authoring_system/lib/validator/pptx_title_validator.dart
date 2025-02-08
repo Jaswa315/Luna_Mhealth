@@ -12,16 +12,16 @@ class PptxTitleValidator extends IValidator {
 
   @override
   Set<ValidationIssue> validate() {
-    final errors = <ValidationIssue>{};
+    final validationIssues = <ValidationIssue>{};
 
     if (_pptxTree.title.trim().isEmpty) {
-      errors.add(PPTXTitleHasNoVisibleCharacters());
+      validationIssues.add(PPTXTitleHasNoVisibleCharacters());
     }
     if (_pptxTree.title.length > LunaConstants.maximumPptxTitleLength) {
-      errors.add(PPTXTitleIsTooLong());
+      validationIssues.add(PPTXTitleIsTooLong());
     }
 
-    return errors;
+    return validationIssues;
   }
 }
 
