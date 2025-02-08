@@ -16,13 +16,13 @@ class PptxValidator implements IValidator {
 
   @override
   Set<ValidationIssue> validate() {
-    Set<ValidationIssue> allErrors = {};
+    Set<ValidationIssue> allIssues = {};
 
     // Run all individual validators and aggregate errors
-    allErrors.addAll(PptxTitleValidator(_pptxTree).validate());
-    allErrors.addAll(PptxDimensionsValidator(_pptxTree).validate());
+    allIssues.addAll(PptxTitleValidator(_pptxTree).validate());
+    allIssues.addAll(PptxDimensionsValidator(_pptxTree).validate());
     // Add new PPTX Validators here
 
-    return allErrors;
+    return allIssues;
   }
 }
