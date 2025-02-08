@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/validator/pptx_dimensions_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
@@ -24,5 +27,15 @@ class PptxValidator implements IValidator {
     // Add new PPTX Validators here
 
     return allErrors;
+  }
+
+    Uint8List validateAndGetIssuesAsTXTFileBytes() {
+    final issues = validate();
+    final issueCodes = issues.map((issue) => issue.issueCode).toList()..sort();
+    final content = '${issueCodes.join('\n')}\n';
+    // Convert to List<int> first, then create a Uint8List from it.
+    final bytes = utf8.encode(content);
+    
+    return Uint8List.fromList(bytes);
   }
 }
