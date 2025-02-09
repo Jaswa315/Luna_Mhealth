@@ -53,6 +53,8 @@ Future<void> main() async {
     exit(-1);
   }
 
+  // TODO: Render or save txt file of issues for author to see
+  
   ModuleObjectGenerator moduleObjectGenerator = ModuleObjectGenerator(pptxTree);
   Module module = await moduleObjectGenerator.generateLunaModule();
   String moduleJson = jsonEncode(module.toJson());
