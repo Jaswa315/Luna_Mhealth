@@ -18,8 +18,9 @@ steps:
     flutter pub get
     flutter pub global activate junitreport
     flutter pub global activate cobertura
+    flutter pub global activate patrol_cli 3.2.0
     echo "##vso[task.prependpath]$HOME/.pub-cache/bin"
-  displayName: 'Activate Junitreport and Cobertura'
+  displayName: 'Activate Flutter Packages'
   condition: ne( variables['Agent.OS'], 'Windows_NT' )
 
 #while bash scripts are available on windows, there are subtle differences that make just using powershell easier for this task
@@ -36,6 +37,14 @@ steps:
     flutter pub get
     flutter pub global activate junitreport
     flutter pub global activate cobertura
+    flutter pub global activate patrol_cli 3.2.0
     Write-Host "##vso[task.prependpath]C:\Users\VssAdministrator\AppData\Local\Pub\Cache\bin"
   condition: eq( variables['Agent.OS'], 'Windows_NT' )
-  displayName: 'Activate Junitreport and Cobertura (Windows)'
+  displayName: 'Activate Flutter Packages (Windows)'
+
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '11'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+

@@ -75,10 +75,10 @@ jobs:
   displayName: "Run Luna Mobile integration tests"
   dependsOn: EndToEnd_Authoring
   pool:
-    vmImage: macos-13
+    vmImage: windows-latest
 
   steps:
 
   - template: templates/install_prereqs.yml
   
-  - template: templates/run_luna_mobile_integration_tests.yml
+  - template: templates/run_luna_mobile_tests_firebase.yml

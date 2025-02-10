@@ -92,6 +92,7 @@ test_media/
 test_media_compressed/
 assets/images/
 assets/test_data/
+**/test_bundle.dart
 
 # JetBrains related
 *.iml
@@ -132,3 +133,4 @@ luna_authoring_system/test\\test_output/images
 # Specific Paths
 luna_authoring_system/sample
 poc_sandboxes/flutter_blue_app/
+

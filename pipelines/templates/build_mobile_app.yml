@@ -9,12 +9,6 @@ parameters:
 
 steps:
 
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '11'
-    jdkArchitectureOption: 'x64'
-    jdkSourceOption: 'PreInstalled'
-
 - task: PowerShell@2
   displayName: 'Build Flutter ${{ parameters.build_os }} App'
   condition: succeededOrFailed()

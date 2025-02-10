@@ -1,0 +1,72 @@
+# Template
+
+parameters:
+  - name: package_path
+    default: 'luna_mobile'
+  - name: driver_path
+    default: 'test_driver/drive_integrations.dart'
+  - name: test_folder
+    default: 'integration_test'
+  - name: luna_module_name
+    default: 'luna_test'
+
+
+steps:
+
+
+- script: exit 1
+  displayName: 'Cancel job if not Windows agent'
+  condition: ne( variables['Agent.OS'], 'Windows_NT' )
+
+- template: run_luna_authoring.yml
+  parameters:
+    operating_system: 'windows'
+    module_name: ${{  parameters.luna_module_name  }}
+
+- task: DownloadSecureFile@1
+  name: firebaseLogin
+  displayName: 'Get firebase service account credentials'
+  inputs:
+    secureFile: 'luna-mhealth-firebase_service.json'
+  
+- task: PowerShell@2
+  displayName: 'Install gcloud tools'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $installDir = "$(Build.SourcesDirectory)\gcloud"
+      New-Item -Type Directory -Path $installDir
+
+      $downloadUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-windows-x86.zip"
+      Invoke-WebRequest -Uri $downloadUrl -OutFile $installDir\gcloud_install.zip
+      Expand-Archive -path $installDir\gcloud_install.zip -destination $installDir
+      & $installDir\google-cloud-sdk\install.bat
+      $gcloudBin = "$installDir\google-cloud-sdk\bin"
+      cd $gcloudBin
+      & $gcloudBin\gcloud init
+      Write-Host "##vso[task.prependpath]$gcloudBin"
+
+- task: PowerShell@2
+  displayName: 'Run ${{  parameters.package_path  }} integration tests via patrol on firbase'
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd ${{  parameters.package_path  }}
+      flutter create --platform=android .
+      patrol build android --target integration_test/luna_mobile_e2e_test.dart
+      gcloud auth activate-service-account --key-file=$(firebaseLogin.secureFilePath)
+      gcloud config set project luna-mhealth
+      $testResults = gcloud firebase test android run `
+          --type instrumentation `
+          --app build/app/outputs/apk/debug/app-debug.apk `
+          --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk `
+          --device model=Pixel2.arm `
+          --timeout 10m `
+          --use-orchestrator `
+          --other-files /sdcard/Download/luna_test.luna="$HOME/Documents/luna_test.luna" `
+          --environment-variables clearPackageData=true
+      if (Select-String -InputObject $testResults "Failed") {
+        Write-Host "##vso[task.logissue type=error]Integration Test Failed"
+        Write-Host "##vso[task.complete result=Failed]"
+      }
+      exit 0

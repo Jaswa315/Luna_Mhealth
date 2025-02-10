@@ -1,42 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:luna_core/utils/logging.dart';
 import 'package:luna_mobile/main.dart';
+import 'package:luna_mobile/providers/module_ui_picker.dart';
+import 'package:patrol/patrol.dart' as p;
+import 'package:provider/provider.dart';
+
 
 
 void main() {
-  
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Test Non-Module Luna Activities', () {
-    testWidgets('Go to settings and back home', (tester) async {
+    const lunaTestFileName = "luna_test.luna";
 
-      await tester.pumpWidget(MyApp());
 
-      // Find settings button
-      expect(find.text('Settings'), findsOneWidget);
-  
-      // Tap on settings button
-      await tester.tap(find.text('Settings'));
-      await tester.pumpAndSettle();
+    Future<Widget> createTestApp() async {
+      await GlobalConfiguration().loadFromAsset("app_settings");
+      await LogManager.createInstance();
+     
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ModuleUIPicker()), // Provide ModuleUIPicker manually
+        ],
+        child: MyApp(),
+      );
+    }
+    p.patrolTest(
+    'Basic test to validate Patrol works',
+    ($) async {
+      Widget testApp = await createTestApp();
+      await $.pumpWidgetAndSettle(testApp);
 
-      // Find about luna and tap on it
-      expect(find.text('About Luna'),findsOneWidget);
-      await tester.tap(find.text('About Luna'));
-      await tester.pumpAndSettle();
+      expect($('Settings'), findsOneWidget);
+      expect($('Lorem ipsum does not exist. NO TEXT'), findsNothing);
+    },
+    
+  );
 
-      // Ensure about dialog shows up
-      expect(find.text('View licenses'), findsOneWidget);
+    p.patrolTest(
+    'Go to settings and back home',
+    ($) async {
+      Widget testApp = await createTestApp();
+      await $.pumpWidgetAndSettle(testApp);
 
-      // Tap close
-      await tester.tap(find.text('Close'));
-      await tester.pumpAndSettle();
-      // Tap back
-      await tester.tap(find.byType(BackButton));
-      await tester.pumpAndSettle();
-      
-      // check we can see home page
-      expect(find.text('Home'), findsOneWidget);
-    });
-  });
+      expect($('Settings'), findsOneWidget);
+      await $('Settings').tap();
+      await $('About Luna').tap();
+      expect($('Version: 1.0.0'), findsOneWidget);
+    },
+    
+  );
+
+
+
+    /// Test adding a module from the file system
+    ///  This test will fail if there is not a file with lunaTestFileName 
+    ///  in the downloads folder
+    p.patrolTest(
+    'Load and Open A Line Module',
+    ($) async {
+
+      Widget testApp = await createTestApp();
+      await $.pumpWidgetAndSettle(testApp);
+      await $('Add Module').tap();
+
+      // check to see if a permissions dialog for file manipulation appears.
+      if(await $.native.isPermissionDialogVisible()){
+        await $.native.grantPermissionWhenInUse();
+      }
+
+      // Expand file picker menu
+      await $.native.waitUntilVisible(p.Selector(contentDescription: "Show roots"));
+      await $.native.tap(p.Selector(contentDescription: "Show roots"));
+
+      // Pick downloads folder
+      await $.native.waitUntilVisible(p.Selector(text: "Downloads"));
+      await $.native.tap(p.Selector(text: "Downloads"));
+
+      // Tap file name
+      await $.native.tap(p.Selector(text: lunaTestFileName ));
+
+      await $.waitUntilExists($("Home"));
+
+      //open the module
+      await $.tester.tap(find.text("Start Learning"));
+      await $.tap($("A line"));
+      expect($("A line"), findsOneWidget);
+    },
+    
+  );
 }
