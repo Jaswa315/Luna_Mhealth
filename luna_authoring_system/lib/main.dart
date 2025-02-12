@@ -14,7 +14,7 @@ import 'package:luna_core/storage/module_resource_factory.dart';
 Future<void> main() async {
 
   // Initialize AuthoringSystem singletons and load app settings
-  await AuthoringInitializer.initialzieAuthoring();
+  await AuthoringInitializer.initializeAuthoring();
 
   const String pptxFilePath = String.fromEnvironment('pptxFilePath');
   const String moduleName = String.fromEnvironment('moduleName');
