@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
+import 'package:luna_authoring_system/helper/authoring_initializer.dart';
 import 'package:luna_authoring_system/module_object_generator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
@@ -10,13 +9,12 @@ import 'package:luna_authoring_system/validator/pptx_validator.dart';
 import 'package:luna_authoring_system/validator/validation_issue.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
-import 'package:luna_core/utils/logging.dart';
+
 
 Future<void> main() async {
-  // initialize log manager
-  WidgetsFlutterBinding.ensureInitialized();
-  await GlobalConfiguration().loadFromAsset("app_settings");
-  await LogManager.createInstance();
+
+  // Initialize AuthoringSystem singletons and load app settings
+  await AuthoringInitializer.initialzieAuthoring();
 
   const String pptxFilePath = String.fromEnvironment('pptxFilePath');
   const String moduleName = String.fromEnvironment('moduleName');
