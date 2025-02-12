@@ -8,16 +8,17 @@
 
 
 import 'package:luna_authoring_system/helper/authoring_initializer.dart';
-import 'package:luna_core/utils/version_manager.dart';
+import 'package:luna_core/utils/version_manager.dart' as v;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:luna_core/utils/logging.dart';
 
 
 void main() {
 
-
+  TestWidgetsFlutterBinding.ensureInitialized();
   //platform channels are not available in unit tests
   //taken from package_info_plus github (https://github.com/fluttercommunity/plus_plugins/blob/main/packages/package_info_plus/package_info_plus/test/package_info_test.dart)
   const channel = MethodChannel('dev.fluttercommunity.plus/package_info');
@@ -49,13 +50,17 @@ void main() {
   });
 
   group('Initialize Authoring Tests', () {
-    test('Check Version Manager is initialized', aysnc() {
+  
+    test('Check Version and Log Manager are initialized', () async {
       await AuthoringInitializer.initializeAuthoring();
-      expect(VersionManager.version, '1.0');
+      //check version manager is initialized
+      expect(v.VersionManager().version, '1.0');
+      //check log manager is initialized
+      expect(() {LogManager manager = LogManager();}, returnsNormally);
+      //ensure we cant call initializeAuhoring twice
+      expect(() async { await AuthoringInitializer.initializeAuthoring();}, throwsA(anything));
     });
-    test('Check Version Manager is initialized', aysnc() {
-      await AuthoringInitializer.initializeAuthoring();
-      expect(VersionManager.version, '1.0');
-    });
+
   });
+
 }
