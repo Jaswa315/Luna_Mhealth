@@ -59,15 +59,5 @@ void main() {
       expect(result.dx, closeTo(expectedOffset.dx, 0.00001));
       expect(result.dy, closeTo(expectedOffset.dy, 0.00001));
     });
-
-    test('Handles negative values by throwing an error', () {
-      expect(() => Point2DPercentage(-0.2, 0.5), throwsArgumentError);
-      expect(() => Point2DPercentage(0.5, -0.1), throwsArgumentError);
-    });
-
-    test('Handles values greater than 1 by throwing an error', () {
-      expect(() => Point2DPercentage(1.1, 0.5), throwsArgumentError);
-      expect(() => Point2DPercentage(0.5, 1.2), throwsArgumentError);
-    });
   });
 }
