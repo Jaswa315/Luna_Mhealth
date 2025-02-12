@@ -1,4 +1,4 @@
-import 'package:luna_core/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/validation_issue.dart';
 
 abstract class PPTXDimensionsIssue extends ValidationIssue {}
 

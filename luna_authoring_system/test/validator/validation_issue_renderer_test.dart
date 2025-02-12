@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/validator/validation_issue_renderer.dart';
-import 'package:luna_core/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/validation_issue_renderer.dart';
+import 'package:luna_authoring_system/validator/validation_issue.dart';
 
 /// A dummy implementation of ValidationIssue for testing purposes.
 class DummyValidationIssue extends ValidationIssue {
