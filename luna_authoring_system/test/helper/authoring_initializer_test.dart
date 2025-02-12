@@ -57,8 +57,6 @@ void main() {
       expect(v.VersionManager().version, '1.0');
       //check log manager is initialized
       expect(() {LogManager manager = LogManager();}, returnsNormally);
-      //ensure we cant call initializeAuhoring twice
-      expect(() async { await AuthoringInitializer.initializeAuthoring();}, throwsA(anything));
     });
 
   });

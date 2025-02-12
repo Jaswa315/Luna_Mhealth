@@ -21,7 +21,7 @@ class AuthoringInitializer {
   /// Initializes the app and loads configuration
   static initializeAuthoring() async{
 
-    if (AuthoringInitializer._initialized){throw Exception('Authoring System already initialized.');}
+    if (AuthoringInitializer._initialized){return;}
     WidgetsFlutterBinding.ensureInitialized();
     await GlobalConfiguration().loadFromAsset("app_settings");
     // initialize log manager
