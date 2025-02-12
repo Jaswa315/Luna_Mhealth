@@ -1,5 +1,3 @@
-import 'package:luna_core/validator/point_2d_percentage_validator.dart';
-
 class Point2DPercentage {
   /// Represents a point in a 2-dimensional space using normalized coordinates (0 to 1).
   ///
@@ -41,14 +39,6 @@ class Point2DPercentage {
 
   /// Constructor that enforces validation using the validator class.
   factory Point2DPercentage(double x, double y) {
-    // Run validation
-     final errors = Point2DPercentageValidator(x, y).validate();
-    if (errors.isNotEmpty) {
-      throw ArgumentError(
-        "Invalid Point2DPercentage values detected: ${errors.map((e) => e.issueCode).join(', ')}",
-      );
-    }
-
     return Point2DPercentage._(x, y);
   }
 }
