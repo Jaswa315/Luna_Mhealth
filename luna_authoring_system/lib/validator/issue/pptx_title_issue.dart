@@ -1,4 +1,4 @@
-import 'package:luna_core/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/validation_issue.dart';
 
 /// Base class for PPTX title validation errors.
 abstract class PPTXTitleIssue extends ValidationIssue {}

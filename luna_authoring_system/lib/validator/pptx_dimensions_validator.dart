@@ -2,9 +2,9 @@
 // We ignore these rules so we can catch LateInitializationError to validate if PptxTree width/height is initialized
 
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
+import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_dimensions_issue.dart';
-import 'package:luna_core/validator/i_validator.dart';
-import 'package:luna_core/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/validation_issue.dart';
 
 /// A validator that checks the validity of the dimensions of a `PptxTree`.
 class PptxDimensionsValidator extends IValidator {

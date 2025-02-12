@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/validator/i_validator.dart';
+import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_title_issue.dart';
-import 'package:luna_core/luna_constants.dart';
-import 'package:luna_core/validator/validation_issue.dart';
+import 'package:luna_authoring_system/luna_constants.dart';
+import 'package:luna_authoring_system/validator/validation_issue.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

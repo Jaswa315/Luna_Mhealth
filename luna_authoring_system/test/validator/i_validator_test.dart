@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/validator/i_validator.dart';
-import 'package:luna_core/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/i_validator.dart';
+import 'package:luna_authoring_system/validator/validation_issue.dart';
 
 /// Mock error classes for testing purposes.
 

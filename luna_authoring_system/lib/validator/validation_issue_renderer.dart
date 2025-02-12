@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:luna_core/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/validation_issue.dart';
 
 /// This class is responsible for rendering validation issues
 /// into a text file (as UTF-8 encoded bytes).
