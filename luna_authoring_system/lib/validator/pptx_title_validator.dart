@@ -1,8 +1,8 @@
 import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
+import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_title_issue.dart';
-import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
 /// A validator that checks the validity of the title of a `PptxTree`.
 class PptxTitleValidator extends IValidator {
