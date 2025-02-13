@@ -3,10 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/validator/validation_issue_renderer.dart';
-import 'package:luna_authoring_system/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
-/// A dummy implementation of ValidationIssue for testing purposes.
-class DummyValidationIssue extends ValidationIssue {
+/// A dummy implementation of IValidationIssue for testing purposes.
+class DummyValidationIssue extends IValidationIssue {
   final String _issueCode;
 
   DummyValidationIssue(this._issueCode);
@@ -18,7 +18,7 @@ class DummyValidationIssue extends ValidationIssue {
 void main() {
   group('ValidationIssueRenderer Tests', () {
     test('Renders an empty set of issues as a single newline', () {
-      final Set<ValidationIssue> issues = {};
+      final Set<IValidationIssue> issues = {};
       final renderer = ValidationIssueRenderer(issues);
 
       final Uint8List fileBytes = renderer.renderAsTextFileBytes();
@@ -28,7 +28,7 @@ void main() {
     });
 
     test('Renders a single issue correctly', () {
-      final Set<ValidationIssue> issues = {
+      final Set<IValidationIssue> issues = {
         DummyValidationIssue('single_issue'),
       };
       final renderer = ValidationIssueRenderer(issues);
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('Renders multiple issues in any order', () {
-      final Set<ValidationIssue> issues = {
+      final Set<IValidationIssue> issues = {
         DummyValidationIssue('z_issue'),
         DummyValidationIssue('a_issue'),
         DummyValidationIssue('m_issue'),

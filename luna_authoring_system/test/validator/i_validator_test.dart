@@ -1,25 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
-import 'package:luna_authoring_system/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
 /// Mock error classes for testing purposes.
 
-class MockErrorOne extends ValidationIssue {
+class MockErrorOne extends IValidationIssue {
   @override
   String get issueCode => 'mock_error_one';
 }
 
-class MockErrorTwo extends ValidationIssue {
+class MockErrorTwo extends IValidationIssue {
   @override
   String get issueCode => 'mock_error_two';
 }
 
-class MockErrorThree extends ValidationIssue {
+class MockErrorThree extends IValidationIssue {
   @override
   String get issueCode => 'mock_error_three';
 }
 
-class MockErrorFour extends ValidationIssue {
+class MockErrorFour extends IValidationIssue {
   @override
   String get issueCode => 'mock_error_four';
 }
@@ -32,7 +32,7 @@ void main() {
     final mockValidator = _MockValidatorWithOneError();
 
     // Run the validation.
-    Set<ValidationIssue> errors = mockValidator.validate();
+    Set<IValidationIssue> errors = mockValidator.validate();
 
     // Verify the results.
     expect(errors.length, 1);
@@ -47,7 +47,7 @@ void main() {
     final mockValidator2 = _MockValidatorWithAnotherError();
 
     // Run the validations and combine errors.
-    Set<ValidationIssue> errors = {};
+    Set<IValidationIssue> errors = {};
     errors.addAll(mockValidator1.validate());
     errors.addAll(mockValidator2.validate());
 
@@ -68,7 +68,7 @@ void main() {
     final mockValidator3 = _MockValidatorWithTwoErrors();
 
     // Run the validations and combine errors.
-    Set<ValidationIssue> errors = {};
+    Set<IValidationIssue> errors = {};
     errors.addAll(mockValidator1.validate());
     errors.addAll(mockValidator2.validate());
     errors.addAll(mockValidator3.validate());
@@ -85,7 +85,7 @@ void main() {
 /// Mock validator that always returns a single error.
 class _MockValidatorWithOneError implements IValidator {
   @override
-  Set<ValidationIssue> validate() {
+  Set<IValidationIssue> validate() {
     return {MockErrorOne()};
   }
 }
@@ -93,7 +93,7 @@ class _MockValidatorWithOneError implements IValidator {
 /// Mock validator that always returns a different single error.
 class _MockValidatorWithAnotherError implements IValidator {
   @override
-  Set<ValidationIssue> validate() {
+  Set<IValidationIssue> validate() {
     return {MockErrorTwo()};
   }
 }
@@ -101,7 +101,7 @@ class _MockValidatorWithAnotherError implements IValidator {
 /// Mock validator that returns two errors.
 class _MockValidatorWithTwoErrors implements IValidator {
   @override
-  Set<ValidationIssue> validate() {
+  Set<IValidationIssue> validate() {
     return {MockErrorThree(), MockErrorFour()};
   }
 }
