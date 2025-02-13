@@ -29,22 +29,22 @@ void main() {
 
     test('Renders a single issue correctly', () {
       final Set<ValidationIssue> issues = {
-        DummyValidationIssue('single_error'),
+        DummyValidationIssue('single_issue'),
       };
       final renderer = ValidationIssueRenderer(issues);
 
       final Uint8List fileBytes = renderer.renderAsTextFileBytes();
       final String content = utf8.decode(fileBytes);
 
-      // The content should be "single_error\n".
-      expect(content, 'single_error\n');
+      // The content should be "single_issue\n".
+      expect(content, 'single_issue\n');
     });
 
     test('Renders multiple issues in any order', () {
       final Set<ValidationIssue> issues = {
-        DummyValidationIssue('z_error'),
-        DummyValidationIssue('a_error'),
-        DummyValidationIssue('m_error'),
+        DummyValidationIssue('z_issue'),
+        DummyValidationIssue('a_issue'),
+        DummyValidationIssue('m_issue'),
       };
       final renderer = ValidationIssueRenderer(issues);
 
@@ -52,9 +52,9 @@ void main() {
       final String content = utf8.decode(fileBytes);
 
       // Verify that the content contains each expected issue code.
-      expect(content, contains('a_error'));
-      expect(content, contains('m_error'));
-      expect(content, contains('z_error'));
+      expect(content, contains('a_issue'));
+      expect(content, contains('m_issue'));
+      expect(content, contains('z_issue'));
 
       // Verify that there are exactly 3 non-empty lines.
       final List<String> lines =
