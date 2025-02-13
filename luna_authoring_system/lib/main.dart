@@ -45,7 +45,7 @@ Future<void> main() async {
     for (var issue in issueList) {
       // TODO: Replace with Log
       // ignore: avoid_print
-      print('Validation Issue Found. Issue Code: ${issue.issueCode}');
+      print('Validation Issue Found: ${issue.toText()}');
     }
     // Exit with code -1 to indicate validation failure.
     exit(-1);
