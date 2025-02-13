@@ -2,106 +2,110 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
-/// Mock error classes for testing purposes.
+/// Mock issue classes for testing purposes.
 
-class MockErrorOne extends IValidationIssue {
-  @override
-  String get issueCode => 'mock_error_one';
+class MockIssueOne extends IValidationIssue {
+  String toText() {
+    return 'mock_issue_one';
+  }
 }
 
-class MockErrorTwo extends IValidationIssue {
-  @override
-  String get issueCode => 'mock_error_two';
+class MockIssueTwo extends IValidationIssue {
+  String toText() {
+    return 'mock_issue_two';
+  }
 }
 
-class MockErrorThree extends IValidationIssue {
-  @override
-  String get issueCode => 'mock_error_three';
+class MockIssueThree extends IValidationIssue {
+  String toText() {
+    return 'mock_issue_three';
+  }
 }
 
-class MockErrorFour extends IValidationIssue {
-  @override
-  String get issueCode => 'mock_error_four';
+class MockIssueFour extends IValidationIssue {
+  String toText() {
+    return 'mock_issue_four';
+  }
 }
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('Single validator with one error should return single error', () {
-    // Mock validator that always returns a single error.
-    final mockValidator = _MockValidatorWithOneError();
+  test('Single validator with one issue should return single issue', () {
+    // Mock validator that always returns a single issue.
+    final mockValidator = _MockValidatorWithOneIssue();
 
     // Run the validation.
-    Set<IValidationIssue> errors = mockValidator.validate();
+    Set<IValidationIssue> issues = mockValidator.validate();
 
     // Verify the results.
-    expect(errors.length, 1);
-    expect(errors.first, isA<MockErrorOne>());
+    expect(issues.length, 1);
+    expect(issues.first, isA<MockIssueOne>());
   });
 
-  test('Combining two validators should return two errors', () {
-    // Mock validator 1 that returns one error.
-    final mockValidator1 = _MockValidatorWithOneError();
+  test('Combining two validators should return two issues', () {
+    // Mock validator 1 that returns one issue.
+    final mockValidator1 = _MockValidatorWithOneIssue();
 
-    // Mock validator 2 that returns another error.
-    final mockValidator2 = _MockValidatorWithAnotherError();
+    // Mock validator 2 that returns another issue.
+    final mockValidator2 = _MockValidatorWithAnotherIssue();
 
-    // Run the validations and combine errors.
-    Set<IValidationIssue> errors = {};
-    errors.addAll(mockValidator1.validate());
-    errors.addAll(mockValidator2.validate());
+    // Run the validations and combine issues.
+    Set<IValidationIssue> issues = {};
+    issues.addAll(mockValidator1.validate());
+    issues.addAll(mockValidator2.validate());
 
     // Verify the results.
-    expect(errors.length, 2);
-    expect(errors.any((error) => error is MockErrorOne), isTrue);
-    expect(errors.any((error) => error is MockErrorTwo), isTrue);
+    expect(issues.length, 2);
+    expect(issues.any((issue) => issue is MockIssueOne), isTrue);
+    expect(issues.any((issue) => issue is MockIssueTwo), isTrue);
   });
 
-  test('Combining three validators with one returning two errors should return four errors', () {
-    // Mock validator 1 that returns one error.
-    final mockValidator1 = _MockValidatorWithOneError();
+  test('Combining three validators with one returning two issues should return four issues', () {
+    // Mock validator 1 that returns one issue.
+    final mockValidator1 = _MockValidatorWithOneIssue();
 
-    // Mock validator 2 that returns another error.
-    final mockValidator2 = _MockValidatorWithAnotherError();
+    // Mock validator 2 that returns another issue.
+    final mockValidator2 = _MockValidatorWithAnotherIssue();
 
-    // Mock validator 3 that returns two errors.
-    final mockValidator3 = _MockValidatorWithTwoErrors();
+    // Mock validator 3 that returns two issues.
+    final mockValidator3 = _MockValidatorWithTwoIssues();
 
-    // Run the validations and combine errors.
-    Set<IValidationIssue> errors = {};
-    errors.addAll(mockValidator1.validate());
-    errors.addAll(mockValidator2.validate());
-    errors.addAll(mockValidator3.validate());
+    // Run the validations and combine issues.
+    Set<IValidationIssue> issues = {};
+    issues.addAll(mockValidator1.validate());
+    issues.addAll(mockValidator2.validate());
+    issues.addAll(mockValidator3.validate());
 
     // Verify the results.
-    expect(errors.length, 4);
-    expect(errors.any((error) => error is MockErrorOne), isTrue);
-    expect(errors.any((error) => error is MockErrorTwo), isTrue);
-    expect(errors.any((error) => error is MockErrorThree), isTrue);
-    expect(errors.any((error) => error is MockErrorFour), isTrue);
+    expect(issues.length, 4);
+    expect(issues.any((issue) => issue is MockIssueOne), isTrue);
+    expect(issues.any((issue) => issue is MockIssueTwo), isTrue);
+    expect(issues.any((issue) => issue is MockIssueThree), isTrue);
+    expect(issues.any((issue) => issue is MockIssueFour), isTrue);
   });
 }
 
-/// Mock validator that always returns a single error.
-class _MockValidatorWithOneError implements IValidator {
+/// Mock validator that always returns a single issue.
+class _MockValidatorWithOneIssue implements IValidator {
   @override
   Set<IValidationIssue> validate() {
-    return {MockErrorOne()};
+    return {MockIssueOne()};
   }
 }
 
-/// Mock validator that always returns a different single error.
-class _MockValidatorWithAnotherError implements IValidator {
+/// Mock validator that always returns a different single issue.
+class _MockValidatorWithAnotherIssue implements IValidator {
   @override
   Set<IValidationIssue> validate() {
-    return {MockErrorTwo()};
+    return {MockIssueTwo()};
   }
 }
 
-/// Mock validator that returns two errors.
-class _MockValidatorWithTwoErrors implements IValidator {
+/// Mock validator that returns two issues.
+class _MockValidatorWithTwoIssues implements IValidator {
   @override
   Set<IValidationIssue> validate() {
-    return {MockErrorThree(), MockErrorFour()};
+    return {MockIssueThree(), MockIssueFour()};
   }
 }
