@@ -1,5 +1,5 @@
-import 'package:luna_authoring_system/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
 abstract class IValidator {
-  Set<ValidationIssue> validate();
+  Set<IValidationIssue> validate();
 }

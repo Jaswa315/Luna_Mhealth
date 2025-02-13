@@ -4,7 +4,7 @@ import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_title_issue.dart';
 import 'package:luna_authoring_system/luna_constants.dart';
-import 'package:luna_authoring_system/validator/validation_issue.dart';
+import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ void main() {
     pptxTree.title = "";
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidationIssue> issues = validator.validate();
+    final Set<IValidationIssue> issues = validator.validate();
 
     expect(issues.length, 1);
     expect(issues.first, isA<PPTXTitleHasNoVisibleCharacters>());
@@ -25,7 +25,7 @@ void main() {
     pptxTree.title = "  ";
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidationIssue> issues = validator.validate();
+    final Set<IValidationIssue> issues = validator.validate();
 
     expect(issues.length, 1);
     expect(issues.first, isA<PPTXTitleHasNoVisibleCharacters>());
@@ -37,7 +37,7 @@ void main() {
     pptxTree.title = 'a' * (LunaConstants.maximumPptxTitleLength + 1);
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidationIssue> issues = validator.validate();
+    final Set<IValidationIssue> issues = validator.validate();
 
     expect(issues.length, 1);
     expect(issues.first, isA<PPTXTitleIsTooLong>());
@@ -48,7 +48,7 @@ void main() {
     pptxTree.title = 'a' * (LunaConstants.maximumPptxTitleLength);
     IValidator validator = PptxTitleValidator(pptxTree);
 
-    final Set<ValidationIssue> issues = validator.validate();
+    final Set<IValidationIssue> issues = validator.validate();
 
     expect(issues.isEmpty, true);
   });
