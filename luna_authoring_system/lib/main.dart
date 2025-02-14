@@ -16,24 +16,14 @@ Future<void> main() async {
   // Initialize AuthoringSystem singletons and load app settings
   await AuthoringInitializer.initializeAuthoring();
 
+  /// This is to ensure that the current --dart-define method works
+  /// will be folded into validateInputs once arguments work
   const String pptxFilePath = String.fromEnvironment('pptxFilePath');
   const String moduleName = String.fromEnvironment('moduleName');
-
-  // ignore: unnecessary_null_comparison
-  if (pptxFilePath == null || moduleName == null) {
-    // Files are under Documents/ by default on Macos
-    // On Windows, Files are generated under C:\Users\username\Documents.
-    // ignore: avoid_print
-    print(
-      'Usage: flutter run --dart--define=pptxFilePath=<pptx_file_path> --dart-define=moduleName=<module_name>',
-    );
-
-    // Exit with code -1 to indicate an error
-    exit(-1);
-  }
+  final pptxFile = AuthoringInitializer.validateInputs([pptxFilePath,moduleName]);
 
   // Parse the presentation
-  PptxParser pptxParser = PptxParser(pptxFilePath);
+  PptxParser pptxParser = PptxParser(pptxFile);
   PptxTree pptxTree = pptxParser.getPptxTree();
 
   // Run all PPTX validations.

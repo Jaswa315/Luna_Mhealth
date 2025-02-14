@@ -6,14 +6,16 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/utils/emu.dart';
+import 'dart:io';
 
 void main() {
   group('Tests for PptxParser using A line.pptx', () {
-    PptxParser pptxParser = PptxParser('test/test_assets/A line.pptx');
+
+    final pptxFile = File('test/test_assets/A line.pptx');
+    PptxParser pptxParser = PptxParser(pptxFile);
 
     test('parsePptx method initialzes title.', () async {
       PptxTree pptxTree = pptxParser.getPptxTree();
-
       expect(pptxTree.title, "A line");
     });
 

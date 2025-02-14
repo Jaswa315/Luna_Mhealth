@@ -1,5 +1,6 @@
 library pptx_parser;
 
+import 'dart:io';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
@@ -97,8 +98,8 @@ class PptxParser {
   late PptxLoader _pptxLoader;
   PptxTree _pptxTree = PptxTree();
 
-  PptxParser(String pptxFilePath) {
-    _pptxLoader = PptxLoader(pptxFilePath);
+  PptxParser(File pptxFile) {
+    _pptxLoader = PptxLoader(pptxFile);
   }
 
   void _updateTitleAndAuthor() {
