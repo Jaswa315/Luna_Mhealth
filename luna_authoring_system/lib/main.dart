@@ -20,7 +20,7 @@ Future<void> main() async {
   /// will be folded into validateInputs once arguments work
   const String pptxFilePath = String.fromEnvironment('pptxFilePath');
   const String moduleName = String.fromEnvironment('moduleName');
-  final pptxFile = AuthoringInitializer.validateInputs([pptxFilePath,moduleName]);
+  final pptxFile = AuthoringInitializer.processInputs([pptxFilePath,moduleName]);
 
   // Parse the presentation
   PptxParser pptxParser = PptxParser(pptxFile);

@@ -37,7 +37,7 @@ class AuthoringInitializer {
   /// [arguements] 
   /// [arguements] 0 is pptx filepath
   /// [arguements] 1 is module file name
-  static validateInputs(List<String> arguements) {
+  static processInputs(List<String> arguements) {
 
     // ignore: unnecessary_null_comparison
     if (arguements[0] == null || arguements[1] == null) {
@@ -52,10 +52,10 @@ class AuthoringInitializer {
       exit(-1);
     }
 
-    return _validFilePptxFilePath(arguements[0]);
+    return _getPptxFile(arguements[0]);
   }
 
-  static File _validFilePptxFilePath(String pptxFilePath){
+  static File _getPptxFile(String pptxFilePath){
 
     // validate file extension.
     final fileExtension = p.extension(pptxFilePath);
