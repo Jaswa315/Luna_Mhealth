@@ -9,21 +9,16 @@ import 'package:xml2json/xml2json.dart';
 /// .pptx files are ZIP archives containing XML documents and embedded resources.
 /// .pptx file is decompressed using ZipDecoder.
 /// XML files are extracted
+/// Assumes pptxFile is a valid file. 
 class PptxLoader {
   late final File _pptxFile;
 
-  PptxLoader(String pptxFilePath) {
-    // validate file extension.
-    final fileExtension = p.extension(pptxFilePath);
+  PptxLoader(File pptxFilePath) {
 
-    if (fileExtension.toLowerCase() != '.pptx') {
-      throw ArgumentError(
-        'Invalid file extension: $fileExtension. Only .pptx files are allowed.',
-      );
-    }
+    _pptxFile = pptxFilePath;
 
-    _pptxFile = File(pptxFilePath);
   }
+
 
   ArchiveFile _extractFileFromPptx(String filePath) {
     var bytes = _pptxFile.readAsBytesSync();

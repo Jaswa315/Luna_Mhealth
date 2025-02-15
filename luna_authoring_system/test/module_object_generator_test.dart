@@ -4,6 +4,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
 import 'package:luna_authoring_system/module_object_generator.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/shape/line_component.dart';
+import 'dart:io';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,7 @@ void main() {
       () async {
     // Parse the PPTX tree
     PptxTree pptxTree =
-        PptxParser('test/test_assets/A line.pptx').getPptxTree();
+        PptxParser(File('test/test_assets/A line.pptx')).getPptxTree();
 
     // Create the ModuleObjectGenerator
     ModuleObjectGenerator moduleObjectGenerator =
