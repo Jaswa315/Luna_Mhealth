@@ -3,11 +3,14 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 import 'package:luna_authoring_system/helper/authoring_initializer.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 
 
 void main() {
   group('Tests for PptxRunner using A line.pptx', () {
 
+
+    const testDir = 'test/output';
 
     TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -43,28 +46,24 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(path_channel, (MethodCall methodCall) async {
       if (methodCall.method == 'getApplicationDocumentsDirectory') {
-        return 'test/output'; 
+        return testDir; 
       }
       return null;
     });
 
-    tearDown(() {
+    tearDown(() async {
+      await Directory(testDir).delete(recursive: true);
       log.clear();
     });
 
 
-
-
     final pptxFile = File('test/test_assets/A line.pptx');
-    // setUp(() {
-    //   // Use fake path provider to account for non-mobile unit tests
-    //   storageProvider = LocalStorageProvider.withPathPlatformProvider(
-    //       FakePathProviderPlatform());
-    // });
-    test('parsePptx method initialzes title.', () async {
+    test('Process PPTX makes a luna file.', () async {
+      const fileName = 'unit_test_luna';
+      var filePath = join(testDir, "$fileName.luna");
       await AuthoringInitializer.initializeAuthoring();
-      await PptxRunner().processPptx(pptxFile, "unit_test_luna");
+      await PptxRunner().processPptx(pptxFile, fileName);
+      expect(await File(filePath).exists(), true);
     });
-
   });
 }

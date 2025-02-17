@@ -66,7 +66,7 @@ class PptxRunner {
 
     // Create the package (ZIP file) using ModuleStorage
     // Save module JSON data into the archive
-    ModuleResourceFactory.addModule(_moduleName, moduleJson);
+    await ModuleResourceFactory.addModule(_moduleName, moduleJson);
     
   }
 
