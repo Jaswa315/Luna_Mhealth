@@ -2,7 +2,7 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 
-class ConnectionShapeHelper {
+class ConnectionShapePositioner {
   /// Computes the start and end points of a ConnectionShape in percentage-based coordinates.
   static Map<String, Point2DPercentage> getStartAndEndPoints(
     ConnectionShape cxn,
