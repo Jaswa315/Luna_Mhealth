@@ -17,6 +17,7 @@ import 'package:path/path.dart' as p;
 class AuthoringInitializer {
 
   static bool _initialized = false;
+  static const int _numberOfArguments = 2;
 
   /// Setup method for the Luna Authoring System
   /// Sets up singletons such as version manager and logmanager
@@ -34,25 +35,26 @@ class AuthoringInitializer {
   }
 
 
-  /// [arguements] 
-  /// [arguements] 0 is pptx filepath
-  /// [arguements] 1 is module file name
-  static processInputs(List<String> arguements) {
+  /// [arguments] 
+  /// [arguments] 0 is pptx filepath
+  /// [arguments] 1 is module file name
+  static processInputs(List<String> arguments) {
 
     // ignore: unnecessary_null_comparison
-    if (arguements[0] == null || arguements[1] == null) {
+    if (arguments.length != _numberOfArguments) {
       // Files are under Documents/ by default on Macos
       // On Windows, Files are generated under C:\Users\username\Documents.
       // ignore: avoid_print
       print(
-        'Usage: flutter run --dart-define=pptxFilePath=<pptx_file_path> --dart-define=moduleName=<module_name>',
+        'Usage: flutter run ./lib/main.dart <pptx_file_path> <module_name>',
       );
 
       // Exit with code -1 to indicate an error
       exit(-1);
+      
     }
 
-    return _getPptxFile(arguements[0]);
+    return _getPptxFile(arguments[0]);
   }
 
   static File _getPptxFile(String pptxFilePath){
