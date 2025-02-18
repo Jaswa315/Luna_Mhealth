@@ -7,6 +7,8 @@ Future<void> main(List<String> arguments) async {
   // Initialize AuthoringSystem singletons and load app settings
   await AuthoringInitializer.initializeAuthoring();
 
+  print(arguments);
+
   /// This is to ensure that the current --dart-define method works
   /// will be folded into validateInputs once arguments work
   final pptxFile = AuthoringInitializer.processInputs(arguments);
