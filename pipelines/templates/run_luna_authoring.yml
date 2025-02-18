@@ -36,7 +36,7 @@ steps:
       cd "luna_authoring_system"
       $pptx_file_path = "${{ parameters.pptx_path }}"
       flutter create --platform=${{ parameters.operating_system }} .
-      $flutter_proc = Start-Process -FilePath "flutter" -ArgumentList @("run","./lib/main.dart","-a","`"$pptx_file_path`"","-a ","`"${{ parameters.module_name }}`"") -NoNewWindow -PassThru
+      $flutter_proc = Start-Process -FilePath "flutter" -ArgumentList @("run", "./lib/main.dart", "-a", "`"$pptx_file_path`"", "-a", "`"${{ parameters.module_name }}`"") -NoNewWindow -PassThru
       Start-Sleep 240
       Stop-Process $flutter_proc
 
