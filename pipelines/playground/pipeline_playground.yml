@@ -12,4 +12,4 @@ variables:
 steps:
 
 - template: ../templates/install_prereqs.yml
-- template: ../templates/run_luna_authoring
+- template: ../templates/run_luna_authoring.yml
