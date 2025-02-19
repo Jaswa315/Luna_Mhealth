@@ -17,6 +17,7 @@ class Module extends Item {
   late final String moduleId;
   late final String title;
   late final String author;
+  late final String authoringVersion;
   late List<Page> pages;
   late final int width;
   late final int height;
@@ -26,12 +27,14 @@ class Module extends Item {
     String? moduleId,
     String? title,
     String? author,
+    String? authoringVersion,
     List<Page>? pages,
     int? width,
     int? height,
   })  : moduleId = moduleId ?? Uuid().v4(),
         title = title ?? "Untitled",
         author = author ?? "Unassigned Author",
+        authoringVersion = authoringVersion ?? '0.0.0',
         pages = pages ?? [],
         width = width ?? 0,
         height = height ?? 0,
@@ -48,6 +51,7 @@ class Module extends Item {
       moduleId: json['module']['moduleId'] as String,
       title: json['module']['title'] as String,
       author: json['module']['author'] as String,
+      authoringVersion: json['module']['authoringVersion'],
       pages: pages,
       width: (json['module']['width'] as num).toInt(),
       height: (json['module']['height'] as num).toInt(),
@@ -61,6 +65,7 @@ class Module extends Item {
         'moduleId': moduleId,
         'title': title,
         'author': author,
+        'authoringVersion': authoringVersion,
         'pages': pages.map((page) => page.toJson()).toList(),
         'width': width,
         'height': height,

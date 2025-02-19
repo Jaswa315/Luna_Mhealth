@@ -8,6 +8,7 @@ import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/shape/line_component.dart';
+import 'package:luna_core/utils/version_manager.dart' as vm;
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
 /// Module and all descendant objects of a module. This includes Pages, Components, and other items inside a Module.
@@ -41,6 +42,7 @@ class ModuleObjectGenerator {
     Module moduleObj = Module(
       title: root.title,
       author: root.author,
+      authoringVersion: vm.VersionManager().version,
       pages: pages,
       width: root.width.value,
       height: root.height.value,

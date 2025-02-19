@@ -5,9 +5,15 @@ import 'package:luna_authoring_system/module_object_generator.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/shape/line_component.dart';
 import 'dart:io';
+import 'package:luna_core/utils/version_manager.dart';
+
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() {
+    VersionManager().setTestVersion("0.0.1");
+  });
 
   test(
       'Should be able to create module.dart with pptx tree with single slide that has single line',
@@ -22,8 +28,8 @@ void main() {
 
     // Generate the module asynchronously
     Module generatedModule = await moduleObjectGenerator.generateLunaModule();
-
     expect(generatedModule.pages.length, 1);
+    expect(generatedModule.authoringVersion, "0.0.1");
     expect(generatedModule.pages[0].components.length, 1);
     expect(generatedModule.pages[0].components[0], isA<LineComponent>());
   });

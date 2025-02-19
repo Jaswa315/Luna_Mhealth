@@ -22,6 +22,7 @@ void main() {
       final module = Module(
           title: 'This is title',
           author: 'Test Author',
+          authoringVersion: '0.0.0',
           pages: [],
           width: 100,
           height: 200,);
@@ -29,6 +30,7 @@ void main() {
       expect(module.id, isNotNull); // ID is auto-generated if not provided
       expect(module.title, 'This is title');
       expect(module.author, 'Test Author');
+      expect(module.authoringVersion, '0.0.0');
       expect(module.pages, isEmpty);
       expect(module.width, 100);
       expect(module.height, 200);
@@ -53,6 +55,7 @@ void main() {
           'moduleId': '12345',
           'title': 'This is title',
           'author': 'John Doe',
+          'authoringVersion': '0.0.0',
           'pages': [],
           'width': 100,
           'height': 200,
@@ -65,6 +68,7 @@ void main() {
       expect(module.moduleId, isNotNull);
       expect(module.title, 'This is title');
       expect(module.author, 'John Doe');
+      expect(module.authoringVersion, '0.0.0');
       expect(module.pages, isEmpty);
       expect(module.width, 100);
       expect(module.height, 200);

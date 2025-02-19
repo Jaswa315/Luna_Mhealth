@@ -47,6 +47,13 @@ class VersionManager {
     _curVersion = packageInfo.version;
   }
 
+  /// Method to set version for testing
+  /// Overriding packageInfo is possible but annoying
+  /// See https://github.com/fluttercommunity/plus_plugins/blob/main/packages/package_info_plus/package_info_plus/test/package_info_test.dart
+  @visibleForTesting
+  setTestVersion(String ver){
+    _curVersion = ver;
+  }
 
   /// Reset version. only should be used for testing
   @visibleForTesting
