@@ -8,7 +8,6 @@ import 'package:luna_core/models/component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/shape/line_component.dart';
-import 'package:luna_core/utils/logging.dart';
 import 'package:luna_core/utils/version_manager.dart' as vm;
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
