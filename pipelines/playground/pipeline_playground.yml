@@ -3,7 +3,7 @@
 trigger: none
 
 pool:
-  vmImage: windows-latest
+  vmImage: macos-latest
 
 variables:
   - name: package_folders
@@ -12,4 +12,6 @@ variables:
 steps:
 
 - template: ../templates/install_prereqs.yml
-- template: ../templates/run_luna_mobile_tests_firebase.yml
+- template: ../templates/run_luna_authoring.yml
+  parameters:
+    operating_system: macos
