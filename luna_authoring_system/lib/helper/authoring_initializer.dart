@@ -40,9 +40,6 @@ class AuthoringInitializer {
   /// [arguments] 1 is module file name
   static processInputs(List<String> arguments) {
 
-    print(arguments);
-
-    // ignore: unnecessary_null_comparison
     if (arguments.length != _numberOfArguments) {
       // Files are under Documents/ by default on Macos
       // On Windows, Files are generated under C:\Users\username\Documents.
