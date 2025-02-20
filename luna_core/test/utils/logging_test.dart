@@ -14,12 +14,14 @@ import 'package:luna_core/utils/logging.dart';
 import 'package:mockito/mockito.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:azure_application_insights/azure_application_insights.dart';
+import 'package:luna_core/utils/version_manager.dart';
 
 var log = [];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
+  VersionManager().setTestVersion("0.0.0");
 
   group('LogManager Tests', () {
     test('LogManager - Singleton create fail', () async {

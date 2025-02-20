@@ -32,6 +32,7 @@ const String kTestAssetsPath = 'test/storage/testassets';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
+  VersionManager().setTestVersion("0.0.0");
 
   group('LocalStorageProvider Tests', () {
     late IStorageProvider storageProvider;
@@ -50,7 +51,6 @@ void main() {
 
     setUp(() {
       // Use fake path provider to account for non-mobile unit tests
-      VersionManager.setTestVersion("0.0.0");
       storageProvider = LocalStorageProvider.withPathPlatformProvider(
           FakePathProviderPlatform());
     });
