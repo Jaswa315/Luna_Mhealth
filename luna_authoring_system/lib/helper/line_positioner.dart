@@ -2,7 +2,14 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 
-class ConnectionShapePositioner {
+///[LinePositioner] is a helper class that computes the start and end points of a shape in percentage-based coordinates
+/// relative to the slide dimensions. This class is initally created to handle lines specifically.
+/// Purpose:
+/// - Converts the absolute EMU (English Metric Units) values of a shape into percentage-based coordinates.
+/// - Ensures the position remains proportional to the slide size.
+/// - Handles vertical flipping transformations to correctly swap start and end points when necessary.
+///
+class LinePositioner {
   /// Computes the start and end points of a ConnectionShape in percentage-based coordinates.
   static Map<String, Point2DPercentage> getStartAndEndPoints(
     ConnectionShape cxn,

@@ -1,5 +1,5 @@
-import 'package:luna_authoring_system/helper/connection_shape_positioner.dart';
 import 'package:luna_authoring_system/helper/emu_conversions.dart';
+import 'package:luna_authoring_system/helper/line_positioner.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
@@ -70,7 +70,7 @@ class ModuleObjectGenerator {
     double thicknessOfLine =
         EmuConversions.updateThicknessToDisplayPixels(cxn.width);
     // Get computed start and end points
-    final points = ConnectionShapePositioner.getStartAndEndPoints(
+    final points = LinePositioner.getStartAndEndPoints(
       cxn,
       _slideWidth,
       _slideHeight,
