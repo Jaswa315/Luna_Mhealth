@@ -2,13 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/helper/connection_shape_helper.dart';
+import 'package:luna_authoring_system/helper/line_positioner.dart';
 import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/utils/emu.dart';
 
 void main() {
-  group('ConnectionShapeHelper Tests', () {
+  group('StartEndPointPositioner Tests', () {
     test('Computes correct start and end points from ConnectionShape', () {
       // Mock slide dimensions
       int slideWidth = 5000000;
@@ -25,7 +25,7 @@ void main() {
       );
 
       // Get computed start and end points
-      final points = ConnectionShapeHelper.getStartAndEndPoints(
+      final points = LinePositioner.getStartAndEndPoints(
           connectionShape, slideWidth, slideHeight);
 
       // Expected values in percentage
@@ -57,7 +57,7 @@ void main() {
       );
 
       // Get computed start and end points
-      final points = ConnectionShapeHelper.getStartAndEndPoints(
+      final points = LinePositioner.getStartAndEndPoints(
           connectionShape, slideWidth, slideHeight);
 
       // Expected values in percentage
@@ -87,7 +87,7 @@ void main() {
       );
 
       // Get computed start and end points
-      final points = ConnectionShapeHelper.getStartAndEndPoints(
+      final points = LinePositioner.getStartAndEndPoints(
           connectionShape, slideWidth, slideHeight);
 
       // Expected thickness conversion
