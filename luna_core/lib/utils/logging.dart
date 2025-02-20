@@ -14,7 +14,7 @@ import 'package:device_info/device_info.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:luna_core/utils/version_manager.dart';
 
 /// Enum representing the calibrated severity levels for logging.
 enum LunaSeverityLevel {
@@ -319,23 +319,6 @@ class LogManager {
   }
 }
 
-/// Provides version-related functionality for the application.
-///
-/// The VersionManager class is responsible for retrieving the current
-/// version of the application.
-class VersionManager {
-  static String _cachedVersion = "Unknown";
-
-  /// Returns the current version of the application.
-  Future<String> getAppVersion() async {
-    if (_cachedVersion == "Unknown") {
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      _cachedVersion = packageInfo.version;
-    }
-    return _cachedVersion;
-  }
-}
-
 /// A simple console logger implementation that logs messages using the Dart
 /// logging package.
 ///
@@ -533,8 +516,9 @@ class ApplicationInsightsLogger implements ILunaLogger {
   Future<void> _initDeviceContext() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     DeviceContext deviceContext = _telemetryClient.context.device;
+    await VersionManager().setVersion();
 
-    _telemetryClient.context.applicationVersion = VersionManager._cachedVersion;
+    _telemetryClient.context.applicationVersion = VersionManager().version;
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;

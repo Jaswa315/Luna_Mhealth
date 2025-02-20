@@ -43,8 +43,10 @@ class VersionManager {
   /// Gets the current version of the app and sets the version of Version Manager
   /// Asynchronous due to package_info
   setVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    _curVersion = packageInfo.version;
+    if (_curVersion == _emptyVersion){ 
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      _curVersion = packageInfo.version;
+    }
   }
 
   /// Method to set version for testing
