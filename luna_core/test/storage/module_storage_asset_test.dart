@@ -21,6 +21,7 @@ import 'package:luna_core/storage/module_storage.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:luna_core/utils/version_manager.dart';
 
 const String kApplicationDocumentsPath = 'test/storage/moduletestdata';
 const String kTestAssetsPath = 'test/storage/testassets';
@@ -29,6 +30,7 @@ const String kLangLocale = 'en';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   GlobalConfiguration().loadFromAsset("app_settings");
+  VersionManager().setTestVersion("0.0.0");
 
   group('ModuleStorage Asset Tests', () {
     late IStorageProvider storageProvider;
