@@ -5,48 +5,79 @@ import 'package:path/path.dart' as p;
 import 'package:xml/xml.dart';
 import 'package:xml2json/xml2json.dart';
 
-/// PptxLoader creates in-memory representation of the .pptx.
-/// .pptx files are ZIP archives containing XML documents and embedded resources.
-/// .pptx file is decompressed using ZipDecoder.
-/// XML files are extracted
-/// Assumes pptxFile is a valid file. 
+/// `PptxLoader` is responsible for extracting, loading, and converting XML files
+/// from a `.pptx` archive (which is a ZIP file containing XML-based slide data).
+///
+/// This class extracts the `.pptx` file only once to a temporary directory,
+/// maintains its original folder structure, and provides methods to retrieve XML
+/// files as JSON for easier processing.
+///
+/// Assumes: `_pptxFile` is a valid `.pptx` file.
 class PptxLoader {
-  late final File _pptxFile;
+  final File _pptxFile;
+  late final Directory _tempDir;
+  bool _isExtracted = false;
 
-  PptxLoader(File pptxFilePath) {
-
-    _pptxFile = pptxFilePath;
-
+  PptxLoader(this._pptxFile) {
+    _tempDir = Directory.systemTemp.createTempSync('pptx_loader_');
   }
 
-
-  ArchiveFile _extractFileFromPptx(String filePath) {
+  /// Extracts the `.pptx` archive while preserving its original file structure
+  /// and saves the extracted files in `_tempDir`.
+  void _extractPptxOnce() {
+    if (_isExtracted) return;
     var bytes = _pptxFile.readAsBytesSync();
     var archive = ZipDecoder().decodeBytes(bytes);
+    for (var file in archive) {
+      if (file.isFile) {
+        var extractedFilePath = p.join(_tempDir.path, file.name);
+        var outFile = File(extractedFilePath);
 
-    return archive.firstWhere((file) => p.equals(file.name, filePath));
+        outFile.createSync(recursive: true);
+        outFile.writeAsBytesSync(file.content as List<int>);
+      }
+    }
+    _isExtracted = true;
   }
 
-  XmlDocument _extractXmlFromPptx(String xmlFilePath) {
-    return XmlDocument.parse(
-      utf8.decode(_extractFileFromPptx(xmlFilePath).content),
-    );
+  /// Loads an XML file from the extracted temp storage. Throws an exception if missing.
+  XmlDocument _loadXml(String filePath) {
+    _extractPptxOnce();
+    var fullPath = p.join(_tempDir.path, filePath);
+    var file = File(fullPath);
+
+    if (!file.existsSync()) {
+      throw Exception("XML file not found: $filePath");
+    }
+
+    return XmlDocument.parse(file.readAsStringSync());
   }
 
+  /// Converts XML into a JSON-friendly structure.
   dynamic _transformXmlToJson(XmlDocument document) {
     Xml2Json xml2json = Xml2Json();
-
     // "&#xA" is equivalent to Line Feed Character (\n)
     String processedXml = document.toXmlString().replaceAll('&#xA;', '\\n');
-
     xml2json.parse(processedXml);
 
     return jsonDecode(xml2json.toParkerWithAttrs());
   }
 
+  /// Retrieves an XML file, converts it to JSON, and returns it.
   dynamic getJsonFromPptx(String xmlFilePath) {
-    XmlDocument doc = _extractXmlFromPptx(xmlFilePath);
-
+    XmlDocument doc = _loadXml(xmlFilePath);
     return _transformXmlToJson(doc);
+  }
+
+  /// Returns the path of the temporary directory where `.pptx` files are extracted.
+  String getTempPath() {
+    return _tempDir.path;
+  }
+
+  /// Deletes extracted files and removes the temp directory.
+  void dispose() {
+    if (_tempDir.existsSync()) {
+      _tempDir.deleteSync(recursive: true);
+    }
   }
 }
