@@ -24,6 +24,8 @@ class PptxLoader {
 
   /// Extracts the `.pptx` archive while preserving its original file structure
   /// and saves the extracted files in `_tempDir`.
+  /// Input: None.
+  /// Returns: `void` (Extracts files into `_tempDir`).
   void _extractPptxOnce() {
     if (_isExtracted) return;
     var bytes = _pptxFile.readAsBytesSync();
@@ -41,6 +43,8 @@ class PptxLoader {
   }
 
   /// Loads an XML file from the extracted temp storage. Throws an exception if missing.
+  /// Input:`filePath` (relative path to the XML file inside `_tempDir`).
+  /// Returns: `XmlDocument` representing the parsed XML content.
   XmlDocument _loadXml(String filePath) {
     _extractPptxOnce();
     var fullPath = p.join(_tempDir.path, filePath);
@@ -54,6 +58,8 @@ class PptxLoader {
   }
 
   /// Converts XML into a JSON-friendly structure.
+  /// Input: `document` (`XmlDocument`) containing structured XML.
+  /// Returns: `Map<String, dynamic>` representing the JSON structure of the XML.
   dynamic _transformXmlToJson(XmlDocument document) {
     Xml2Json xml2json = Xml2Json();
     // "&#xA" is equivalent to Line Feed Character (\n)
@@ -64,17 +70,23 @@ class PptxLoader {
   }
 
   /// Retrieves an XML file, converts it to JSON, and returns it.
+  /// Input: `xmlFilePath` (relative path to the XML file in `_tempDir`).
+  /// Returns: `Map<String, dynamic>` representing the JSON structure of the XML.
   dynamic getJsonFromPptx(String xmlFilePath) {
     XmlDocument doc = _loadXml(xmlFilePath);
     return _transformXmlToJson(doc);
   }
 
   /// Returns the path of the temporary directory where `.pptx` files are extracted.
+  /// Input: None.
+  /// Returns: `String` representing the absolute path of `_tempDir`.
   String getTempPath() {
     return _tempDir.path;
   }
 
   /// Deletes extracted files and removes the temp directory.
+  /// Input: None.
+  /// Returns: `void` (Deletes files from `_tempDir`).
   void dispose() {
     if (_tempDir.existsSync()) {
       _tempDir.deleteSync(recursive: true);
