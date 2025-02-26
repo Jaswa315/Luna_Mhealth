@@ -7,7 +7,7 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
-import 'package:luna_core/models/component.dart';
+import 'package:luna_core/models/components/component.dart';
 import 'irenderer.dart';
 
 /// An abstract class representing a base component renderer.

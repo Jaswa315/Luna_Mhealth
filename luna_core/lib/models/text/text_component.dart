@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:luna_core/utils/types.dart';
 
 import '../../enums/component_type.dart';
-import '../component.dart';
+import '../components/component.dart';
 
 /// Represents a text component that can be used in the Luna mHealth Mobile app.
 ///

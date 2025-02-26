@@ -11,7 +11,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:luna_core/controllers/navigation_controller.dart';
 import 'package:luna_core/enums/component_type.dart';
-import 'package:luna_core/models/component.dart';
+import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_core/utils/types.dart';
 import 'package:luna_mobile/core/constants/constants.dart';

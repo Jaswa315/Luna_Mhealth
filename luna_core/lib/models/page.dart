@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/item.dart';
 import 'package:luna_core/utils/types.dart';
-import 'component.dart';
+import 'components/component.dart';
 
 /// Represents a page in the application.
 ///

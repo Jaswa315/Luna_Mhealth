@@ -1,7 +1,7 @@
 class Point2DPercentage {
   /// Represents a point in a 2-dimensional space using normalized coordinates (0 to 1).
   ///
-  /// This class is primarily used for defining the relative position of shapes
+  /// This class is primarily used for defining the relative position of components
   /// in .pptx files, where x and y values represent percentages of the total
   /// width and height, respectively.
   ///

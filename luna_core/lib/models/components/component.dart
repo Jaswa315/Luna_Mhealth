@@ -9,10 +9,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/enums/item_type.dart';
+import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
-import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/utils/types.dart';
 
