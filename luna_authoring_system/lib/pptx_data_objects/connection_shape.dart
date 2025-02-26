@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
@@ -8,13 +9,13 @@ import 'package:luna_core/utils/emu.dart';
 class ConnectionShape implements Shape {
   static EMU defaultWidth = EMU(6350); // Default width (0.5pt)
   static String defaultColor = "#000000"; // Default color (black)
-  static int defaultShape = 1;
+  static BorderStyle defaultStyle = BorderStyle.solid;
 
   EMU width;
 
   String color;
 
-  int shape;
+  BorderStyle style;
 
   @override
   Transform transform;
@@ -24,12 +25,12 @@ class ConnectionShape implements Shape {
   ConnectionShape({
     EMU? width,
     String? color,
-    int? shape,
+    BorderStyle? style,
     required this.isFlippedVertically,
     required this.transform,
   })  : width = width ?? defaultWidth,
         color = color ?? defaultColor,
-        shape = shape ?? defaultShape;
+        style = style ?? defaultStyle;
 
   @override
   ShapeType get type => ShapeType.connection;
