@@ -31,6 +31,7 @@ void main() {
       endPoint: Point2DPercentage(0.8, 0.15), // 80% from left, 15% from top
       thickness: 2, // 2 pixels thick
       color: Colors.blue, // Blue line
+      style: BorderStyle.solid,
     );
 
     // Render the TestApp with the dummy data
