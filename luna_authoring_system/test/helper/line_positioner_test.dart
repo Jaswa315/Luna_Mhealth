@@ -16,12 +16,12 @@ void main() {
 
       // Mock connection shape
       ConnectionShape connectionShape = ConnectionShape(
-        EMU(50000), // Width of the connection
-        Transform(
+        width: EMU(50000), // Width of the connection
+        transform: Transform(
           Point2D(EMU(1000000), EMU(500000)), // Offset
           Point2D(EMU(2000000), EMU(1000000)), // Size
         ),
-        false, // Not flipped vertically
+        isFlippedVertically: false, // Not flipped vertically
       );
 
       // Get computed start and end points
@@ -48,12 +48,12 @@ void main() {
 
       // Mock connection shape with flipping enabled
       ConnectionShape connectionShape = ConnectionShape(
-        EMU(50000),
-        Transform(
+        width: EMU(50000),
+        transform: Transform(
           Point2D(EMU(1000000), EMU(500000)),
           Point2D(EMU(2000000), EMU(1000000)),
         ),
-        true, // Flipped vertically
+        isFlippedVertically: true, // Flipped vertically
       );
 
       // Get computed start and end points
@@ -78,12 +78,12 @@ void main() {
 
       // Mock connection shape
       ConnectionShape connectionShape = ConnectionShape(
-        EMU(50000), // Connection width
-        Transform(
+        width: EMU(50000), // Connection width
+        transform: Transform(
           Point2D(EMU(1000000), EMU(500000)),
           Point2D(EMU(2000000), EMU(1000000)),
         ),
-        false,
+        isFlippedVertically: false,
       );
 
       // Get computed start and end points

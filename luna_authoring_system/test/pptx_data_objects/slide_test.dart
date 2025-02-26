@@ -15,11 +15,16 @@ void main() {
       List<Shape> shapes = [];
       EMU emu = EMU(0);
       bool isFlippedVertically = false;
+
       for (int i = 0; i < 3; i++) {
         shapes.add(ConnectionShape(
-            emu,
-            Transform(Point2D(emu, emu), Point2D(emu, emu)),
-            isFlippedVertically));
+          width: emu,
+          transform: Transform(
+            Point2D(emu, emu),
+            Point2D(emu, emu),
+          ),
+          isFlippedVertically: isFlippedVertically,
+        ));
       }
 
       slide.shapes = shapes;
