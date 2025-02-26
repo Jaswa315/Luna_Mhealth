@@ -56,12 +56,13 @@ void main() {
         isFlippedVertically: isFlippedVertically,
       );
 
-      expect(cShape.color, "#000000"); // Ensuring default color
+      expect(cShape.color,
+          const Color.fromARGB(255, 0, 0, 0)); // Ensuring default color
     });
 
     test('Color is correctly assigned when provided.', () {
       ConnectionShape cShape = ConnectionShape(
-        color: "#FF5733",
+        color: const Color.fromARGB(255, 10, 20, 30),
         transform: Transform(
           Point2D(EMU(0), EMU(0)),
           Point2D(EMU(0), EMU(0)),
@@ -69,7 +70,7 @@ void main() {
         isFlippedVertically: isFlippedVertically,
       );
 
-      expect(cShape.color, "#FF5733");
+      expect(cShape.color, const Color.fromARGB(255, 10, 20, 30));
     });
 
     test('Style is set to default (solid) when not provided.', () {
@@ -126,7 +127,7 @@ void main() {
       expect(
         () => ConnectionShape(
           width: EMU(8000),
-          color: "#123456",
+          color: const Color.fromARGB(255, 0, 0, 0),
           style: BorderStyle.solid,
           transform: Transform(
             Point2D(EMU(0), EMU(0)),

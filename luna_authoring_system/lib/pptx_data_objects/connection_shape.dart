@@ -8,12 +8,13 @@ import 'package:luna_core/utils/emu.dart';
 /// weight represents the thickness of the connector.
 class ConnectionShape implements Shape {
   static EMU defaultWidth = EMU(6350); // Default width (0.5pt)
-  static String defaultColor = "#000000"; // Default color (black)
+  static Color defaultColor =
+      const Color.fromARGB(255, 0, 0, 0); // Default color (black)
   static BorderStyle defaultStyle = BorderStyle.solid;
 
   EMU width;
 
-  String color;
+  Color color;
 
   BorderStyle style;
 
@@ -24,7 +25,7 @@ class ConnectionShape implements Shape {
 
   ConnectionShape({
     EMU? width,
-    String? color,
+    Color? color,
     BorderStyle? style,
     required this.isFlippedVertically,
     required this.transform,
