@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/models/shape/line_component.dart';
+import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 
 /// A test suite for the `LineComponent` class.

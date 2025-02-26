@@ -4,10 +4,10 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
-import 'package:luna_core/models/component.dart';
+import 'package:luna_core/models/components/component.dart';
+import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
-import 'package:luna_core/models/shape/line_component.dart';
 import 'package:luna_core/utils/version_manager.dart';
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
