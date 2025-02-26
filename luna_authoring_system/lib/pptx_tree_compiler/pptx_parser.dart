@@ -156,7 +156,6 @@ class PptxParser {
 
   ConnectionShape _getConnectionShape(Json connectionShapeMap) {
     // TODO: Replace this with actual value from the .pptx archive instead of a default value.
-    int cWidth = connectionShapeMap[eShapeProperty][eLine]?[eLineWidth] ?? 6350;
     Transform transform =
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
@@ -168,9 +167,8 @@ class PptxParser {
         "1";
 
     return ConnectionShape(
-      EMU(cWidth),
-      transform,
-      isFlippedVertically,
+      transform: transform,
+      isFlippedVertically: isFlippedVertically,
     );
   }
 
