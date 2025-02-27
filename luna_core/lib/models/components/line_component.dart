@@ -16,13 +16,13 @@ class LineComponent extends Component {
   final Point2DPercentage endPoint;
 
   /// The color of the line.
-  Color color;
+  final Color color;
 
-  /// The thickness of the line line in logical pixels.
-  double thickness;
+  /// The thickness of the line in logical pixels.
+  final double thickness;
 
   /// The style of the line's border.
-  BorderStyle style;
+  final BorderStyle style;
 
   /// Overrides `x, y, width, height` dynamically based on `startPoint` and `endPoint`.
   static double _calculateWidth(
@@ -51,9 +51,9 @@ class LineComponent extends Component {
   /// - [startPoint]: The start point of the line in percentage coordinates.
   /// - [endPoint]: The end point of the line in percentage coordinates.
   LineComponent({
-    this.color = const Color.fromARGB(255, 43, 116, 179),
-    this.thickness = 5,
-    this.style = BorderStyle.solid,
+    required this.color,
+    required this.thickness,
+    required this.style,
     required this.startPoint,
     required this.endPoint,
   }) : super(
@@ -99,21 +99,13 @@ class LineComponent extends Component {
         json['endPoint']['x'].toDouble(),
         json['endPoint']['y'].toDouble(),
       ),
-      color: json.containsKey('color')
-          ? Color(json['color'])
-          : const Color.fromARGB(255, 43, 116, 179),
-      thickness: json.containsKey('thickness')
-          ? double.tryParse(json['thickness'].toString()) ?? 5
-          : 5,
-      style: json.containsKey('style')
-          ? BorderStyle.values[json['style']]
-          : BorderStyle.solid,
+      color: Color(json['color']),
+      thickness: (json['thickness'] as num).toDouble(),
+      style: BorderStyle.values[json['style']],
     );
   }
 
   /// Handles the click event on the line component.
-  /// This method can be overridden to define specific behaviors when the line
-  /// is clicked (e.g., triggering a callback or navigating).
   @override
   void onClick() {
     // TODO: Implement onClick behavior, if needed.

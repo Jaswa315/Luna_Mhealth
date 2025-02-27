@@ -95,6 +95,8 @@ void main() {
 
       // Create LineComponent
       final line = LineComponent(
+        color: connectionShape.color,
+        style: connectionShape.style,
         startPoint: points['startPoint']!,
         endPoint: points['endPoint']!,
         thickness: expectedThickness,

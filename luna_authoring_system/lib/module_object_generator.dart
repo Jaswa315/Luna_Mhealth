@@ -79,6 +79,8 @@ class ModuleObjectGenerator {
     );
 
     return LineComponent(
+      color: cxn.color,
+      style: cxn.style,
       startPoint: points['startPoint']!,
       endPoint: points['endPoint']!,
       thickness: thicknessOfLine,
