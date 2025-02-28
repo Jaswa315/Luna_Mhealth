@@ -5,45 +5,34 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+import 'package:luna_core/enums/item_type.dart';
+import 'package:luna_core/models/item.dart';
+import 'package:luna_core/models/page.dart';
 import 'package:luna_core/utils/types.dart';
-import 'package:uuid/uuid.dart';
-
-import '../enums/item_type.dart';
-import 'item.dart';
-import 'page.dart';
 
 class Module extends Item {
-  late final String moduleId;
-  late final String title;
-  late final String author;
-  late final String authoringVersion;
-  late List<Page> pages;
-  late final int width;
-  late final int height;
+  final String moduleId;
+  final String title;
+  final String author;
+  final String authoringVersion;
+  final List<Page> pages;
 
-  // Constructor with optional named parameters and default values
+  ///// Aspect ratio (height/width)
+  final double aspectRatio;
+
+  // Constructor with required parameters
   Module({
-    String? moduleId,
-    String? title,
-    String? author,
-    String? authoringVersion,
-    List<Page>? pages,
-    int? width,
-    int? height,
-  })  : moduleId = moduleId ?? Uuid().v4(),
-        title = title ?? "Untitled",
-        author = author ?? "Unassigned Author",
-        authoringVersion = authoringVersion ?? '0.0.0',
-        pages = pages ?? [],
-        width = width ?? 0,
-        height = height ?? 0,
-        super(id: moduleId, itemType: ItemType.module);
+    required this.moduleId,
+    required this.title,
+    required this.author,
+    required this.authoringVersion,
+    required this.pages,
+    required this.aspectRatio,
+  }) : super(id: moduleId, itemType: ItemType.module);
 
-  /// A factory method that creates a [Module] from a JSON map.
+  /// Factory method to create a [Module] from JSON.
   factory Module.fromJson(Json json) {
     var slidesJson = json['module']['pages'] as List<dynamic>;
-
     var pages =
         slidesJson.map((slideJson) => Page.fromJson(slideJson)).toList();
 
@@ -53,8 +42,7 @@ class Module extends Item {
       author: json['module']['author'] as String,
       authoringVersion: json['module']['authoringVersion'],
       pages: pages,
-      width: (json['module']['width'] as num).toInt(),
-      height: (json['module']['height'] as num).toInt(),
+      aspectRatio: (json['module']['aspectRatio'] as num).toDouble(),
     );
   }
 
@@ -67,8 +55,7 @@ class Module extends Item {
         'author': author,
         'authoringVersion': authoringVersion,
         'pages': pages.map((page) => page.toJson()).toList(),
-        'width': width,
-        'height': height,
+        'aspectRatio': aspectRatio,
       },
     };
   }

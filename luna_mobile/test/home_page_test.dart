@@ -28,28 +28,24 @@ class MockModuleUIPicker extends ModuleUIPicker {
   }
 }
 
-void main() {
-  // Create a reusable setup function to reduce redundancy
-  /// Initializes the `HomePage` with a `ChangeNotifierProvider` for testing.
-  Future<void> setupHomePage(WidgetTester tester,
-      [MockModuleUIPicker? mockModuleUIPicker]) async {
-    // Use the provided mockModuleUIPicker or create a new one
-    final moduleUIPicker = mockModuleUIPicker ?? MockModuleUIPicker();
+// Create a reusable setup function to reduce redundancy
+Future<void> setupHomePage(WidgetTester tester,
+    [MockModuleUIPicker? mockModuleUIPicker]) async {
+  final moduleUIPicker = mockModuleUIPicker ?? MockModuleUIPicker();
 
-    // Set up the HomePage wrapped with the required provider
-    await tester.pumpWidget(
-      ChangeNotifierProvider<ModuleUIPicker>.value(
-        value: moduleUIPicker,
-        child: MaterialApp(
-          home: HomePage(),
-        ),
+  await tester.pumpWidget(
+    ChangeNotifierProvider<ModuleUIPicker>.value(
+      value: moduleUIPicker,
+      child: MaterialApp(
+        home: HomePage(),
       ),
-    );
+    ),
+  );
 
-    // Ensure the BottomNavigationBar is rendered on the HomePage
-    expect(find.byType(BottomNavigationBar), findsOneWidget);
-  }
+  expect(find.byType(BottomNavigationBar), findsOneWidget);
+}
 
+void main() {
   testWidgets('Verify Start Learning button functionality',
       (WidgetTester tester) async {
     await setupHomePage(tester);
@@ -101,35 +97,38 @@ void main() {
 
   testWidgets('Verify module name assignment for empty or null-like titles',
       (WidgetTester tester) async {
-    // Mock modules with different title cases
     final mockModules = [
       Module(
-        title: 'Module 1', // Proper title
+        moduleId: 'module-1',
+        title: 'Module 1',
         author: 'Author 1',
+        authoringVersion: '1.0.0',
         pages: [],
-        width: 1024,
-        height: 768,
+        aspectRatio: 4 / 3,
       ),
       Module(
-        title: '', // Empty title
+        moduleId: 'module-2',
+        title: '',
         author: 'Author 2',
+        authoringVersion: '1.0.0',
         pages: [],
-        width: 1024,
-        height: 768,
+        aspectRatio: 4 / 3,
       ),
       Module(
-        title: '', // Another empty title
+        moduleId: 'module-3',
+        title: '',
         author: 'Author 3',
+        authoringVersion: '1.0.0',
         pages: [],
-        width: 1024,
-        height: 768,
+        aspectRatio: 4 / 3,
       ),
       Module(
-        title: 'Module 4', // Another proper title
+        moduleId: 'module-4',
+        title: 'Module 4',
         author: 'Author 4',
+        authoringVersion: '1.0.0',
         pages: [],
-        width: 1024,
-        height: 768,
+        aspectRatio: 4 / 3,
       ),
     ];
 
@@ -142,18 +141,20 @@ void main() {
       (WidgetTester tester) async {
     final mockModules = [
       Module(
+        moduleId: 'module-1',
         title: 'Module 1',
         author: 'Author 1',
+        authoringVersion: '1.0.0',
         pages: [],
-        width: 1024,
-        height: 768,
+        aspectRatio: 4 / 3,
       ),
       Module(
+        moduleId: 'module-2',
         title: 'Module 2',
         author: 'Author 2',
+        authoringVersion: '1.0.0',
         pages: [],
-        width: 1024,
-        height: 768,
+        aspectRatio: 4 / 3,
       ),
     ];
 
@@ -161,7 +162,6 @@ void main() {
     mockModuleUIPicker.mockModules = mockModules;
     mockModuleUIPicker.areModulesLoaded = true;
 
-    // Load StartLearningPage with mock provider
     await tester.pumpWidget(
       ChangeNotifierProvider<ModuleUIPicker>.value(
         value: mockModuleUIPicker,
@@ -171,7 +171,6 @@ void main() {
       ),
     );
 
-    // Verify module titles in the UI
     for (final module in mockModules) {
       expect(find.text(module.title), findsOneWidget);
     }
@@ -181,11 +180,12 @@ void main() {
       (WidgetTester tester) async {
     final mockModules = [
       Module(
+        moduleId: 'module-1',
         title: 'Module 1',
         author: 'Author 1',
+        authoringVersion: '1.0.0',
         pages: [],
-        width: 1024,
-        height: 768,
+        aspectRatio: 4 / 3,
       ),
     ];
 

@@ -1,164 +1,164 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
-import 'dart:io';
+import 'package:luna_core/models/components/component.dart';
 import 'dart:convert';
-
-const String kTestAssetsPath = 'test/storage/testassets';
 
 void main() {
   group('Module Class Tests', () {
-    // Test initialization of the Module
     test('Module is created with expected properties', () {
       final module = Module(
-          title: 'This is title',
-          author: 'Test Author',
-          authoringVersion: '0.0.0',
-          pages: [],
-          width: 100,
-          height: 200,);
+        moduleId: '12345',
+        title: 'This is title',
+        author: 'Test Author',
+        authoringVersion: '1.0.0',
+        pages: [Page(components: [])],
+        aspectRatio: 16 / 9,
+      );
 
-      expect(module.id, isNotNull); // ID is auto-generated if not provided
+      expect(module.moduleId, '12345');
       expect(module.title, 'This is title');
       expect(module.author, 'Test Author');
-      expect(module.authoringVersion, '0.0.0');
-      expect(module.pages, isEmpty);
-      expect(module.width, 100);
-      expect(module.height, 200);
+      expect(module.authoringVersion, '1.0.0');
+      expect(module.pages.length, 1);
+      expect(module.pages[0].components, isEmpty);
+      expect(module.aspectRatio, closeTo(1.7777, 0.0001));
       expect(module.itemType, ItemType.module);
     });
 
-    test('Module is created with provided ID', () {
-      final module = Module(
-          moduleId: '1',
-          title: 'This is title',
-          author: 'Test Author',
-          pages: [],
-          width: 100,
-          height: 200,);
-
-      expect(module.id, '1');
-    });
-
-    test('Deserialization of Module from JSON', () {
+    test('Deserialization from valid JSON with empty pages', () {
       final json = {
         'module': {
           'moduleId': '12345',
           'title': 'This is title',
           'author': 'John Doe',
-          'authoringVersion': '0.0.0',
+          'authoringVersion': '1.0.0',
           'pages': [],
-          'width': 100,
-          'height': 200,
-          'name': 'Sample Module'
+          'aspectRatio': 1.7777777777777777,
         }
       };
 
       final module = Module.fromJson(json);
 
-      expect(module.moduleId, isNotNull);
+      expect(module.moduleId, '12345');
       expect(module.title, 'This is title');
       expect(module.author, 'John Doe');
-      expect(module.authoringVersion, '0.0.0');
+      expect(module.authoringVersion, '1.0.0');
       expect(module.pages, isEmpty);
-      expect(module.width, 100);
-      expect(module.height, 200);
-      expect(module.itemType, ItemType.module);
+      expect(module.aspectRatio, closeTo(1.7777777, 0.0001));
     });
 
-    // Test deserialization of Module from JSON with slides
-    test('Deserialization of Module from JSON with slides', () {
-      /* TODO: fix test
-      final String jsonModule =
-          File("$kTestAssetsPath/module.json").readAsStringSync();
-
-      final module = Module.fromJson(jsonDecode(jsonModule));
-
-      expect(module.id, isNotNull); // ID is auto-generated
-      expect(module.title, 'This is title');
-      expect(module.pages.length, 1);
-      expect(module.pages[0].index, 1);
-      expect(module.width, 100.0);
-      expect(module.height, 200.0);
-      expect(module.itemType, ItemType.module);
-      */
-    });
-
-    // Test deserialization of Module from JSON without slides
-    test('Deserialization of Module from JSON without slides', () {
-      /* TODO: fix test
+    test('Deserialization from valid JSON with pages', () {
       final json = {
-        'module_name': 'This is title',
-        'dimensions': {'width': 100, 'height': 200},
+        'module': {
+          'moduleId': '54321',
+          'title': 'Module with Pages',
+          'author': 'Jane Doe',
+          'authoringVersion': '1.0.0',
+          'pages': [
+            {
+              'type': 'page',
+              'shapes': [],
+            },
+            {
+              'type': 'page',
+              'shapes': [],
+            }
+          ],
+          'aspectRatio': 16 / 9,
+        }
       };
 
-      expect(
-        () => Module.fromJson(json),
-        throwsA(isA<FormatException>().having(
-          (e) => e.message,
-          'message',
-          'Expected a "slides" field with an array value.',
-        )),
-      );
-      */
+      final module = Module.fromJson(json);
+
+      expect(module.moduleId, '54321');
+      expect(module.pages.length, 2);
+      expect(module.pages[0].components, isEmpty);
+      expect(module.pages[1].components, isEmpty);
+      expect(module.aspectRatio, closeTo(1.7777, 0.0001));
     });
 
-    // Test serialization of Module to JSON
-    test('Serialization of Module to JSON', () {
-      /* TODO: fix test
+    test('Serialization to JSON', () {
       final module = Module(
-        title: 'This is title',
+        moduleId: '98765',
+        title: 'Serializable Module',
+        author: 'Author Name',
+        authoringVersion: '1.0.0',
         pages: [
-          Page(index: 1),
-          Page(index: 2),
+          Page(components: []),
+          Page(components: []),
         ],
-        width: 100.0,
-        height: 200.0,
+        aspectRatio: 4 / 3,
       );
 
       final json = module.toJson();
 
-      expect(json, isMap);
-      expect(json['module_name'], 'This is title');
-      expect(json['slides'], isList);
-      expect(json['slides'].length, 2);
-      expect(json['slides'][0]['index'], 1);
-      expect(json['slides'][1]['index'], 2);
-      expect(json['dimensions'], isMap);
-      expect(json['dimensions']['width'], 100);
-      expect(json['dimensions']['height'], 200);
-      */
+      expect(json['module']['moduleId'], '98765');
+      expect(json['module']['title'], 'Serializable Module');
+      expect(json['module']['author'], 'Author Name');
+      expect(json['module']['authoringVersion'], '1.0.0');
+      expect(json['module']['pages'].length, 2);
+      expect(json['module']['aspectRatio'], closeTo(1.3333, 0.0001));
     });
 
-    // Test string deserialization of Module
-    test('String Deserialization - Module', () {
-      /* TODO: fix test
-      final jsonString = '''
-        {
-          "module_name": "This is title",
-          "slides": [],
-          "dimensions": {"width": 100, "height": 200}
+    test('Deserialization fails if one required field is missing', () {
+      final jsonMissingAuthor = {
+        'module': {
+          'moduleId': '12345',
+          'title': 'This is title',
+          // Missing 'author'
+          'authoringVersion': '1.0.0',
+          'pages': [],
+          'aspectRatio': 1.7777777777777777,
         }
-      ''';
+      };
 
-      final module = Module.fromJson(jsonDecode(jsonString));
+      expect(
+        () => Module.fromJson(jsonMissingAuthor),
+        throwsA(isA<TypeError>()),
+      );
+    });
 
-      expect(module.id, isNotNull); // ID is auto-generated
-      expect(module.title, 'This is title');
-      expect(module.pages, isEmpty);
-      expect(module.width, 100.0);
-      expect(module.height, 200.0);
-      expect(module.itemType, ItemType.module);
-      */
+    test('Deserialization fails if aspectRatio is not a number', () {
+      final invalidAspectRatioJson = {
+        'module': {
+          'moduleId': '12345',
+          'title': 'This is title',
+          'author': 'John Doe',
+          'authoringVersion': '1.0.0',
+          'pages': [],
+          'aspectRatio': 'not a number', // Wrong type
+        }
+      };
+
+      expect(
+        () => Module.fromJson(invalidAspectRatioJson),
+        throwsA(isA<TypeError>()),
+      );
+    });
+
+    test('Deserialization fails if a page has wrong type', () {
+      final json = {
+        'module': {
+          'moduleId': '12345',
+          'title': 'Module with Invalid Page',
+          'author': 'John Doe',
+          'authoringVersion': '1.0.0',
+          'pages': [
+            {
+              'type': 'not_page', // Invalid type, should be 'page'
+              'shapes': [],
+            },
+          ],
+          'aspectRatio': 16 / 9,
+        }
+      };
+
+      expect(
+        () => Module.fromJson(json),
+        throwsA(isA<FormatException>()),
+      );
     });
   });
 }

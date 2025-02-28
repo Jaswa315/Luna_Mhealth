@@ -9,6 +9,7 @@ import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/utils/version_manager.dart';
+import 'package:uuid/uuid.dart';
 
 /// [ModuleObjectGenerator] takes in a pptx tree and converts the data into in-memory representation of
 /// Module and all descendant objects of a module. This includes Pages, Components, and other items inside a Module.
@@ -32,6 +33,8 @@ class ModuleObjectGenerator {
     _slideWidth = root.width.value;
     _slideHeight = root.height.value;
 
+    double aspectRatio = _slideHeight / _slideWidth;
+
     List<Page> pages = [];
 
     for (Slide child in root.slides) {
@@ -40,12 +43,12 @@ class ModuleObjectGenerator {
     }
 
     Module moduleObj = Module(
+      moduleId: Uuid().v4(),
       title: root.title,
       author: root.author,
       authoringVersion: VersionManager().version,
       pages: pages,
-      width: root.width.value,
-      height: root.height.value,
+      aspectRatio: aspectRatio,
     );
 
     return moduleObj;
