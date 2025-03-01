@@ -7,7 +7,7 @@ import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/pptx_validator.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
-
+import 'package:path/path.dart' as p;
 
 /// Class to run the parsing process of a pptx into a luna file.
 class PptxRunner {
@@ -16,54 +16,16 @@ class PptxRunner {
   late PptxTree _pptxTree;
   static const int _numberOfArguments = 2;
 
-  /// [arguments] 
-  /// [arguments] 0 is pptx filepath
-  /// [arguments] 1 is module file name
-  static processInputs(List<String> arguments) {
 
-    if (arguments.length != _numberOfArguments) {
-      // Files are under Documents/ by default on Macos
-      // On Windows, Files are generated under C:\Users\username\Documents.
-      // ignore: avoid_print
-      print(
-        'Usage: flutter run ./lib/main.dart -a <pptx_file_path> -a <module_name>',
-      );
-
-      // Exit with code -1 to indicate an error
-      exit(-1);
-      
-    }
-
-    return _getPptxFile(arguments[0]);
-  }
-
-  static File _getPptxFile(String pptxFilePath){
-
-    // validate file extension.
-    final fileExtension = p.extension(pptxFilePath);
-    final pptxFile = File(pptxFilePath);
-
-    if (fileExtension.toLowerCase() != '.pptx') {
-      throw ArgumentError(
-        'Invalid file extension: $fileExtension. Only .pptx files are allowed.',
-      );
-    }
-
-    if (!pptxFile.existsSync()){
-      throw ArgumentError(
-        'PPTX file at $pptxFilePath does not exists.',
-      );
-    }
-
-    return pptxFile;
-  }
 
 
   /// Takes in a pptx file object and output directory (currently users home directory)
   /// Outputs the luna file for the pptx if no validation issues 
   /// Outputs validations issue text file otherwise
   /// Assumes pptxFile is a valid file. 
-  Future processPptx(File pptxFile, String moduleName) async{
+  Future processPptx(String pptxFilePath, String moduleName) async{
+
+    File pptxFile = _processInputs([pptxFilePath,moduleName]);
     _moduleName = moduleName;
 
     // Parse the presentation
@@ -111,6 +73,48 @@ class PptxRunner {
     // Save module JSON data into the archive
     await ModuleResourceFactory.addModule(_moduleName, moduleJson);
     
+  }
+
+  /// [arguments] 
+  /// [arguments] 0 is pptx filepath
+  /// [arguments] 1 is module file name
+  static _processInputs(List<String> arguments) {
+
+    if (arguments.length != _numberOfArguments) {
+      // Files are under Documents/ by default on Macos
+      // On Windows, Files are generated under C:\Users\username\Documents.
+      // ignore: avoid_print
+      print(
+        'Usage: flutter run ./lib/main.dart -a <pptx_file_path> -a <module_name>',
+      );
+
+      // Exit with code -1 to indicate an error
+      exit(-1);
+      
+    }
+
+    return _getPptxFile(arguments[0]);
+  }
+
+  static File _getPptxFile(String pptxFilePath){
+
+    // validate file extension.
+    final fileExtension = p.extension(pptxFilePath);
+    final pptxFile = File(pptxFilePath);
+
+    if (fileExtension.toLowerCase() != '.pptx') {
+      throw ArgumentError(
+        'Invalid file extension: $fileExtension. Only .pptx files are allowed.',
+      );
+    }
+
+    if (!pptxFile.existsSync()){
+      throw ArgumentError(
+        'PPTX file at $pptxFilePath does not exists.',
+      );
+    }
+
+    return pptxFile;
   }
 
 

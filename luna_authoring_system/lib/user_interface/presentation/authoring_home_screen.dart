@@ -13,28 +13,26 @@ class AuthoringHomeScreen extends StatefulWidget {
 
 class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   String? filePath;
-  String? moduleName;
   bool filePicked = false;
   bool textEntered = false;
 
   final TextEditingController _controller = TextEditingController();
 
-  void pickFile() async {
+  Future _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       setState(() {
-        filePath = result.files.single.name;
+        filePath = result.files.single.path;
         filePicked = true;
       });
     }
   }
 
-  void submitText() async{
+  Future _submitText() async{
+    await PptxRunner().processPptx(filePath!,_controller.text);
     setState(() {
       textEntered = true;
-      moduleName = _controller.text;
     });
-    await PptxRunner().processPptx(pptxFile,moduleName);
   }
 
   @override
@@ -50,7 +48,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
               if (!filePicked) 
                 ElevatedButton(
-                  onPressed: pickFile, 
+                  onPressed: () => _pickFile, 
                   child: Text("Pick a PPTX File"),
                 ),
 
@@ -63,12 +61,12 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: submitText,
+                  onPressed: () => _submitText,
                   child: Text("Submit"),
                 ),
 
               ],
-              if (textEntered) Text("!", style: TextStyle(fontSize: 20)),
+              if (textEntered) Text("Job done!", style: TextStyle(fontSize: 20)),
             ],
           ),
         ),

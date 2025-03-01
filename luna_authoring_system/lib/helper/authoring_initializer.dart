@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:luna_core/utils/version_manager.dart';
-import 'package:path/path.dart' as p;
+
 
 /// Class to provide helper methods to inialize the Luna authoring system
 class AuthoringInitializer {
