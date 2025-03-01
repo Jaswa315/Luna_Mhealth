@@ -12,7 +12,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 
-
+/// Home page for the Authoring System
+/// Goes through each input for the system
+/// Once all inputs are selected, converts the specified input file to a .luna
 class AuthoringHomeScreen extends StatefulWidget {
   @override
   _AuthoringHomeScreenState createState() => _AuthoringHomeScreenState();
@@ -59,7 +61,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                   child: Text("Pick a PPTX File"),
                 ),
 
-              if (filePicked && !textEntered) ...[
+              if (filePicked && !textEntered) ...[ // spread operator
                 Text("File Selected: $filePath"),
                 TextField(
                   controller: _controller,
@@ -73,7 +75,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                 ),
 
               ],
-              if (textEntered) Text("Job done!", style: TextStyle(fontSize: 20)),
+              if (textEntered) Text("Job done!", style: TextStyle(fontSize: 20)), // text has been entered so luna file should be generated
             ],
           ),
         ),

@@ -19,12 +19,14 @@ class PptxRunner {
 
 
 
-  /// Takes in a pptx file object and output directory (currently users home directory)
+  /// Takes in a filepath to a pptx file and output directory (currently users home directory)
   /// Outputs the luna file for the pptx if no validation issues 
   /// Outputs validations issue text file otherwise
-  /// Assumes pptxFile is a valid file. 
   Future processPptx(String pptxFilePath, String moduleName) async{
 
+
+    // process the input to esnure they are good
+    // gets a pptxFile if the passed in filepath is good.
     File pptxFile = _processInputs([pptxFilePath,moduleName]);
     _moduleName = moduleName;
 
