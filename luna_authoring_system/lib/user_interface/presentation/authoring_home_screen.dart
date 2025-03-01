@@ -57,7 +57,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
               if (!filePicked) 
                 ElevatedButton(
-                  onPressed: () => _pickFile, 
+                  onPressed: () => _pickFile(), 
                   child: Text("Pick a PPTX File"),
                 ),
 
@@ -70,7 +70,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () => _submitText,
+                  onPressed: () => _submitText(),
                   child: Text("Submit"),
                 ),
 
