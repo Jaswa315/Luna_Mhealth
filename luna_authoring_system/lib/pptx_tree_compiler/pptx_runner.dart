@@ -14,6 +14,49 @@ class PptxRunner {
 
   late String _moduleName;
   late PptxTree _pptxTree;
+  static const int _numberOfArguments = 2;
+
+  /// [arguments] 
+  /// [arguments] 0 is pptx filepath
+  /// [arguments] 1 is module file name
+  static processInputs(List<String> arguments) {
+
+    if (arguments.length != _numberOfArguments) {
+      // Files are under Documents/ by default on Macos
+      // On Windows, Files are generated under C:\Users\username\Documents.
+      // ignore: avoid_print
+      print(
+        'Usage: flutter run ./lib/main.dart -a <pptx_file_path> -a <module_name>',
+      );
+
+      // Exit with code -1 to indicate an error
+      exit(-1);
+      
+    }
+
+    return _getPptxFile(arguments[0]);
+  }
+
+  static File _getPptxFile(String pptxFilePath){
+
+    // validate file extension.
+    final fileExtension = p.extension(pptxFilePath);
+    final pptxFile = File(pptxFilePath);
+
+    if (fileExtension.toLowerCase() != '.pptx') {
+      throw ArgumentError(
+        'Invalid file extension: $fileExtension. Only .pptx files are allowed.',
+      );
+    }
+
+    if (!pptxFile.existsSync()){
+      throw ArgumentError(
+        'PPTX file at $pptxFilePath does not exists.',
+      );
+    }
+
+    return pptxFile;
+  }
 
 
   /// Takes in a pptx file object and output directory (currently users home directory)

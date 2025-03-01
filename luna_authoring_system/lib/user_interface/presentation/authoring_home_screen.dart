@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 
 
 class AuthoringHomeScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class AuthoringHomeScreen extends StatefulWidget {
 
 class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   String? filePath;
+  String? moduleName;
   bool filePicked = false;
   bool textEntered = false;
 
@@ -27,10 +29,12 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
     }
   }
 
-  void submitText() {
+  void submitText() async{
     setState(() {
       textEntered = true;
+      moduleName = _controller.text;
     });
+    await PptxRunner().processPptx(pptxFile,moduleName);
   }
 
   @override
@@ -43,24 +47,28 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
               if (!filePicked) 
                 ElevatedButton(
                   onPressed: pickFile, 
                   child: Text("Pick a PPTX File"),
                 ),
+
               if (filePicked && !textEntered) ...[
                 Text("File Selected: $filePath"),
                 TextField(
                   controller: _controller,
                   decoration: InputDecoration(labelText: "Enter Module Name"),
                 ),
+
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: submitText,
                   child: Text("Submit"),
                 ),
+
               ],
-              if (textEntered) Text("Job Done!", style: TextStyle(fontSize: 20)),
+              if (textEntered) Text("!", style: TextStyle(fontSize: 20)),
             ],
           ),
         ),

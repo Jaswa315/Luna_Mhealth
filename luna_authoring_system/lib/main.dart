@@ -30,7 +30,6 @@ Future<void> main(List<String> arguments) async {
 
   /// Process the pptxFile and output the Luna file
   await PptxRunner().processPptx(pptxFile, input_to_process[1]);
-  print("test");
 }
 
 /// The root widget of the application.
