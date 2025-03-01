@@ -57,12 +57,13 @@ void main() {
     });
 
 
+    
     final pptxFile = File('test/test_assets/A line.pptx');
     test('Process PPTX makes a luna file.', () async {
       const fileName = 'unit_test_luna';
       var filePath = join(testDir, "$fileName.luna");
       await AuthoringInitializer.initializeAuthoring();
-      await PptxRunner().processPptx(pptxFile, fileName);
+      await PptxRunner().processPptx(pptxFile.path, fileName);
       expect(await File(filePath).exists(), true);
     });
   });
