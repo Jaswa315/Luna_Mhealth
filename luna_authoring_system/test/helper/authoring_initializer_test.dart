@@ -12,7 +12,6 @@ import 'package:luna_core/utils/version_manager.dart' as v;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/utils/logging.dart';
-import 'dart:io';
 
 
 
@@ -58,19 +57,6 @@ void main() {
       expect(v.VersionManager().version, '1.0');
       //check log manager is initialized
       expect(() {LogManager manager = LogManager();}, returnsNormally);
-    });
-
-    test('Valid pptx works', () async{
-      final File pptx = AuthoringInitializer.processInputs(['test/test_assets/A line.pptx','luna_module']);
-      expect(pptx.path.endsWith('A line.pptx'),true);
-    });
-
-    test('Test bad extension', () async{
-      expect(() => AuthoringInitializer.processInputs(['test/test_assets/A line.notapptx','luna_module']), throwsA(isArgumentError));
-    });
-
-    test('Test file does not exist', () async{
-      expect(() => AuthoringInitializer.processInputs(['test/does_not_exist_test_assets/A line.pptx','luna_module']), throwsA(isArgumentError));
     });
 
   });

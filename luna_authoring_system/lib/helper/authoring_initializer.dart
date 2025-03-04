@@ -6,19 +6,16 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_core/utils/logging.dart';
 import 'package:luna_core/utils/version_manager.dart';
-import 'package:path/path.dart' as p;
+
 
 /// Class to provide helper methods to inialize the Luna authoring system
 class AuthoringInitializer {
 
   static bool _initialized = false;
-  static const int _numberOfArguments = 2;
-
   /// Setup method for the Luna Authoring System
   /// Sets up singletons such as version manager and logmanager
   /// Initializes the app and loads configuration
@@ -34,47 +31,5 @@ class AuthoringInitializer {
     _initialized = true;
   }
 
-
-  /// [arguments] 
-  /// [arguments] 0 is pptx filepath
-  /// [arguments] 1 is module file name
-  static processInputs(List<String> arguments) {
-
-    if (arguments.length != _numberOfArguments) {
-      // Files are under Documents/ by default on Macos
-      // On Windows, Files are generated under C:\Users\username\Documents.
-      // ignore: avoid_print
-      print(
-        'Usage: flutter run ./lib/main.dart -a <pptx_file_path> -a <module_name>',
-      );
-
-      // Exit with code -1 to indicate an error
-      exit(-1);
-      
-    }
-
-    return _getPptxFile(arguments[0]);
-  }
-
-  static File _getPptxFile(String pptxFilePath){
-
-    // validate file extension.
-    final fileExtension = p.extension(pptxFilePath);
-    final pptxFile = File(pptxFilePath);
-
-    if (fileExtension.toLowerCase() != '.pptx') {
-      throw ArgumentError(
-        'Invalid file extension: $fileExtension. Only .pptx files are allowed.',
-      );
-    }
-
-    if (!pptxFile.existsSync()){
-      throw ArgumentError(
-        'PPTX file at $pptxFilePath does not exists.',
-      );
-    }
-
-    return pptxFile;
-  }
 
 }
