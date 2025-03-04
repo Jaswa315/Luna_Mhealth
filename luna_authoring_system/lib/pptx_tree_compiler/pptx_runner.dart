@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:luna_authoring_system/module_object_generator.dart';
+import 'package:luna_authoring_system/builder/module_object_generator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
@@ -11,23 +11,17 @@ import 'package:path/path.dart' as p;
 
 /// Class to run the parsing process of a pptx into a luna file.
 class PptxRunner {
-
   late String _moduleName;
   late PptxTree _pptxTree;
   static const int _numberOfArguments = 2;
 
-
-
-
   /// Takes in a filepath to a pptx file and output directory (currently users home directory)
-  /// Outputs the luna file for the pptx if no validation issues 
+  /// Outputs the luna file for the pptx if no validation issues
   /// Outputs validations issue text file otherwise
-  Future processPptx(String pptxFilePath, String moduleName) async{
-
-
+  Future processPptx(String pptxFilePath, String moduleName) async {
     // process the input to esnure they are good
     // gets a pptxFile if the passed in filepath is good.
-    File pptxFile = _processInputs([pptxFilePath,moduleName]);
+    File pptxFile = _processInputs([pptxFilePath, moduleName]);
     _moduleName = moduleName;
 
     // Parse the presentation
@@ -39,13 +33,10 @@ class PptxRunner {
 
     // Generate the Luna Module
     await _generateLunaModule();
-
   }
 
-
   /// Checks the pptx tree for validation issues
-  void _runValidations(){
-
+  void _runValidations() {
     // Run all PPTX validations.
     Set<IValidationIssue> issueList = PptxValidator(_pptxTree).validate();
 
@@ -65,23 +56,21 @@ class PptxRunner {
   }
 
   /// Generates a luna module from a pptx tree
-  Future _generateLunaModule() async{
-
-    ModuleObjectGenerator moduleObjectGenerator = ModuleObjectGenerator(_pptxTree);
+  Future _generateLunaModule() async {
+    ModuleObjectGenerator moduleObjectGenerator =
+        ModuleObjectGenerator(_pptxTree);
     Module module = await moduleObjectGenerator.generateLunaModule();
     String moduleJson = jsonEncode(module.toJson());
 
     // Create the package (ZIP file) using ModuleStorage
     // Save module JSON data into the archive
     await ModuleResourceFactory.addModule(_moduleName, moduleJson);
-    
   }
 
-  /// [arguments] 
+  /// [arguments]
   /// [arguments] 0 is pptx filepath
   /// [arguments] 1 is module file name
   static _processInputs(List<String> arguments) {
-
     if (arguments.length != _numberOfArguments) {
       // Files are under Documents/ by default on Macos
       // On Windows, Files are generated under C:\Users\username\Documents.
@@ -92,14 +81,12 @@ class PptxRunner {
 
       // Exit with code -1 to indicate an error
       exit(-1);
-      
     }
 
     return _getPptxFile(arguments[0]);
   }
 
-  static File _getPptxFile(String pptxFilePath){
-
+  static File _getPptxFile(String pptxFilePath) {
     // validate file extension.
     final fileExtension = p.extension(pptxFilePath);
     final pptxFile = File(pptxFilePath);
@@ -110,7 +97,7 @@ class PptxRunner {
       );
     }
 
-    if (!pptxFile.existsSync()){
+    if (!pptxFile.existsSync()) {
       throw ArgumentError(
         'PPTX file at $pptxFilePath does not exists.',
       );
@@ -118,6 +105,4 @@ class PptxRunner {
 
     return pptxFile;
   }
-
-
 }

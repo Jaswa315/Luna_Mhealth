@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
-import 'package:luna_authoring_system/module_object_generator.dart';
+import 'package:luna_authoring_system/builder/module_object_generator.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'dart:io';
