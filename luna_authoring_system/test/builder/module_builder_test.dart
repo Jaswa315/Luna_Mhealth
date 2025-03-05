@@ -27,7 +27,7 @@ void main() {
 
     test('Should set and get author correctly', () {
       String expectedAuthor = "Author Name";
-      builder.setTitle("Some Title"); // Ensure title is set for all tests
+      builder.setTitle("Some Title");
       builder.setAuthor(expectedAuthor);
       builder.setDimensions(1920000, 1080000);
       Module result = builder.build();
@@ -36,11 +36,9 @@ void main() {
     });
 
     test('Should calculate aspect ratio correctly', () {
-      int width = 2560000;
-      int height = 1440000;
-      builder.setTitle("Aspect Ratio Title"); // Set a title here
-      builder.setAuthor("Aspect Ratio Author"); // Set an author here
-      builder.setDimensions(width, height);
+      builder.setTitle("Aspect Ratio Title");
+      builder.setAuthor("Aspect Ratio Author");
+      builder.setDimensions(2560000, 1440000);
       Module result = builder.build();
       expect(result.aspectRatio, equals(1440000 / 2560000));
       expect(result.authoringVersion, equals(versionManager.version));
@@ -69,7 +67,6 @@ void main() {
       expect(result2.authoringVersion, equals(versionManager.version));
     });
 
-    // Resetting the version to default after tests
     tearDown(() {
       versionManager.resetVersion();
     });
