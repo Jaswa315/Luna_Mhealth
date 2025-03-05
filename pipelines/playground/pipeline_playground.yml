@@ -1,17 +1,68 @@
-# Lint and Testing pipeline for Luna mHealth
-# YML that gets run when a PR is requested
+# Nightly Build for Luna mHealth
+# Runs unit tests and then integration tests
+
 trigger: none
 
-pool:
-  vmImage: macos-latest
+jobs:
 
-variables:
-  - name: package_folders
-    value: luna_core,luna_authoring_system,luna_mobile
+- job: WindowsTests
 
-steps:
+  pool:
+    vmImage: windows-latest
+  variables:
+    - name: package_folders
+      value: luna_core,luna_authoring_system,luna_mobile
 
-- template: ../templates/install_prereqs.yml
-- template: ../templates/run_luna_authoring.yml
-  parameters:
-    operating_system: macos
+  steps:
+
+  - template: ../templates/install_prereqs.yml
+
+  - ${{ each folder in split(variables.package_folders, ',') }}:
+    - template: ../templates/lint_luna.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+    - template: ../templates/run_tests.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+
+  - template: ../templates/publish_test_lint_results.yml
+
+  - template: ../templates/run_luna_authoring.yml
+    parameters:
+      operating_system: windows
+
+  - template: ../templates/run_luna_mobile_tests_firebase.yml
+    
+
+
+
+
+- job: MacOSTests
+
+  pool:
+    vmImage: macos-latest
+  variables:
+    - name: package_folders
+      value: luna_core,luna_authoring_system,luna_mobile
+
+  steps:
+
+  - template: ../templates/install_prereqs.yml
+
+  - ${{ each folder in split(variables.package_folders, ',') }}:
+    - template: ../templates/lint_luna.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+    - template: ../templates/run_tests.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+
+  - template: ../templates/publish_test_lint_results.yml
+
+  - template: ../templates/run_luna_authoring.yml
+    parameters:
+      operating_system: macos
