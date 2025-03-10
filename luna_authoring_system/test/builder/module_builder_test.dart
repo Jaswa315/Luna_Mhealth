@@ -1,7 +1,11 @@
 import 'package:test/test.dart';
 import 'package:luna_authoring_system/builder/module_builder.dart';
+import 'package:luna_authoring_system/builder/page_builder.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
+import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
+import 'package:luna_core/utils/emu.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_core/utils/version_manager.dart'; // Ensure this import path is correct
+import 'package:luna_core/utils/version_manager.dart';
 
 void main() {
   group('ModuleBuilder Tests', () {
@@ -23,6 +27,46 @@ void main() {
       Module result = builder.build();
       expect(result.title, equals(expectedTitle));
       expect(result.authoringVersion, equals(versionManager.version));
+    });
+
+    test('Should correctly process slides into pages', () {
+      PptxTree mockTree = PptxTree();
+      mockTree.title = "Mock Module";
+      mockTree.author = "Test Author";
+      mockTree.width = EMU(1920000);
+      mockTree.height = EMU(1080000);
+
+      final dummySlide = Slide();
+      dummySlide.shapes = [];
+
+      mockTree.slides = [dummySlide, dummySlide, dummySlide];
+
+      builder
+          .setTitle("Test Module")
+          .setAuthor("Test Author")
+          .setDimensions(1920000, 1080000)
+          .setPages(mockTree)
+          .build();
+
+      expect(builder.build().pages.length, equals(3));
+    });
+
+    test('Should correctly process empty pptx tree', () {
+      PptxTree mockTree = PptxTree();
+      mockTree.title = "Mock Module";
+      mockTree.author = "Test Author";
+      mockTree.width = EMU(1920000);
+      mockTree.height = EMU(1080000);
+      mockTree.slides = [];
+
+      builder
+          .setTitle("Test Module")
+          .setAuthor("Test Author")
+          .setDimensions(1920000, 1080000)
+          .setPages(mockTree)
+          .build();
+
+      expect(builder.build().pages, isEmpty);
     });
 
     test('Should set and get author correctly', () {
