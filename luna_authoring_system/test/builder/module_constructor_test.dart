@@ -23,6 +23,22 @@ void main() {
 
   group('Module Construction Tests', () {
     group('Basic Module Construction', () {
+      test(
+          'Should be able to create module.dart with pptx tree with single slide that has single line',
+          () async {
+        // Parse the PPTX tree
+        PptxTree pptxTree =
+            PptxParser(File('test/test_assets/A line.pptx')).getPptxTree();
+
+        ModuleConstructor moduleConstructor = ModuleConstructor(pptxTree);
+
+        // Generate the module asynchronously
+        Module generatedModule = await moduleConstructor.constructLunaModule();
+        expect(generatedModule.pages.length, 1);
+        expect(generatedModule.authoringVersion, "0.0.1");
+        expect(generatedModule.pages[0].components.length, 1);
+        expect(generatedModule.pages[0].components[0], isA<LineComponent>());
+      });
       test('Should create a module with a single slide and single line',
           () async {
         final pptxTree = PptxTree();
