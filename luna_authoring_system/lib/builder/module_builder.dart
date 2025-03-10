@@ -1,4 +1,6 @@
 import 'package:luna_authoring_system/builder/i_builder.dart';
+import 'package:luna_authoring_system/builder/page_builder.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/utils/version_manager.dart';
@@ -9,6 +11,8 @@ class ModuleBuilder implements IBuilder<Module> {
   late String _title;
   late String _author;
   late double _aspectRatio;
+  late int _moduleWidth;
+  late int _moduleHeight;
   final List<Page> _pages = [];
 
   ModuleBuilder() {
@@ -27,24 +31,26 @@ class ModuleBuilder implements IBuilder<Module> {
     return this;
   }
 
-  ModuleBuilder setDimensions(int _moduleWidth, int _moduleHeight) {
+  ModuleBuilder setDimensions(int moduleWidth, int moduleHeight) {
+    _moduleWidth = moduleWidth;
+    _moduleHeight = moduleHeight;
     _aspectRatio = _moduleHeight / _moduleWidth;
 
     return this;
   }
 
-  /*
   ModuleBuilder setPages(PptxTree pptxTree) {
     _pages.clear();
     for (var slide in pptxTree.slides) {
-  
-      Page page = PageBuilder(_moduleWidth, _moduleHeight).buildPage(slide.shapes);
-      _pages.add(page);
+      _pages.add(
+        PageBuilder(_moduleWidth, _moduleHeight)
+            .buildPage(slide.shapes ?? [])
+            .build(),
+      );
     }
 
     return this;
   }
-  */
 
   @override
   Module build() {
