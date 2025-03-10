@@ -42,9 +42,11 @@ class ModuleBuilder implements IBuilder<Module> {
   ModuleBuilder setPages(PptxTree pptxTree) {
     _pages.clear();
     for (var slide in pptxTree.slides) {
-      PageBuilder pageBuilder = PageBuilder(_moduleWidth, _moduleHeight);
-      Page page = pageBuilder.buildPage(slide.shapes ?? []).build();
-      _pages.add(page);
+      _pages.add(
+        PageBuilder(_moduleWidth, _moduleHeight)
+            .buildPage(slide.shapes ?? [])
+            .build(),
+      );
     }
 
     return this;
