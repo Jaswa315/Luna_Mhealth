@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:luna_authoring_system/builder/module_object_generator.dart';
+import 'package:luna_authoring_system/builder/module_constructor.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
@@ -57,9 +57,8 @@ class PptxRunner {
 
   /// Generates a luna module from a pptx tree
   Future _generateLunaModule() async {
-    ModuleObjectGenerator moduleObjectGenerator =
-        ModuleObjectGenerator(_pptxTree);
-    Module module = await moduleObjectGenerator.generateLunaModule();
+    ModuleConstructor moduleObjectGenerator = ModuleConstructor(_pptxTree);
+    Module module = await moduleObjectGenerator.constructLunaModule();
     String moduleJson = jsonEncode(module.toJson());
 
     // Create the package (ZIP file) using ModuleStorage
