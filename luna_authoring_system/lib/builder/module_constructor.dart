@@ -8,8 +8,8 @@ class ModuleConstructor {
   ModuleConstructor(this.pptxTree);
 
   Future<Module> constructLunaModule() async {
-    final moduleWidth = pptxTree.width.value.toInt();
-    final moduleHeight = pptxTree.height.value.toInt();
+    final moduleWidth = pptxTree.width.value;
+    final moduleHeight = pptxTree.height.value;
 
     return ModuleBuilder()
         .setTitle(pptxTree.title)
