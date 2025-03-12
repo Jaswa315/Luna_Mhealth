@@ -6,11 +6,11 @@ class Theme {
 
   Theme(this.themeId) : _thicknessMap = {};
 
-  void setThickness(int key, EMU value) {
-    if (value.value <= 0) {
+  void setThickness(int key, EMU thickness) {
+    if (thickness.value <= 0) {
       throw ArgumentError('Thickness value must be greater than 0');
     }
-    _thicknessMap[key] = value;
+    _thicknessMap[key] = thickness;
   }
 
   EMU getThickness(int key) {
