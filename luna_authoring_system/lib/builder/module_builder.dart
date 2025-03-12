@@ -39,8 +39,8 @@ class ModuleBuilder implements IBuilder<Module> {
     return this;
   }
 
-  /// - Aspect Ratio Calculation: Instead of taking an aspect ratio as an explicit parameter, it is derived
-  ///   from module dimensions to prevent inconsistencies.
+  /// Aspect Ratio Calculation: Instead of taking an aspect ratio as an explicit parameter, it is derived
+  /// from module dimensions to prevent inconsistencies.
   ModuleBuilder setDimensions(int moduleWidth, int moduleHeight) {
     _moduleWidth = moduleWidth;
     _moduleHeight = moduleHeight;

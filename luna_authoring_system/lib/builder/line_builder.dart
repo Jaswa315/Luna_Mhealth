@@ -23,7 +23,7 @@ class LineBuilder implements IBuilder<LineComponent> {
 
   LineBuilder(this._moduleWidth, this._moduleHeight);
 
-  /// - `setStartAndEndPoints()`: Determines the start and end points.
+  /// Determines the start and end points.
   LineBuilder setStartAndEndPoints(ConnectionShape shape) {
     final points = LinePositioner.getStartAndEndPoints(
       shape,
@@ -36,21 +36,21 @@ class LineBuilder implements IBuilder<LineComponent> {
     return this;
   }
 
-  /// - `setThickness()`: Converts width to a proper thickness.
+  /// setThickness() converts width to a proper thickness.
   LineBuilder setThickness(ConnectionShape shape) {
     _thickness = EmuConversions.updateThicknessToDisplayPixels(shape.width);
 
     return this;
   }
 
-  /// - `setColor()`: Extracts the color of the line.
+  /// setColor() extracts the color of the line.
   LineBuilder setColor(ConnectionShape shape) {
     _color = shape.color;
 
     return this;
   }
 
-  /// - `setStyle()`: Extracts the line's border style.
+  /// setStyle() extracts the line's border style.
   LineBuilder setStyle(ConnectionShape shape) {
     _style = shape.style;
 

@@ -15,7 +15,7 @@ class PageBuilder implements IBuilder<Page> {
 
   PageBuilder(this._moduleWidth, this._moduleHeight);
 
-  /// - `addComponent()`: Converts a shape into a component and adds it to the list.
+  /// addComponent(shape) converts a shape into a component and adds it to the list.
   PageBuilder addComponent(Shape shape) {
     _components.add(
       ComponentBuilder(_moduleWidth, _moduleHeight, shape).build(),
@@ -24,7 +24,7 @@ class PageBuilder implements IBuilder<Page> {
     return this;
   }
 
-  /// The `buildPage()` method ensures that new pages are created with
+  /// The buildPage() method ensures that new pages are created with
   PageBuilder buildPage(List<Shape> shapes) {
     // Clear the components list before adding new components
     _components.clear();
@@ -35,7 +35,7 @@ class PageBuilder implements IBuilder<Page> {
     return this;
   }
 
-  /// - `build()`: Finalizes the `Page` instance.
+  /// build() finalizes the `Page` instance.
   @override
   Page build() {
     return Page(components: _components);
