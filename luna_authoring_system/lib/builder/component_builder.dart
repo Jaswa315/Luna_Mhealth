@@ -11,7 +11,7 @@ import 'package:luna_core/models/components/line_component.dart';
 /// if the shape is a `ConnectionShape`.
 ///
 /// The builder follows a structured approach:
-/// - If the shape is a `ConnectionShape`, it calls `LineBuilder` to construct a `LineComponent`.
+/// - If the shape currently exists, the builder constructs the corresponding component.
 /// - If an unsupported shape type is encountered, an `ArgumentError` is thrown.
 class ComponentBuilder implements IBuilder<Component> {
   final int _moduleWidth;
