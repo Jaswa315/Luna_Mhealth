@@ -1,13 +1,12 @@
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
-/// This class is responsible for rendering validation issues
-class ValidationIssuesRenderer {
+/// This class takes in a set of validation issues to generate a report for the author
+class ValidationReportGenerator {
   final Set<IValidationIssue> issues;
 
-  ValidationIssuesRenderer(this.issues);
+  ValidationReportGenerator(this.issues);
 
   /// Renders the validation issues as a text file.
-  /// Each issue's code is printed on a new line.
   String renderAsText() {
     String contentString = "";
     for (var issue in issues) {

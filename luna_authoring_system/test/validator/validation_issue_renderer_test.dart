@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_authoring_system/validator/validation_issues_renderer.dart';
+import 'package:luna_authoring_system/validator/validation_report_generator.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
 /// A dummy implementation of IValidationIssue for testing purposes.
@@ -15,10 +15,10 @@ class DummyValidationIssue extends IValidationIssue {
 }
 
 void main() {
-  group('ValidationIssuesRenderer Tests', () {
+  group('ValidationReportGenerator Tests', () {
     test('Renders an empty set of issues as an empty string', () {
       final Set<IValidationIssue> issues = {};
-      final renderer = ValidationIssuesRenderer(issues);
+      final renderer = ValidationReportGenerator(issues);
 
       expect(renderer.renderAsText(), '');
     });
@@ -27,7 +27,7 @@ void main() {
       final Set<IValidationIssue> issues = {
         DummyValidationIssue(),
       };
-      final renderer = ValidationIssuesRenderer(issues);
+      final renderer = ValidationReportGenerator(issues);
 
       expect(renderer.renderAsText(), 'dummy_validation_issue');
     });
