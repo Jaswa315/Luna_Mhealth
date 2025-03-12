@@ -6,6 +6,17 @@ import 'package:luna_core/models/page.dart';
 import 'package:luna_core/utils/version_manager.dart';
 import 'package:uuid/uuid.dart';
 
+/// ModuleBuilder is responsible for constructing a `Module` object.
+/// It aggregates metadata such as the title, author, dimensions, and pages.
+///
+/// This builder allows the setting of:
+/// - `Title` and `Author` for the module.
+/// - `Module dimensions` (width and height).
+/// - `Pages`, which are built from slides within a `PptxTree`.
+///
+/// Once all properties are set, calling `build()` generates a `Module`
+/// instance with the configured attributes.
+
 class ModuleBuilder implements IBuilder<Module> {
   late final String _moduleId;
   late String _title;

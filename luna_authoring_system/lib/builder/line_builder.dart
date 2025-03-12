@@ -6,6 +6,18 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 
+/// LineBuilder is a builder class for constructing a `LineComponent`.
+/// It extracts necessary properties from a `ConnectionShape` and
+/// applies transformation functions to map PowerPoint dimensions to
+/// display pixels.
+///
+/// This builder follows a fluent API approach:
+/// - `setStartAndEndPoints()`: Determines the start and end points.
+/// - `setThickness()`: Converts width to a proper thickness.
+/// - `setColor()`: Extracts the color of the line.
+/// - `setStyle()`: Extracts the line's border style.
+///
+/// The `build()` method finalizes the object and returns a `LineComponent`.
 class LineBuilder implements IBuilder<LineComponent> {
   final int _moduleWidth;
   final int _moduleHeight;
