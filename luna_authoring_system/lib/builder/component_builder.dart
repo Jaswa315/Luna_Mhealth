@@ -5,6 +5,13 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/models/components/line_component.dart';
 
+/// ComponentBuilder is responsible for constructing a [Component] object.
+///
+/// It takes in a shape extracted from a PowerPoint file and determines
+/// the appropriate component type to build. Currently, it supports [LineComponent]
+/// if the shape is a [ConnectionShape].
+///
+/// If an unsupported shape type is encountered, an [ArgumentError] is thrown.
 class ComponentBuilder implements IBuilder<Component> {
   final int _moduleWidth;
   final int _moduleHeight;
