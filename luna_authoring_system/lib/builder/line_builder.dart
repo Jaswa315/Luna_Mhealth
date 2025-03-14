@@ -6,11 +6,11 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 
-/// LineBuilder is a builder class for constructing a `LineComponent`.
-/// It extracts necessary properties from a `ConnectionShape` and
+/// LineBuilder is a builder class for constructing a [LineComponent].
+/// It extracts necessary properties from a [ConnectionShape] and
 /// applies transformation functions to map PowerPoint dimensions to
-/// percentage-based coordinates which is later used by line_component_renderer
-/// in luna_mobile to render the line.
+/// percentage-based coordinates which is later used by luna app
+/// to render the line.
 
 class LineBuilder implements IBuilder<LineComponent> {
   final int _moduleWidth;
@@ -36,28 +36,28 @@ class LineBuilder implements IBuilder<LineComponent> {
     return this;
   }
 
-  /// setThickness() converts width to a proper thickness.
+  /// Converts width which is in EMU to percentage.
   LineBuilder setThickness(ConnectionShape shape) {
     _thickness = EmuConversions.updateThicknessToDisplayPixels(shape.width);
 
     return this;
   }
 
-  /// setColor() extracts the color of the line.
+  /// extracts the color of the line.
   LineBuilder setColor(ConnectionShape shape) {
     _color = shape.color;
 
     return this;
   }
 
-  /// setStyle() extracts the line's border style.
+  ///  extracts the line's border style.
   LineBuilder setStyle(ConnectionShape shape) {
     _style = shape.style;
 
     return this;
   }
 
-  /// The `build()` method finalizes the object and returns a `LineComponent`.
+  /// The [build] method finalizes the object and returns a `LineComponent`.
   @override
   LineComponent build() {
     return LineComponent(

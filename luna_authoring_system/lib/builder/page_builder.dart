@@ -4,9 +4,9 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/models/page.dart';
 
-/// PageBuilder is responsible for constructing a `Page` object.
-/// It converts a list of `Shape` objects into corresponding `Component` objects
-/// and aggregates them into a `Page`.
+/// PageBuilder is responsible for constructing a [Page] object.
+/// It converts a list of [Shape] objects into corresponding [Component] objects
+/// and aggregates them into a [Page].
 
 class PageBuilder implements IBuilder<Page> {
   List<Component> _components = [];
@@ -15,7 +15,7 @@ class PageBuilder implements IBuilder<Page> {
 
   PageBuilder(this._moduleWidth, this._moduleHeight);
 
-  /// addComponent(shape) converts a shape into a component and adds it to the list.
+  /// converts a shape into a component and adds it to the list.
   PageBuilder addComponent(Shape shape) {
     _components.add(
       ComponentBuilder(_moduleWidth, _moduleHeight, shape).build(),
@@ -24,7 +24,7 @@ class PageBuilder implements IBuilder<Page> {
     return this;
   }
 
-  /// The buildPage() method ensures that new pages are created with
+  /// This method ensures that new pages are created with
   PageBuilder buildPage(List<Shape> shapes) {
     // Clear the components list before adding new components
     _components.clear();
@@ -35,7 +35,7 @@ class PageBuilder implements IBuilder<Page> {
     return this;
   }
 
-  /// build() finalizes the `Page` instance.
+  /// finalizes the [Page] instance.
   @override
   Page build() {
     return Page(components: _components);
