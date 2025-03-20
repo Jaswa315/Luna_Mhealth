@@ -102,19 +102,30 @@ class PptxTreeBuilder {
     _pptxLoader = PptxXmlToJsonConverter(pptxFile);
   }
 
-  void _updateTitleAndAuthor() {
+  void _updateTitle() {
     Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
     String eCoreProperties = 'cp:coreProperties';
-    _pptxTree.title = coreMap[eCoreProperties][eTitle];
-    _pptxTree.author = coreMap[eCoreProperties][eAuthor];
+    _pptxTree.title = coreMap[eCoreProperties]?[eTitle] ?? "Untitled";
   }
 
-  void _updateWidthAndHeight() {
+  void _updateAuthor() {
+    Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
+    String eCoreProperties = 'cp:coreProperties';
+    _pptxTree.author = coreMap[eCoreProperties]?[eAuthor] ?? "Unknown Author";
+  }
+
+  void _updateWidth() {
     Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
+
     _pptxTree.width =
-        EMU(int.parse(presentationMap[ePresentation][eSlideSize][eCX]));
+        EMU(int.parse(presentationMap[ePresentation][eSlideSize]?[eCX] ?? "0"));
+  }
+
+  void _updateHeight() {
+    Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
+
     _pptxTree.height =
-        EMU(int.parse(presentationMap[ePresentation][eSlideSize][eCY]));
+        EMU(int.parse(presentationMap[ePresentation][eSlideSize]?[eCY] ?? "0"));
   }
 
   int _getSlideCount() {
@@ -187,8 +198,10 @@ class PptxTreeBuilder {
   }
 
   PptxTree getPptxTree() {
-    _updateTitleAndAuthor();
-    _updateWidthAndHeight();
+    _updateTitle();
+    _updateAuthor();
+    _updateWidth();
+    _updateHeight();
     _updateSlides();
 
     return _pptxTree;
