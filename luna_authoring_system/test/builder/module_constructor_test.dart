@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart';
 import 'package:luna_authoring_system/builder/module_constructor.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
@@ -28,7 +28,7 @@ void main() {
           () async {
         // Parse the PPTX tree
         PptxTree pptxTree =
-            PptxParser(File('test/test_assets/A line.pptx')).getPptxTree();
+            PptxTreeBuilder(File('test/test_assets/A line.pptx')).getPptxTree();
 
         ModuleConstructor moduleConstructor = ModuleConstructor(pptxTree);
 

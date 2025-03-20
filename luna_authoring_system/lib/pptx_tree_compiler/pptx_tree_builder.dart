@@ -88,17 +88,17 @@ const String eLineWidth = '_w';
 const String flipVertical = '_flipV';
 
 /// =================================================================================================
-/// PPTX PARSER CLASS
+/// PPTX PptxTreeBuilder CLASS
 /// =================================================================================================
 
-/// The PptxParser takes a .pptx file and is capable of making a
+/// The PptxTreeBuilder takes a .pptx file and is capable of making a
 /// PptxTree object that represents given PowerPoint file.
 /// It will only parse the required info to form a luna module.
-class PptxParser {
+class PptxTreeBuilder {
   late PptxXmlToJsonConverter _pptxLoader;
   PptxTree _pptxTree = PptxTree();
 
-  PptxParser(File pptxFile) {
+  PptxTreeBuilder(File pptxFile) {
     _pptxLoader = PptxXmlToJsonConverter(pptxFile);
   }
 

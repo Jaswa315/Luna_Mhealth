@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:luna_authoring_system/builder/module_constructor.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/pptx_validator.dart';
 import 'package:luna_core/models/module.dart';
@@ -25,8 +25,8 @@ class PptxRunner {
     _moduleName = moduleName;
 
     // Parse the presentation
-    PptxParser pptxParser = PptxParser(pptxFile);
-    _pptxTree = pptxParser.getPptxTree();
+    PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
+    _pptxTree = pptxTreeBuilder.getPptxTree();
 
     // Run validations
     _runValidations();
