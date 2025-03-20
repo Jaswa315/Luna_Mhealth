@@ -23,7 +23,6 @@ void main() {
 
       expect(pptxTree.author, "Andrew Nah");
     });
-
     test('parsePptx method initialzes width.', () async {
       PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
 
