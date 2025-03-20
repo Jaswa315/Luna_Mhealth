@@ -13,12 +13,12 @@ import 'package:xml2json/xml2json.dart';
 /// files as JSON for easier processing.
 ///
 /// Assumes: `_pptxFile` is a valid `.pptx` file.
-class PptxLoader {
+class PptxXmlToJsonConverter {
   final File _pptxFile;
   late final Directory _tempDir;
   bool _isExtracted = false;
 
-  PptxLoader(this._pptxFile) {
+  PptxXmlToJsonConverter(this._pptxFile) {
     _tempDir = Directory.systemTemp.createTempSync('pptx_loader_');
   }
 
