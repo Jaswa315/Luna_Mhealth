@@ -7,7 +7,7 @@ import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_loader.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_core/utils/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
@@ -95,11 +95,11 @@ const String flipVertical = '_flipV';
 /// PptxTree object that represents given PowerPoint file.
 /// It will only parse the required info to form a luna module.
 class PptxParser {
-  late PptxLoader _pptxLoader;
+  late PptxXmlToJsonConverter _pptxLoader;
   PptxTree _pptxTree = PptxTree();
 
   PptxParser(File pptxFile) {
-    _pptxLoader = PptxLoader(pptxFile);
+    _pptxLoader = PptxXmlToJsonConverter(pptxFile);
   }
 
   void _updateTitleAndAuthor() {
