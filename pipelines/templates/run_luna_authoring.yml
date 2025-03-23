@@ -32,7 +32,7 @@ steps:
 
 - task: PowerShell@2
   displayName: 'Run Luna Authoring System using Flutter'
-  condition: not(${{ parameters.module_name }})
+  condition: not(${{ parameters.use_built_exe }})
   inputs:
     targetType: 'inline'
     script: |
@@ -45,7 +45,7 @@ steps:
 
 - task: PowerShell@2
   displayName: 'Run built MacOS'
-  condition: use_built_exe
+  condition: ${{ parameters.use_built_exe }}
   inputs:
     script: |
       cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/runner/Release"
