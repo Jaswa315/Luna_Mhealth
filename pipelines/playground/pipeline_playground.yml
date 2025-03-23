@@ -9,13 +9,13 @@ variables:
   - name: package_folders
     value: luna_core,luna_authoring_system,luna_mobile
   - name: imageName
-    value: 'macOS-latest'
+    value: macOS-latest
   - name: buildOS
-    value: 'macos'
+    value: macos
   - name: package_name
-    value: 'MacBuild_$(Build.BuildNumber)'
+    value: MacBuild_$(Build.BuildNumber)
   - name: release_dir
-    value: '/Build/Products/Release'
+    value: /Build/Products/Release
 
 steps:
 
