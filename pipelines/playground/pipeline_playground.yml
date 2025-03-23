@@ -3,8 +3,6 @@
 
 trigger: none
 
-job: MacOSTests
-
 pool:
   vmImage: macos-latest
 variables:
