@@ -48,7 +48,7 @@ steps:
   condition: use_built_exe
   inputs:
     script: |
-      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/${{ parameters.build_os }}/runner/Release"
+      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/runner/Release"
       Write-Host -InputObject (Get-Item)
 
 - template: test_file_existence.yml
