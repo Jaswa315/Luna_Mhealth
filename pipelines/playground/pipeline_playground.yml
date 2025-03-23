@@ -8,6 +8,14 @@ pool:
 variables:
   - name: package_folders
     value: luna_core,luna_authoring_system,luna_mobile
+  - name:  imageName
+    value: 'macOS-latest'
+  - name: buildOS
+    value: 'macos'
+  - name: package_name
+    value: 'MacBuild_$(Build.BuildNumber)'
+  - name: release_dir
+    value: '/Build/Products/Release'
 
 steps:
 
@@ -26,6 +34,10 @@ steps:
 - template: ../templates/publish_test_lint_results.yml
 
 - template: ../templates/build_authoring_system.yml
+  build_os: $(buildOS)
+  package_name: $(package_name)
+  release_directory: $(release_dir)
+  build_name: $(Build.BuildNumber)
 
 - template: ../templates/run_luna_authoring.yml
   parameters:
