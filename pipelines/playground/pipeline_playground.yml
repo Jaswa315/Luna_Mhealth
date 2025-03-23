@@ -3,22 +3,30 @@
 
 trigger: none
 
-jobs:
+job: MacOSTests
 
-- job: mactest
+pool:
+  vmImage: macos-latest
+variables:
+  - name: package_folders
+    value: luna_core,luna_authoring_system,luna_mobile
 
+steps:
 
-  pool:
-    vmImage: macos-latest
-  variables:
-    - name: package_folders
-      value: luna_core,luna_authoring_system,luna_mobile
+- template: ./templates/install_prereqs.yml
 
-  steps:
-
-  - template: ../templates/install_prereqs.yml
-
-
-  - template: ../templates/run_luna_authoring.yml
+- ${{ each folder in split(variables.package_folders, ',') }}:
+  - template: ./templates/lint_luna.yml
     parameters:
-      operating_system: macos
+      package_path: ${{ folder }}
+      package_name: ${{ folder }}
+  - template: ./templates/run_tests.yml
+    parameters:
+      package_path: ${{ folder }}
+      package_name: ${{ folder }}
+
+- template: ./templates/publish_test_lint_results.yml
+
+- template: ./templates/run_luna_authoring.yml
+  parameters:
+    operating_system: macos
