@@ -46,9 +46,10 @@ steps:
 - task: PowerShell@2
   displayName: 'Run built MacOS'
   condition: use_built_exe
-  script: |
-    cd "$(Build.SourcesDirectory)/luna_authoring_system/build/${{ parameters.build_os }}/runner/Release"
-    Write-Host -InputObject (Get-Item)
+  inputs:
+    script: |
+      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/${{ parameters.build_os }}/runner/Release"
+      Write-Host -InputObject (Get-Item)
 
 - template: test_file_existence.yml
   parameters:
