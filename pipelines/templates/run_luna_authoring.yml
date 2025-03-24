@@ -50,11 +50,16 @@ steps:
     targetType: 'inline'
     script: |
       cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Release"
-      $app_path = "./luna_authoring_system.app"
       $param1 = "${{ parameters.pptx_path }}"
       $param2 = "${{ parameters.module_name }}"
-      & open $app_path --args $param1 $param2
-      Start-Sleep 30
+      $execPath = "./luna_authoring_system.app/Contents/MacOS/luna_authoring_system"
+    
+      if (!(Test-Path $execPath)) {
+        Write-Host "Executable not found: $execPath"
+        exit 1
+      }
+
+      & $execPath $param1 $param2
 
 - template: test_file_existence.yml
   parameters:
