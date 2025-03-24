@@ -59,7 +59,7 @@ steps:
         exit 1
       }
 
-      & $execPath $param1 $param2
+      sudo & $execPath $param1 $param2
 
 - template: test_file_existence.yml
   parameters:
