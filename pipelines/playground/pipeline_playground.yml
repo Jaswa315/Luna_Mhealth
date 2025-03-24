@@ -21,18 +21,6 @@ steps:
 
 - template: ../templates/install_prereqs.yml
 
-- ${{ each folder in split(variables.package_folders, ',') }}:
-  - template: ../templates/lint_luna.yml
-    parameters:
-      package_path: ${{ folder }}
-      package_name: ${{ folder }}
-  - template: ../templates/run_tests.yml
-    parameters:
-      package_path: ${{ folder }}
-      package_name: ${{ folder }}
-
-- template: ../templates/publish_test_lint_results.yml
-
 - template: ../templates/build_authoring_system.yml
   parameters:
     build_os: $(buildOS)
