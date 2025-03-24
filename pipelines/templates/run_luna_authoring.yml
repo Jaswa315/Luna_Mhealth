@@ -47,6 +47,7 @@ steps:
   displayName: 'Run built MacOS'
   condition: ${{ parameters.use_built_exe }}
   inputs:
+    targetType: 'inline'
     script: |
       cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Release"
       Write-Host -InputObject (Get-Item)
