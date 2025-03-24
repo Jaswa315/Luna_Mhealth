@@ -51,9 +51,10 @@ steps:
     script: |
       cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Release"
       $app_path = "./luna_authoring_system.app"
-      $param1 = "${{ parameters.module_name }}"
-      $param2 = "${{ parameters.pptx_path }}"
+      $param1 = "${{ parameters.pptx_path }}"
+      $param2 = "${{ parameters.module_name }}"
       & open $app_path --args $param1 $param2
+      Start-Sleep 30
 
 - template: test_file_existence.yml
   parameters:
