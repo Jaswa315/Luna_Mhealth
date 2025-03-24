@@ -50,7 +50,7 @@ steps:
     targetType: 'inline'
     script: |
       cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Release"
-      Move-Item -Path "${{ parameters.pptx_path }}" -destination "/tmp/luna_test.pptx"
+      Copy-Item -Path "${{ parameters.pptx_path }}" -destination "/tmp/luna_test.pptx"
       $param1 = "/tmp/luna_test.pptx"
       $param2 = "${{ parameters.module_name }}"
       $execPath = "./luna_authoring_system.app/Contents/MacOS/luna_authoring_system"
