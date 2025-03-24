@@ -50,7 +50,8 @@ steps:
     targetType: 'inline'
     script: |
       cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Release"
-      Write-Host Get-Item -InputObject ./
+      $results = Get-Item -InputObject ./
+      Write-Host $results
 
 - template: test_file_existence.yml
   parameters:
