@@ -32,7 +32,7 @@ steps:
         $debug_mode = "${{ parameters.debug_mode }}"
         Write-Host -Object $debug_mode
         Write-Host "#####"
-        if($debug_mode} -eq "true"){
+        if($debug_mode -eq "true"){
           Write-Host -Object "debug"
           flutter build ${{ parameters.build_os }} --build-name ${{  parameters.build_name  }} --debug
         }else{
