@@ -8,6 +8,8 @@ parameters:
   default: 'luna_test'
 - name: operating_system
   default: 'windows'
+- name: use_built_exe
+  default: False
 
 steps:
 
@@ -30,6 +32,7 @@ steps:
 
 - task: PowerShell@2
   displayName: 'Run Luna Authoring System using Flutter'
+  condition: not(${{ parameters.use_built_exe }})
   inputs:
     targetType: 'inline'
     script: |
@@ -40,6 +43,24 @@ steps:
       Start-Sleep 480
       Stop-Process $flutter_proc
 
+- task: PowerShell@2
+  displayName: 'Run built MacOS'
+  condition: ${{ parameters.use_built_exe }}
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Debug"
+      Copy-Item -Path "${{ parameters.pptx_path }}" -destination "$HOME/Documents/luna_test.pptx"
+      $param1 = "${{ parameters.pptx_path }}"
+      $param2 = "${{ parameters.module_name }}"
+      $execPath = "./luna_authoring_system.app/Contents/MacOS/luna_authoring_system"
+    
+      if (!(Test-Path $execPath)) {
+        Write-Host "Executable not found: $execPath"
+        exit 1
+      }
+
+      & $execPath $param1 $param2
 
 - template: test_file_existence.yml
   parameters:

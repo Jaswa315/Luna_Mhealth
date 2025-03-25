@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/helper/authoring_initializer.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
@@ -19,6 +21,7 @@ Future<void> main(List<String> arguments) async {
   await AuthoringInitializer.initializeAuthoring();
   // Process the pptxFile and output the Luna file for cmd
   await PptxRunner().processPptx(arguments[0], arguments[1]);
+  exit(0);
 }
 
 /// The root widget of the application.

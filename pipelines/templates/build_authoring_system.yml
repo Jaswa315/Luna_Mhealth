@@ -12,6 +12,10 @@ parameters:
   default: "/x64/runner/Release"
 - name: build_name
   default: 0
+- name: debug_mode
+  default: false
+- name: archive_file
+  default: true
 
 steps:
   - task: PowerShell@2
@@ -24,8 +28,15 @@ steps:
         flutter clean
         flutter pub get
         flutter create --platforms=${{ parameters.build_os }} .
-        flutter build ${{ parameters.build_os }} --build-name ${{  parameters.build_name  }}
+        $debug_mode = "${{ parameters.debug_mode }}"
+        if($debug_mode -eq "true"){
+          flutter build ${{ parameters.build_os }} --build-name ${{  parameters.build_name  }} --debug
+        }else{
+          flutter build ${{ parameters.build_os }} --build-name ${{  parameters.build_name  }}
+        }
+
   - task: ArchiveFiles@2
+    condition: ${{ parameters.archive_file }}
     inputs:
       rootFolderOrFile: "$(Build.SourcesDirectory)/luna_authoring_system/build/${{ parameters.build_os }}/${{ parameters.release_directory }}"
       archiveType: 'zip'

@@ -2,23 +2,42 @@
 # Runs unit tests and then integration tests
 
 trigger: none
+# Nightly Build for Luna mHealth
+# Runs unit tests and then integration tests
 
 jobs:
 
-- job: mactest
-
+- job: MacOSTests
 
   pool:
     vmImage: macos-latest
   variables:
     - name: package_folders
       value: luna_core,luna_authoring_system,luna_mobile
+    - name: imageName
+      value: macOS-latest
+    - name: buildOS
+      value: macos
+    - name: package_name
+      value: MacBuild_$(Build.BuildNumber)
+    - name: release_dir
+      value: /Build/Products/Debug
+
 
   steps:
 
   - template: ../templates/install_prereqs.yml
 
+  - template: ../templates/build_authoring_system.yml
+    parameters:
+      build_os: $(buildOS)
+      package_name: $(package_name)
+      release_directory: $(release_dir)
+      build_name: $(Build.BuildNumber)
+      debug_mode: true
+      archive_file: false
 
   - template: ../templates/run_luna_authoring.yml
     parameters:
       operating_system: macos
+      use_built_exe: true
