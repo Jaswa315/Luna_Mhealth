@@ -42,9 +42,6 @@ jobs:
   - template: templates/run_luna_mobile_tests_firebase.yml
     
 
-
-
-
 - job: MacOSTests
 
   pool:
