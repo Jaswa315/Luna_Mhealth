@@ -29,7 +29,7 @@ steps:
         flutter pub get
         flutter create --platforms=${{ parameters.build_os }} .
         Write-Host "###########"
-        $test = ${{ parameters.debug_mode }}
+        $test = "${{ parameters.debug_mode }}"
         Write-Host -Object $test
         Write-Host "#####"
         if(${{ parameters.debug_mode }} -eq "true"){
