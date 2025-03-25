@@ -13,7 +13,7 @@ parameters:
 - name: build_name
   default: 0
 - name: debug_mode
-  default: "false"
+  default: false
 - name: archive_file
   default: true
 
@@ -29,10 +29,11 @@ steps:
         flutter pub get
         flutter create --platforms=${{ parameters.build_os }} .
         Write-Host "###########"
-        $test = "${{ parameters.debug_mode }}"
-        Write-Host -Object $test
+        $debug_mode = "${{ parameters.debug_mode }}"
+        Write-Host -Object $debug_mode
         Write-Host "#####"
-        if(${{ parameters.debug_mode }} -eq "true"){
+        if($debug_mode} -eq "true"){
+          Write-Host -Object "debug"
           flutter build ${{ parameters.build_os }} --build-name ${{  parameters.build_name  }} --debug
         }else{
           flutter build ${{ parameters.build_os }} --build-name ${{  parameters.build_name  }}
