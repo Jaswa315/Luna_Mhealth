@@ -13,7 +13,7 @@ parameters:
 - name: build_name
   default: 0
 - name: debug_mode
-  default: false
+  default: "false"
 - name: archive_file
   default: true
 

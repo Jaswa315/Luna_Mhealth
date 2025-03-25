@@ -34,7 +34,7 @@ jobs:
       package_name: $(package_name)
       release_directory: $(release_dir)
       build_name: $(Build.BuildNumber)
-      debug_mode: true
+      debug_mode: "true"
       archive_file: false
 
   - template: ../templates/run_luna_authoring.yml
