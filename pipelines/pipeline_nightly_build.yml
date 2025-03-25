@@ -52,6 +52,13 @@ jobs:
   variables:
     - name: package_folders
       value: luna_core,luna_authoring_system,luna_mobile
+    - name: buildOS
+      value: macos
+    - name: package_name
+      value: MacBuild_$(Build.BuildNumber)
+    - name: release_dir
+      value: /Build/Products/Debug
+
 
   steps:
 
@@ -80,5 +87,5 @@ jobs:
 
   - template: .templates/run_luna_authoring.yml
     parameters:
-      operating_system: macos
+      operating_system: $(buildOS)
       use_built_exe: true
