@@ -49,9 +49,9 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Release"
+      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Debug"
       Copy-Item -Path "${{ parameters.pptx_path }}" -destination "$HOME/Documents/luna_test.pptx"
-      $param1 = "$HOME/Documents/luna_test.pptx"
+      $param1 = "${{ parameters.pptx_path }}"
       $param2 = "${{ parameters.module_name }}"
       $execPath = "./luna_authoring_system.app/Contents/MacOS/luna_authoring_system"
     
