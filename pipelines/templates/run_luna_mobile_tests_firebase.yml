@@ -9,7 +9,8 @@ parameters:
     default: 'integration_test'
   - name: luna_module_name
     default: 'luna_test'
-
+  - name: luna_module_path
+    default: $HOME/Documents/luna_test.luna
 
 steps:
 
@@ -17,11 +18,6 @@ steps:
 - script: exit 1
   displayName: 'Cancel job if not Windows agent'
   condition: ne( variables['Agent.OS'], 'Windows_NT' )
-
-- template: run_luna_authoring.yml
-  parameters:
-    operating_system: 'windows'
-    module_name: ${{  parameters.luna_module_name  }}
 
 - task: DownloadSecureFile@1
   name: firebaseLogin
@@ -52,6 +48,11 @@ steps:
     targetType: 'inline'
     script: |
       cd ${{  parameters.package_path  }}
+      $luna_mod_path = "${{ parameters.luna_module_path }}"
+      if (!(Test-Path $luna_mod_path)) {
+        Write-Host "Module not found: $luna_mod_path"
+        exit 1
+      }
       flutter create --platform=android .
       patrol build android --target integration_test/luna_mobile_e2e_test.dart
       gcloud auth activate-service-account --key-file=$(firebaseLogin.secureFilePath)
@@ -63,7 +64,7 @@ steps:
           --device model=Pixel2.arm `
           --timeout 10m `
           --use-orchestrator `
-          --other-files /sdcard/Download/luna_test.luna="$HOME/Documents/luna_test.luna" `
+          --other-files /sdcard/Download/luna_test.luna=$luna_mod_path `
           --environment-variables clearPackageData=true
       if (Select-String -InputObject $testResults "Failed") {
         Write-Host "##vso[task.logissue type=error]Integration Test Failed"

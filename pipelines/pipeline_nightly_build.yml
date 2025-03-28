@@ -18,6 +18,12 @@ jobs:
   variables:
     - name: package_folders
       value: luna_core,luna_authoring_system,luna_mobile
+    - name: buildOS
+      value: windows
+    - name: package_name
+      value: WindowsBuild_$(Build.BuildNumber)
+    - name: release_dir
+      value: /x64/runner/Debug
 
   steps:
 
@@ -35,9 +41,20 @@ jobs:
 
   - template: templates/publish_test_lint_results.yml
 
+  - template: templates/build_authoring_system.yml
+    parameters:
+      build_os: $(buildOS)
+      package_name: $(package_name)
+      release_directory: $(release_dir)
+      build_name: $(Build.BuildNumber)
+      debug_mode: true
+      archive_file: false
+
   - template: templates/run_luna_authoring.yml
     parameters:
       operating_system: windows
+      use_built_exe: true
+      release_dir: $(release_dir)
 
   - template: templates/run_luna_mobile_tests_firebase.yml
     

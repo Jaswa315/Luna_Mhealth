@@ -10,6 +10,8 @@ parameters:
   default: 'windows'
 - name: use_built_exe
   default: False
+- name: release_dir
+  default: /Build/Products/Debug
 
 steps:
 
@@ -44,16 +46,21 @@ steps:
       Stop-Process $flutter_proc
 
 - task: PowerShell@2
-  displayName: 'Run built MacOS'
-  condition: ${{ parameters.use_built_exe }}
+  displayName: 'Run built Authoring Exe for ${{ parameters.operating_system }} '
+  condition: ${{ parameters.use_built_exe }} 
   inputs:
     targetType: 'inline'
     script: |
-      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/macos/Build/Products/Debug"
-      Copy-Item -Path "${{ parameters.pptx_path }}" -destination "$HOME/Documents/luna_test.pptx"
+      cd "$(Build.SourcesDirectory)/luna_authoring_system/build/${{ parameters.operating_system }}/${{ parameters.release_dir }}"
       $param1 = "${{ parameters.pptx_path }}"
       $param2 = "${{ parameters.module_name }}"
-      $execPath = "./luna_authoring_system.app/Contents/MacOS/luna_authoring_system"
+      $execPath = ""
+      $os = "${{ parameters.operating_system }}"
+      if($os -eq "macos"){
+        $execPath = "./luna_authoring_system.app/Contents/MacOS/luna_authoring_system"
+      }else{
+        $execPath = "./luna_authoring_system.exe"
+      }
     
       if (!(Test-Path $execPath)) {
         Write-Host "Executable not found: $execPath"
