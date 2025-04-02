@@ -5,11 +5,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 
-
 void main() {
   group('Tests for PptxRunner using A line.pptx', () {
-
-
     const testDir = 'test/output';
 
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -40,13 +37,12 @@ void main() {
       },
     );
 
-
     // mock path provider too
     const path_channel = MethodChannel('plugins.flutter.io/path_provider');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(path_channel, (MethodCall methodCall) async {
       if (methodCall.method == 'getApplicationDocumentsDirectory') {
-        return testDir; 
+        return testDir;
       }
       return null;
     });
@@ -56,8 +52,6 @@ void main() {
       log.clear();
     });
 
-
-    
     final pptxFile = File('test/test_assets/A line.pptx');
     test('Process PPTX makes a luna file.', () async {
       const fileName = 'unit_test_luna';
