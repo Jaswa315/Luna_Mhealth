@@ -73,7 +73,6 @@ class LineComponent extends Component {
 
   /// Converts the current [LineComponent] instance to a JSON object.
   /// Returns: A [Json] object containing all the properties of the line.
-  @override
   Json toJson() {
     return {
       'type': type.name,

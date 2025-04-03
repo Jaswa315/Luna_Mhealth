@@ -5,12 +5,10 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-import 'package:luna_core/enums/item_type.dart';
-import 'package:luna_core/models/item.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/utils/types.dart';
 
-class Module extends Item {
+class Module {
   final String moduleId;
   final String title;
   final String author;
@@ -28,7 +26,7 @@ class Module extends Item {
     required this.authoringVersion,
     required this.pages,
     required this.aspectRatio,
-  }) : super(id: moduleId, itemType: ItemType.module);
+  });
 
   /// Factory method to create a [Module] from JSON.
   factory Module.fromJson(Json json) {
