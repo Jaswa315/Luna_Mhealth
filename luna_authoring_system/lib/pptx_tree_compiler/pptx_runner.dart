@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:luna_authoring_system/builder/module_constructor.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_input_handler.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart';
-import 'package:luna_authoring_system/validator/i_validation_issue.dart';
-import 'package:luna_authoring_system/validator/pptx_validator.dart';
+import 'package:luna_authoring_system/validator/pptx_validator_runner.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 
@@ -15,54 +13,29 @@ class PptxRunner {
   late String _moduleName;
   late PptxTree _pptxTree;
 
-  /// Takes in a filepath to a pptx file and output directory (currently users home directory)
-  /// Outputs the luna file for the pptx if no validation issues
-  /// Outputs validations issue text file otherwise
-
+  /// Parses a PPTX file, validates, and generates a .luna module.
   Future<void> processPptx(String pptxFilePath, String moduleName) async {
-    // Delegate input handling
+    // Step 1: Validate and load file
     File pptxFile = PptxInputHandler.processInputs([pptxFilePath, moduleName]);
     _moduleName = moduleName;
 
-    // Parse the presentation
+    // Step 2: Build PPTX Tree from the file
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
     _pptxTree = pptxTreeBuilder.getPptxTree();
 
-    // Run validations
-    _runValidations();
+    // Step 3: Run validatiors via a dedicated runner
+    PptxValidatorRunner.runValidatiors(_pptxTree);
 
-    // Generate the Luna Module
+    // Step 4: Generate .luna module from pptx tree
     await _generateLunaModule();
   }
 
-  /// Checks the pptx tree for validation issues
-  void _runValidations() {
-    // Run all PPTX validations.
-    Set<IValidationIssue> issueList = PptxValidator(_pptxTree).validate();
-
-    // Check for validation errors.
-    if (issueList.isNotEmpty) {
-      // Print all errors.
-      for (var issue in issueList) {
-        // TODO: Replace with Log
-        // ignore: avoid_print
-        print('Validation Issue Found: ${issue.toText()}');
-      }
-      throw ArgumentError(
-          'Validation failed with ${issueList.length} issue(s).');
-    }
-
-    // TODO: Render or save txt file of issues for author to see
-  }
-
-  /// Generates a luna module from a pptx tree
-  Future _generateLunaModule() async {
-    ModuleConstructor moduleObjectGenerator = ModuleConstructor(_pptxTree);
-    Module module = await moduleObjectGenerator.constructLunaModule();
+  /// Generates and stores the .luna file based on the parsed PPTX tree.
+  Future<void> _generateLunaModule() async {
+    ModuleConstructor moduleConstructor = ModuleConstructor(_pptxTree);
+    Module module = await moduleConstructor.constructLunaModule();
     String moduleJson = jsonEncode(module.toJson());
 
-    // Create the package (ZIP file) using ModuleStorage
-    // Save module JSON data into the archive
     await ModuleResourceFactory.addModule(_moduleName, moduleJson);
   }
 }
