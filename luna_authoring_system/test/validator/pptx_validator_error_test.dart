@@ -15,7 +15,7 @@ void main() {
       pptxTree.title += 'a' * 300; // exceeds max length
 
       expect(
-        () => PptxValidatorRunner.runValidations(pptxTree),
+        () => PptxValidatorRunner.runValidatiors(pptxTree),
         throwsA(predicate((e) =>
             e is ArgumentError &&
             e.message.toString().contains('Validation failed'))),
@@ -27,7 +27,7 @@ void main() {
       pptxTree.title = 'A valid PPTX title';
 
       expect(
-        () => PptxValidatorRunner.runValidations(pptxTree),
+        () => PptxValidatorRunner.runValidatiors(pptxTree),
         returnsNormally,
       );
     });

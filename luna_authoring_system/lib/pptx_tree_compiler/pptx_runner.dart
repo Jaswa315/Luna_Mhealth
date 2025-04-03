@@ -23,8 +23,8 @@ class PptxRunner {
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
     _pptxTree = pptxTreeBuilder.getPptxTree();
 
-    // Step 3: Run validations via a dedicated runner
-    PptxValidatorRunner.runValidations(_pptxTree);
+    // Step 3: Run validatiors via a dedicated runner
+    PptxValidatorRunner.runValidatiors(_pptxTree);
 
     // Step 4: Generate .luna module from pptx tree
     await _generateLunaModule();
