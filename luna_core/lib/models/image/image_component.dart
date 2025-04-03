@@ -92,7 +92,6 @@ class ImageComponent extends Component {
         'hyperlink': hyperlink
       };
 
-  @override
   void onClick() {
     // Process hyperlink
     if (hyperlink != null) {

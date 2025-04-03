@@ -11,7 +11,6 @@ import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
-import 'package:luna_core/models/interfaces/clickable.dart';
 import 'package:luna_core/models/item.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/utils/types.dart';
@@ -19,7 +18,7 @@ import 'package:luna_core/utils/types.dart';
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
 /// Components can be rendered on the screen.
-abstract class Component extends Item with ChangeNotifier, Clickable {
+abstract class Component extends Item with ChangeNotifier {
   /// The type of the component.
   final ComponentType type;
 
@@ -81,5 +80,5 @@ abstract class Component extends Item with ChangeNotifier, Clickable {
 const Map<String, ComponentType> _typeMapping = {
   'image': ComponentType.image,
   'text': ComponentType.text,
-  'line': ComponentType.line
+  'line': ComponentType.line,
 };
