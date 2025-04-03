@@ -8,17 +8,15 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:luna_core/enums/component_type.dart';
-import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
-import 'package:luna_core/models/item.dart';
 import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
 /// Components can be rendered on the screen.
-abstract class Component extends Item with ChangeNotifier {
+abstract class Component with ChangeNotifier {
   /// The type of the component.
   final ComponentType type;
 
@@ -49,8 +47,7 @@ abstract class Component extends Item with ChangeNotifier {
     required this.width,
     required this.height,
     required String name,
-  })  : _bounds = Rect.fromLTWH(x, y, width, height),
-        super(itemType: ItemType.component, name: name);
+  }) : _bounds = Rect.fromLTWH(x, y, width, height);
 
   /// Abstract method for rendering the UI.
   /// Should be implemented by subclasses to render the UI for the component.
@@ -72,6 +69,19 @@ abstract class Component extends Item with ChangeNotifier {
         return LineComponent.fromJson(json);
       default:
         throw Exception('Unsupported component type: $type.toString()');
+    }
+  }
+
+  static Json serializeComponent(Component component) {
+    if (component is ImageComponent) {
+      return component.toJson();
+    } else if (component is LineComponent) {
+      return component.toJson();
+    } else if (component is TextComponent) {
+      return component.toJson();
+    } else {
+      throw UnimplementedError(
+          'Unknown component type: ${component.runtimeType}');
     }
   }
 }

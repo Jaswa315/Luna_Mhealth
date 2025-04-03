@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/enums/item_type.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/components/component.dart';
@@ -24,7 +23,6 @@ void main() {
       expect(module.pages.length, 1);
       expect(module.pages[0].components, isEmpty);
       expect(module.aspectRatio, closeTo(1.7777, 0.0001));
-      expect(module.itemType, ItemType.module);
     });
 
     test('Deserialization from valid JSON with empty pages', () {

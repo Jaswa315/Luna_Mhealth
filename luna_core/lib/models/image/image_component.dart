@@ -25,20 +25,21 @@ class ImageComponent extends Component {
   String? hyperlink;
 
   /// Constructs a new instance of [ImageComponent] with the given [imagePath], [x], [y], [width], and [height].
-  ImageComponent(
-      {required this.imagePath,
-      required double x,
-      required double y,
-      required double width,
-      required double height,
-      this.hyperlink})
-      : super(
-            type: ComponentType.image,
-            x: x,
-            y: y,
-            width: width,
-            height: height,
-            name: 'ImageComponent');
+  ImageComponent({
+    required this.imagePath,
+    required double x,
+    required double y,
+    required double width,
+    required double height,
+    this.hyperlink,
+  }) : super(
+          type: ComponentType.image,
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+          name: 'ImageComponent',
+        );
 
   @override
   Future<Widget> render(Size screenSize) async {
@@ -74,12 +75,13 @@ class ImageComponent extends Component {
   /// Updated the fromJson method to include moduleName
   static ImageComponent fromJson(Json json) {
     return ImageComponent(
-        imagePath: json['image_path'],
-        x: json['x'].toDouble(),
-        y: json['y'].toDouble(),
-        width: json['width'].toDouble(),
-        height: json['height'].toDouble(),
-        hyperlink: json['hyperlink']);
+      imagePath: json['image_path'],
+      x: json['x'].toDouble(),
+      y: json['y'].toDouble(),
+      width: json['width'].toDouble(),
+      height: json['height'].toDouble(),
+      hyperlink: json['hyperlink'],
+    );
   }
 
   Json toJson() => {
@@ -89,7 +91,7 @@ class ImageComponent extends Component {
         'y': bounds.top,
         'width': bounds.width,
         'height': bounds.height,
-        'hyperlink': hyperlink
+        'hyperlink': hyperlink,
       };
 
   void onClick() {

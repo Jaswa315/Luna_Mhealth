@@ -2,8 +2,6 @@
 /// A page can contain multiple components.
 
 import 'dart:convert';
-import 'package:luna_core/enums/item_type.dart';
-import 'package:luna_core/models/item.dart';
 import 'package:luna_core/utils/types.dart';
 import 'components/component.dart';
 
@@ -11,15 +9,14 @@ import 'components/component.dart';
 ///
 /// A page contains a list of components that can be added or removed.
 /// It can be converted to and from a JSON map.
-class Page extends Item {
+class Page {
   /// A list of components on the slide.
   final List<Component> components;
 
   /// Constructs a new instance of [Page].
   Page({
     List<Component>? components,
-  })  : components = components ?? [],
-        super(itemType: ItemType.page);
+  }) : components = components ?? [];
 
   /// Gets the list of components in the page.
   List<Component> get getPageComponents => List.unmodifiable(components);
@@ -36,7 +33,7 @@ class Page extends Item {
 
   /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
   factory Page.fromJson(Json json) {
-    if (json['type'] != ItemType.page.name) {
+    if (json['type'] != 'page') {
       throw FormatException('Only page type components are allowed');
     }
 
@@ -52,8 +49,8 @@ class Page extends Item {
   /// Converts a Page into a JSON map.
   Json toJson() {
     return {
-      'type': super.itemType.name,
-      'shapes': components.map((c) => c.toJson()).toList(),
+      'type': 'page',
+      'shapes': components.map((c) => Component.serializeComponent(c)).toList(),
     };
   }
 
