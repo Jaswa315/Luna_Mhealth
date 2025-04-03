@@ -104,10 +104,4 @@ class LineComponent extends Component {
       style: BorderStyle.values[json['style']],
     );
   }
-
-  /// Handles the click event on the line component.
-  @override
-  void onClick() {
-    // TODO: Implement onClick behavior, if needed.
-  }
 }

@@ -96,10 +96,6 @@ class TextComponent extends Component {
         'width': width,
         'height': height
       };
-
-  /// Handles the click event for the text component.
-  @override
-  void onClick() {}
 }
 
 /// String of text with given font
