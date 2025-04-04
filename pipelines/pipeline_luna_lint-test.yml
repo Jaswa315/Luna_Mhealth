@@ -3,7 +3,7 @@
 trigger: none
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 variables:
   - name: package_folders
@@ -24,5 +24,20 @@ steps:
       package_name: ${{ folder }}
 
 - template: templates/test_file_existence.yml
+
+- template: templates/build_authoring_system.yml
+  parameters:
+    build_os: windows
+    package_name: windows-temp-build
+    release_directory: /x64/runner/Debug
+    build_name: windows-temp-build
+    debug_mode: true
+    archive_file: false
+
+- template: templates/run_luna_authoring.yml
+  parameters:
+    operating_system: windows
+    use_built_exe: true
+    release_dir: /x64/runner/Debug
 
 - template: templates/publish_test_lint_results.yml
