@@ -8,7 +8,7 @@ class Dimension {
   final UnitType _unit;
 
   /// Private named constructor used internally by static creation methods.
-  const Dimension._(this._value, this._unit);
+  const Dimension._(this._value, this._unit) : assert(_value >= 0);
 
   /// Creates a Dimension instance with EMU units.
   static Dimension emu(double value) {
@@ -30,6 +30,25 @@ class Dimension {
 
   /// The unit type of the dimension (EMU, display pixels, or percent).
   UnitType get unit => _unit;
+
+  /// Creates a Dimension from a JSON map.
+  factory Dimension.fromJson(Map<String, dynamic> json) {
+    final value = (json['value'] as num).toDouble();
+    final unitStr = json['unit'] as String;
+
+    final unit = UnitType.values.firstWhere(
+      (e) => e.name == unitStr,
+      orElse: () => throw ArgumentError('Invalid unit type: $unitStr'),
+    );
+
+    return Dimension._(value, unit);
+  }
+
+  /// Converts this Dimension into a JSON map.
+  Map<String, dynamic> toJson() => {
+        'value': _value,
+        'unit': _unit.name,
+      };
 
   @override
   String toString() => '$value ${unit.name}';
