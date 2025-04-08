@@ -34,5 +34,11 @@ void main() {
       expect(dim1.unit, isNot(equals(dim2.unit)));
       expect(dim1.value, isNot(equals(dim2.value)));
     });
+
+    test('should throw AssertionError for negative values', () {
+      expect(() => Dimension.emu(-100), throwsA(isA<AssertionError>()));
+      expect(() => Dimension.pixels(-10), throwsA(isA<AssertionError>()));
+      expect(() => Dimension.percent(-5), throwsA(isA<AssertionError>()));
+    });
   });
 }

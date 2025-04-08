@@ -8,7 +8,7 @@ class Dimension {
   final UnitType _unit;
 
   /// Private named constructor used internally by static creation methods.
-  const Dimension._(this._value, this._unit);
+  const Dimension._(this._value, this._unit) : assert(_value >= 0);
 
   /// Creates a Dimension instance with EMU units.
   static Dimension emu(double value) {
