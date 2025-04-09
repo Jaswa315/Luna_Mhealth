@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/models/point/point_2d_percentage.dart';
 import 'package:luna_core/utils/types.dart';
@@ -57,12 +56,11 @@ class LineComponent extends Component {
     required this.startPoint,
     required this.endPoint,
   }) : super(
-          type: ComponentType.line,
+          name: 'LineComponent',
           x: startPoint.x,
           y: startPoint.y,
           width: _calculateWidth(startPoint, endPoint),
           height: _calculateHeight(startPoint, endPoint),
-          name: 'LineComponent',
         );
 
   /// Renders the line as a [Widget].
@@ -75,7 +73,7 @@ class LineComponent extends Component {
   /// Returns: A [Json] object containing all the properties of the line.
   Json toJson() {
     return {
-      'type': type.name,
+      'type': 'line',
       'startPoint': {'x': startPoint.x, 'y': startPoint.y},
       'endPoint': {'x': endPoint.x, 'y': endPoint.y},
       'color': color.value,

@@ -8,8 +8,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:luna_core/utils/types.dart';
-
-import '../../enums/component_type.dart';
 import '../components/component.dart';
 
 /// Represents a text component that can be used in the Luna mHealth Mobile app.
@@ -41,12 +39,11 @@ class TextComponent extends Component {
     /// height of component
     required double height,
   }) : super(
-          type: ComponentType.text,
+          name: 'TextComponent',
           x: x,
           y: y,
           width: width,
           height: height,
-          name: 'TextComponent',
         );
 
   @override
@@ -58,15 +55,16 @@ class TextComponent extends Component {
 
     return Future.value(
       Container(
-          width: width * screenSize.width,
-          height: height * screenSize.height,
-          padding: EdgeInsets.all(16.0),
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              children: textSpans,
-            ),
-          )),
+        width: width * screenSize.width,
+        height: height * screenSize.height,
+        padding: EdgeInsets.all(16.0),
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: textSpans,
+          ),
+        ),
+      ),
     );
   }
 
@@ -89,12 +87,12 @@ class TextComponent extends Component {
   }
 
   Json toJson() => {
-        'type': ComponentType.text.name,
+        'type': 'text',
         'textParts': textChildren.map((textPart) => textPart.toJson()).toList(),
         'x': x,
         'y': y,
         'width': width,
-        'height': height
+        'height': height,
       };
 }
 
@@ -122,42 +120,46 @@ class TextPart {
   Color? color;
 
   /// construct a new instance of [TextPart] with the given parameters
-  TextPart(
-      {required this.text,
-      this.fontSize = 16.0,
-      this.fontStyle = FontStyle.normal,
-      this.fontWeight = FontWeight.normal,
-      this.fontUnderline = TextDecoration.none,
-      this.textID,
-      this.color});
+  TextPart({
+    required this.text,
+    this.fontSize = 16.0,
+    this.fontStyle = FontStyle.normal,
+    this.fontWeight = FontWeight.normal,
+    this.fontUnderline = TextDecoration.none,
+    this.textID,
+    this.color,
+  });
 
   /// return the span of this [TextPart]
   TextSpan getTextSpan() {
     return TextSpan(
-        text: text,
-        style: TextStyle(
-            color: color,
-            fontStyle: fontStyle,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            decoration: fontUnderline));
+      text: text,
+      style: TextStyle(
+        color: color,
+        fontStyle: fontStyle,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        decoration: fontUnderline,
+      ),
+    );
   }
 
   /// construct new instance of [TextPart] from json
   static TextPart fromJson(Json json) {
     return TextPart(
-        text: json['text'],
-        textID: json['textID'],
-        fontSize: json['fontSize'] ?? 16.0,
-        // ToDo: No hardcoding font properties!
-        fontStyle:
-            json['fontStyle'] == 'italic' ? FontStyle.italic : FontStyle.normal,
-        color: json['color'] != null ? Color(json['color']) : Colors.black,
-        fontWeight:
-            json['fontWeight'] == 'bold' ? FontWeight.bold : FontWeight.normal,
-        fontUnderline: json['fontUnderline'] == 'underline'
-            ? TextDecoration.underline
-            : TextDecoration.none);
+      text: json['text'],
+      textID: json['textID'],
+      fontSize: json['fontSize'] ?? 16.0,
+      // ToDo: No hardcoding font properties!
+      fontStyle:
+          json['fontStyle'] == 'italic' ? FontStyle.italic : FontStyle.normal,
+      color: json['color'] != null ? Color(json['color']) : Colors.black,
+      fontWeight:
+          json['fontWeight'] == 'bold' ? FontWeight.bold : FontWeight.normal,
+      fontUnderline: json['fontUnderline'] == 'underline'
+          ? TextDecoration.underline
+          : TextDecoration.none,
+    );
   }
 
   /// construct new json instance from [TextPart]
@@ -169,6 +171,6 @@ class TextPart {
         'color': color?.value,
         'fontWeight': fontWeight == FontWeight.bold ? 'bold' : '',
         'fontUnderline':
-            fontUnderline == TextDecoration.underline ? 'underline' : ''
+            fontUnderline == TextDecoration.underline ? 'underline' : '',
       };
 }

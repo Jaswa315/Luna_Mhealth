@@ -7,7 +7,6 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/widgets.dart';
-import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/image/image_component.dart';
 import 'package:luna_core/models/text/text_component.dart';
@@ -17,9 +16,6 @@ import 'package:luna_core/utils/types.dart';
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
 /// Components can be rendered on the screen.
 abstract class Component with ChangeNotifier {
-  /// The type of the component.
-  final ComponentType type;
-
   /// x position of component
   final double x;
 
@@ -41,7 +37,6 @@ abstract class Component with ChangeNotifier {
 
   /// Creates a new Component instance.
   Component({
-    required this.type,
     required this.x,
     required this.y,
     required this.width,
@@ -59,16 +54,16 @@ abstract class Component with ChangeNotifier {
   /// This method takes a [json] object and returns a Component object based on the 'type' field in the JSON.
 
   static Component fromJson(Json json) {
-    ComponentType? type = _typeMapping[json['type']];
+    final String? type = json['type'];
     switch (type) {
-      case ComponentType.image:
+      case 'image':
         return ImageComponent.fromJson(json);
-      case ComponentType.text:
+      case 'text':
         return TextComponent.fromJson(json);
-      case ComponentType.line:
+      case 'line':
         return LineComponent.fromJson(json);
       default:
-        throw Exception('Unsupported component type: $type.toString()');
+        throw Exception('Unsupported component type: $type');
     }
   }
 
@@ -81,14 +76,8 @@ abstract class Component with ChangeNotifier {
       return component.toJson();
     } else {
       throw UnimplementedError(
-          'Unknown component type: ${component.runtimeType}');
+        'Unknown component type: ${component.runtimeType}',
+      );
     }
   }
 }
-
-/// A mapping of component type IDs to ComponentType enum values.
-const Map<String, ComponentType> _typeMapping = {
-  'image': ComponentType.image,
-  'text': ComponentType.text,
-  'line': ComponentType.line,
-};
