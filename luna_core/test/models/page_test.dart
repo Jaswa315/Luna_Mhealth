@@ -8,7 +8,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart' hide Page;
-import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/components/component.dart';
 

@@ -10,7 +10,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:luna_core/controllers/navigation_controller.dart';
-import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_core/utils/types.dart';
@@ -33,12 +32,11 @@ class ImageComponent extends Component {
     required double height,
     this.hyperlink,
   }) : super(
-          type: ComponentType.image,
+          name: 'ImageComponent',
           x: x,
           y: y,
           width: width,
           height: height,
-          name: 'ImageComponent',
         );
 
   @override
@@ -85,7 +83,7 @@ class ImageComponent extends Component {
   }
 
   Json toJson() => {
-        'type': super.type.name,
+        'type': 'image',
         'image_path': imagePath,
         'x': bounds.left,
         'y': bounds.top,

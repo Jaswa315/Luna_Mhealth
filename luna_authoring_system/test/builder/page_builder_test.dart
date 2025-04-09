@@ -5,7 +5,6 @@ import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/models/page.dart';
 import 'package:luna_core/models/components/component.dart';
-import 'package:luna_core/enums/component_type.dart';
 import 'package:luna_core/utils/emu.dart';
 
 /// **Mock ConnectionShape for Testing**
