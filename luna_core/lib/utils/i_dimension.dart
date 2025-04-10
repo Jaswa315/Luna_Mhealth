@@ -2,8 +2,8 @@
 ///
 /// This class serves as a blueprint for unit types like EMU, Percent, and DisplayPixel.
 /// Implementations must define how they are serialized to JSON and represented as a string.
-abstract class Dimension {
-  const Dimension();
+abstract class IDimension {
+  const IDimension();
 
   /// Converts the dimension object into a JSON-compatible map.
   Map<String, dynamic> toJson();

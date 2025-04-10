@@ -1,4 +1,4 @@
-import 'package:luna_core/utils/dimension.dart';
+import 'package:luna_core/utils/i_dimension.dart';
 
 /// EMU(English Metric Units) is a measurement in computer typography.
 /// These units are used to translate on-screen layouts to printed layouts for specified printer hardware.
@@ -6,7 +6,7 @@ import 'package:luna_core/utils/dimension.dart';
 /// More information about EMU:
 /// https://c-rex.net/samples/ooxml/e1/Part4/OOXML_P4_DOCX_sldSz_topic_ID0EULOGB.html
 /// https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-odraw/40cd0cf9-f038-4603-b790-252d93e3e8fd
-class EMU extends Dimension {
+class EMU extends IDimension {
   final int value;
 
   EMU(this.value) {

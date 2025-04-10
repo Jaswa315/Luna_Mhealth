@@ -1,20 +1,21 @@
 import 'dart:ui';
-import 'package:luna_core/utils/dimension.dart';
+
 import 'package:luna_core/utils/display_pixel.dart';
 import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/utils/i_dimension.dart';
 import 'package:luna_core/utils/percent.dart';
 
 /// Represents a bounding box with position and size.
 /// Immutable from outside: values can only be accessed via getters.
 class BoundingBox {
   final Offset _topLeftCorner;
-  final Dimension _width;
-  final Dimension _height;
+  final IDimension _width;
+  final IDimension _height;
 
   BoundingBox({
     required Offset topLeftCorner,
-    required Dimension width,
-    required Dimension height,
+    required IDimension width,
+    required IDimension height,
   })  : _topLeftCorner = topLeftCorner,
         _width = width,
         _height = height,
@@ -24,10 +25,10 @@ class BoundingBox {
   Offset get topLeftCorner => _topLeftCorner;
 
   /// Getter for width.
-  Dimension get width => _width;
+  IDimension get width => _width;
 
   /// Getter for height.
-  Dimension get height => _height;
+  IDimension get height => _height;
 
   /// Creates a BoundingBox from JSON.
   factory BoundingBox.fromJson(Map<String, dynamic> json) {
@@ -51,7 +52,7 @@ class BoundingBox {
         'height': _height.toJson(),
       };
 
-  static Dimension _dimensionFromJson(Map<String, dynamic> json) {
+  static IDimension _dimensionFromJson(Map<String, dynamic> json) {
     final unit = json['unit'];
     switch (unit) {
       case 'emu':
