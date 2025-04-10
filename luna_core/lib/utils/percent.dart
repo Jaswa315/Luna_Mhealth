@@ -1,5 +1,7 @@
+import 'package:luna_core/utils/dimension.dart';
+
 /// Represents a percentage value between 0 and 100.
-class Percent {
+class Percent extends Dimension {
   final double value;
 
   Percent(this.value) {
@@ -13,4 +15,10 @@ class Percent {
 
   @override
   String toString() => '$value%';
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'value': value,
+        'unit': 'percent',
+      };
 }
