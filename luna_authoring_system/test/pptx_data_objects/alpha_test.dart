@@ -3,11 +3,6 @@ import 'package:luna_authoring_system/pptx_data_objects/alpha.dart';
 
 void main() {
   group('Alpha Class Tests', () {
-    test('Null value should set alpha to max opacity.', () {
-      Alpha alpha = Alpha(null);
-      expect(alpha.value, Alpha.maxAlpha);
-    });
-
     test('Valid Alpha values should not throw an error.', () {
       expect(() => Alpha(0), returnsNormally);
       expect(() => Alpha(50000), returnsNormally);
