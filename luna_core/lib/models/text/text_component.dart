@@ -1,72 +1,23 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 import 'package:flutter/material.dart';
+import 'package:luna_core/models/bounding_box.dart';
+import 'package:luna_core/models/components/bounding_box_component.dart';
 import 'package:luna_core/utils/types.dart';
-import '../components/component.dart';
 
 /// Represents a text component that can be used in the Luna mHealth Mobile app.
 ///
-/// This class extends the [Component] class and provides additional functionality
+/// This class extends the [BoundingBoxComponent] class and provides additional functionality
 /// specific to text components.
-class TextComponent extends Component {
+class TextComponent extends BoundingBoxComponent {
   /// The text to display in the text component.
   final List<TextPart> textChildren;
 
   /// Constructs a new instance of [TextComponent] with the given parameters.
   TextComponent({
-    //required this.text,
-    // this.fontSize = 16.0,
-    // this.fontStyle = FontStyle.normal,
-    // this.color = Colors.black,
-    /// children of component
     required this.textChildren,
-
-    /// x position of component
-    required double x,
-
-    /// y position of component
-    required double y,
-
-    /// width of component
-    required double width,
-
-    /// height of component
-    required double height,
+    required BoundingBox boundingBox,
   }) : super(
-          name: 'TextComponent',
-          x: x,
-          y: y,
-          width: width,
-          height: height,
+          boundingBox: boundingBox,
         );
-
-  @override
-  Future<Widget> render(Size screenSize) {
-    List<TextSpan> textSpans = [];
-    for (TextPart textPart in textChildren) {
-      textSpans.add(textPart.getTextSpan());
-    }
-
-    return Future.value(
-      Container(
-        width: width * screenSize.width,
-        height: height * screenSize.height,
-        padding: EdgeInsets.all(16.0),
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            children: textSpans,
-          ),
-        ),
-      ),
-    );
-  }
 
   /// Converts a JSON object to a [TextComponent] instance.
   ///
@@ -77,22 +28,26 @@ class TextComponent extends Component {
         .map((textPartJson) => TextPart.fromJson(textPartJson))
         .toList();
 
+    final boundingBox = BoundingBox.fromJson({
+      'topLeftCorner': {
+        'dx': (json['x'] as num).toDouble(),
+        'dy': (json['y'] as num).toDouble(),
+      },
+      'width': json['width'],
+      'height': json['height'],
+    });
+
     return TextComponent(
       textChildren: children,
-      x: json['x'].toDouble(),
-      y: json['y'].toDouble(),
-      width: json['width'].toDouble(),
-      height: json['height'].toDouble(),
+      boundingBox: boundingBox,
     );
   }
 
+  @override
   Json toJson() => {
         'type': 'text',
         'textParts': textChildren.map((textPart) => textPart.toJson()).toList(),
-        'x': x,
-        'y': y,
-        'width': width,
-        'height': height,
+        'boundingBox': boundingBox.toJson(),
       };
 }
 

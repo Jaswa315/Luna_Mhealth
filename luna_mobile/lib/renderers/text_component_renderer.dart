@@ -6,8 +6,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'package:luna_core/models/text/text_component.dart';
 import 'base_component_renderer.dart';
 
 /// A class that extends the [BaseComponentRenderer] class to render text components.
-class TextComponentRenderer extends BaseComponentRenderer<TextComponent> {}
+class TextComponentRenderer {}

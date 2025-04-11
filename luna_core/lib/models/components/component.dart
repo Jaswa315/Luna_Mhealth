@@ -8,8 +8,6 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/models/image/image_component.dart';
-import 'package:luna_core/models/text/text_component.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// A class that represents a component in the UI.
@@ -56,10 +54,6 @@ abstract class Component with ChangeNotifier {
   static Component fromJson(Json json) {
     final String? type = json['type'];
     switch (type) {
-      case 'image':
-        return ImageComponent.fromJson(json);
-      case 'text':
-        return TextComponent.fromJson(json);
       case 'line':
         return LineComponent.fromJson(json);
       default:
@@ -68,11 +62,7 @@ abstract class Component with ChangeNotifier {
   }
 
   static Json serializeComponent(Component component) {
-    if (component is ImageComponent) {
-      return component.toJson();
-    } else if (component is LineComponent) {
-      return component.toJson();
-    } else if (component is TextComponent) {
+    if (component is LineComponent) {
       return component.toJson();
     } else {
       throw UnimplementedError(
