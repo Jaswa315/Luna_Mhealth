@@ -1,5 +1,7 @@
+import 'package:luna_core/utils/i_dimension.dart';
+
 /// Represents a display pixel value, must be >= 0.
-class DisplayPixel {
+class DisplayPixel extends IDimension {
   final double value;
 
   DisplayPixel(this.value) {
@@ -10,4 +12,10 @@ class DisplayPixel {
 
   @override
   String toString() => '${value}px';
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'value': value,
+        'unit': 'displayPixels',
+      };
 }

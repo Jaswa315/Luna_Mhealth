@@ -1,44 +1,41 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/utils/dimension.dart';
-import 'package:luna_core/enums/unit_type.dart';
+import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/utils/percent.dart';
+import 'package:luna_core/utils/display_pixel.dart';
 
 void main() {
-  group('Dimension', () {
-    test('should create Dimension with EMU unit', () {
-      final dim = Dimension.emu(1200.0);
-      expect(dim.value, equals(1200.0));
-      expect(dim.unit, equals(UnitType.emu));
+  group('Dimension subclasses', () {
+    test('should create EMU with correct value', () {
+      final dim = EMU(1200);
+      expect(dim.value, equals(1200));
     });
 
-    test('should create Dimension with display pixel unit', () {
-      final dim = Dimension.pixels(300.5);
+    test('should create DisplayPixel with correct value', () {
+      final dim = DisplayPixel(300.5);
       expect(dim.value, equals(300.5));
-      expect(dim.unit, equals(UnitType.displayPixels));
     });
 
-    test('should create Dimension with percent unit', () {
-      final dim = Dimension.percent(75.0);
+    test('should create Percent with correct value', () {
+      final dim = Percent(75.0);
       expect(dim.value, equals(75.0));
-      expect(dim.unit, equals(UnitType.percent));
     });
 
     test('toString() should return formatted string', () {
-      final dim = Dimension.percent(50.0);
-      expect(dim.toString(), equals('50.0 percent'));
+      final dim = Percent(50.0);
+      expect(dim.toString(), equals('50.0%'));
     });
 
     test('multiple instances should be independent', () {
-      final dim1 = Dimension.emu(1000.0);
-      final dim2 = Dimension.pixels(500.0);
+      final dim1 = EMU(1000);
+      final dim2 = DisplayPixel(500.0);
 
-      expect(dim1.unit, isNot(equals(dim2.unit)));
       expect(dim1.value, isNot(equals(dim2.value)));
     });
 
-    test('should throw AssertionError for negative values', () {
-      expect(() => Dimension.emu(-100), throwsA(isA<AssertionError>()));
-      expect(() => Dimension.pixels(-10), throwsA(isA<AssertionError>()));
-      expect(() => Dimension.percent(-5), throwsA(isA<AssertionError>()));
+    test('should throw ArgumentError for invalid values', () {
+      expect(() => EMU(-100), throwsA(isA<ArgumentError>()));
+      expect(() => DisplayPixel(-10), throwsA(isA<ArgumentError>()));
+      expect(() => Percent(-5), throwsA(isA<ArgumentError>()));
     });
   });
 }
