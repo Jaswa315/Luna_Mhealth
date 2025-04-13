@@ -4,6 +4,7 @@
 class SrgbColor {
   final regex = RegExp(r'^[0-9A-Fa-f]{6}$');
   final String _value;
+  static const String defaultColor = "000000"; // Black
 
   SrgbColor(this._value) {
     // Check if the string is a valid 6-character hexadecimal string
