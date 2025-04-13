@@ -64,7 +64,7 @@ void main() {
     });
   });
 
-  group('Tests for PptxTreeBuilder using A line in slidelayout.pptx', () {
+  group('Tests for PptxTreeBuilder using Empty slide with slideLayout.pptx', () {
     final pptxFile = File('test/test_assets/Empty slide with slideLayout.pptx');
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
 
@@ -93,7 +93,7 @@ void main() {
       expect(pptxTree.slides, isA<List<Slide>>());
     });
 
-    test('A line is parsed', () async {
+    test('A Red line is parsed', () async {
       PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
       ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
 
@@ -102,7 +102,10 @@ void main() {
       expect(cShape.transform.offset.x.value, 179189);
       expect(cShape.transform.offset.y.value, 645068);
       expect(cShape.transform.size.x.value, 3756423);
-      expect(cShape.transform.size.y.value, 0);
+      expect(cShape.color.alpha, 255);
+      expect(cShape.color.red, 255);
+      expect(cShape.color.green, 0);
+      expect(cShape.color.blue, 0);
     });
 
     ///testing in a pptx file where flipV = 1

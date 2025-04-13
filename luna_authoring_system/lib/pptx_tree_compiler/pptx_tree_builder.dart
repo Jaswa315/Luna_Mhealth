@@ -242,7 +242,7 @@ class PptxTreeBuilder {
   }
 
   Color _getLineColor(Json lineMap){
-    SrgbColor color = SrgbColor(lineMap[eLine]?[eSrgbColor]?[eValue] ?? SrgbColor.defaultColor);
+    SrgbColor color = SrgbColor(lineMap[eLine]?[eSolidFill]?[eSrgbColor]?[eValue] ?? SrgbColor.defaultColor);
     Alpha alpha = Alpha(int.parse(lineMap[eLine]?[eAlpha] ?? "${Alpha.maxAlpha}"));
     Color lineColor = ColorConversions.updateSrgbColorAndAlphaToFlutterColor(color, alpha);
 
