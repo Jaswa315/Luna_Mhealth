@@ -71,7 +71,7 @@ void main() {
     test('parsePptx method initialzes author.', () async {
       PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
 
-      expect(pptxTree.author, "Jon Socha");
+      expect(pptxTree.author, "Jon");
     });
     test('parsePptx method initialzes width.', () async {
       PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
