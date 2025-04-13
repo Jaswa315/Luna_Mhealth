@@ -249,11 +249,17 @@ class PptxTreeBuilder {
     return lineColor;
   }
 
+  EMU _getLineWidth(Json lineMap) {
+    return EMU(int.parse(lineMap[eLine]?[eLineWidth] ?? "${ConnectionShape.defaultWidth.value}"));
+  }
+
   ConnectionShape _getConnectionShape(Json connectionShapeMap) {
     Transform transform =
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
     Color lineColor = _getLineColor(connectionShapeMap[eShapeProperty]);    
+
+    EMU lineWidth = _getLineWidth(connectionShapeMap[eShapeProperty]);
 
     // Extracts the flipVertical attribute from the connection shape's transform properties.
     // set to true if attribute is "1", false otherwise
@@ -266,6 +272,7 @@ class PptxTreeBuilder {
       transform: transform,
       isFlippedVertically: isFlippedVertically,
       color: lineColor,
+      width: lineWidth,
     );
   }
 
