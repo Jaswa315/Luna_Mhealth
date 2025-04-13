@@ -1,11 +1,15 @@
 library pptx_parser;
 
 import 'dart:io';
+import 'dart:ui';
+import 'package:luna_authoring_system/helper/color_conversions.dart';
+import 'package:luna_authoring_system/pptx_data_objects/alpha.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
+import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_core/utils/emu.dart';
@@ -40,6 +44,9 @@ const String eSlide = 'p:sld';
 
 /// The XML element for the common slide data in the slide.
 const String eCommonSlideData = 'p:cSld';
+
+/// The XML element for the common slide data in the slide.
+const String eSlideLayoutData = 'p:sldLayout';
 
 /// The XML element for the shape tree in the common slide data.
 const String eShapeTree = 'p:spTree';
@@ -84,8 +91,39 @@ const String eLine = 'a:ln';
 /// The XML element for the width of connection shape.
 const String eLineWidth = '_w';
 
+/// The XML element for the solid fill style in PowerPoint.
+/// See more information in this documentation.
+/// https://www.datypic.com/sc/ooxml/t-a_CT_FillStyleList.html
+const String eSolidFill = 'a:solidFill';
+
+/// The XML element for the srgbColor element in PowerPoint.
+const String eSrgbColor = 'a:srgbClr';
+
+/// The XML element for the alpha element in PowerPoint.
+const String eAlpha = 'a:alpha';
+
 /// The XML element that indicates the vertical flip of connection shape.
 const String flipVertical = '_flipV';
+
+/// The XML element for the Relationships in the slide.
+const String eRelationships = 'Relationships';
+
+/// The XML element for the Relationship in the slide.
+const String eRelationship = 'Relationship';
+
+/// The XML element for the Type of an relationship.
+const String eType = '_Type';
+
+/// The XML element for the Target of an relationships.
+const String eTarget = '_Target';
+
+/// The XML element for the value of an pptx element.
+const String eValue = '_val';
+
+
+/// The XML element for the slideLayout type for the slide.
+const String eSlideLayoutKey =
+    'http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout';
 
 /// =================================================================================================
 /// PPTX PptxTreeBuilder CLASS
@@ -134,13 +172,51 @@ class PptxTreeBuilder {
     return int.parse(appMap[eProperties][eSlides]);
   }
 
+  int _getSlideLayoutIndex(int slideIndex) {
+    // Every slide has a .rels file that contains the relationships.
+    dynamic slideRelationships = _pptxLoader.getJsonFromPptx("ppt/slides/_rels/slide$slideIndex.xml.rels")[eRelationships];
+    
+    if (slideRelationships is List) {
+      for (Json relationship in slideRelationships) {
+        if (relationship[eType] == eSlideLayoutKey) {
+          return _parseSlideLayoutTargetString(relationship[eTarget]);
+        }
+      }
+    } else if (slideRelationships is Map) {
+      if (slideRelationships[eRelationship][eType] == eSlideLayoutKey) {
+        return _parseSlideLayoutTargetString(slideRelationships[eRelationship][eTarget]);
+      }
+    } else {
+      throw Exception("Invalid slide relationships format: $slideRelationships");
+    }
+    throw Exception("Slide layout not found in ppt/slides/_rels/slide$slideIndex.xml.rels");
+  }
+
+  int _parseSlideLayoutTargetString(String target) {
+    RegExp regex = RegExp(r'slideLayout(\d+)\.xml');
+    Match? match = regex.firstMatch(target);
+    if (match != null) {
+      return int.parse(match.group(1)!);
+    }
+    throw Exception("Invalid slide layout target string: $target");
+  }
+
   List<Shape> _parseShapeTree(Json shapeTree) {
     List<Shape> shapes = [];
 
     shapeTree.forEach((key, value) {
       switch (key) {
         case eConnectionShape:
-          shapes.add(_getConnectionShape(shapeTree[key]));
+          if (shapeTree[key] is List) {
+            for (Json connectionShape in shapeTree[key]) {
+              shapes.add(_getConnectionShape(connectionShape));
+            }
+          } else if (shapeTree[key] is Map) {
+            shapes.add(_getConnectionShape(shapeTree[key]));
+          }
+          else {
+            throw Exception("Invalid connection shape format: ${shapeTree[key]}");
+          }
           break;
       }
     });
@@ -165,10 +241,19 @@ class PptxTreeBuilder {
     );
   }
 
+  Color _getLineColor(Json lineMap){
+    SrgbColor color = SrgbColor(lineMap[eLine]?[eSolidFill]?[eSrgbColor]?[eValue] ?? SrgbColor.defaultColor);
+    Alpha alpha = Alpha(int.parse(lineMap[eLine]?[eAlpha] ?? "${Alpha.maxAlpha}"));
+    Color lineColor = ColorConversions.updateSrgbColorAndAlphaToFlutterColor(color, alpha);
+
+    return lineColor;
+  }
+
   ConnectionShape _getConnectionShape(Json connectionShapeMap) {
-    // TODO: Replace this with actual value from the .pptx archive instead of a default value.
     Transform transform =
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
+
+    Color lineColor = _getLineColor(connectionShapeMap[eShapeProperty]);    
 
     // Extracts the flipVertical attribute from the connection shape's transform properties.
     // set to true if attribute is "1", false otherwise
@@ -180,6 +265,7 @@ class PptxTreeBuilder {
     return ConnectionShape(
       transform: transform,
       isFlippedVertically: isFlippedVertically,
+      color: lineColor,
     );
   }
 
@@ -187,10 +273,11 @@ class PptxTreeBuilder {
     List<Slide> slides = [];
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
-      slide.shapes = _parseShapeTree(
-        _pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")[eSlide]
-            [eCommonSlideData][eShapeTree],
-      );
+      // add slide layout elements first.
+      slide.shapes = _parseShapeTree(_pptxLoader.getJsonFromPptx("ppt/slideLayouts/slideLayout${_getSlideLayoutIndex(i)}.xml")[eSlideLayoutData][eCommonSlideData][eShapeTree]);
+      
+      // add slide elements afterwards.
+      slide.shapes?.addAll(_parseShapeTree(_pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")[eSlide][eCommonSlideData][eShapeTree]));
       slides.add(slide);
     }
 
