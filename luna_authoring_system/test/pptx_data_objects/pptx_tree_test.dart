@@ -52,6 +52,21 @@ void main() {
     test('slides can be updated with a list of slides', () async {
       PptxTree pptxTree = PptxTree();
 
+      Map<String, List<int>> section = {
+        'Symptom1': [1, 2, 3],
+        'Symptom2': [4, 5, 6],
+      };
+
+      pptxTree.section = section;
+
+      expect(pptxTree.section, section);
+      expect(pptxTree.section['Symptom1'], [1, 2, 3]);
+      expect(pptxTree.section['Symptom2'], [4, 5, 6]);
+    });
+
+    test('slides can be updated with a list of slides', () async {
+      PptxTree pptxTree = PptxTree();
+
       List<Slide> slides = [];
       for (int i = 0; i < 3; i++) {
         slides.add(Slide());
