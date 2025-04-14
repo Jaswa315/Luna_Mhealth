@@ -3,7 +3,7 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 
 /// The slide represents the slide data in PowerPoint.
 class Slide {
-  late String id;
+  late final String id;
 
   late List<Shape>? shapes;
 
