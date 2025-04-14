@@ -1,4 +1,4 @@
-import 'package:luna_core/utils/i_dimension.dart';
+import 'package:luna_core/units/i_dimension.dart';
 
 /// EMU(English Metric Units) is a measurement in computer typography.
 /// These units are used to translate on-screen layouts to printed layouts for specified printer hardware.

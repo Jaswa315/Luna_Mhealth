@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:luna_core/models/point/point_2d_percentage.dart';
+import 'package:luna_core/units/point_2d_percentage.dart';
 
 /// A utility class for converting normalized percentage points to display pixel coordinates.
 class PercentageConversion {

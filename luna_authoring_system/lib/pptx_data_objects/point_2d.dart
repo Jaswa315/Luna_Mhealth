@@ -1,4 +1,4 @@
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 
 /// Point2D class is the representation of a point in 2-dimensional space.
 /// It is used to describe offset and size values of the shapes in the .pptx.

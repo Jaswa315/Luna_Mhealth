@@ -1,4 +1,4 @@
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 
 /// Converts EMU values to a percentage (0-1 scale) relative to the slide size.
 /// This helps normalize positions and sizes for rendering.

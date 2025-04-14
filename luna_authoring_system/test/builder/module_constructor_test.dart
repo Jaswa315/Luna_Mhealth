@@ -10,7 +10,7 @@ import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 import 'dart:io';
 import 'package:luna_core/utils/version_manager.dart';
 

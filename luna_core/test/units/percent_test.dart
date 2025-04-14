@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/utils/percent.dart';
+import 'package:luna_core/units/percent.dart';
 
 void main() {
   group('Percent', () {

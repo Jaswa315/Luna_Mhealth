@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 
 void main() {
   group('Tests for EMU', () {

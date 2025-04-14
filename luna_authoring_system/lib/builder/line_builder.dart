@@ -4,7 +4,7 @@ import 'package:luna_authoring_system/helper/emu_conversions.dart';
 import 'package:luna_authoring_system/helper/line_positioner.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/models/point/point_2d_percentage.dart';
+import 'package:luna_core/units/point_2d_percentage.dart';
 
 /// LineBuilder is a builder class for constructing a [LineComponent].
 /// It extracts necessary properties from a [ConnectionShape] and

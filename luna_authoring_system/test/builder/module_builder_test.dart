@@ -3,7 +3,7 @@ import 'package:luna_authoring_system/builder/module_builder.dart';
 import 'package:luna_authoring_system/builder/page_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/utils/version_manager.dart';
 

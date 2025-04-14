@@ -7,7 +7,7 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 import 'package:flutter/rendering.dart';
 
 /// **Mock ConnectionShape for Testing**

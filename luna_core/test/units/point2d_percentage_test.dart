@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/models/point/point_2d_percentage.dart';
+import 'package:luna_core/units/point_2d_percentage.dart';
 
 void main() {
   group('Unit Tests for Point2DPercentage', () {

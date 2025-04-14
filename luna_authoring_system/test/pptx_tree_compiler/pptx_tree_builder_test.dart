@@ -5,7 +5,7 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 import 'dart:io';
 
 void main() {
@@ -64,7 +64,8 @@ void main() {
     });
   });
 
-  group('Tests for PptxTreeBuilder using Empty slide with slideLayout.pptx', () {
+  group('Tests for PptxTreeBuilder using Empty slide with slideLayout.pptx',
+      () {
     final pptxFile = File('test/test_assets/Empty slide with slideLayout.pptx');
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
 

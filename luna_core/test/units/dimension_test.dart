@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_core/utils/emu.dart';
-import 'package:luna_core/utils/percent.dart';
-import 'package:luna_core/utils/display_pixel.dart';
+import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/percent.dart';
+import 'package:luna_core/units/display_pixel.dart';
 
 void main() {
   group('Dimension subclasses', () {
