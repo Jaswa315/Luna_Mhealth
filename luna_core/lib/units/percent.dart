@@ -1,4 +1,4 @@
-import 'package:luna_core/utils/i_dimension.dart';
+import 'package:luna_core/units/i_dimension.dart';
 
 /// Represents a percentage value between 0 and 100.
 class Percent extends IDimension {

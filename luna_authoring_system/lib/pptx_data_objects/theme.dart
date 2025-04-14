@@ -1,4 +1,4 @@
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 
 class Theme {
   final int _themeId;

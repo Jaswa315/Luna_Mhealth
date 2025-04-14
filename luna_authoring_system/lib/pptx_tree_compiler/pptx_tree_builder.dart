@@ -14,7 +14,7 @@ import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// =================================================================================================
@@ -66,8 +66,9 @@ class PptxTreeBuilder {
 
   int _getSlideLayoutIndex(int slideIndex) {
     // Every slide has a .rels file that contains the relationships.
-    dynamic slideRelationships = _pptxLoader.getJsonFromPptx("ppt/slides/_rels/slide$slideIndex.xml.rels")[eRelationships];
-    
+    dynamic slideRelationships = _pptxLoader.getJsonFromPptx(
+        "ppt/slides/_rels/slide$slideIndex.xml.rels")[eRelationships];
+
     if (slideRelationships is List) {
       for (Json relationship in slideRelationships) {
         if (relationship[eType] == eSlideLayoutKey) {
@@ -76,12 +77,15 @@ class PptxTreeBuilder {
       }
     } else if (slideRelationships is Map) {
       if (slideRelationships[eRelationship][eType] == eSlideLayoutKey) {
-        return _parseSlideLayoutTargetString(slideRelationships[eRelationship][eTarget]);
+        return _parseSlideLayoutTargetString(
+            slideRelationships[eRelationship][eTarget]);
       }
     } else {
-      throw Exception("Invalid slide relationships format: $slideRelationships");
+      throw Exception(
+          "Invalid slide relationships format: $slideRelationships");
     }
-    throw Exception("Slide layout not found in ppt/slides/_rels/slide$slideIndex.xml.rels");
+    throw Exception(
+        "Slide layout not found in ppt/slides/_rels/slide$slideIndex.xml.rels");
   }
 
   int _parseSlideLayoutTargetString(String target) {
@@ -105,9 +109,9 @@ class PptxTreeBuilder {
             }
           } else if (shapeTree[key] is Map) {
             shapes.add(_getConnectionShape(shapeTree[key]));
-          }
-          else {
-            throw Exception("Invalid connection shape format: ${shapeTree[key]}");
+          } else {
+            throw Exception(
+                "Invalid connection shape format: ${shapeTree[key]}");
           }
           break;
       }
@@ -133,23 +137,28 @@ class PptxTreeBuilder {
     );
   }
 
-  Color _getLineColor(Json lineMap){
-    SrgbColor color = SrgbColor(lineMap[eLine]?[eSolidFill]?[eSrgbColor]?[eValue] ?? SrgbColor.defaultColor);
-    Alpha alpha = Alpha(int.parse(lineMap[eLine]?[eAlpha] ?? "${Alpha.maxAlpha}"));
-    Color lineColor = ColorConversions.updateSrgbColorAndAlphaToFlutterColor(color, alpha);
+  Color _getLineColor(Json lineMap) {
+    SrgbColor color = SrgbColor(lineMap[eLine]?[eSolidFill]?[eSrgbColor]
+            ?[eValue] ??
+        SrgbColor.defaultColor);
+    Alpha alpha =
+        Alpha(int.parse(lineMap[eLine]?[eAlpha] ?? "${Alpha.maxAlpha}"));
+    Color lineColor =
+        ColorConversions.updateSrgbColorAndAlphaToFlutterColor(color, alpha);
 
     return lineColor;
   }
 
   EMU _getLineWidth(Json lineMap) {
-    return EMU(int.parse(lineMap[eLine]?[eLineWidth] ?? "${ConnectionShape.defaultWidth.value}"));
+    return EMU(int.parse(lineMap[eLine]?[eLineWidth] ??
+        "${ConnectionShape.defaultWidth.value}"));
   }
 
   ConnectionShape _getConnectionShape(Json connectionShapeMap) {
     Transform transform =
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
-    Color lineColor = _getLineColor(connectionShapeMap[eShapeProperty]);    
+    Color lineColor = _getLineColor(connectionShapeMap[eShapeProperty]);
 
     EMU lineWidth = _getLineWidth(connectionShapeMap[eShapeProperty]);
 
@@ -173,10 +182,14 @@ class PptxTreeBuilder {
     for (int i = 1; i <= _getSlideCount(); i++) {
       Slide slide = Slide();
       // add slide layout elements first.
-      slide.shapes = _parseShapeTree(_pptxLoader.getJsonFromPptx("ppt/slideLayouts/slideLayout${_getSlideLayoutIndex(i)}.xml")[eSlideLayoutData][eCommonSlideData][eShapeTree]);
-      
+      slide.shapes = _parseShapeTree(_pptxLoader.getJsonFromPptx(
+              "ppt/slideLayouts/slideLayout${_getSlideLayoutIndex(i)}.xml")[
+          eSlideLayoutData][eCommonSlideData][eShapeTree]);
+
       // add slide elements afterwards.
-      slide.shapes?.addAll(_parseShapeTree(_pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")[eSlide][eCommonSlideData][eShapeTree]));
+      slide.shapes?.addAll(_parseShapeTree(
+          _pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")[eSlide]
+              [eCommonSlideData][eShapeTree]));
       slides.add(slide);
     }
 

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/components/bounding_box_component.dart';
-import 'package:luna_core/models/bounding_box.dart';
-import 'package:luna_core/utils/emu.dart';
-import 'package:luna_core/utils/display_pixel.dart';
+import 'package:luna_core/units/bounding_box.dart';
+import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/display_pixel.dart';
 import 'dart:ui';
 
 void main() {

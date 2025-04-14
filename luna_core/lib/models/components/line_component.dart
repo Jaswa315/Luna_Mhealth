@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/components/component.dart';
-import 'package:luna_core/models/point/point_2d_percentage.dart';
+import 'package:luna_core/units/point_2d_percentage.dart';
 import 'package:luna_core/utils/types.dart';
 import 'package:luna_mobile/renderers/line_component_renderer.dart';
 

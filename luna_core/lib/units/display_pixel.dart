@@ -1,4 +1,4 @@
-import 'package:luna_core/utils/i_dimension.dart';
+import 'package:luna_core/units/i_dimension.dart';
 
 /// Represents a display pixel value, must be >= 0.
 class DisplayPixel extends IDimension {

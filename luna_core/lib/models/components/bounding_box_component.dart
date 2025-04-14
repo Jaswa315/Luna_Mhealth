@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:luna_core/models/bounding_box.dart';
 import 'package:luna_core/models/components/component.dart';
+import 'package:luna_core/units/bounding_box.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// BBComponent represents a component with a bounding box, such as a text box or image.

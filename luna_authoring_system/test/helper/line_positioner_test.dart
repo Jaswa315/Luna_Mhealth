@@ -4,8 +4,8 @@ import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/helper/line_positioner.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/models/point/point_2d_percentage.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/point_2d_percentage.dart';
+import 'package:luna_core/units/emu.dart';
 
 void main() {
   group('StartEndPointPositioner Tests', () {

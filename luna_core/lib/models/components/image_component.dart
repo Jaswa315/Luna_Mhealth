@@ -1,5 +1,5 @@
-import 'package:luna_core/models/bounding_box.dart';
 import 'package:luna_core/models/components/bounding_box_component.dart';
+import 'package:luna_core/units/bounding_box.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// Represents an image component that can be rendered and clicked.

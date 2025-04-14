@@ -1,5 +1,5 @@
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
-import 'package:luna_core/utils/emu.dart';
+import 'package:luna_core/units/emu.dart';
 
 /// The PptxTree represents the PowerPoint data as a tree.
 /// It stores every data we need to build a luna module,
