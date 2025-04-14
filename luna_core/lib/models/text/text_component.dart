@@ -28,14 +28,8 @@ class TextComponent extends BoundingBoxComponent {
         .map((textPartJson) => TextPart.fromJson(textPartJson))
         .toList();
 
-    final boundingBox = BoundingBox.fromJson({
-      'topLeftCorner': {
-        'dx': (json['x'] as num).toDouble(),
-        'dy': (json['y'] as num).toDouble(),
-      },
-      'width': json['width'],
-      'height': json['height'],
-    });
+    final boundingBox =
+        BoundingBoxComponent.parseBoundingBoxFromLegacyJson(json);
 
     return TextComponent(
       textChildren: children,

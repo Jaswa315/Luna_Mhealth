@@ -22,14 +22,8 @@ class ImageComponent extends BoundingBoxComponent {
   /// Creates an [ImageComponent] from a JSON map.
   /// Updated the fromJson method to include moduleName
   static ImageComponent fromJson(Json json) {
-    final boundingBox = BoundingBox.fromJson({
-      'topLeftCorner': {
-        'dx': (json['x'] as num).toDouble(),
-        'dy': (json['y'] as num).toDouble(),
-      },
-      'width': json['width'],
-      'height': json['height'],
-    });
+    final boundingBox =
+        BoundingBoxComponent.parseBoundingBoxFromLegacyJson(json);
 
     return ImageComponent(
       imagePath: json['image_path'],
