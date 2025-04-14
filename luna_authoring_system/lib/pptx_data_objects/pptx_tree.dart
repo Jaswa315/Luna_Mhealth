@@ -13,6 +13,7 @@ class PptxTree {
   late EMU width;
   late EMU height;
 
+  late final Map<String, List<int>> section;
   late List<Slide> slides;
 
   PptxTree();
