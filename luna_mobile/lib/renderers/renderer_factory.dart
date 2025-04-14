@@ -7,18 +7,12 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/models/image/image_component.dart';
-import 'package:luna_core/models/text/text_component.dart';
-import 'package:luna_mobile/renderers/image_component_renderer.dart';
 import 'package:luna_mobile/renderers/irenderer.dart';
 import 'package:luna_mobile/renderers/line_component_renderer.dart';
-import 'package:luna_mobile/renderers/text_component_renderer.dart';
 
 /// A factory class for creating component renderers.
 class RendererFactory {
   static final Map<Type, IRenderer> _renderers = {
-    ImageComponent: ImageComponentRenderer(),
-    TextComponent: TextComponentRenderer(),
     LineComponent: LineComponentRenderer(),
   };
 

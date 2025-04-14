@@ -24,4 +24,16 @@ class BoundingBoxComponent {
       'boundingBox': boundingBox.toJson(),
     };
   }
+
+  /// Parses a bounding box from legacy JSON with x, y, width, and height fields.
+  static BoundingBox parseBoundingBoxFromLegacyJson(Json json) {
+    return BoundingBox.fromJson({
+      'topLeftCorner': {
+        'dx': (json['x'] as num).toDouble(),
+        'dy': (json['y'] as num).toDouble(),
+      },
+      'width': json['width'],
+      'height': json['height'],
+    });
+  }
 }
