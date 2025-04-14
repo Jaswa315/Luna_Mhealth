@@ -13,34 +13,11 @@ import 'package:luna_core/utils/types.dart';
 /// A class that represents a component in the UI.
 /// Components are the building blocks of the UI and can be of different types like text, image, etc.
 /// Components can be rendered on the screen.
-abstract class Component with ChangeNotifier {
-  /// x position of component
-  final double x;
-
-  /// y position of component
-  final double y;
-
-  /// width of component
-  final double width;
-
-  /// height of component
-  final double height;
-
-  /// The position and size of the component represented as a Rect.
-  Rect _bounds;
-
-  /// Getter for bounds as a defensive copy to prevent external modification.
-  Rect get bounds =>
-      Rect.fromLTWH(_bounds.left, _bounds.top, _bounds.width, _bounds.height);
-
+abstract class Component {
   /// Creates a new Component instance.
   Component({
-    required this.x,
-    required this.y,
-    required this.width,
-    required this.height,
     required String name,
-  }) : _bounds = Rect.fromLTWH(x, y, width, height);
+  });
 
   /// Abstract method for rendering the UI.
   /// Should be implemented by subclasses to render the UI for the component.
