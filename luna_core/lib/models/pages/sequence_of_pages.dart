@@ -1,17 +1,17 @@
 import 'package:luna_core/models/pages/page.dart';
 
 class SequenceOfPages {
-  final String _id;
+  final String _name;
   final List<Page> _pages;
 
   SequenceOfPages({
-    required String id,
+    required String name,
     required List<Page> pages,
-  })  : _id = id,
+  })  : _name = name,
         _pages = pages;
 
   /// A unique identifier for the sequence of pages.
-  String get id => _id;
+  String get name => _name;
 
   /// A list of pages in the sequence.
   List<Page> get pages => List.unmodifiable(_pages);

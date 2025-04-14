@@ -12,13 +12,13 @@ void main() {
       page1 = Page(components: []);
       page2 = Page(components: []);
       sequenceOfPages = SequenceOfPages(
-        id: 'sequence1',
+        name: 'sequence1',
         pages: [page1, page2],
       );
     });
 
     test('Should return the correct id', () {
-      expect(sequenceOfPages.id, 'sequence1');
+      expect(sequenceOfPages.name, 'sequence1');
     });
 
     test('Should return the correct list of pages', () {
