@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_core/models/page.dart';
+import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'dart:convert';
 

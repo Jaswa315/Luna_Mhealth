@@ -2,7 +2,7 @@ import 'package:luna_authoring_system/builder/i_builder.dart';
 import 'package:luna_authoring_system/builder/page_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_core/models/page.dart';
+import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/utils/version_manager.dart';
 import 'package:uuid/uuid.dart';
 

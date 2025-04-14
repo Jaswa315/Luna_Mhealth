@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 import 'package:luna_core/utils/types.dart';
-import 'components/component.dart';
+import '../components/component.dart';
 
 /// Represents a page in the application.
 ///
