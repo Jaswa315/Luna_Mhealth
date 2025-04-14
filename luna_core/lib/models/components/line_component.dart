@@ -7,6 +7,7 @@ import 'package:luna_mobile/renderers/line_component_renderer.dart';
 /// Represents a line component that can be used in the Luna mHealth Mobile app.
 /// This component provides a line to separate content sections visually,
 /// with customizable properties like color, thickness, and style.
+/// It relies on `startPoint` and `endPoint` directly for its rendering.
 class LineComponent extends Component {
   /// The start point of the line in percentage coordinates.
   final Point2DPercentage startPoint;
@@ -23,30 +24,11 @@ class LineComponent extends Component {
   /// The style of the line's border.
   final BorderStyle style;
 
-  /// Overrides `x, y, width, height` dynamically based on `startPoint` and `endPoint`.
-  static double _calculateWidth(
-    Point2DPercentage start,
-    Point2DPercentage end,
-  ) {
-    return (end.x - start.x).abs();
-  }
-
-  static double _calculateHeight(
-    Point2DPercentage start,
-    Point2DPercentage end,
-  ) {
-    return (end.y - start.y).abs();
-  }
-
   /// Constructs a new instance of [LineComponent].
   /// Parameters:
   /// - [color]: The color of the line. Defaults to `Color.fromARGB(255, 43, 116, 179)`.
   /// - [thickness]: The thickness of the line in logical pixels. Defaults to 5.0.
   /// - [style]: The border style of the line. Defaults to `BorderStyle.solid`.
-  /// - [x]: The x-coordinate position of the line's top-left corner.
-  /// - [y]: The y-coordinate position of the line's top-left corner.
-  /// - [width]: The width of the line.
-  /// - [height]: The height of the line.
   /// - [startPoint]: The start point of the line in percentage coordinates.
   /// - [endPoint]: The end point of the line in percentage coordinates.
   LineComponent({
@@ -55,13 +37,7 @@ class LineComponent extends Component {
     required this.style,
     required this.startPoint,
     required this.endPoint,
-  }) : super(
-          name: 'LineComponent',
-          x: startPoint.x,
-          y: startPoint.y,
-          width: _calculateWidth(startPoint, endPoint),
-          height: _calculateHeight(startPoint, endPoint),
-        );
+  }) : super(name: 'LineComponent');
 
   /// Renders the line as a [Widget].
   @override
