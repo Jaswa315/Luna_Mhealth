@@ -2,7 +2,7 @@ import 'package:luna_authoring_system/builder/component_builder.dart';
 import 'package:luna_authoring_system/builder/i_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_core/models/components/component.dart';
-import 'package:luna_core/models/page.dart';
+import 'package:luna_core/models/pages/page.dart';
 
 /// PageBuilder is responsible for constructing a [Page] object.
 /// It converts a list of [Shape] objects into corresponding [Component] objects

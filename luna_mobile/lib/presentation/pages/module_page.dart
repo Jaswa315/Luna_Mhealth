@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_core/controllers/navigation_controller.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_core/models/page.dart' as page_model;
+import 'package:luna_core/models/pages/page.dart' as page_model;
 import 'package:luna_mobile/core/services/page_builder_service.dart';
 import 'package:luna_mobile/core/services/page_persistence_service.dart';
 import 'package:luna_mobile/presentation/widgets/module_page_navigation.dart';
