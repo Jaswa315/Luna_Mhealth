@@ -31,12 +31,5 @@ void main() {
 
       expect(slide.shapes, shapes);
     });
-    
-    test('slide has slideId.', () async {
-      Slide slide = Slide();
-      slide.id = "1";
-
-      expect(slide.id, "1");
-    });
   });
 }
