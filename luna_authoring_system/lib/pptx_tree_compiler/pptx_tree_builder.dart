@@ -58,7 +58,7 @@ class PptxTreeBuilder {
         EMU(int.parse(presentationMap[ePresentation][eSlideSize]?[eCY] ?? "0"));
   }
 
-  Map<String, String> _getSldIdToRId() {
+  Map<String, String> _getSlideIdToRelationshipIdMap() {
     Map<String, String> result = {};
     Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
     dynamic slideIdList = presentationMap[ePresentation][eSlideIdList][eSlideId];
@@ -76,7 +76,7 @@ class PptxTreeBuilder {
     return result;
   }
 
-  void _updateRIdToSlideIndexMap(Map<String, int> rIdToSlideIndex, Json relationship) {
+  void _updateRelationshipIdToSlideIndexMap(Map<String, int> rIdToSlideIndex, Json relationship) {
     RegExp regex = RegExp(r'slides/slide(\d+)\.xml');
     Match? match = regex.firstMatch(relationship[eTarget]);
     if (match != null) {
@@ -86,7 +86,7 @@ class PptxTreeBuilder {
     }
   }
 
-  Map<String, int> _getRIdToSlideIndex() {
+  Map<String, int> _getRelationshipIdToSlideIndexMap() {
     Map<String, int> result = {};
     dynamic presentationRelsMap = _pptxLoader
         .getJsonFromPptx("ppt/_rels/presentation.xml.rels")[eRelationships][eRelationship];
@@ -94,12 +94,12 @@ class PptxTreeBuilder {
     if (presentationRelsMap is List) {
       for (Json relationship in presentationRelsMap) {
         if (relationship[eType] == eSlideKey) {
-          _updateRIdToSlideIndexMap(result, relationship);
+          _updateRelationshipIdToSlideIndexMap(result, relationship);
         }
       }
     } else if (presentationRelsMap is Map) {
       if (presentationRelsMap[eRelationship][eType] == eSlideKey) {
-        _updateRIdToSlideIndexMap(result, presentationRelsMap[eRelationship]);
+        _updateRelationshipIdToSlideIndexMap(result, presentationRelsMap[eRelationship]);
       }
     } else {
       throw Exception("Invalid presentation relationships: $presentationRelsMap");
@@ -127,7 +127,7 @@ class PptxTreeBuilder {
     return null;
   }
 
-  Map<String, int> _getSldIdToSlideIndex(Map<String, String> sldIdToRId, Map<String, int> rIdToSlideIndex) {
+  Map<String, int> _getSlideIdToSlideIndexMap(Map<String, String> sldIdToRId, Map<String, int> rIdToSlideIndex) {
     Map<String, int> sldIdToSlideIndex = {};
     for (var entry in sldIdToRId.entries) {
       String sldId = entry.key;
@@ -194,9 +194,9 @@ class PptxTreeBuilder {
             List<int>.generate(_getSlideCount(), (index) => index + 1),
       };
     } else {
-      Map<String, String> sldIdToRId = _getSldIdToRId();
-      Map<String, int> rIdToSlideIndex = _getRIdToSlideIndex();
-      Map<String, int> sldIdToSlideIndex = _getSldIdToSlideIndex(sldIdToRId, rIdToSlideIndex);
+      Map<String, String> sldIdToRId = _getSlideIdToRelationshipIdMap();
+      Map<String, int> rIdToSlideIndex = _getRelationshipIdToSlideIndexMap();
+      Map<String, int> sldIdToSlideIndex = _getSlideIdToSlideIndexMap(sldIdToRId, rIdToSlideIndex);
       _pptxTree.section = _getSection(sectionMap[eP14Section], sldIdToSlideIndex);
     }
   }
