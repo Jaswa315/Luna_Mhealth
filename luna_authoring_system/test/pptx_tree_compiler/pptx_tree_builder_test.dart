@@ -2,6 +2,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart'
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,8 +54,8 @@ void main() {
     });
 
     test('The name of the section is parsed as default name if there is no section configured.', () async {
-      expect(pptxTree.section, isA<Map<String, List<int>>>());
-      expect(pptxTree.section, {PptxTree.defaultSectionName: [1]});
+      expect(pptxTree.section, isA<Section>());
+      expect(pptxTree.section.value, {Section.defaultSectionName: [1]});
     });
   });
 
@@ -110,8 +111,8 @@ void main() {
     PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
     
     test('Section is parsed.', () async {
-      expect(pptxTree.section, isA<Map<String, List<int>>>());
-      expect(pptxTree.section, {
+      expect(pptxTree.section, isA<Section>());
+      expect(pptxTree.section.value, {
         "Default Section": [1],
         "Section 2": [2, 3, 4],
         "Section 3": [],

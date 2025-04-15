@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
+import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/units/emu.dart';
 
@@ -52,16 +53,16 @@ void main() {
     test('slides can be updated with a list of slides', () async {
       PptxTree pptxTree = PptxTree();
 
-      Map<String, List<int>> section = {
+      Section section = Section({
         'Symptom1': [1, 2, 3],
         'Symptom2': [4, 5, 6],
-      };
+      });
 
       pptxTree.section = section;
 
-      expect(pptxTree.section, section);
-      expect(pptxTree.section['Symptom1'], [1, 2, 3]);
-      expect(pptxTree.section['Symptom2'], [4, 5, 6]);
+      expect(pptxTree.section, isA<Section>());
+      expect(pptxTree.section.value['Symptom1'], [1, 2, 3]);
+      expect(pptxTree.section.value['Symptom2'], [4, 5, 6]);
     });
 
     test('slides can be updated with a list of slides', () async {

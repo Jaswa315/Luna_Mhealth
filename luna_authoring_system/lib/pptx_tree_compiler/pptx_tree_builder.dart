@@ -8,6 +8,7 @@ import 'package:luna_authoring_system/pptx_data_objects/alpha.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
+import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
@@ -166,7 +167,7 @@ class PptxTreeBuilder {
     return result;
   }
 
-  Map<String, List<int>> _getSection(dynamic sectionMap, Map<String, int> sldIdToSlideIndex) {
+  Section _getSection(dynamic sectionMap, Map<String, int> sldIdToSlideIndex) {
     Map<String, List<int>> result = {};
 
     if (sectionMap is List) {
@@ -179,7 +180,7 @@ class PptxTreeBuilder {
       throw Exception("Invalid section map: $sectionMap");
     }
 
-    return result;
+    return Section(result);
   }
 
   void _updateSection() {
@@ -189,10 +190,10 @@ class PptxTreeBuilder {
     if (sectionMap == null) {
       // If there is no section, create a default section with all slides.
       // Add 1 as the slide index starts from 1.
-      _pptxTree.section = {
-        PptxTree.defaultSectionName:
+      _pptxTree.section = Section({
+        Section.defaultSectionName:
             List<int>.generate(_getSlideCount(), (index) => index + 1),
-      };
+      });
     } else {
       Map<String, String> sldIdToRId = _getSlideIdToRelationshipIdMap();
       Map<String, int> rIdToSlideIndex = _getRelationshipIdToSlideIndexMap();
