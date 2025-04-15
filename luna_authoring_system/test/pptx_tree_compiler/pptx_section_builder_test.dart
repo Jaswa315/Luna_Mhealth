@@ -6,7 +6,7 @@ import 'package:luna_core/units/emu.dart';
 import 'dart:io';
 
 void main() {
-  group('Tests for PptxSectionBuilder using Sections.pptx', () {
+  group('Tests for PptxSectionBuilder using a pptx that has multiple sections.', () {
     final pptxFile = File('test/test_assets/Sections.pptx');
     PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
     PptxSectionBuilder pptxSectionBuilder = PptxSectionBuilder(pptxLoader);
@@ -23,7 +23,7 @@ void main() {
     });
   });
 
-  group('Tests for PptxSectionBuilder using Sections.pptx', () {
+  group('Tests for PptxSectionBuilder using a pptx file that has no section.', () {
     final pptxFile = File('test/test_assets/A line.pptx');
     PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
     PptxSectionBuilder pptxSectionBuilder = PptxSectionBuilder(pptxLoader);
