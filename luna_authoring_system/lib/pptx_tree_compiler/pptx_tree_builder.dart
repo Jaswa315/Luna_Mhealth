@@ -28,7 +28,6 @@ import 'package:luna_core/utils/types.dart';
 class PptxTreeBuilder {
   late PptxXmlToJsonConverter _pptxLoader;
   late PptxSectionBuilder _pptxSectionParser;
-  late final _slideCount;
 
   PptxTree _pptxTree = PptxTree();
 
