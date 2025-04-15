@@ -1,5 +1,5 @@
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_section_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/units/emu.dart';

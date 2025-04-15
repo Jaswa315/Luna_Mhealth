@@ -1,6 +1,6 @@
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_constants.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// =================================================================================================

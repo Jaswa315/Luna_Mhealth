@@ -12,9 +12,9 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_section_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
