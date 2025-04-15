@@ -12,39 +12,29 @@ void main() {
   group('Tests for PptxTreeBuilder using A line.pptx', () {
     final pptxFile = File('test/test_assets/A line.pptx');
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
-
+    PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
     test('parsePptx method initialzes title.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
       expect(pptxTree.title, "A line");
     });
 
     test('parsePptx method initialzes author.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.author, "Andrew Nah");
     });
     test('parsePptx method initialzes width.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.width, isA<EMU>());
       expect(pptxTree.width.value, 12192000);
     });
 
     test('parsePptx method initialzes height.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.height, isA<EMU>());
       expect(pptxTree.height.value, 6858000);
     });
 
     test('parsePptx method initialzes slides.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.slides, isA<List<Slide>>());
     });
 
     test('A line is parsed', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
       ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
 
       expect(cShape.type, ShapeType.connection);
@@ -57,15 +47,12 @@ void main() {
 
     ///testing in a pptx file where flipV = 1
     test('flipV attribute is correctly parsed for connection shapes', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
       ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
 
       expect(cShape.isFlippedVertically, isTrue);
     });
 
     test('The name of the section is parsed as default name if there is no section configured.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.section, isA<Map<String, List<int>>>());
       expect(pptxTree.section, {PptxTree.defaultSectionName: [1]});
     });
@@ -75,34 +62,27 @@ void main() {
       () {
     final pptxFile = File('test/test_assets/Empty slide with slideLayout.pptx');
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
+    PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
 
     test('parsePptx method initialzes author.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
 
       expect(pptxTree.author, "Jon");
     });
     test('parsePptx method initialzes width.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.width, isA<EMU>());
       expect(pptxTree.width.value, 4114800);
     });
 
     test('parsePptx method initialzes height.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.height, isA<EMU>());
       expect(pptxTree.height.value, 7315200);
     });
 
     test('parsePptx method initialzes slides.', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.slides, isA<List<Slide>>());
     });
 
     test('A Red line is parsed', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
       ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
 
       expect(cShape.type, ShapeType.connection);
@@ -118,7 +98,6 @@ void main() {
 
     ///testing in a pptx file where flipV = 1
     test('flipV attribute is correctly parsed for connection shapes', () async {
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
       ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
 
       expect(cShape.isFlippedVertically, isFalse);
@@ -126,11 +105,11 @@ void main() {
   });
 
   group('Tests for PptxTreeBuilder using Sections.pptx', () {
+    final pptxFile = File('test/test_assets/Sections.pptx');
+    PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
+    PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
+    
     test('Section is parsed.', () async {
-      final pptxFile = File('test/test_assets/Sections.pptx');
-      PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
-      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-
       expect(pptxTree.section, isA<Map<String, List<int>>>());
       expect(pptxTree.section, {
         "Default Section": [1],
