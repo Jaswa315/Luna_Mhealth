@@ -27,13 +27,13 @@ import 'package:luna_core/utils/types.dart';
 /// It will only parse the required info to form a luna module.
 class PptxTreeBuilder {
   late PptxXmlToJsonConverter _pptxLoader;
-  late PptxSectionBuilder _pptxSectionParser;
+  late PptxSectionBuilder _pptxSectionBuilder;
 
   PptxTree _pptxTree = PptxTree();
 
   PptxTreeBuilder(File pptxFile) {
     _pptxLoader = PptxXmlToJsonConverter(pptxFile);
-    _pptxSectionParser = PptxSectionBuilder(_pptxLoader);
+    _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader);
   }
 
   void _updateTitle() {
@@ -63,7 +63,7 @@ class PptxTreeBuilder {
   }
 
   void _updateSection() {
-    _pptxTree.section = _pptxSectionParser.getSection();
+    _pptxTree.section = _pptxSectionBuilder.getSection();
   }
 
   int _getSlideCount() {
