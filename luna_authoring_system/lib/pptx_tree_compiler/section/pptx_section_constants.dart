@@ -1,5 +1,5 @@
 /// =================================================================================================
-/// XML ELEMENTS CONSTANTS
+/// XML ELEMENTS CONSTANTS FOR SECTION BUILDER
 /// =================================================================================================
 /// This file contains the XML element constants used in the PptxSectionBuilder class.
 /// 
