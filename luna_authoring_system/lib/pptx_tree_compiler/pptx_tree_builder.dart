@@ -58,6 +58,149 @@ class PptxTreeBuilder {
         EMU(int.parse(presentationMap[ePresentation][eSlideSize]?[eCY] ?? "0"));
   }
 
+  Map<String, String> _getSldIdToRId() {
+    Map<String, String> result = {};
+    Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
+    dynamic slideIdList = presentationMap[ePresentation][eSlideIdList][eSlideId];
+
+    if (slideIdList is List) {
+      for (var element in slideIdList) {
+        result[element[eSldId]] = element[eRId];
+      }
+    } else if (slideIdList is Json) {
+      result[slideIdList[eSldId]] = slideIdList[eRId];
+    } else {
+      throw Exception("Invalid slideIdList format: $slideIdList. Expected List or Map.");
+    }
+
+    return result;
+  }
+
+  void _updateRIdToSlideIndexMap(Map<String, int> rIdToSlideIndex, Json relationship) {
+    RegExp regex = RegExp(r'slides/slide(\d+)\.xml');
+    Match? match = regex.firstMatch(relationship[eTarget]);
+    if (match != null) {
+      rIdToSlideIndex[relationship[eId]] = int.parse(match.group(1)!);
+    } else {
+      throw Exception("Slide index not found for this relationship: $relationship");
+    }
+  }
+
+  Map<String, int> _getRIdToSlideIndex() {
+    Map<String, int> result = {};
+    dynamic presentationRelsMap = _pptxLoader
+        .getJsonFromPptx("ppt/_rels/presentation.xml.rels")[eRelationships][eRelationship];
+
+    if (presentationRelsMap is List) {
+      for (Json relationship in presentationRelsMap) {
+        if (relationship[eType] == eSlideKey) {
+          _updateRIdToSlideIndexMap(result, relationship);
+        }
+      }
+    } else if (presentationRelsMap is Map) {
+      if (presentationRelsMap[eRelationship][eType] == eSlideKey) {
+        _updateRIdToSlideIndexMap(result, presentationRelsMap[eRelationship]);
+      }
+    } else {
+      throw Exception("Invalid presentation relationships: $presentationRelsMap");
+    }
+
+    return result;
+  }
+
+  dynamic _getSectionMap(Json presentationMap) {
+    dynamic extensions = presentationMap[ePresentation][eExtensionList][eExtension];
+    if (extensions is List) {
+      for (Json extension in extensions) {
+        if (extension[eUri] == eSectionKey) {
+          return extension[eP14SectionList];
+        }
+      }
+    } else if (extensions is Map) {
+      if (extensions[eUri] == eSectionKey) {
+        return extensions[eP14SectionList];
+      }
+    } else {
+      throw Exception("Invalid presentation map: $presentationMap");
+    }
+
+    return null;
+  }
+
+  Map<String, int> _getSldIdToSlideIndex(Map<String, String> sldIdToRId, Map<String, int> rIdToSlideIndex) {
+    Map<String, int> sldIdToSlideIndex = {};
+    for (var entry in sldIdToRId.entries) {
+      String sldId = entry.key;
+      String rId = entry.value;
+
+      if (rIdToSlideIndex.containsKey(rId)) {
+        sldIdToSlideIndex[sldId] = rIdToSlideIndex[rId]!;
+      } else {
+        throw Exception("Slide ID $sldId does not have a corresponding slide index.");
+      }
+    }
+
+    return sldIdToSlideIndex;
+  } 
+
+  List<int> _getSlideIdsFromSectionMap(dynamic slideIdListMap, Map<String, int> sldIdToSlideIndex) {
+    List<int> result = [];
+
+    if (slideIdListMap == "") {
+      // an empty list means no slides in this section.
+      return result;
+    }
+
+    dynamic slideIds = slideIdListMap[eP14SlideId];
+
+    if (slideIds is List) {
+      for (Json slideId in slideIds) {
+        result.add(sldIdToSlideIndex[slideId[eSldId]]!);
+      }
+    } else if (slideIds is Map) {
+      result.add(sldIdToSlideIndex[slideIds[eSldId]]!);
+    } else {
+      throw Exception("Invalid slideIdList map: $slideIdListMap");
+    }
+
+    return result;
+  }
+
+  Map<String, List<int>> _getSection(dynamic sectionMap, Map<String, int> sldIdToSlideIndex) {
+    Map<String, List<int>> result = {};
+
+    if (sectionMap is List) {
+      for (Json section in sectionMap) {
+        result[section[eName]] = _getSlideIdsFromSectionMap(section[eP14SlideIdList], sldIdToSlideIndex);
+      }
+    } else if (sectionMap is Map) {
+      result[sectionMap[eName]] = _getSlideIdsFromSectionMap(sectionMap[eP14SlideIdList], sldIdToSlideIndex);
+    } else {
+      throw Exception("Invalid section map: $sectionMap");
+    }
+
+    return result;
+  }
+
+  void _updateSection() {
+    Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
+    dynamic sectionMap = _getSectionMap(presentationMap);
+
+    if (sectionMap == null) {
+      // If there is no section, create a default section with all slides.
+      // Add 1 as the slide index starts from 1.
+      _pptxTree.section = {
+        PptxTree.defaultSectionName:
+            List<int>.generate(_getSlideCount(), (index) => index + 1),
+      };
+    } else {
+      Map<String, String> sldIdToRId = _getSldIdToRId();
+      Map<String, int> rIdToSlideIndex = _getRIdToSlideIndex();
+      Map<String, int> sldIdToSlideIndex = _getSldIdToSlideIndex(sldIdToRId, rIdToSlideIndex);
+      _pptxTree.section = _getSection(sectionMap[eP14Section], sldIdToSlideIndex);
+    }
+  }
+
   int _getSlideCount() {
     Json appMap = _pptxLoader.getJsonFromPptx("docProps/app.xml");
 
@@ -201,6 +344,7 @@ class PptxTreeBuilder {
     _updateAuthor();
     _updateWidth();
     _updateHeight();
+    _updateSection();
     _updateSlides();
 
     return _pptxTree;

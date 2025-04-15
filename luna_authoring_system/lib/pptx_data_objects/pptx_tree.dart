@@ -7,6 +7,8 @@ import 'package:luna_core/units/emu.dart';
 /// For more information, check the domain diagram at this url.
 /// https://app.diagrams.net/#G1oO_dalj6fEq2QAfdHzyQPQiMiSi9CpXE#%7B%22pageId%22%3A%22JfLex2GAHqd8IyoLERXG%22%7D
 class PptxTree {
+  static const String defaultSectionName = "Default Section";
+  
   late String title;
   late String author;
 

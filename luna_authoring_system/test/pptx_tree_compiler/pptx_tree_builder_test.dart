@@ -62,6 +62,13 @@ void main() {
 
       expect(cShape.isFlippedVertically, isTrue);
     });
+
+    test('The name of the section is parsed as default name if there is no section configured.', () async {
+      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
+
+      expect(pptxTree.section, isA<Map<String, List<int>>>());
+      expect(pptxTree.section, {PptxTree.defaultSectionName: [1]});
+    });
   });
 
   group('Tests for PptxTreeBuilder using Empty slide with slideLayout.pptx',
@@ -115,6 +122,22 @@ void main() {
       ConnectionShape cShape = pptxTree.slides[0].shapes![0] as ConnectionShape;
 
       expect(cShape.isFlippedVertically, isFalse);
+    });
+  });
+
+  group('Tests for PptxTreeBuilder using Sections.pptx', () {
+    test('Section is parsed.', () async {
+      final pptxFile = File('test/test_assets/Sections.pptx');
+      PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
+      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
+
+      expect(pptxTree.section, isA<Map<String, List<int>>>());
+      expect(pptxTree.section, {
+        "Default Section": [1],
+        "Section 2": [2, 3, 4],
+        "Section 3": [],
+        "Section 4": [5, 6, 7]
+      });
     });
   });
 }
