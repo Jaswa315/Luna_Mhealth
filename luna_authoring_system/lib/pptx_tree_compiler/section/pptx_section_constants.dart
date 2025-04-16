@@ -9,12 +9,6 @@ const String ePresentation = 'p:presentation';
 /// The XML element for uri under extension tag.
 const String eUri = '_uri';
 
-/// The XML element for the properties within the application map.
-const String eProperties = 'Properties';
-
-/// The XML element for the Slides meta data.
-const String eSlides = 'Slides';
-
 /// The XML element for the slide Id list in presentation properties.
 const String eSlideIdList = 'p:sldIdLst';
 
