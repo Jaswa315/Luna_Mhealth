@@ -18,12 +18,6 @@ const String ePresentation = 'p:presentation';
 /// The XML element for the size of the presentation.
 const String eSlideSize = 'p:sldSz';
 
-/// The XML element for the properties within the application map.
-const String eProperties = 'Properties';
-
-/// The XML element for the Slides meta data.
-const String eSlides = 'Slides';
-
 /// The XML element for the slide within a PowerPoint slide.
 const String eSlide = 'p:sld';
 

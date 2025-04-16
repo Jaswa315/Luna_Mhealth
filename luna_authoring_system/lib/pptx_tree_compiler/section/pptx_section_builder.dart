@@ -1,14 +1,16 @@
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// This class parses presentation.xml file and presentation.xml.rels file, and
 /// is capable of creating Section object that represents section in PowerPoint file.
 class PptxSectionBuilder {
+  PptxXmlToJsonConverter _pptxLoader;
+  PptxSlideCountParser _pptxSlideCountParser;
 
-  late PptxXmlToJsonConverter _pptxLoader;
-  PptxSectionBuilder(this._pptxLoader);
+  PptxSectionBuilder(this._pptxLoader, this._pptxSlideCountParser);
 
   Map<String, String> _getSlideIdToRelationshipIdMap() {
     Map<String, String> result = {};
@@ -134,18 +136,12 @@ class PptxSectionBuilder {
     return Section(result);
   }
 
-  int _getSlideCount() {
-    Json appMap = _pptxLoader.getJsonFromPptx("docProps/app.xml");
-
-    return int.parse(appMap[eProperties][eSlides]);
-  }
-
   Section _getDefaultSection() {
     // If there is no section, create a default section with all slides.
     // Add 1 as the slide index starts from 1.
     return Section({
       Section.defaultSectionName:
-          List<int>.generate(_getSlideCount(), (index) => index + 1),
+          List<int>.generate(_pptxSlideCountParser.slideCount, (index) => index + 1),
     });
   }
   

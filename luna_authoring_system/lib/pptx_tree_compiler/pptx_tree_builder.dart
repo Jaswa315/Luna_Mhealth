@@ -15,6 +15,7 @@ import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
@@ -28,12 +29,14 @@ import 'package:luna_core/utils/types.dart';
 class PptxTreeBuilder {
   late PptxXmlToJsonConverter _pptxLoader;
   late PptxSectionBuilder _pptxSectionBuilder;
+  late PptxSlideCountParser _pptxSlideCountParser;
 
   PptxTree _pptxTree = PptxTree();
 
   PptxTreeBuilder(File pptxFile) {
     _pptxLoader = PptxXmlToJsonConverter(pptxFile);
-    _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader);
+    _pptxSlideCountParser = PptxSlideCountParser(_pptxLoader);
+    _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
   }
 
   void _updateTitle() {
@@ -64,12 +67,6 @@ class PptxTreeBuilder {
 
   void _updateSection() {
     _pptxTree.section = _pptxSectionBuilder.getSection();
-  }
-
-  int _getSlideCount() {
-    Json appMap = _pptxLoader.getJsonFromPptx("docProps/app.xml");
-
-    return int.parse(appMap[eProperties][eSlides]);
   }
 
   int _getSlideLayoutIndex(int slideIndex) {
@@ -187,7 +184,7 @@ class PptxTreeBuilder {
 
   void _updateSlides() {
     List<Slide> slides = [];
-    for (int i = 1; i <= _getSlideCount(); i++) {
+    for (int i = 1; i <= _pptxSlideCountParser.slideCount; i++) {
       Slide slide = Slide();
       // add slide layout elements first.
       slide.shapes = _parseShapeTree(_pptxLoader.getJsonFromPptx(
