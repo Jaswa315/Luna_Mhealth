@@ -6,12 +6,18 @@ import 'package:luna_core/utils/types.dart';
 /// The number of slide count is used for forming default section,
 /// and iterating through the slides to parse the slide content.
 class PptxSlideCountParser {
-  late PptxXmlToJsonConverter _pptxLoader;
-  PptxSlideCountParser(this._pptxLoader);
+  PptxXmlToJsonConverter _pptxLoader;
+  late final int _slideCount;
 
-  int getSlideCount() {
+  PptxSlideCountParser(this._pptxLoader) {
+    _slideCount = _getSlideCount();
+  }
+
+  int _getSlideCount() {
     Json appMap = _pptxLoader.getJsonFromPptx("docProps/app.xml");
 
     return int.parse(appMap[eProperties][eSlides]);
   }
+
+  int get slideCount => _slideCount;
 }
