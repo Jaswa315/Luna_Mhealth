@@ -3,13 +3,8 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_conver
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_constants.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// =================================================================================================
-/// PPTX PptxSectionBuilder CLASS
-/// =================================================================================================
-
-/// PptxSectionBuilder class parses presentation.xml file and presentation.xml.rels file.
-/// This class is capable of creating Section object that represents section in PowerPoint file.
-/// It will only parse the required info to form a luna module.
+/// This class parses presentation.xml file and presentation.xml.rels file, and
+/// is capable of creating Section object that represents section in PowerPoint file.
 class PptxSectionBuilder {
 
   late PptxXmlToJsonConverter _pptxLoader;
