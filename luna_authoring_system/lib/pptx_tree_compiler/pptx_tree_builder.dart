@@ -6,6 +6,7 @@ import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/document_property/pptx_document_property_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
@@ -23,6 +24,7 @@ import 'package:luna_core/utils/types.dart';
 /// It will only parse the required info to form a luna module.
 class PptxTreeBuilder {
   late PptxXmlToJsonConverter _pptxLoader;
+  late PptxDocumentPropertyParser _pptxDocumentPropertyParser;
   late PptxSectionBuilder _pptxSectionBuilder;
   late PptxSlideCountParser _pptxSlideCountParser;
   late PptxConnectionShapeBuilder _pptxConnectionShapeBuilder;
@@ -32,6 +34,7 @@ class PptxTreeBuilder {
 
   PptxTreeBuilder(File pptxFile) {
     _pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    _pptxDocumentPropertyParser = PptxDocumentPropertyParser(_pptxLoader);
     _pptxSlideCountParser = PptxSlideCountParser(_pptxLoader);
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
     _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder();
@@ -39,13 +42,11 @@ class PptxTreeBuilder {
   }
 
   void _updateTitle() {
-    Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
-    _pptxTree.title = coreMap[eCoreProperties]?[eTitle] ?? "Untitled";
+    _pptxTree.title = _pptxDocumentPropertyParser.title;
   }
 
   void _updateAuthor() {
-    Json coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
-    _pptxTree.author = coreMap[eCoreProperties]?[eAuthor] ?? "Unknown Author";
+    _pptxTree.author = _pptxDocumentPropertyParser.author;
   }
 
   void _updateWidth() {

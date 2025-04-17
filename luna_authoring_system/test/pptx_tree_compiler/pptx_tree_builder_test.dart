@@ -67,7 +67,7 @@ void main() {
 
     test('parsePptx method initialzes author.', () async {
 
-      expect(pptxTree.author, "Jon");
+      expect(pptxTree.author, "An Author Name");
     });
     test('parsePptx method initialzes width.', () async {
       expect(pptxTree.width, isA<EMU>());
