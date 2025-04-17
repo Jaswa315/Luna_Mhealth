@@ -10,6 +10,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_consta
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout_relationship/pptx_slide_layout_relationship_parser.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
@@ -25,6 +26,7 @@ class PptxTreeBuilder {
   late PptxSectionBuilder _pptxSectionBuilder;
   late PptxSlideCountParser _pptxSlideCountParser;
   late PptxConnectionShapeBuilder _pptxConnectionShapeBuilder;
+  late PptxSlideLayoutRelationshipParser _pptxSlideLayoutRelationshipParser;
 
   PptxTree _pptxTree = PptxTree();
 
@@ -33,6 +35,7 @@ class PptxTreeBuilder {
     _pptxSlideCountParser = PptxSlideCountParser(_pptxLoader);
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
     _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder();
+    _pptxSlideLayoutRelationshipParser = PptxSlideLayoutRelationshipParser(_pptxLoader);
   }
 
   void _updateTitle() {
@@ -63,46 +66,15 @@ class PptxTreeBuilder {
     _pptxTree.section = _pptxSectionBuilder.getSection();
   }
 
-  int _getSlideLayoutIndex(int slideIndex) {
-    // Every slide has a .rels file that contains the relationships.
-    dynamic slideRelationships = _pptxLoader.getJsonFromPptx(
-        "ppt/slides/_rels/slide$slideIndex.xml.rels")[eRelationships];
-
-    if (slideRelationships is List) {
-      for (Json relationship in slideRelationships) {
-        if (relationship[eType] == eSlideLayoutKey) {
-          return _parseSlideLayoutTargetString(relationship[eTarget]);
-        }
-      }
-    } else if (slideRelationships is Map) {
-      if (slideRelationships[eRelationship][eType] == eSlideLayoutKey) {
-        return _parseSlideLayoutTargetString(
-            slideRelationships[eRelationship][eTarget]);
-      }
-    } else {
-      throw Exception(
-          "Invalid slide relationships format: $slideRelationships");
-    }
-    throw Exception(
-        "Slide layout not found in ppt/slides/_rels/slide$slideIndex.xml.rels");
-  }
-
-  int _parseSlideLayoutTargetString(String target) {
-    RegExp regex = RegExp(r'slideLayout(\d+)\.xml');
-    Match? match = regex.firstMatch(target);
-    if (match != null) {
-      return int.parse(match.group(1)!);
-    }
-    throw Exception("Invalid slide layout target string: $target");
-  }
-
   List<Shape> _parseShapeTree(Json shapeTree) {
     List<Shape> shapes = [];
 
     shapeTree.forEach((key, value) {
       switch (key) {
         case eConnectionShape:
-          shapes.addAll(_pptxConnectionShapeBuilder.getConnectionShapes(shapeTree[key]));
+          shapes.addAll(
+            _pptxConnectionShapeBuilder.getConnectionShapes(shapeTree[key]),
+          );
           break;
       }
     });
@@ -115,14 +87,19 @@ class PptxTreeBuilder {
     for (int i = 1; i <= _pptxSlideCountParser.slideCount; i++) {
       Slide slide = Slide();
       // add slide layout elements first.
-      slide.shapes = _parseShapeTree(_pptxLoader.getJsonFromPptx(
-              "ppt/slideLayouts/slideLayout${_getSlideLayoutIndex(i)}.xml")[
-          eSlideLayoutData][eCommonSlideData][eShapeTree]);
+      slide.shapes = _parseShapeTree(
+        _pptxLoader.getJsonFromPptx(
+          "ppt/slideLayouts/slideLayout${_pptxSlideLayoutRelationshipParser.getSlideLayoutIndex(i)}.xml",
+        )[eSlideLayoutData][eCommonSlideData][eShapeTree],
+      );
 
       // add slide elements afterwards.
       slide.shapes?.addAll(_parseShapeTree(
-          _pptxLoader.getJsonFromPptx("ppt/slides/slide$i.xml")[eSlide]
-              [eCommonSlideData][eShapeTree]));
+        _pptxLoader.getJsonFromPptx(
+          "ppt/slides/slide$i.xml",
+        )[eSlide][eCommonSlideData][eShapeTree],
+      ));
+
       slides.add(slide);
     }
 
