@@ -21,7 +21,7 @@ void main() {
       List<Shape> connectionShapes =
           pptxConnectionShapeBuilder.getConnectionShapes(
               await pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[eSlide]
-                  [eCommonSlideData][eShapeTree]);
+                  [eCommonSlideData][eShapeTree][eConnectionShape]);
       ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
 
       expect(cShape.type, ShapeType.connection);
@@ -42,10 +42,10 @@ void main() {
     PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
 
     test('A Red line is parsed', () async {
-      List<Shape> connectionShapes =
-          pptxConnectionShapeBuilder.getConnectionShapes(
-              await pptxLoader.getJsonFromPptx("ppt/slideLayouts/slideLayout13.xml")[eSlideLayoutData]
-                  [eCommonSlideData][eShapeTree]);
+      List<Shape> connectionShapes = pptxConnectionShapeBuilder
+          .getConnectionShapes(await pptxLoader.getJsonFromPptx(
+                  "ppt/slideLayouts/slideLayout13.xml")[eSlideLayoutData]
+              [eCommonSlideData][eShapeTree][eConnectionShape]);
       ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
 
       expect(cShape.type, ShapeType.connection);

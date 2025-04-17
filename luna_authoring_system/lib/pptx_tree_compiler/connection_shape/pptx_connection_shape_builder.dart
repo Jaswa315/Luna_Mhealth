@@ -74,18 +74,18 @@ class PptxConnectionShapeBuilder {
     );
   }
 
-  List<Shape> getConnectionShapes(Json shapeTree) {
+  List<Shape> getConnectionShapes(dynamic shapeTree) {
     List<Shape> shapes = [];
 
-    if (shapeTree[eConnectionShape] is List) {
-      for (Json connectionShape in shapeTree[eConnectionShape]) {
+    if (shapeTree is List) {
+      for (Json connectionShape in shapeTree) {
         shapes.add(_buildConnectionShape(connectionShape));
       }
-    } else if (shapeTree[eConnectionShape] is Map) {
-      shapes.add(_buildConnectionShape(shapeTree[eConnectionShape]));
+    } else if (shapeTree is Map) {
+      shapes.add(_buildConnectionShape(shapeTree as Json));
     } else {
       throw Exception(
-        "Invalid connection shape format: ${shapeTree[eConnectionShape]}",
+        "Invalid connection shape format: $shapeTree",
       );
     }
 
