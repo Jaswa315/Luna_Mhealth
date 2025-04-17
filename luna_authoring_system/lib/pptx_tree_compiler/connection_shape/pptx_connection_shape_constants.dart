@@ -3,9 +3,6 @@
 /// =================================================================================================
 /// This file contains the XML element constants used in the PptxConnectionShapeBuilder class.
 ///
-/// The XML element for the connection shape element in a PowerPoint presentation.
-const String eConnectionShape = 'p:cxnSp';
-
 /// The XML element for the offset in the bounding box location.
 const String eOffset = 'a:off';
 
