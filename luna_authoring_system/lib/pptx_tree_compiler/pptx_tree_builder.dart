@@ -9,10 +9,10 @@ import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_c
 import 'package:luna_authoring_system/pptx_tree_compiler/document_property/pptx_document_property_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/presentation_property/pptx_presentation_property_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout_relationship/pptx_slide_layout_relationship_parser.dart';
-import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// =================================================================================================
@@ -25,6 +25,7 @@ import 'package:luna_core/utils/types.dart';
 class PptxTreeBuilder {
   late PptxXmlToJsonConverter _pptxLoader;
   late PptxDocumentPropertyParser _pptxDocumentPropertyParser;
+  late PptxPresentationPropertyParser _pptxPresentationPropertyParser;
   late PptxSectionBuilder _pptxSectionBuilder;
   late PptxSlideCountParser _pptxSlideCountParser;
   late PptxConnectionShapeBuilder _pptxConnectionShapeBuilder;
@@ -35,6 +36,7 @@ class PptxTreeBuilder {
   PptxTreeBuilder(File pptxFile) {
     _pptxLoader = PptxXmlToJsonConverter(pptxFile);
     _pptxDocumentPropertyParser = PptxDocumentPropertyParser(_pptxLoader);
+    _pptxPresentationPropertyParser = PptxPresentationPropertyParser(_pptxLoader);
     _pptxSlideCountParser = PptxSlideCountParser(_pptxLoader);
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
     _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder();
@@ -50,17 +52,11 @@ class PptxTreeBuilder {
   }
 
   void _updateWidth() {
-    Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
-
-    _pptxTree.width =
-        EMU(int.parse(presentationMap[ePresentation][eSlideSize]?[eCX] ?? "0"));
+    _pptxTree.width = _pptxPresentationPropertyParser.width;
   }
 
   void _updateHeight() {
-    Json presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
-
-    _pptxTree.height =
-        EMU(int.parse(presentationMap[ePresentation][eSlideSize]?[eCY] ?? "0"));
+    _pptxTree.height = _pptxPresentationPropertyParser.height;
   }
 
   void _updateSection() {
