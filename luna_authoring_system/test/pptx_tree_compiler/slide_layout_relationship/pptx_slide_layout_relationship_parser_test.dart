@@ -8,8 +8,7 @@ import 'package:luna_core/units/emu.dart';
 import 'dart:io';
 
 void main() {
-  group('Tests for PptxSectionBuilder using a pptx that has multiple sections.',
-      () {
+  group('Tests for PptxSlideLayoutRelationshipParser.', () {
     final pptxFile = File('test/test_assets/Sections.pptx');
     PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
     PptxSlideLayoutRelationshipParser pptxSlideLayoutRelationshipParser =
