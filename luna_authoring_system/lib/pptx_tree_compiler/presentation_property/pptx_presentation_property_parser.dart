@@ -10,7 +10,6 @@ class PptxPresentationPropertyParser {
   late final Json _presentationMap;
   late final EMU _width;
   late final EMU _height;
-  static const String defaultLEMU = "0";
 
   PptxPresentationPropertyParser(this._pptxLoader) {
     _presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
@@ -19,11 +18,23 @@ class PptxPresentationPropertyParser {
   }
 
   EMU _parseWidth() {
-    return EMU(int.parse(_presentationMap[ePresentation][eSlideSize]?[eCX] ?? defaultLEMU));
+    try {
+      return EMU(int.parse(_presentationMap[ePresentation][eSlideSize]?[eCX]));
+    } catch (e) {
+      throw Exception(
+        "Error parsing slide width in presentationMap: ${_presentationMap[ePresentation][eSlideSize]}",
+      );
+    }
   }
 
   EMU _parseHeight() {
-    return EMU(int.parse(_presentationMap[ePresentation][eSlideSize]?[eCY] ?? defaultLEMU));
+    try {
+      return EMU(int.parse(_presentationMap[ePresentation][eSlideSize]?[eCY]));
+    } catch (e) {
+      throw Exception(
+        "Error parsing slide height in presentationMap: ${_presentationMap[ePresentation][eSlideSize]}",
+      );
+    }
   }
 
   EMU get width => _width;
