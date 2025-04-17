@@ -9,16 +9,12 @@ void main() {
     late Page page2;
 
     setUp(() {
+      // Initialize test data
       page1 = Page(components: []);
       page2 = Page(components: []);
       sequenceOfPages = SequenceOfPages(
-        name: 'sequence1',
         pages: [page1, page2],
       );
-    });
-
-    test('Should return the correct id', () {
-      expect(sequenceOfPages.name, 'sequence1');
     });
 
     test('Should return the correct list of pages', () {
@@ -56,7 +52,7 @@ void main() {
       final page3 = Page(components: []);
       sequenceOfPages.removePage(page3);
 
-      expect(sequenceOfPages.pages.length, 2);
+      expect(sequenceOfPages.pages.length, 2); // No change
     });
   });
 }

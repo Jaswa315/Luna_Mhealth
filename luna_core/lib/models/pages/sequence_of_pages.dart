@@ -1,17 +1,13 @@
 import 'package:luna_core/models/pages/page.dart';
 
+/// Represents a sequence of pages in the application.
 class SequenceOfPages {
-  final String _name;
   final List<Page> _pages;
 
+  /// Constructs a new [SequenceOfPages] with a list of pages.
   SequenceOfPages({
-    required String name,
     required List<Page> pages,
-  })  : _name = name,
-        _pages = pages;
-
-  /// A unique identifier for the sequence of pages.
-  String get name => _name;
+  }) : _pages = pages;
 
   /// A list of pages in the sequence.
   List<Page> get pages => List.unmodifiable(_pages);
@@ -21,7 +17,6 @@ class SequenceOfPages {
     if (index < 0 || index >= _pages.length) {
       throw RangeError('Index out of range');
     }
-
     return _pages[index];
   }
 
