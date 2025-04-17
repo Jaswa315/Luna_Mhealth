@@ -2,6 +2,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/document_property/pptx_
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_core/utils/types.dart';
 
+/// This class parses docProps.xml to get the title and author in the .pptx file.
 class PptxDocumentPropertyParser {
   PptxXmlToJsonConverter _pptxLoader;
   late final Json _coreMap;
