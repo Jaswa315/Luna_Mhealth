@@ -13,7 +13,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/presentation_property/p
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout_relationship/pptx_slide_layout_relationship_parser.dart';
-import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// =================================================================================================
