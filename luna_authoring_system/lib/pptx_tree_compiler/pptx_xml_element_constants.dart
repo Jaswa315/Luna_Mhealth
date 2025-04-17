@@ -3,12 +3,6 @@
 /// =================================================================================================
 /// This file contains the XML element constants used in the PPTX tree compiler.
 ///
-/// The XML element for the presentation meta data.
-const String ePresentation = 'p:presentation';
-
-/// The XML element for the size of the presentation.
-const String eSlideSize = 'p:sldSz';
-
 /// The XML element for the slide within a PowerPoint slide.
 const String eSlide = 'p:sld';
 
@@ -29,9 +23,3 @@ const String eShape = 'p:sp';
 
 /// The XML element for the connection shape element in a PowerPoint presentation.
 const String eConnectionShape = 'p:cxnSp';
-
-/// The XML element for the width in EMUs.
-const String eCX = '_cx';
-
-/// The XML element for the height in EMUs.
-const String eCY = '_cy';

@@ -8,6 +8,8 @@ class PptxDocumentPropertyParser {
   late final Json _coreMap;
   late final String _title;
   late final String _author;
+  static const String untitled = "Untitled";
+  static const String unknownAuthor = "Unknown Author";
   
   PptxDocumentPropertyParser(this._pptxLoader) {
     _coreMap = _pptxLoader.getJsonFromPptx("docProps/core.xml");
@@ -16,11 +18,11 @@ class PptxDocumentPropertyParser {
   }
 
   String _parseTitle() {
-    return _coreMap[eCoreProperties]?[eTitle] ?? "Untitled";
+    return _coreMap[eCoreProperties]?[eTitle] ?? untitled;
   }
 
   String _parseAuthor() {
-    return _coreMap[eCoreProperties]?[eAuthor] ?? "Unknown Author";
+    return _coreMap[eCoreProperties]?[eAuthor] ?? unknownAuthor;
   }
 
   String get title => _title;
