@@ -4,7 +4,8 @@ import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/helper/line_positioner.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/units/point_2d_percentage.dart';
+import 'package:luna_core/units/point.dart';
+import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/emu.dart';
 
 void main() {
@@ -35,10 +36,14 @@ void main() {
       double expectedEndY = (500000 + 1000000) / 3000000; // 0.5
 
       // Assertions
-      expect(points['startPoint']!.x, closeTo(expectedStartX, 0.0001));
-      expect(points['startPoint']!.y, closeTo(expectedStartY, 0.0001));
-      expect(points['endPoint']!.x, closeTo(expectedEndX, 0.0001));
-      expect(points['endPoint']!.y, closeTo(expectedEndY, 0.0001));
+      expect((points['startPoint']!.x as Percent).value,
+          closeTo(expectedStartX, 0.0001));
+      expect((points['startPoint']!.y as Percent).value,
+          closeTo(expectedStartY, 0.0001));
+      expect((points['endPoint']!.x as Percent).value,
+          closeTo(expectedEndX, 0.0001));
+      expect((points['endPoint']!.y as Percent).value,
+          closeTo(expectedEndY, 0.0001));
     });
 
     test('Handles flipped vertically by swapping startY and endY', () {
@@ -65,8 +70,10 @@ void main() {
       double expectedEndY = 500000 / 3000000; // 0.1667 (swapped)
 
       // Assertions
-      expect(points['startPoint']!.y, closeTo(expectedStartY, 0.0001));
-      expect(points['endPoint']!.y, closeTo(expectedEndY, 0.0001));
+      expect((points['startPoint']!.y as Percent).value,
+          closeTo(expectedStartY, 0.0001));
+      expect((points['endPoint']!.y as Percent).value,
+          closeTo(expectedEndY, 0.0001));
     });
   });
 
@@ -103,10 +110,10 @@ void main() {
       );
 
       // Assertions
-      expect(line.startPoint.x, closeTo(0.2, 0.0001));
-      expect(line.startPoint.y, closeTo(0.1667, 0.0001));
-      expect(line.endPoint.x, closeTo(0.6, 0.0001));
-      expect(line.endPoint.y, closeTo(0.5, 0.0001));
+      expect((line.startPoint.x as Percent).value, closeTo(0.2, 0.0001));
+      expect((line.startPoint.y as Percent).value, closeTo(0.1667, 0.0001));
+      expect((line.endPoint.x as Percent).value, closeTo(0.6, 0.0001));
+      expect((line.endPoint.y as Percent).value, closeTo(0.5, 0.0001));
       expect(line.thickness, closeTo(expectedThickness, 0.0001));
     });
   });

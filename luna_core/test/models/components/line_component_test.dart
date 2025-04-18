@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/units/point_2d_percentage.dart';
+import 'package:luna_core/units/point.dart';
+import 'package:luna_core/units/percent.dart';
 
 void main() {
   group('LineComponent Tests', () {
     test('Creates LineComponent with valid values', () {
       final line = LineComponent(
-        startPoint: Point2DPercentage(0.1, 0.2),
-        endPoint: Point2DPercentage(0.4, 0.5),
+        startPoint: Point(Percent(0.1), Percent(0.2)),
+        endPoint: Point(Percent(0.4), Percent(0.5)),
         color: const Color(0xFF0D47A1),
         thickness: 5.0,
         style: BorderStyle.solid,
       );
 
-      expect(line.startPoint.x, 0.1);
-      expect(line.startPoint.y, 0.2);
-      expect(line.endPoint.x, 0.4);
-      expect(line.endPoint.y, 0.5);
+      expect((line.startPoint.x as Percent).value, 0.1);
+      expect((line.startPoint.y as Percent).value, 0.2);
+      expect((line.endPoint.x as Percent).value, 0.4);
+      expect((line.endPoint.y as Percent).value, 0.5);
       expect(line.color, const Color(0xFF0D47A1));
       expect(line.thickness, 5.0);
       expect(line.style, BorderStyle.solid);
@@ -25,8 +26,8 @@ void main() {
 
     test('Converts LineComponent to JSON correctly', () {
       final line = LineComponent(
-        startPoint: Point2DPercentage(0.1, 0.2),
-        endPoint: Point2DPercentage(0.4, 0.5),
+        startPoint: Point(Percent(0.1), Percent(0.2)),
+        endPoint: Point(Percent(0.4), Percent(0.5)),
         color: const Color(0xFF0D47A1),
         thickness: 5.0,
         style: BorderStyle.solid,
@@ -56,10 +57,10 @@ void main() {
 
       final line = LineComponent.fromJson(json);
 
-      expect(line.startPoint.x, 0.1);
-      expect(line.startPoint.y, 0.2);
-      expect(line.endPoint.x, 0.4);
-      expect(line.endPoint.y, 0.5);
+      expect((line.startPoint.x as Percent).value, 0.1);
+      expect((line.startPoint.y as Percent).value, 0.2);
+      expect((line.endPoint.x as Percent).value, 0.4);
+      expect((line.endPoint.y as Percent).value, 0.5);
       expect(line.color, const Color(0xFF0D47A1));
       expect(line.thickness, 5.0);
       expect(line.style, BorderStyle.solid);

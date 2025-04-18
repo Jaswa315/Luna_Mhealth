@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:luna_core/units/point_2d_percentage.dart';
+import 'package:luna_core/units/display_pixel.dart';
+import 'package:luna_core/units/percent.dart';
+import 'package:luna_core/units/point.dart';
 
 /// A utility class for converting normalized percentage points to display pixel coordinates.
 class PercentageConversion {
-  /// Converts a normalized [Point2DPercentage] into an absolute [Offset] in display pixels,
+  /// Converts a normalized [Point] into a [Point] of [DisplayPixel]s,
   /// based on the provided [containerSize].
   ///
   /// The [containerSize] represents the size of the screen or parent widget in display pixels.
   ///
   /// Example:
   /// ```dart
-  /// Point2DPercentage point = Point2DPercentage(0.5, 0.75);
+  /// Point point = Point(Percent(0.5), Percent(0.75));
   /// Size containerSize = Size(300, 600);
-  /// Offset displayPixels = PercentageConversion.updatePercentageToDisplayPixel(point, containerSize);
-  /// // displayPixels is Offset(150, 450)
+  /// Point displayPoint = PercentageConversion.updatePercentageToDisplayPixel(point, containerSize);
+  /// // displayPoint.x = DisplayPixel(150), displayPoint.y = DisplayPixel(450)
   /// ```
-  static Offset updatePercentageToDisplayPixel(
-    Point2DPercentage point,
+  static Point updatePercentageToDisplayPixel(
+    Point point,
     Size containerSize,
   ) {
-    return Offset(
-      point.x * containerSize.width,
-      point.y * containerSize.height,
-    );
+    final displayX =
+        DisplayPixel(containerSize.width * (point.x as Percent).value);
+    final displayY =
+        DisplayPixel(containerSize.height * (point.y as Percent).value);
+
+    return Point(displayX, displayY);
   }
 }
