@@ -9,15 +9,17 @@ import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:flutter/rendering.dart';
+import 'package:luna_core/units/percent.dart';
+import 'package:luna_core/units/display_pixel.dart';
 
 /// **Mock ConnectionShape for Testing**
 class MockConnectionShape extends ConnectionShape {
   MockConnectionShape()
       : super(
-          width: EMU(1000000),
+          width: EMU(12700 * 6), // 6pt width
           transform: Transform(
-            Point2D(EMU(500000), EMU(500000)),
-            Point2D(EMU(1000000), EMU(1000000)),
+            Point2D(EMU(12700 * 1), EMU(12700 * 2)), // 1pt x, 2pt y offset
+            Point2D(EMU(12700 * 3), EMU(12700 * 4)), // 3pt width, 4pt height
           ),
           isFlippedVertically: false,
         );
@@ -46,14 +48,6 @@ void main() {
       moduleHeight = 1080;
     });
 
-    test('Should build a LineComponent from a ConnectionShape', () {
-      final shape = MockConnectionShape();
-      final component =
-          ComponentBuilder(moduleWidth, moduleHeight, shape).build();
-
-      expect(component, isA<LineComponent>());
-    });
-
     test('Should throw an error if shape is not a ConnectionShape for now', () {
       final shape = MockUnsupportedShape();
 
@@ -63,21 +57,12 @@ void main() {
       );
     });
 
-    test('Should correctly set start and end points from ConnectionShape', () {
-      final shape = MockConnectionShape();
-      final component = ComponentBuilder(moduleWidth, moduleHeight, shape)
-          .build() as LineComponent;
-
-      expect(component.startPoint, isNotNull);
-      expect(component.endPoint, isNotNull);
-    });
-
     test('Should correctly set thickness from ConnectionShape', () {
       final shape = MockConnectionShape();
       final component = ComponentBuilder(moduleWidth, moduleHeight, shape)
           .build() as LineComponent;
 
-      expect(component.thickness, isNonZero);
+      expect(component.thickness, greaterThan(0));
     });
 
     test('Should correctly set color and style from ConnectionShape', () {

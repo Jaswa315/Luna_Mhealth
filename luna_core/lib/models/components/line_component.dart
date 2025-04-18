@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/components/component.dart';
-import 'package:luna_core/units/point_2d_percentage.dart';
+import 'package:luna_core/units/percent.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
 import 'package:luna_mobile/renderers/line_component_renderer.dart';
 
@@ -10,10 +11,10 @@ import 'package:luna_mobile/renderers/line_component_renderer.dart';
 /// It relies on `startPoint` and `endPoint` directly for its rendering.
 class LineComponent extends Component {
   /// The start point of the line in percentage coordinates.
-  final Point2DPercentage startPoint;
+  final Point startPoint;
 
   /// The end point of the line in percentage coordinates.
-  final Point2DPercentage endPoint;
+  final Point endPoint;
 
   /// The color of the line.
   final Color color;
@@ -50,8 +51,14 @@ class LineComponent extends Component {
   Json toJson() {
     return {
       'type': 'line',
-      'startPoint': {'x': startPoint.x, 'y': startPoint.y},
-      'endPoint': {'x': endPoint.x, 'y': endPoint.y},
+      'startPoint': {
+        'x': (startPoint.x as Percent).value,
+        'y': (startPoint.y as Percent).value,
+      },
+      'endPoint': {
+        'x': (endPoint.x as Percent).value,
+        'y': (endPoint.y as Percent).value,
+      },
       'color': color.value,
       'thickness': thickness,
       'style': style.index,
@@ -64,13 +71,13 @@ class LineComponent extends Component {
   /// Throws: An [Exception] if the JSON is missing required fields like `x`, `y`, `width`, or `height`.
   static LineComponent fromJson(Json json) {
     return LineComponent(
-      startPoint: Point2DPercentage(
-        json['startPoint']['x'].toDouble(),
-        json['startPoint']['y'].toDouble(),
+      startPoint: Point(
+        Percent((json['startPoint']['x'] as num).toDouble()),
+        Percent((json['startPoint']['y'] as num).toDouble()),
       ),
-      endPoint: Point2DPercentage(
-        json['endPoint']['x'].toDouble(),
-        json['endPoint']['y'].toDouble(),
+      endPoint: Point(
+        Percent((json['endPoint']['x'] as num).toDouble()),
+        Percent((json['endPoint']['y'] as num).toDouble()),
       ),
       color: Color(json['color']),
       thickness: (json['thickness'] as num).toDouble(),

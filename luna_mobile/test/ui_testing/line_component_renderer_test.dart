@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/units/point_2d_percentage.dart';
+import 'package:luna_core/units/point.dart';
+import 'package:luna_core/units/percent.dart';
+import 'package:luna_core/units/display_pixel.dart';
 import 'package:luna_mobile/renderers/line_component_renderer.dart';
 import 'package:luna_mobile/renderers/line_painter.dart';
 
@@ -23,12 +25,15 @@ class TestApp extends StatelessWidget {
 }
 
 void main() {
-  testWidgets('LineComponentRenderer creates a proper line using Offset',
+  testWidgets(
+      'LineComponentRenderer creates a proper line using DisplayPixel Points',
       (WidgetTester tester) async {
     // Create dummy data for LineComponent with start and end points
     final LineComponent dummyComponent = LineComponent(
-      startPoint: Point2DPercentage(0.2, 0.15), // 20% from left, 15% from top
-      endPoint: Point2DPercentage(0.8, 0.15), // 80% from left, 15% from top
+      startPoint:
+          Point(Percent(0.2), Percent(0.15)), // 20% from left, 15% from top
+      endPoint:
+          Point(Percent(0.8), Percent(0.15)), // 80% from left, 15% from top
       thickness: 2, // 2 pixels thick
       color: Colors.blue, // Blue line
       style: BorderStyle.solid,
@@ -46,13 +51,11 @@ void main() {
     // Extract the LinePainter and validate its properties
     final LinePainter painter = customPaint.painter as LinePainter;
 
-    // Expected Offset positions
-    final Offset expectedStart = Offset(160.0, 90.0); // 0.2 * 800, 0.15 * 600
-    final Offset expectedEnd = Offset(640.0, 90.0); // 0.8 * 800, 0.15 * 600
-
-    // Assert the properties of the line using Offset
-    expect(painter.start, equals(expectedStart));
-    expect(painter.end, equals(expectedEnd));
+    // Validate values as DisplayPixel values
+    expect((painter.start.x as DisplayPixel).value, closeTo(160.0, 0.001));
+    expect((painter.start.y as DisplayPixel).value, closeTo(90.0, 0.001));
+    expect((painter.end.x as DisplayPixel).value, closeTo(640.0, 0.001));
+    expect((painter.end.y as DisplayPixel).value, closeTo(90.0, 0.001));
     expect(painter.thickness, closeTo(2, 0.00001));
     expect(painter.color, Colors.blue);
   });

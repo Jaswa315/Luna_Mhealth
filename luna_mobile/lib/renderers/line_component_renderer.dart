@@ -1,11 +1,3 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/utils/percentage_conversion.dart';
@@ -28,20 +20,15 @@ class LineComponentRenderer extends BaseComponentRenderer<LineComponent> {
     if (component is LineComponent) {
       return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          // Convert start and end points to absolute pixel positions
-          final Offset start =
-              PercentageConversion.updatePercentageToDisplayPixel(
+          final start = PercentageConversion.updatePercentageToDisplayPixel(
             component.startPoint,
             Size(constraints.maxWidth, constraints.maxHeight),
           );
-
-          final Offset end =
-              PercentageConversion.updatePercentageToDisplayPixel(
+          final end = PercentageConversion.updatePercentageToDisplayPixel(
             component.endPoint,
             Size(constraints.maxWidth, constraints.maxHeight),
           );
 
-          // Return a CustomPaint widget that uses the LinePainter to render the line
           return CustomPaint(
             painter: LinePainter(
               start: start,

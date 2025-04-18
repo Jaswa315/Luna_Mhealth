@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:luna_core/units/display_pixel.dart';
+import 'package:luna_core/units/point.dart';
 
 /// A custom painter class for drawing a straight line on a canvas.
 ///
@@ -6,10 +8,10 @@ import 'package:flutter/material.dart';
 /// with specified start and end coordinates, thickness, and color.
 class LinePainter extends CustomPainter {
   /// The starting point of the line as an `Offset`.
-  final Offset start;
+  final Point start;
 
   /// The ending point of the line as an `Offset`.
-  final Offset end;
+  final Point end;
 
   /// The thickness of the line, specified in pixels.
   final double thickness;
@@ -34,8 +36,13 @@ class LinePainter extends CustomPainter {
   /// or repaint its contents.
   @override
   void paint(Canvas canvas, Size size) {
+    final startX = (start.x as DisplayPixel).value;
+    final startY = (start.y as DisplayPixel).value;
+    final endX = (end.x as DisplayPixel).value;
+    final endY = (end.y as DisplayPixel).value;
+
     debugPrint(
-      "LinePainter: Start=(${start.dx}, ${start.dy}), End=(${end.dx}, ${end.dy}), Thickness=$thickness",
+      "LinePainter: Start=($startX, $startY), End=($endX, $endY), Thickness=$thickness",
     );
 
     final paint = Paint()
@@ -43,7 +50,7 @@ class LinePainter extends CustomPainter {
       ..strokeWidth = thickness
       ..style = PaintingStyle.stroke;
 
-    canvas.drawLine(start, end, paint);
+    canvas.drawLine(Offset(startX, startY), Offset(endX, endY), paint);
   }
 
   /// Determines whether the painter should repaint.
