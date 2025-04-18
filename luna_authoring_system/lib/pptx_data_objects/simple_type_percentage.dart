@@ -4,7 +4,6 @@
 /// See more information about the unit in this documentation:
 /// https://c-rex.net/samples/ooxml/e1/Part4/OOXML_P4_DOCX_ST_Percentage_topic_ID0EY3XNB.html
 /// https://www.datypic.com/sc/ooxml/t-a_ST_PositiveFixedPercentage.html
-
 class SimpleTypePercentage {
   final int _value;
   static const int minSimpleTypePercentage = 0; // 0% inclusive.
