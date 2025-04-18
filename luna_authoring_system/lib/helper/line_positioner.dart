@@ -1,7 +1,7 @@
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
-import 'package:luna_core/units/point.dart';
 import 'package:luna_core/units/percent.dart';
+import 'package:luna_core/units/point.dart';
 
 ///[LinePositioner] is a helper class that computes the start and end points of a shape in percentage-based coordinates
 /// relative to the slide dimensions. This class is initally created to handle lines specifically.
