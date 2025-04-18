@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:luna_authoring_system/pptx_data_objects/picture_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_percentage.dart';
 import 'package:luna_authoring_system/pptx_data_objects/source_rectangle.dart';
@@ -15,8 +15,8 @@ void main() {
     test('The shape type of the picture shape is set by default.', () {
       PictureShape pShape = PictureShape(
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         url: "",
         sourceRectangle: SourceRectangle(),
@@ -29,8 +29,8 @@ void main() {
       expect(
         () => PictureShape(
           transform: Transform(
-            Point2D(EMU(0), EMU(0)),
-            Point2D(EMU(0), EMU(0)),
+            Point(EMU(0), EMU(0)),
+            Point(EMU(0), EMU(0)),
           ),
           url: "../image1.png",
           sourceRectangle: SourceRectangle(
