@@ -11,8 +11,8 @@ import 'package:luna_core/units/emu.dart';
 void main() {
   bool isFlippedVertically = false;
 
-  group('Tests for ConnectionShape', () {
-    test('The shape type of the connection shape is set by default.', () {
+  group('Tests for PictureShape', () {
+    test('The shape type of the picture shape is set by default.', () {
       PictureShape pShape = PictureShape(
         transform: Transform(
           Point2D(EMU(0), EMU(0)),
