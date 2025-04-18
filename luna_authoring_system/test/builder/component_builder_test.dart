@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/builder/component_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_core/models/components/component.dart';
@@ -18,8 +18,8 @@ class MockConnectionShape extends ConnectionShape {
       : super(
           width: EMU(12700 * 6), // 6pt width
           transform: Transform(
-            Point2D(EMU(12700 * 1), EMU(12700 * 2)), // 1pt x, 2pt y offset
-            Point2D(EMU(12700 * 3), EMU(12700 * 4)), // 3pt width, 4pt height
+            Point(EMU(12700 * 1), EMU(12700 * 2)), // 1pt x, 2pt y offset
+            Point(EMU(12700 * 3), EMU(12700 * 4)), // 3pt width, 4pt height
           ),
           isFlippedVertically: false,
         );
@@ -32,7 +32,7 @@ class MockUnsupportedShape extends Shape {
 
   @override
   Transform get transform =>
-      Transform(Point2D(EMU(0), EMU(0)), Point2D(EMU(0), EMU(0)));
+      Transform(Point(EMU(0), EMU(0)), Point(EMU(0), EMU(0)));
 
   @override
   set transform(Transform transform) {}

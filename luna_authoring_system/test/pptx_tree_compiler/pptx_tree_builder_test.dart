@@ -40,10 +40,10 @@ void main() {
 
       expect(cShape.type, ShapeType.connection);
       expect(cShape.width.value, 6350);
-      expect(cShape.transform.offset.x.value, 2655518);
-      expect(cShape.transform.offset.y.value, 2580362);
-      expect(cShape.transform.size.x.value, 2755726);
-      expect(cShape.transform.size.y.value, 1929008);
+      expect((cShape.transform.offset.x as EMU).value, 2655518);
+      expect((cShape.transform.offset.y as EMU).value, 2580362);
+      expect((cShape.transform.size.x as EMU).value, 2755726);
+      expect((cShape.transform.size.y as EMU).value, 1929008);
     });
 
     ///testing in a pptx file where flipV = 1
@@ -53,9 +53,13 @@ void main() {
       expect(cShape.isFlippedVertically, isTrue);
     });
 
-    test('The name of the section is parsed as default name if there is no section configured.', () async {
+    test(
+        'The name of the section is parsed as default name if there is no section configured.',
+        () async {
       expect(pptxTree.section, isA<Section>());
-      expect(pptxTree.section.value, {Section.defaultSectionName: [1]});
+      expect(pptxTree.section.value, {
+        Section.defaultSectionName: [1]
+      });
     });
   });
 
@@ -66,7 +70,6 @@ void main() {
     PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
 
     test('parsePptx method initialzes author.', () async {
-
       expect(pptxTree.author, "An Author Name");
     });
     test('parsePptx method initialzes width.', () async {
@@ -88,9 +91,9 @@ void main() {
 
       expect(cShape.type, ShapeType.connection);
       expect(cShape.width.value, 19050);
-      expect(cShape.transform.offset.x.value, 179189);
-      expect(cShape.transform.offset.y.value, 645068);
-      expect(cShape.transform.size.x.value, 3756423);
+      expect((cShape.transform.offset.x as EMU).value, 179189);
+      expect((cShape.transform.offset.y as EMU).value, 645068);
+      expect((cShape.transform.size.x as EMU).value, 3756423);
       expect(cShape.color.alpha, 255);
       expect(cShape.color.red, 255);
       expect(cShape.color.green, 0);
@@ -109,7 +112,7 @@ void main() {
     final pptxFile = File('test/test_assets/Sections.pptx');
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
     PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
-    
+
     test('Section is parsed.', () async {
       expect(pptxTree.section, isA<Section>());
       expect(pptxTree.section.value, {

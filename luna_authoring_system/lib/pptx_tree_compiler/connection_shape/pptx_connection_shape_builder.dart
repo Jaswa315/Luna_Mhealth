@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:luna_authoring_system/helper/color_conversions.dart';
 import 'package:luna_authoring_system/pptx_data_objects/alpha.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
@@ -18,12 +18,12 @@ class PptxConnectionShapeBuilder {
   PptxConnectionShapeBuilder();
 
   Transform _getTransform(Json transformMap) {
-    Point2D offset = Point2D(
+    Point offset = Point(
       EMU(int.parse(transformMap[eOffset][eX])),
       EMU(int.parse(transformMap[eOffset][eY])),
     );
 
-    Point2D size = Point2D(
+    Point size = Point(
       EMU(int.parse(transformMap[eSize][eCX])),
       EMU(int.parse(transformMap[eSize][eCY])),
     );

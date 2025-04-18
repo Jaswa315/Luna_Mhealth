@@ -1,5 +1,5 @@
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
+import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/point.dart';
 
@@ -18,14 +18,16 @@ class LinePositioner {
     int slideHeight,
   ) {
     // Extract offset (starting position) and size (width & height) from the shape
-    Point2D offset = cxn.transform.offset;
-    Point2D size = cxn.transform.size;
+    Point offset = cxn.transform.offset;
+    Point size = cxn.transform.size;
 
     // Convert EMU values to percentage-based coordinates
-    final startX = Percent(offset.x.value / slideWidth);
-    final startY = Percent(offset.y.value / slideHeight);
-    final endX = Percent((size.x.value + offset.x.value) / slideWidth);
-    final endY = Percent((size.y.value + offset.y.value) / slideHeight);
+    final startX = Percent((offset.x as EMU).value / slideWidth);
+    final startY = Percent((offset.y as EMU).value / slideHeight);
+    final endX =
+        Percent(((offset.x as EMU).value + (size.x as EMU).value) / slideWidth);
+    final endY = Percent(
+        ((offset.y as EMU).value + (size.y as EMU).value) / slideHeight);
 
     // If the shape is flipped vertically, swap startY and endY
     final actualStartY = cxn.isFlippedVertically ? endY : startY;

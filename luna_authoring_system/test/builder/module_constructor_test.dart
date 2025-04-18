@@ -4,13 +4,13 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart'
 import 'package:luna_authoring_system/builder/module_constructor.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
+import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/units/emu.dart';
 import 'dart:io';
 import 'package:luna_core/utils/version_manager.dart';
 
@@ -52,8 +52,8 @@ void main() {
           ConnectionShape(
             width: EMU(1000000),
             transform: Transform(
-              Point2D(EMU(500000), EMU(500000)),
-              Point2D(EMU(1000000), EMU(1000000)),
+              Point(EMU(500000), EMU(500000)),
+              Point(EMU(1000000), EMU(1000000)),
             ),
             isFlippedVertically: false,
           ),
@@ -99,8 +99,8 @@ void main() {
           ConnectionShape(
             width: EMU(1000000),
             transform: Transform(
-              Point2D(EMU(500000), EMU(500000)),
-              Point2D(EMU(1000000), EMU(1000000)),
+              Point(EMU(500000), EMU(500000)),
+              Point(EMU(1000000), EMU(1000000)),
             ),
             isFlippedVertically: false,
           ),
@@ -111,8 +111,8 @@ void main() {
           ConnectionShape(
             width: EMU(800000),
             transform: Transform(
-              Point2D(EMU(200000), EMU(200000)),
-              Point2D(EMU(900000), EMU(900000)),
+              Point(EMU(200000), EMU(200000)),
+              Point(EMU(900000), EMU(900000)),
             ),
             isFlippedVertically: true,
           ),
