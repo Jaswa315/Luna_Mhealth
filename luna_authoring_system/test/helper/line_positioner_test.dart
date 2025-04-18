@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/helper/line_positioner.dart';
 import 'package:luna_core/models/components/line_component.dart';
@@ -19,8 +18,8 @@ void main() {
       ConnectionShape connectionShape = ConnectionShape(
         width: EMU(50000), // Width of the connection
         transform: Transform(
-          Point2D(EMU(1000000), EMU(500000)), // Offset
-          Point2D(EMU(2000000), EMU(1000000)), // Size
+          Point(EMU(1000000), EMU(500000)), // Offset
+          Point(EMU(2000000), EMU(1000000)), // Size
         ),
         isFlippedVertically: false, // Not flipped vertically
       );
@@ -55,8 +54,8 @@ void main() {
       ConnectionShape connectionShape = ConnectionShape(
         width: EMU(50000),
         transform: Transform(
-          Point2D(EMU(1000000), EMU(500000)),
-          Point2D(EMU(2000000), EMU(1000000)),
+          Point(EMU(1000000), EMU(500000)),
+          Point(EMU(2000000), EMU(1000000)),
         ),
         isFlippedVertically: true, // Flipped vertically
       );
@@ -87,8 +86,8 @@ void main() {
       ConnectionShape connectionShape = ConnectionShape(
         width: EMU(50000), // Connection width
         transform: Transform(
-          Point2D(EMU(1000000), EMU(500000)),
-          Point2D(EMU(2000000), EMU(1000000)),
+          Point(EMU(1000000), EMU(500000)),
+          Point(EMU(2000000), EMU(1000000)),
         ),
         isFlippedVertically: false,
       );

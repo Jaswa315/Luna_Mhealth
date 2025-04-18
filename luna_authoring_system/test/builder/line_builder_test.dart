@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/builder/line_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_core/models/components/component.dart';
@@ -17,8 +16,8 @@ class MockConnectionShape extends ConnectionShape {
       : super(
           width: EMU(1000000),
           transform: Transform(
-            Point2D(EMU(500000), EMU(500000)),
-            Point2D(EMU(1000000), EMU(1000000)),
+            Point(EMU(500000), EMU(500000)),
+            Point(EMU(1000000), EMU(1000000)),
           ),
           isFlippedVertically: false,
         );

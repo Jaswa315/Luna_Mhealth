@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:built_collection/built_collection.dart';
@@ -20,8 +20,8 @@ void main() {
         shapes.add(ConnectionShape(
           width: emu,
           transform: Transform(
-            Point2D(emu, emu),
-            Point2D(emu, emu),
+            Point(emu, emu),
+            Point(emu, emu),
           ),
           isFlippedVertically: isFlippedVertically,
         ));

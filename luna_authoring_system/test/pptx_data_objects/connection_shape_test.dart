@@ -3,8 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/point.dart';
 
 void main() {
   bool isFlippedVertically = false;
@@ -13,8 +13,8 @@ void main() {
     test('The shape type of the connection shape is set by default.', () {
       ConnectionShape cShape = ConnectionShape(
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -25,8 +25,8 @@ void main() {
     test('Width is set to default (6350 EMU) when not provided.', () {
       ConnectionShape cShape = ConnectionShape(
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -38,8 +38,8 @@ void main() {
       ConnectionShape cShape = ConnectionShape(
         width: EMU(8000),
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -50,8 +50,8 @@ void main() {
     test('Color is set to default (#000000) when not provided.', () {
       ConnectionShape cShape = ConnectionShape(
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -64,8 +64,8 @@ void main() {
       ConnectionShape cShape = ConnectionShape(
         color: const Color.fromARGB(255, 10, 20, 30),
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -76,8 +76,8 @@ void main() {
     test('Style is set to default (solid) when not provided.', () {
       ConnectionShape cShape = ConnectionShape(
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -89,8 +89,8 @@ void main() {
       ConnectionShape cShape = ConnectionShape(
         style: BorderStyle.solid,
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -102,8 +102,8 @@ void main() {
       ConnectionShape cShape = ConnectionShape(
         style: BorderStyle.none,
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: isFlippedVertically,
       );
@@ -114,8 +114,8 @@ void main() {
     test('isFlippedVertically is correctly assigned.', () {
       ConnectionShape cShape = ConnectionShape(
         transform: Transform(
-          Point2D(EMU(0), EMU(0)),
-          Point2D(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
+          Point(EMU(0), EMU(0)),
         ),
         isFlippedVertically: true, // Assigning true
       );
@@ -130,8 +130,8 @@ void main() {
           color: const Color.fromARGB(255, 0, 0, 0),
           style: BorderStyle.solid,
           transform: Transform(
-            Point2D(EMU(0), EMU(0)),
-            Point2D(EMU(0), EMU(0)),
+            Point(EMU(0), EMU(0)),
+            Point(EMU(0), EMU(0)),
           ),
           isFlippedVertically: false,
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
-import 'package:luna_authoring_system/pptx_data_objects/point_2d.dart';
 import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/point.dart';
 
 void main() {
   group('Tests for Transform', () {
@@ -20,14 +20,14 @@ void main() {
         throwsA(isA<NoSuchMethodError>()),
       );
     });
-    test('Transform can be initialzed with Point2D values at CTOR.', () {
+    test('Transform can be initialzed with Point values at CTOR.', () {
       Transform transform =
-          Transform(Point2D(EMU(10), EMU(20)), Point2D(EMU(30), EMU(40)));
+          Transform(Point(EMU(10), EMU(20)), Point(EMU(30), EMU(40)));
 
-      expect(transform.offset.x.value, 10);
-      expect(transform.offset.y.value, 20);
-      expect(transform.size.x.value, 30);
-      expect(transform.size.y.value, 40);
+      expect((transform.offset.x as EMU).value, 10);
+      expect((transform.offset.y as EMU).value, 20);
+      expect((transform.size.x as EMU).value, 30);
+      expect((transform.size.y as EMU).value, 40);
     });
   });
 }

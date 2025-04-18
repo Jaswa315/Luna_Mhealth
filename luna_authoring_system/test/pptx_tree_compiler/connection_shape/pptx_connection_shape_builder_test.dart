@@ -26,10 +26,10 @@ void main() {
 
       expect(cShape.type, ShapeType.connection);
       expect(cShape.width.value, 6350);
-      expect(cShape.transform.offset.x.value, 2655518);
-      expect(cShape.transform.offset.y.value, 2580362);
-      expect(cShape.transform.size.x.value, 2755726);
-      expect(cShape.transform.size.y.value, 1929008);
+      expect((cShape.transform.offset.x as EMU).value, 2655518);
+      expect((cShape.transform.offset.y as EMU).value, 2580362);
+      expect((cShape.transform.size.x as EMU).value, 2755726);
+      expect((cShape.transform.size.y as EMU).value, 1929008);
       expect(cShape.isFlippedVertically, isTrue);
     });
   });
@@ -50,9 +50,9 @@ void main() {
 
       expect(cShape.type, ShapeType.connection);
       expect(cShape.width.value, 19050);
-      expect(cShape.transform.offset.x.value, 179189);
-      expect(cShape.transform.offset.y.value, 645068);
-      expect(cShape.transform.size.x.value, 3756423);
+      expect((cShape.transform.offset.x as EMU).value, 179189);
+      expect((cShape.transform.offset.y as EMU).value, 645068);
+      expect((cShape.transform.size.x as EMU).value, 3756423);
       expect(cShape.color.alpha, 255);
       expect(cShape.color.red, 255);
       expect(cShape.color.green, 0);
