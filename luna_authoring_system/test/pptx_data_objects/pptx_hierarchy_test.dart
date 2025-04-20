@@ -43,5 +43,32 @@ void main() {
         PptxHierarchy.theme,
       ]);
     });
+    test('Each hierarchy level has the correct relationshipType', () {
+      expect(PptxHierarchy.theme.relationshipType,
+          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
+      expect(PptxHierarchy.slideMaster.relationshipType,
+          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster");
+      expect(PptxHierarchy.slideLayout.relationshipType,
+          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout");
+      expect(PptxHierarchy.slide.relationshipType,
+          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide");
+    });
+
+    test('Parent and relationshipType traversal works correctly', () {
+      PptxHierarchy? current = PptxHierarchy.slide;
+      List<String?> relationshipTypes = [];
+
+      while (current != null) {
+        relationshipTypes.add(current.relationshipType);
+        current = current.parent;
+      }
+
+      expect(relationshipTypes, [
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+      ]);
+    });
   });
 }
