@@ -11,8 +11,6 @@ import 'package:provider/provider.dart';
 
 void main() {
 
-    const lunaTestFileName = "luna_test.luna";
-
 
     Future<Widget> createTestApp() async {
       await GlobalConfiguration().loadFromAsset("app_settings");
@@ -51,7 +49,27 @@ void main() {
     
   );
 
+    /// Helper function to load a luna file with "lunaTestFilename"
+    loadModule(p.PatrolIntegrationTester tester,String lunaTestFileName) async {
+        await tester('Add Module').tap();
 
+        // check to see if a permissions dialog for file manipulation appears.
+        if(await tester.native.isPermissionDialogVisible()){
+          await tester.native.grantPermissionWhenInUse();
+        }
+
+        // Expand file picker menu
+        await tester.native.waitUntilVisible(p.Selector(contentDescription: "Show roots"));
+        await tester.native.tap(p.Selector(contentDescription: "Show roots"));
+
+        // Pick downloads folder
+        await tester.native.waitUntilVisible(p.Selector(text: "Downloads"));
+        await tester.native.tap(p.Selector(text: "Downloads"));
+
+        // Tap file name
+        await tester.native.tap(p.Selector(text: lunaTestFileName ));
+
+    }
 
     /// Test adding a module from the file system
     ///  This test will fail if there is not a file with lunaTestFileName 
@@ -60,28 +78,11 @@ void main() {
     'Load and Open A Line Module',
     ($) async {
 
+      const lunaTestFileName = "luna_test.luna";
       Widget testApp = await createTestApp();
       await $.pumpWidgetAndSettle(testApp);
-      await $('Add Module').tap();
-
-      // check to see if a permissions dialog for file manipulation appears.
-      if(await $.native.isPermissionDialogVisible()){
-        await $.native.grantPermissionWhenInUse();
-      }
-
-      // Expand file picker menu
-      await $.native.waitUntilVisible(p.Selector(contentDescription: "Show roots"));
-      await $.native.tap(p.Selector(contentDescription: "Show roots"));
-
-      // Pick downloads folder
-      await $.native.waitUntilVisible(p.Selector(text: "Downloads"));
-      await $.native.tap(p.Selector(text: "Downloads"));
-
-      // Tap file name
-      await $.native.tap(p.Selector(text: lunaTestFileName ));
-
-      await $.waitUntilExists($("Home"));
-
+      await loadModule($,lunaTestFileName);
+        await $.waitUntilExists($("Home"));
       //open the module
       await $.tester.tap(find.text("Start Learning"));
       await $.tap($("A line"));

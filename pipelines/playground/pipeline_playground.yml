@@ -23,18 +23,6 @@ jobs:
 
   - template: ../templates/install_prereqs.yml
 
-  - ${{ each folder in split(variables.package_folders, ',') }}:
-    - template: ../templates/lint_luna.yml
-      parameters:
-        package_path: ${{ folder }}
-        package_name: ${{ folder }}
-    - template: ../templates/run_tests.yml
-      parameters:
-        package_path: ${{ folder }}
-        package_name: ${{ folder }}
-
-  - template: ../templates/publish_test_lint_results.yml
-
   - template: ../templates/build_authoring_system.yml
     parameters:
       build_os: $(buildOS)
@@ -52,48 +40,3 @@ jobs:
 
   - template: ../templates/run_luna_mobile_tests_firebase.yml
     
-
-- job: MacOSTests
-
-  pool:
-    vmImage: macos-latest
-  variables:
-    - name: package_folders
-      value: luna_core,luna_authoring_system,luna_mobile
-    - name: buildOS
-      value: macos
-    - name: package_name
-      value: MacBuild_$(Build.BuildNumber)
-    - name: release_dir
-      value: /Build/Products/Debug
-
-
-  steps:
-
-  - template: ../templates/install_prereqs.yml
-
-  - ${{ each folder in split(variables.package_folders, ',') }}:
-    - template: ../templates/lint_luna.yml
-      parameters:
-        package_path: ${{ folder }}
-        package_name: ${{ folder }}
-    - template: ../templates/run_tests.yml
-      parameters:
-        package_path: ${{ folder }}
-        package_name: ${{ folder }}
-
-  - template: ../templates/publish_test_lint_results.yml
-
-  - template: ../templates/build_authoring_system.yml
-    parameters:
-      build_os: $(buildOS)
-      package_name: $(package_name)
-      release_directory: $(release_dir)
-      build_name: $(Build.BuildNumber)
-      debug_mode: true
-      archive_file: false
-
-  - template: ../templates/run_luna_authoring.yml
-    parameters:
-      operating_system: $(buildOS)
-      use_built_exe: true
