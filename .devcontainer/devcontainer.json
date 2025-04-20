@@ -1,0 +1,34 @@
+//json file information needed for vs code to startup the container file
+{
+  "build": {
+    "dockerfile": "./Dockerfile",
+    "context": "."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/powershell:1": {},
+    //https://github.com/NordcomInc/devcontainer-features/blob/master/src/android-sdk/README.md
+    "ghcr.io/nordcominc/devcontainer-features/android-sdk:1": {},
+    "ghcr.io/kreemer/features/chrometesting:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dart-code.dart-code", // Dart extension for VS Code
+        "dart-code.flutter"    // Optional: Flutter extension
+      ]
+    }
+  },
+  //6080 is novnc port
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": {
+      "label": "desktop"
+    }
+  },
+  "postCreateCommand":  "bash ./.devcontainer/scripts/post_create_script.sh",
+  "postStartCommand": "bash ./.devcontainer/scripts/post_start_script.sh",
+  // Name the container 
+  "runArgs": ["--name", "Luna_mHealth_devcontainer"]
+}
