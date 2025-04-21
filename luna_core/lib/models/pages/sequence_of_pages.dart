@@ -43,12 +43,10 @@ class SequenceOfPages {
 
   /// Checks if the given page is between the first and last pages in the sequence.
   bool isBetweenFirstAndLastPage(Page page) {
-    if (_pages.isEmpty || _pages.length < 3) {
-      // If there are fewer than 3 pages, no page can be "between"
-      return false;
-    }
-
-    return page != _pages.first && page != _pages.last && _pages.contains(page);
+    // If the page is neither the leftmost nor the rightmost and exists in the sequence
+    return !isLeftMostPage(page) &&
+        !isRightMostPage(page) &&
+        _pages.contains(page);
   }
 
   /// Checks if the given page is the only page in the sequence.
