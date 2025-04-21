@@ -1,11 +1,28 @@
 enum PptxHierarchy {
-  theme(null, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"),
-  slideMaster(theme, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster"),
-  slideLayout(slideMaster, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout"),
-  slide(slideLayout, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide");
+  theme(
+    null,
+    "a:theme",
+    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+  ),
+  slideMaster(
+    theme,
+    "p:sldMaster",
+    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
+  ),
+  slideLayout(
+    slideMaster,
+    "p:sldLayout",
+    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
+  ),
+  slide(
+    slideLayout,
+    "p:sld",
+    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide",
+  );
 
   final PptxHierarchy? parent;
+  final String xmlKey;
   final String relationshipType;
 
-  const PptxHierarchy(this.parent, this.relationshipType);
+  const PptxHierarchy(this.parent, this.xmlKey, this.relationshipType);
 }
