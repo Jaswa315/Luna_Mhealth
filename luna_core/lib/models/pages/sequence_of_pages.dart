@@ -17,6 +17,7 @@ class SequenceOfPages {
     if (index < 0 || index >= _pages.length) {
       throw RangeError('Index out of range');
     }
+
     return _pages[index];
   }
 
@@ -28,5 +29,30 @@ class SequenceOfPages {
   /// Removes a page from the sequence.
   void removePage(Page page) {
     _pages.remove(page);
+  }
+
+  /// Checks if the given page is the leftmost (first) page in the sequence.
+  bool isLeftMostPage(Page page) {
+    return _pages.isNotEmpty && _pages.first == page;
+  }
+
+  /// Checks if the given page is the rightmost (last) page in the sequence.
+  bool isRightMostPage(Page page) {
+    return _pages.isNotEmpty && _pages.last == page;
+  }
+
+  /// Checks if the given page is between the first and last pages in the sequence.
+  bool isBetweenFirstAndLastPage(Page page) {
+    if (_pages.isEmpty || _pages.length < 3) {
+      // If there are fewer than 3 pages, no page can be "between"
+      return false;
+    }
+
+    return page != _pages.first && page != _pages.last && _pages.contains(page);
+  }
+
+  /// Checks if the given page is the only page in the sequence.
+  bool isOnlyPage(Page page) {
+    return _pages.length == 1 && _pages.contains(page);
   }
 }
