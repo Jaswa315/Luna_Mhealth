@@ -14,6 +14,7 @@ class PptxRelationshipParser {
   PptxHierarchy _pptxHierarchy;
   PptxRelationshipParser(this._pptxLoader, this._pptxHierarchy);
 
+  /// Parse the target string to get the index of the parent: (slideLayout/slideMaster/theme)
   int _parseParentTargetString(String target) {
     RegExp regex = RegExp('${_pptxHierarchy.parent!.name}(\\d+)\\.xml');
     Match? match = regex.firstMatch(target);
