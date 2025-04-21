@@ -7,5 +7,5 @@ const String eMetaDocument = 'office:document-meta';
 /// The XML element for the metadata.
 const String eMeta = 'office:meta';
 
-/// The XML element for the title of the PowerPoint.
+/// The XML element for the title of the Open Document Presentation.
 const String eTitle = 'dc:title';
