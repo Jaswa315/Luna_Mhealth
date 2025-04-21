@@ -3,7 +3,8 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_conver
 import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_constants.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// This class parses the slide relationships in .xml.rels files.
+/// This class parses the slide relationships in .xml.rels files,
+/// to get the target elements in the xml.
 class PptxRelationshipParser {
   PptxXmlToJsonConverter _pptxLoader;
   PptxHierarchy _pptxHierarchy;
