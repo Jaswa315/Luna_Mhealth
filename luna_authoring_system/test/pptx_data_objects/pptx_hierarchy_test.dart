@@ -12,12 +12,14 @@ void main() {
 
     test('Enum values are correctly defined', () {
       expect(PptxHierarchy.values.length, 4);
-      expect(PptxHierarchy.values, containsAll([
-        PptxHierarchy.theme,
-        PptxHierarchy.slideMaster,
-        PptxHierarchy.slideLayout,
-        PptxHierarchy.slide,
-      ]));
+      expect(
+          PptxHierarchy.values,
+          containsAll([
+            PptxHierarchy.theme,
+            PptxHierarchy.slideMaster,
+            PptxHierarchy.slideLayout,
+            PptxHierarchy.slide,
+          ]));
     });
 
     test('Enum toString returns the correct name', () {
@@ -68,6 +70,23 @@ void main() {
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+      ]);
+    });
+
+    test('xmlKey is set correctly for all enums.', () {
+      PptxHierarchy? current = PptxHierarchy.slide;
+      List<String> xmlKeys = [];
+
+      while (current != null) {
+        xmlKeys.add(current.xmlKey);
+        current = current.parent;
+      }
+
+      expect(xmlKeys, [
+        "p:sld",
+        "p:sldLayout",
+        "p:sldMaster",
+        "a:theme",
       ]);
     });
   });
