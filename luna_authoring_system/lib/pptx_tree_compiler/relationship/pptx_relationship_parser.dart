@@ -4,7 +4,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relat
 import 'package:luna_core/utils/types.dart';
 
 /// This class parses the slide relationships in .xml.rels files.
-/// It is used for 2 purposes.
+/// It is used to:
 /// 1. locate to the upper hierarchy from its child in a PowerPoint presentation.
 /// ex) determine the slide layout from a slide.
 /// TODO: 2. get image path from a picture shape.
@@ -23,6 +23,8 @@ class PptxRelationshipParser {
     throw Exception("Invalid slide layout target string: $target");
   }
 
+  /// Get the parent index of the current slide/slideLayout/slideMaster.
+  /// ex) the slideLayout/slideMaster/theme index of the current slide/slideLayout/slideMaster.
   int getParentIndex(int currentIndex) {
     // Every slide/slideLayout/slideMaster has a .rels file that contains the relationships.
     dynamic slideRelationships = _pptxLoader.getJsonFromPptx(
