@@ -4,11 +4,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relat
 import 'package:luna_core/utils/types.dart';
 
 /// This class parses the slide relationships in .xml.rels files.
-/// It is used to:
-/// 1. locate to the upper hierarchy from its child in a PowerPoint presentation.
-/// ex) determine the slide layout from a slide.
-/// TODO: 2. get image path from a picture shape.
-/// ex) rId2 -> ppt/media/image1.png
 class PptxRelationshipParser {
   PptxXmlToJsonConverter _pptxLoader;
   PptxHierarchy _pptxHierarchy;
