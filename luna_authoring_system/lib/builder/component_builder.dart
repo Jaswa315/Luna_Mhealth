@@ -13,11 +13,9 @@ import 'package:luna_core/models/components/line_component.dart';
 ///
 /// If an unsupported shape type is encountered, an [ArgumentError] is thrown.
 class ComponentBuilder implements IBuilder<Component> {
-  final int _moduleWidth;
-  final int _moduleHeight;
   final Shape _shape;
 
-  ComponentBuilder(this._moduleWidth, this._moduleHeight, this._shape);
+  ComponentBuilder(this._shape);
 
   @override
   Component build() {
@@ -29,7 +27,7 @@ class ComponentBuilder implements IBuilder<Component> {
   }
 
   LineComponent _buildLineComponent(ConnectionShape shape) {
-    return LineBuilder(_moduleWidth, _moduleHeight)
+    return LineBuilder()
         .setStartAndEndPoints(shape)
         .setThickness(shape)
         .setColor(shape)

@@ -13,23 +13,17 @@ import 'package:luna_core/units/point.dart';
 /// to render the line.
 
 class LineBuilder implements IBuilder<LineComponent> {
-  final int _moduleWidth;
-  final int _moduleHeight;
   late Point _startPoint;
   late Point _endPoint;
   late Color _color;
   late double _thickness;
   late BorderStyle _style;
 
-  LineBuilder(this._moduleWidth, this._moduleHeight);
+  LineBuilder();
 
   /// Determines the start and end points.
   LineBuilder setStartAndEndPoints(ConnectionShape shape) {
-    final points = LinePositioner.getStartAndEndPoints(
-      shape,
-      _moduleWidth,
-      _moduleHeight,
-    );
+    final points = LinePositioner.getStartAndEndPoints(shape);
     _startPoint = points['startPoint']!;
     _endPoint = points['endPoint']!;
 

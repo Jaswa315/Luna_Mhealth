@@ -6,6 +6,7 @@ import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/units/emu.dart';
+import 'package:luna_authoring_system/builder/module_builder.dart';
 
 /// **Mock ConnectionShape for Testing**
 class MockConnectionShape extends ConnectionShape {
@@ -23,13 +24,11 @@ class MockConnectionShape extends ConnectionShape {
 void main() {
   group('PageBuilder Tests', () {
     late PageBuilder builder;
-    late int moduleWidth;
-    late int moduleHeight;
+    ModuleBuilder moduleBuilder = ModuleBuilder();
 
     setUp(() {
-      moduleWidth = 1920000;
-      moduleHeight = 1080000;
-      builder = PageBuilder(moduleWidth, moduleHeight);
+      moduleBuilder.setDimensions(EMU(1920000).value, EMU(1080000).value);
+      builder = PageBuilder();
     });
 
     test('Should create an empty page by default', () {

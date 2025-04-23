@@ -11,6 +11,7 @@ import 'package:luna_core/units/emu.dart';
 import 'package:flutter/rendering.dart';
 import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/display_pixel.dart';
+import 'package:luna_authoring_system/builder/module_builder.dart';
 
 /// **Mock ConnectionShape for Testing**
 class MockConnectionShape extends ConnectionShape {
@@ -40,35 +41,31 @@ class MockUnsupportedShape extends Shape {
 
 void main() {
   group('ComponentBuilder Tests', () {
-    late int moduleWidth;
-    late int moduleHeight;
+    ModuleBuilder moduleBuilder = ModuleBuilder();
 
     setUp(() {
-      moduleWidth = 1920;
-      moduleHeight = 1080;
+      moduleBuilder.setDimensions(EMU(1920).value, EMU(1080).value);
     });
 
     test('Should throw an error if shape is not a ConnectionShape for now', () {
       final shape = MockUnsupportedShape();
 
       expect(
-        () => ComponentBuilder(moduleWidth, moduleHeight, shape).build(),
+        () => ComponentBuilder(shape).build(),
         throwsA(isA<ArgumentError>()),
       );
     });
 
     test('Should correctly set thickness from ConnectionShape', () {
       final shape = MockConnectionShape();
-      final component = ComponentBuilder(moduleWidth, moduleHeight, shape)
-          .build() as LineComponent;
+      final component = ComponentBuilder(shape).build() as LineComponent;
 
       expect(component.thickness, greaterThan(0));
     });
 
     test('Should correctly set color and style from ConnectionShape', () {
       final shape = MockConnectionShape();
-      final component = ComponentBuilder(moduleWidth, moduleHeight, shape)
-          .build() as LineComponent;
+      final component = ComponentBuilder(shape).build() as LineComponent;
 
       expect(component.color, equals(shape.color));
       expect(component.style, equals(shape.style));
