@@ -1,4 +1,4 @@
-# Template
+# Template for running Luna mobile tests in firebase on an android emulator.
 
 parameters:
   - name: package_path
@@ -7,18 +7,51 @@ parameters:
     default: 'test_driver/drive_integrations.dart'
   - name: test_folder
     default: 'integration_test'
-  - name: luna_module_name
-    default: 'luna_test'
-  - name: luna_module_path
-    default: $HOME/Documents/luna_test.luna
+# Input a list of input files to test against a built authoring system and built mobile
+# luna_mod_name is the module name without the .luna that is outputed by the authoring system
+# input_file_name is the name of the file in the luna_mobile/integration_test/testAssets folder
+  - name: luna_test_files
+    type: object  
+    default:
+      - luna_mod_name: "a_red_line_test"
+        input_file_name: "A red line.pptx"
+      - luna_mod_name: "a_line_test"
+        input_file_name: "A line.pptx"
 
 steps:
-
 
 - script: exit 1
   displayName: 'Cancel job if not Windows agent'
   condition: ne( variables['Agent.OS'], 'Windows_NT' )
 
+- powershell: Write-Host "##vso[task.setvariable variable=luna_test_modules_string]" 
+  displayName: 'Set luna test modules variable'
+
+- ${{ each file in parameters.luna_test_files }}:
+
+  # Build each luna file in the authoring system
+  - template: ../templates/run_luna_authoring.yml
+    parameters:
+      operating_system: windows
+      use_built_exe: true
+      release_dir: $(release_dir)
+      pptx_path: '$(Build.SourcesDirectory)/luna_mobile/integration_test/testAssets/${{ file.input_file_name }}'
+      module_name: ${{ file.luna_mod_name }}
+
+  # Example string gcloud firebase is expecting for otherfiles:
+  # "/sdcard/Download/a_line_test.luna=$HOME/Documents/a_line_test.luna,/sdcard/Download/a_red_line_test.luna=$HOME/Documents/a_red_line_test.luna"
+  - powershell: |
+      $front_string = ","
+      $powershell_var = "$(luna_test_modules_string)"
+      if($powershell_var -eq ''){
+        $front_string = ""
+      }
+      $final_luna_path = $front_string + "/sdcard/Download/${{ file.luna_mod_name }}.luna=$HOME/Documents/${{ file.luna_mod_name }}.luna"
+      # Set pipeline variable
+      Write-Host "##vso[task.setvariable variable=luna_test_modules_string]$(luna_test_modules_string)$final_luna_path"
+    displayName: "Set other-files string for Firebase testing for ${{ file.name }}"
+
+# Setup firebase by downloading the service account and then installing gcloud
 - task: DownloadSecureFile@1
   name: firebaseLogin
   displayName: 'Get firebase service account credentials'
@@ -42,17 +75,14 @@ steps:
       & $gcloudBin\gcloud init
       Write-Host "##vso[task.prependpath]$gcloudBin"
 
+# use gcload to run patrol tests in firebase
 - task: PowerShell@2
   displayName: 'Run ${{  parameters.package_path  }} integration tests via patrol on firbase'
   inputs:
     targetType: 'inline'
     script: |
       cd ${{  parameters.package_path  }}
-      $luna_mod_path = "${{ parameters.luna_module_path }}"
-      if (!(Test-Path $luna_mod_path)) {
-        Write-Host "Module not found: $luna_mod_path"
-        exit 1
-      }
+      $luna_file_string = "$(luna_test_modules_string)"
       flutter create --platform=android .
       patrol build android --target integration_test/luna_mobile_e2e_test.dart
       gcloud auth activate-service-account --key-file=$(firebaseLogin.secureFilePath)
@@ -64,7 +94,7 @@ steps:
           --device model=Pixel2.arm `
           --timeout 10m `
           --use-orchestrator `
-          --other-files /sdcard/Download/luna_test.luna=$luna_mod_path `
+          --other-files $luna_file_string `
           --environment-variables clearPackageData=true
       if (Select-String -InputObject $testResults "Failed") {
         Write-Host "##vso[task.logissue type=error]Integration Test Failed"
