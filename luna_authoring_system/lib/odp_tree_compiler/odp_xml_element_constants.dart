@@ -9,3 +9,6 @@ const String eMeta = 'office:meta';
 
 /// The XML element for the title of the Open Document Presentation.
 const String eTitle = 'dc:title';
+
+/// The XML element for the author of the Open Document Presentation.
+const String eAuthor = 'meta:initial-creator';

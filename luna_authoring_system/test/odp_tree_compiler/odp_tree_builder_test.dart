@@ -8,8 +8,12 @@ void main() {
     final odpFile = File('test/test_assets/A horizontal line.odp');
     OdpTreeBuilder odpTreeBuilder = OdpTreeBuilder(odpFile);
     PptxTree odpTree = odpTreeBuilder.getOdpTree();
-    test('parseOdp method initialzes title.', () async {
+    test('odpTree method initializes title.', () async {
       expect(odpTree.title, "A horizontal line");
+    });
+
+    test('odpTree method initializes author.', () async {
+      expect(odpTree.author, "Kameron Vuong");
     });
   });
 }
