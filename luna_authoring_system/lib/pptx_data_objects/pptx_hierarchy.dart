@@ -1,11 +1,6 @@
 enum PptxHierarchy {
-  theme(
-    null,
-    "a:theme",
-    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
-  ),
   slideMaster(
-    theme,
+    null,
     "p:sldMaster",
     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
   ),
