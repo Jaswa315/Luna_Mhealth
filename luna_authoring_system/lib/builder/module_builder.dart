@@ -27,8 +27,8 @@ class ModuleBuilder implements IBuilder<Module> {
     _moduleId = Uuid().v4();
   }
 
-  int get moduleWidth => _moduleWidth;
-  int get moduleHeight => _moduleHeight;
+  static int get moduleWidth => _moduleWidth;
+  static int get moduleHeight => _moduleHeight;
 
   ModuleBuilder setTitle(String title) {
     _title = title;
@@ -57,9 +57,7 @@ class ModuleBuilder implements IBuilder<Module> {
     _pages.clear();
     for (var slide in pptxTree.slides) {
       _pages.add(
-        PageBuilder(_moduleWidth, _moduleHeight)
-            .buildPage(slide.shapes ?? [])
-            .build(),
+        PageBuilder().buildPage(slide.shapes ?? []).build(),
       );
     }
 
