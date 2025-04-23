@@ -9,6 +9,7 @@ import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:flutter/rendering.dart';
+import 'package:luna_authoring_system/builder/module_builder.dart';
 
 /// **Mock ConnectionShape for Testing**
 class MockConnectionShape extends ConnectionShape {
@@ -25,17 +26,14 @@ class MockConnectionShape extends ConnectionShape {
 
 void main() {
   group('LineBuilder Tests', () {
-    late int moduleWidth;
-    late int moduleHeight;
-
     setUp(() {
-      moduleWidth = 1920000;
-      moduleHeight = 1080000;
+      ModuleBuilder moduleBuilder = ModuleBuilder();
+      moduleBuilder.setDimensions(EMU(5000000).value, EMU(3000000).value);
     });
 
     test('Should build a LineComponent from a ConnectionShape', () {
       final shape = MockConnectionShape();
-      final lineComponent = LineBuilder(moduleWidth, moduleHeight)
+      final lineComponent = LineBuilder()
           .setStartAndEndPoints(shape)
           .setThickness(shape)
           .setColor(shape)
@@ -47,7 +45,7 @@ void main() {
 
     test('Should correctly set start and end points from ConnectionShape', () {
       final shape = MockConnectionShape();
-      final lineComponent = LineBuilder(moduleWidth, moduleHeight)
+      final lineComponent = LineBuilder()
           .setStartAndEndPoints(shape)
           .setThickness(shape)
           .setColor(shape)
@@ -60,7 +58,7 @@ void main() {
 
     test('Should correctly set thickness from ConnectionShape', () {
       final shape = MockConnectionShape();
-      final lineComponent = LineBuilder(moduleWidth, moduleHeight)
+      final lineComponent = LineBuilder()
           .setStartAndEndPoints(shape)
           .setThickness(shape)
           .setColor(shape)
@@ -72,7 +70,7 @@ void main() {
 
     test('Should correctly set color from ConnectionShape', () {
       final shape = MockConnectionShape();
-      final lineComponent = LineBuilder(moduleWidth, moduleHeight)
+      final lineComponent = LineBuilder()
           .setStartAndEndPoints(shape)
           .setThickness(shape)
           .setColor(shape)
@@ -84,7 +82,7 @@ void main() {
 
     test('Should correctly set style from ConnectionShape', () {
       final shape = MockConnectionShape();
-      final lineComponent = LineBuilder(moduleWidth, moduleHeight)
+      final lineComponent = LineBuilder()
           .setStartAndEndPoints(shape)
           .setThickness(shape)
           .setColor(shape)
@@ -100,7 +98,7 @@ void main() {
       final shape = MockConnectionShape();
 
       expect(
-        () => LineBuilder(moduleWidth, moduleHeight)
+        () => LineBuilder()
             .setThickness(shape)
             .setColor(shape)
             .setStyle(shape)

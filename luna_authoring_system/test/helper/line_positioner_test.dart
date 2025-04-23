@@ -6,14 +6,16 @@ import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/emu.dart';
+import 'package:luna_authoring_system/builder/module_builder.dart';
 
 void main() {
   group('StartEndPointPositioner Tests', () {
-    test('Computes correct start and end points from ConnectionShape', () {
-      // Mock slide dimensions
-      int slideWidth = 5000000;
-      int slideHeight = 3000000;
+    ModuleBuilder moduleBuilder = ModuleBuilder();
+    setUp(() {
+      moduleBuilder.setDimensions(EMU(5000000).value, EMU(3000000).value);
+    });
 
+    test('Computes correct start and end points from ConnectionShape', () {
       // Mock connection shape
       ConnectionShape connectionShape = ConnectionShape(
         width: EMU(50000), // Width of the connection
@@ -25,8 +27,7 @@ void main() {
       );
 
       // Get computed start and end points
-      final points = LinePositioner.getStartAndEndPoints(
-          connectionShape, slideWidth, slideHeight);
+      final points = LinePositioner.getStartAndEndPoints(connectionShape);
 
       // Expected values in percentage
       double expectedStartX = 1000000 / 5000000; // 0.2
@@ -46,10 +47,6 @@ void main() {
     });
 
     test('Handles flipped vertically by swapping startY and endY', () {
-      // Mock slide dimensions
-      int slideWidth = 5000000;
-      int slideHeight = 3000000;
-
       // Mock connection shape with flipping enabled
       ConnectionShape connectionShape = ConnectionShape(
         width: EMU(50000),
@@ -61,8 +58,7 @@ void main() {
       );
 
       // Get computed start and end points
-      final points = LinePositioner.getStartAndEndPoints(
-          connectionShape, slideWidth, slideHeight);
+      final points = LinePositioner.getStartAndEndPoints(connectionShape);
 
       // Expected values in percentage
       double expectedStartY = (500000 + 1000000) / 3000000; // 0.5
@@ -78,10 +74,6 @@ void main() {
 
   group('_createLine Tests', () {
     test('Creates LineComponent with correct thickness and points', () {
-      // Mock slide dimensions
-      int slideWidth = 5000000;
-      int slideHeight = 3000000;
-
       // Mock connection shape
       ConnectionShape connectionShape = ConnectionShape(
         width: EMU(50000), // Connection width
@@ -93,8 +85,7 @@ void main() {
       );
 
       // Get computed start and end points
-      final points = LinePositioner.getStartAndEndPoints(
-          connectionShape, slideWidth, slideHeight);
+      final points = LinePositioner.getStartAndEndPoints(connectionShape);
 
       // Expected thickness conversion
       double expectedThickness = 0.5;

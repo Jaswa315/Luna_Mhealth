@@ -10,15 +10,13 @@ import 'package:luna_core/models/pages/page.dart';
 
 class PageBuilder implements IBuilder<Page> {
   List<Component> _components = [];
-  int _moduleWidth;
-  int _moduleHeight;
 
-  PageBuilder(this._moduleWidth, this._moduleHeight);
+  PageBuilder();
 
   /// converts a shape into a component and adds it to the list.
   PageBuilder addComponent(Shape shape) {
     _components.add(
-      ComponentBuilder(_moduleWidth, _moduleHeight, shape).build(),
+      ComponentBuilder(shape).build(),
     );
 
     return this;
