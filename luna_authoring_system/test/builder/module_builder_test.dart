@@ -112,6 +112,19 @@ void main() {
       expect(result2.authoringVersion, equals(versionManager.version));
     });
 
+    test('Should correctly set and retrieve module width and height', () {
+      // Arrange
+      int expectedWidth = EMU(1920000).value; // Example width in EMUs
+      int expectedHeight = EMU(1080000).value; // Example height in EMUs
+
+      // Act
+      builder.setDimensions(expectedWidth, expectedHeight);
+
+      // Assert
+      expect(builder.moduleWidth, equals(expectedWidth));
+      expect(builder.moduleHeight, equals(expectedHeight));
+    });
+
     tearDown(() {
       versionManager.resetVersion();
     });

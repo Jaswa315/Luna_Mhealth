@@ -19,13 +19,16 @@ class ModuleBuilder implements IBuilder<Module> {
   late String _title;
   late String _author;
   late double _aspectRatio;
-  late int _moduleWidth;
-  late int _moduleHeight;
+  static late int _moduleWidth;
+  static late int _moduleHeight;
   final List<Page> _pages = [];
 
   ModuleBuilder() {
     _moduleId = Uuid().v4();
   }
+
+  int get moduleWidth => _moduleWidth;
+  int get moduleHeight => _moduleHeight;
 
   ModuleBuilder setTitle(String title) {
     _title = title;
