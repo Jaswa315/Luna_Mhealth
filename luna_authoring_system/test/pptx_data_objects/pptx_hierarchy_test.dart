@@ -15,7 +15,6 @@ void main() {
       expect(
           PptxHierarchy.values,
           containsAll([
-            PptxHierarchy.theme,
             PptxHierarchy.slideMaster,
             PptxHierarchy.slideLayout,
             PptxHierarchy.slide,
@@ -23,7 +22,6 @@ void main() {
     });
 
     test('Enum toString returns the correct name', () {
-      expect(PptxHierarchy.theme.name, 'theme');
       expect(PptxHierarchy.slideMaster.name, 'slideMaster');
       expect(PptxHierarchy.slideLayout.name, 'slideLayout');
       expect(PptxHierarchy.slide.name, 'slide');
@@ -42,12 +40,9 @@ void main() {
         PptxHierarchy.slide,
         PptxHierarchy.slideLayout,
         PptxHierarchy.slideMaster,
-        PptxHierarchy.theme,
       ]);
     });
     test('Each hierarchy level has the correct relationshipType', () {
-      expect(PptxHierarchy.theme.relationshipType,
-          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
       expect(PptxHierarchy.slideMaster.relationshipType,
           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster");
       expect(PptxHierarchy.slideLayout.relationshipType,
@@ -69,7 +64,6 @@ void main() {
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide",
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
       ]);
     });
 
@@ -86,7 +80,6 @@ void main() {
         "p:sld",
         "p:sldLayout",
         "p:sldMaster",
-        "a:theme",
       ]);
     });
   });
