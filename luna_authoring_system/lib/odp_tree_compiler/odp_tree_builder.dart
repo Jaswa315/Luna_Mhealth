@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:luna_authoring_system/odp_tree_compiler/odp_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
+import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// =================================================================================================
@@ -23,18 +24,38 @@ class OdpTreeBuilder {
   }
 
   void _updateTitle() {
-    Json coreMap = _odpLoader.getJsonFromPptx("meta.xml");
-    _odpTree.title = coreMap[eMetaDocument]?[eMeta]?[eTitle];
+    Json metaMap = _odpLoader.getJsonFromPptx("meta.xml");
+    _odpTree.title = metaMap[eMetaDocument]?[eMeta]?[eTitle];
   }
 
   void _updateAuthor() {
-    Json coreMap = _odpLoader.getJsonFromPptx("meta.xml");
-    _odpTree.author = coreMap[eMetaDocument]?[eMeta]?[eAuthor];
+    Json metaMap = _odpLoader.getJsonFromPptx("meta.xml");
+    _odpTree.author = metaMap[eMetaDocument]?[eMeta]?[eAuthor];
+  }
+
+  int convertCmToEMU(double cm) {
+    return (cm * 360000).toInt(); // 1 cm = 360000 EMUs
+  }
+
+  String extractNumber(String str) {
+    return str.replaceAll(RegExp(r'[^0-9]'), '');
+  }
+
+  void _updateWidth() {
+    Json stylesMap = _odpLoader.getJsonFromPptx("styles.xml");
+    String pageLayoutName = stylesMap[eStylesDocument]?[eMasterStyles]?
+      [eMasterPage]?[ePageLayoutName];
+    int pageLayoutIndex = int.parse(extractNumber(pageLayoutName));
+    String pageWidth = stylesMap[eStylesDocument]?[eAutomaticStyles]?
+      [ePageLayout]?[pageLayoutIndex]?[ePageLayoutProperties]?[ePageWidth];
+    double width = double.parse(extractNumber(pageWidth));
+    _odpTree.width = EMU(convertCmToEMU(width));
   }
 
   PptxTree getOdpTree() {
     _updateTitle();
     _updateAuthor();
+    _updateWidth();
 
     return _odpTree;
   }
