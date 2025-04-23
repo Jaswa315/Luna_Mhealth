@@ -6,12 +6,11 @@ void main() {
     test('Each hierarchy level has the correct parent', () {
       expect(PptxHierarchy.slide.parent, PptxHierarchy.slideLayout);
       expect(PptxHierarchy.slideLayout.parent, PptxHierarchy.slideMaster);
-      expect(PptxHierarchy.slideMaster.parent, PptxHierarchy.theme);
-      expect(PptxHierarchy.theme.parent, isNull);
+      expect(PptxHierarchy.slideMaster.parent, isNull);
     });
 
     test('Enum values are correctly defined', () {
-      expect(PptxHierarchy.values.length, 4);
+      expect(PptxHierarchy.values.length, 3);
       expect(
           PptxHierarchy.values,
           containsAll([
