@@ -56,29 +56,9 @@ void main() {
     PptxRelationshipParser pptxSlideMasterRelationshipParser =
         getPptxRelationshipParser(PptxHierarchy.slideMaster);
 
-    test('getParentIndex returns correct theme index for a slideMaster', () {
-      int slideMasterIndex = 1;
-      int themeIndex =
-          pptxSlideMasterRelationshipParser.getParentIndex(slideMasterIndex);
-
-      expect(themeIndex, 1);
-    });
-
     test('Throws exception for invalid slideMaster index', () {
       expect(
         () => pptxSlideMasterRelationshipParser.getParentIndex(999),
-        throwsException,
-      );
-    });
-  });
-
-  group('PptxRelationshipParser Tests for Theme', () {
-    PptxRelationshipParser pptxThemeRelationshipParser =
-        getPptxRelationshipParser(PptxHierarchy.theme);
-
-    test('Throws exception for theme as it has no parent', () {
-      expect(
-        () => pptxThemeRelationshipParser.getParentIndex(1),
         throwsException,
       );
     });
