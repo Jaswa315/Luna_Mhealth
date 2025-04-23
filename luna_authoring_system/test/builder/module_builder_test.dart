@@ -121,8 +121,8 @@ void main() {
       builder.setDimensions(expectedWidth, expectedHeight);
 
       // Assert
-      expect(builder.moduleWidth, equals(expectedWidth));
-      expect(builder.moduleHeight, equals(expectedHeight));
+      expect(ModuleBuilder.moduleWidth, equals(expectedWidth));
+      expect(ModuleBuilder.moduleHeight, equals(expectedHeight));
     });
 
     tearDown(() {
