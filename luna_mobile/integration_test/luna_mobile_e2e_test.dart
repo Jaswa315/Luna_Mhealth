@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -10,6 +11,9 @@ import 'package:provider/provider.dart';
 
 
 void main() {
+
+  // list of luna files and assocaited titles to test
+  const lunaFileTitlesTest = {"a_line_test.luna":"A line","a_red_line_test.luna":"A Red Line"};
 
 
     Future<Widget> createTestApp() async {
@@ -60,6 +64,14 @@ void main() {
 
         // Expand file picker menu
         await tester.native.waitUntilVisible(p.Selector(contentDescription: "Show roots"));
+
+        //check if file name is present
+        try{
+          await tester.native.tap(p.Selector(text: lunaTestFileName ));
+          
+          return;
+        } on p.PatrolActionException  catch (_) {} // ignore PatrolActionException since the test file name may not be there. it will error anyway if we can't load a file
+        // Expand file picker menu
         await tester.native.tap(p.Selector(contentDescription: "Show roots"));
 
         // Pick downloads folder
@@ -72,22 +84,28 @@ void main() {
     }
 
     /// Test adding a module from the file system
-    ///  This test will fail if there is not a file with lunaTestFileName 
-    ///  in the downloads folder
+    ///  This test will fail if there is not a file with from the
+    /// lunaFileTitlesTest map in the testAssets folder
     p.patrolTest(
-    'Load and Open A Line Module',
+    'Load and Open Test Modules',
     ($) async {
 
-      const lunaTestFileName = "luna_test.luna";
       Widget testApp = await createTestApp();
       await $.pumpWidgetAndSettle(testApp);
-      await loadModule($,lunaTestFileName);
+
+      for (var fileNameTitle in lunaFileTitlesTest.entries){
+        await loadModule($,fileNameTitle.key);
         await $.waitUntilExists($("Home"));
-      //open the module
-      await $.tester.tap(find.text("Start Learning"));
-      await $.tap($("A line"));
-      expect($("A line"), findsOneWidget);
+        //open the module
+        await $.tester.tap(find.text("Start Learning"));
+        await $.tap($(fileNameTitle.value));
+        expect($(fileNameTitle.value), findsOneWidget);
+        await $.tap(find.byIcon(CupertinoIcons.back));
+        await $.tap(find.byType(BackButton));
+      }
     },
-    
   );
+
+
+
 }

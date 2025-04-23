@@ -1,8 +1,3 @@
-# Nightly Build for Luna mHealth
-# Runs unit tests and then integration tests
-
-trigger: none
-
 jobs:
 
 - job: WindowsTests
@@ -23,6 +18,18 @@ jobs:
 
   - template: ../templates/install_prereqs.yml
 
+  - ${{ each folder in split(variables.package_folders, ',') }}:
+    - template: ../templates/lint_luna.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+    - template: ../templates/run_tests.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+
+  - template: ../templates/publish_test_lint_results.yml
+
   - template: ../templates/build_authoring_system.yml
     parameters:
       build_os: $(buildOS)
@@ -32,11 +39,4 @@ jobs:
       debug_mode: true
       archive_file: false
 
-  - template: ../templates/run_luna_authoring.yml
-    parameters:
-      operating_system: windows
-      use_built_exe: true
-      release_dir: $(release_dir)
-
   - template: ../templates/run_luna_mobile_tests_firebase.yml
-    
