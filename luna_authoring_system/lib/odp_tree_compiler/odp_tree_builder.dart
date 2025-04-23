@@ -2,6 +2,7 @@ library odp_parser;
 
 import 'dart:io';
 import 'package:luna_authoring_system/odp_tree_compiler/odp_xml_element_constants.dart';
+import 'package:luna_authoring_system/odp_tree_compiler/unit_conversion_constants.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_core/units/emu.dart';
@@ -34,7 +35,7 @@ class OdpTreeBuilder {
   }
 
   int convertCmToEMU(double cm) {
-    return (cm * 360000).toInt(); // 1 cm = 360000 EMUs
+    return (cm * emusPerCentimeter).toInt();
   }
 
   String extractNumber(String str) {
