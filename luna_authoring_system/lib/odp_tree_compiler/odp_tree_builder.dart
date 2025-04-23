@@ -24,11 +24,17 @@ class OdpTreeBuilder {
 
   void _updateTitle() {
     Json coreMap = _odpLoader.getJsonFromPptx("meta.xml");
-    _odpTree.title = coreMap[eMetaDocument]?[eMeta]?[eTitle] ?? "";
+    _odpTree.title = coreMap[eMetaDocument]?[eMeta]?[eTitle];
+  }
+
+  void _updateAuthor() {
+    Json coreMap = _odpLoader.getJsonFromPptx("meta.xml");
+    _odpTree.author = coreMap[eMetaDocument]?[eMeta]?[eAuthor];
   }
 
   PptxTree getOdpTree() {
     _updateTitle();
+    _updateAuthor();
 
     return _odpTree;
   }
