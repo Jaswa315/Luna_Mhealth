@@ -33,6 +33,7 @@ class PptxConnectionShapeBuilder {
     );
   }
 
+  /// Extracts the line color from the connection shape's line properties.
   Color _getLineColor(Json lineMap) {
     SrgbColor color = SrgbColor(lineMap[eLine]?[eSolidFill]?[eSrgbColor]
             ?[eValue] ??
@@ -45,11 +46,13 @@ class PptxConnectionShapeBuilder {
     return lineColor;
   }
 
+  /// Extracts the line width from the connection shape's line properties.
   EMU _getLineWidth(Json lineMap) {
     return EMU(int.parse(lineMap[eLine]?[eLineWidth] ??
         "${ConnectionShape.defaultWidth.value}"));
   }
 
+  /// Builds a ConnectionShape object from the provided connection shape map.
   ConnectionShape _buildConnectionShape(Json connectionShapeMap) {
     Transform transform =
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
@@ -73,6 +76,7 @@ class PptxConnectionShapeBuilder {
     );
   }
 
+  /// Builds a list of ConnectionShape objects from the provided shape tree.
   List<Shape> getConnectionShapes(dynamic shapeTree) {
     List<Shape> shapes = [];
 
