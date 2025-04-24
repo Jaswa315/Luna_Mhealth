@@ -1,5 +1,7 @@
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
@@ -20,7 +22,7 @@ void main() {
     test('A line is parsed', () async {
       List<Shape> connectionShapes =
           pptxConnectionShapeBuilder.getConnectionShapes(
-              await pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[eSlide]
+              await pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[PptxHierarchy.slide.xmlKey]
                   [eCommonSlideData][eShapeTree][eConnectionShape]);
       ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
 
@@ -44,7 +46,7 @@ void main() {
     test('A Red line is parsed', () async {
       List<Shape> connectionShapes = pptxConnectionShapeBuilder
           .getConnectionShapes(await pptxLoader.getJsonFromPptx(
-                  "ppt/slideLayouts/slideLayout13.xml")[eSlideLayoutData]
+                  "ppt/slideLayouts/slideLayout13.xml")[PptxHierarchy.slideLayout.xmlKey]
               [eCommonSlideData][eShapeTree][eConnectionShape]);
       ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
 

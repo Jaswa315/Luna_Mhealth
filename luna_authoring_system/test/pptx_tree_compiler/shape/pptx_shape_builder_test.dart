@@ -2,8 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_constants.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_constants.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_core/utils/types.dart';
 import 'dart:io';
@@ -29,7 +30,7 @@ void main() {
     test('getShapes returns connection shapes when eConnectionShape is present',
         () {
       Json shapeTree =
-          pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[eSlide]
+          pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[PptxHierarchy.slide.xmlKey]
               [eCommonSlideData][eShapeTree];
 
       List<Shape> shapes = shapeBuilder.getShapes(shapeTree);
@@ -41,7 +42,7 @@ void main() {
     test('getShapes returns connection shapes when eConnectionShape is present',
         () {
       Json shapeTree =
-          pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[eSlide]
+          pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[PptxHierarchy.slide.xmlKey]
               [eCommonSlideData][eShapeTree];
 
       List<Shape> shapes = shapeBuilder.getShapes(shapeTree);

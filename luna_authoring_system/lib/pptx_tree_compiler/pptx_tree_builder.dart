@@ -10,10 +10,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_bu
 import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
 
-/// =================================================================================================
-/// PPTX PptxTreeBuilder CLASS
-/// =================================================================================================
-
 /// The PptxTreeBuilder takes a .pptx file and is capable of making a
 /// PptxTree object that represents given PowerPoint file.
 /// It will only parse the required info to form a luna module.
