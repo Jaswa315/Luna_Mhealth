@@ -5,6 +5,11 @@ import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
 
+/// The [SequenceOfPageBuilder] class is responsible for building a set of
+/// [SequenceOfPages] objects from a list of slides and a section.
+/// It processes each section and creates a sequence of pages based on the
+/// provided slide indices.
+/// It uses the [PageBuilder] to create individual pages from the slides.
 class SequenceOfPageBuilder implements IBuilder<Set<SequenceOfPages>> {
   final Set<SequenceOfPages> _sequenceOfPages = {};
   final List<Slide> _slides;
