@@ -3,6 +3,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_c
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_constants.dart';
 import 'package:luna_core/utils/types.dart';
 
+/// This class is responsible for building shapes from the PPTX shape tree.
 class PptxShapeBuilder {
   final PptxConnectionShapeBuilder _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder();
 
