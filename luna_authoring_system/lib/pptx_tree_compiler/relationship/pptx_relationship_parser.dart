@@ -9,7 +9,7 @@ class PptxRelationshipParser {
   PptxXmlToJsonConverter _pptxLoader;
   PptxRelationshipParser(this._pptxLoader);
 
-  /// Parse the target string to get the index of the parent: (slideLayout/slideMaster/theme)
+  /// Parse the target string to get the index of the parent.
   int _parseParentTargetString(String target, PptxHierarchy pptxHierarchy) {
     RegExp regex = RegExp('${pptxHierarchy.parent!.name}(\\d+)\\.xml');
     Match? match = regex.firstMatch(target);
@@ -19,7 +19,7 @@ class PptxRelationshipParser {
     throw Exception("Invalid slide layout target string: $target");
   }
 
-  /// Get the parent index of the current slide/slideLayout/slideMaster.
+  /// Get the parent index of the current hierarchy.
   int getParentIndex(int currentIndex, PptxHierarchy pptxHierarchy) {
     // Every slide/slideLayout/slideMaster has a .rels file that contains the relationships.
     dynamic slideRelationships = _pptxLoader.getJsonFromPptx(
@@ -28,13 +28,13 @@ class PptxRelationshipParser {
 
     if (slideRelationships is List) {
       for (Json relationship in slideRelationships) {
-        // Assuming the current _pptxHierarchy is either slide/slideLayout/slideMaster.
+        // Assuming the current _pptxHierarchy has a parent hierarchy.
         if (relationship[eType] == pptxHierarchy.parent!.relationshipType) {
           return _parseParentTargetString(relationship[eTarget], pptxHierarchy);
         }
       }
     } else if (slideRelationships is Map) {
-      // Assuming the current _pptxHierarchy is either slide/slideLayout/slideMaster.
+      // Assuming the current _pptxHierarchy has a parent hierarchy.
       if (slideRelationships[eType] ==
           pptxHierarchy.parent!.relationshipType) {
         return _parseParentTargetString(slideRelationships[eTarget], pptxHierarchy);
