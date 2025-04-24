@@ -8,8 +8,9 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_consta
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// This class is responsible for building a slide object from a PPTX file,
-/// aggregating shape tree hierarchy.
+/// This class is responsible for building the slide objects from the PPTX file.
+/// It handles the extraction of shapes from the slide hierarchy and merges them
+/// from different levels of the hierarchy.
 class PptxSlideBuilder {
   final PptxXmlToJsonConverter _pptxLoader;
   final PptxSlideCountParser _pptxSlideCountParser;
