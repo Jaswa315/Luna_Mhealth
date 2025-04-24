@@ -7,12 +7,11 @@ import 'package:luna_core/utils/types.dart';
 /// to get the target elements in the xml.
 class PptxRelationshipParser {
   PptxXmlToJsonConverter _pptxLoader;
-  PptxHierarchy _pptxHierarchy;
-  PptxRelationshipParser(this._pptxLoader, this._pptxHierarchy);
+  PptxRelationshipParser(this._pptxLoader);
 
   /// Parse the target string to get the index of the parent: (slideLayout/slideMaster/theme)
-  int _parseParentTargetString(String target) {
-    RegExp regex = RegExp('${_pptxHierarchy.parent!.name}(\\d+)\\.xml');
+  int _parseParentTargetString(String target, PptxHierarchy pptxHierarchy) {
+    RegExp regex = RegExp('${pptxHierarchy.parent!.name}(\\d+)\\.xml');
     Match? match = regex.firstMatch(target);
     if (match != null) {
       return int.parse(match.group(1)!);
@@ -21,31 +20,30 @@ class PptxRelationshipParser {
   }
 
   /// Get the parent index of the current slide/slideLayout/slideMaster.
-  /// ex) the slideLayout/slideMaster/theme index of the current slide/slideLayout/slideMaster.
-  int getParentIndex(int currentIndex) {
+  int getParentIndex(int currentIndex, PptxHierarchy pptxHierarchy) {
     // Every slide/slideLayout/slideMaster has a .rels file that contains the relationships.
     dynamic slideRelationships = _pptxLoader.getJsonFromPptx(
-      "ppt/${_pptxHierarchy.name}s/_rels/${_pptxHierarchy.name}$currentIndex.xml.rels",
+      "ppt/${pptxHierarchy.name}s/_rels/${pptxHierarchy.name}$currentIndex.xml.rels",
     )[eRelationships][eRelationship];
 
     if (slideRelationships is List) {
       for (Json relationship in slideRelationships) {
         // Assuming the current _pptxHierarchy is either slide/slideLayout/slideMaster.
-        if (relationship[eType] == _pptxHierarchy.parent!.relationshipType) {
-          return _parseParentTargetString(relationship[eTarget]);
+        if (relationship[eType] == pptxHierarchy.parent!.relationshipType) {
+          return _parseParentTargetString(relationship[eTarget], pptxHierarchy);
         }
       }
     } else if (slideRelationships is Map) {
       // Assuming the current _pptxHierarchy is either slide/slideLayout/slideMaster.
       if (slideRelationships[eType] ==
-          _pptxHierarchy.parent!.relationshipType) {
-        return _parseParentTargetString(slideRelationships[eTarget]);
+          pptxHierarchy.parent!.relationshipType) {
+        return _parseParentTargetString(slideRelationships[eTarget], pptxHierarchy);
       }
     } else {
       throw Exception("Invalid slide relationships format: $slideRelationships");
     }
     throw Exception(
-      "Slide layout not found in ppt/${_pptxHierarchy.name}s/_rels/${_pptxHierarchy.name}$currentIndex.xml.rels",
+      "Slide layout not found in ppt/${pptxHierarchy.name}s/_rels/${pptxHierarchy.name}$currentIndex.xml.rels",
     );
   }
 }
