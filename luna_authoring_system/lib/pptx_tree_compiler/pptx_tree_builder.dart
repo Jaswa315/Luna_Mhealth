@@ -3,17 +3,12 @@ library pptx_parser;
 import 'dart:io';
 
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/document_property/pptx_document_property_parser.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/presentation_property/pptx_presentation_property_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout_relationship/pptx_slide_layout_relationship_parser.dart';
-import 'package:luna_core/utils/types.dart';
 
 /// =================================================================================================
 /// PPTX PptxTreeBuilder CLASS
@@ -28,8 +23,7 @@ class PptxTreeBuilder {
   late PptxPresentationPropertyParser _pptxPresentationPropertyParser;
   late PptxSectionBuilder _pptxSectionBuilder;
   late PptxSlideCountParser _pptxSlideCountParser;
-  late PptxConnectionShapeBuilder _pptxConnectionShapeBuilder;
-  late PptxSlideLayoutRelationshipParser _pptxSlideLayoutRelationshipParser;
+  late PptxSlideBuilder _pptxSlideBuilder;
 
   PptxTree _pptxTree = PptxTree();
 
@@ -39,8 +33,7 @@ class PptxTreeBuilder {
     _pptxPresentationPropertyParser = PptxPresentationPropertyParser(_pptxLoader);
     _pptxSlideCountParser = PptxSlideCountParser(_pptxLoader);
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
-    _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder();
-    _pptxSlideLayoutRelationshipParser = PptxSlideLayoutRelationshipParser(_pptxLoader);
+    _pptxSlideBuilder = PptxSlideBuilder(_pptxLoader, _pptxSlideCountParser);
   }
 
   void _updateTitle() {
@@ -63,44 +56,8 @@ class PptxTreeBuilder {
     _pptxTree.section = _pptxSectionBuilder.getSection();
   }
 
-  List<Shape> _parseShapeTree(Json shapeTree) {
-    List<Shape> shapes = [];
-
-    shapeTree.forEach((key, value) {
-      switch (key) {
-        case eConnectionShape:
-          shapes.addAll(
-            _pptxConnectionShapeBuilder.getConnectionShapes(shapeTree[key]),
-          );
-          break;
-      }
-    });
-
-    return shapes;
-  }
-
   void _updateSlides() {
-    List<Slide> slides = [];
-    for (int i = 1; i <= _pptxSlideCountParser.slideCount; i++) {
-      Slide slide = Slide();
-      // add slide layout elements first.
-      slide.shapes = _parseShapeTree(
-        _pptxLoader.getJsonFromPptx(
-          "ppt/slideLayouts/slideLayout${_pptxSlideLayoutRelationshipParser.getSlideLayoutIndex(i)}.xml",
-        )[eSlideLayoutData][eCommonSlideData][eShapeTree],
-      );
-
-      // add slide elements afterwards.
-      slide.shapes?.addAll(_parseShapeTree(
-        _pptxLoader.getJsonFromPptx(
-          "ppt/slides/slide$i.xml",
-        )[eSlide][eCommonSlideData][eShapeTree],
-      ));
-
-      slides.add(slide);
-    }
-
-    _pptxTree.slides = slides;
+    _pptxTree.slides = _pptxSlideBuilder.getSlides();
   }
 
   PptxTree getPptxTree() {
