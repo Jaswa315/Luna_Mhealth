@@ -11,8 +11,7 @@ import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// This class parses slide{n}.xml and slideLayout{n}.xml files,
-/// where it is capable of building ConnectionShapes object
+/// This class is capable of building ConnectionShapes object
 /// that represent lines in a PowerPoint file.
 class PptxConnectionShapeBuilder {
   PptxConnectionShapeBuilder();
