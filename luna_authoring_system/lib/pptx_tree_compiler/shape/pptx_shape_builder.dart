@@ -7,6 +7,7 @@ import 'package:luna_core/utils/types.dart';
 class PptxShapeBuilder {
   final PptxConnectionShapeBuilder _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder();
 
+  /// Parses the shape tree and returns a list of shapes.
   List<Shape> getShapes(Json shapeTree) {
     List<Shape> shapes = [];
 
