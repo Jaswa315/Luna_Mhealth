@@ -46,22 +46,23 @@ class PptxSlideBuilder {
           "ppt/${hierarchy.name}s/${hierarchy.name}$slideIndex.xml",
         )[hierarchy.xmlKey][eCommonSlideData][eShapeTree],
       );
+    } else {
+      // Recursive case: Get shapes from the parent level first.
+      int parentIndex =
+          _pptxRelationshipParser.getParentIndex(slideIndex, hierarchy);
+      List<Shape> parentShapes =
+          _aggregateShapesFromHierarchy(parentIndex, hierarchy.parent!);
+
+      // Get shapes from the current hierarchy level.
+      List<Shape> currentShapes = _getShapes(
+        _pptxLoader.getJsonFromPptx(
+          "ppt/${hierarchy.name}s/${hierarchy.name}$slideIndex.xml",
+        )[hierarchy.xmlKey][eCommonSlideData][eShapeTree],
+      );
+
+      // Merge parent shapes and current shapes.
+      return _mergeShapeLists(parentShapes, currentShapes);
     }
-
-    // Recursive case: Get shapes from the parent level first.
-    int parentIndex = _pptxRelationshipParser.getParentIndex(slideIndex, hierarchy);
-    List<Shape> parentShapes =
-        _aggregateShapesFromHierarchy(parentIndex, hierarchy.parent!);
-
-    // Get shapes from the current hierarchy level.
-    List<Shape> currentShapes = _getShapes(
-      _pptxLoader.getJsonFromPptx(
-        "ppt/${hierarchy.name}s/${hierarchy.name}$slideIndex.xml",
-      )[hierarchy.xmlKey][eCommonSlideData][eShapeTree],
-    );
-
-    // Merge parent shapes and current shapes.
-    return _mergeShapeLists(parentShapes, currentShapes);
   }
 
   /// Get the slide object for a specific slide index, populated with shapes.
