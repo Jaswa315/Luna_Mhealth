@@ -4,14 +4,17 @@
 trigger: none
 
 pool:
-  vmImage: 'macOS-latest'
+  vmImage: 'windows-latest'
 
 variables:
 - group: 'Version Numbers' #this is a variable group in the library
+- group: 'Google Drive IDs'
 - name: 'mobile_path'
   value: 'luna_mobile'
 - name: 'build_path'
   value: 'build/app/outputs/flutter-apk/app-release.apk'
+- name: 'package_name'
+  value: 'Luna_MobileBuild_$(Build.BuildNumber)'
 
 name: $(version_numbers_luna_mobile).$(Rev:r) #increment build counter everytime build is run
 
@@ -20,10 +23,13 @@ steps:
 - template: templates/install_prereqs.yml
 
 - template: templates/build_mobile_app.yml
+  parameters:
+    build_name: $(Build.BuildNumber)
+    archive_file: true
+    package_name: $(package_name)
 
-# publish mobile as an artifact
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(mobile_path)/$(build_path)'
-    artifact: "Luna_Mobile_$(Build.BuildNumber)"
-    publishLocation: 'pipeline' 
+- template: templates/upload_file_gdrive.yml
+  parameters:
+    gdrive_id: $(gdrive_id_luna_mobile)
+    package_name: $(package_name)
+    source_dir: $(Build.SourcesDirectory)

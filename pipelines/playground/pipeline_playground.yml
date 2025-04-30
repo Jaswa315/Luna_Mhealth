@@ -1,43 +1,35 @@
+# Build pipeline for luna mobile
+# builds the mobile app and publishes it as an apk file to the pipeline
+
 trigger: none
-jobs:
 
-- job: WindowsTests
+pool:
+  vmImage: 'windows-latest'
 
-  pool:
-    vmImage: windows-latest
-  variables:
-    - name: package_folders
-      value: luna_core,luna_authoring_system,luna_mobile
-    - name: buildOS
-      value: windows
-    - name: package_name
-      value: WindowsBuild_$(Build.BuildNumber)
-    - name: release_dir
-      value: /x64/runner/Debug
+variables:
+- group: 'Version Numbers' #this is a variable group in the library
+- group: 'Google Drive IDs'
+- name: 'mobile_path'
+  value: 'luna_mobile'
+- name: 'build_path'
+  value: 'build/app/outputs/flutter-apk/app-release.apk'
+- name: 'package_name'
+  value: 'Luna_MobileBuild_$(Build.BuildNumber)'
 
-  steps:
+name: $(version_numbers_luna_mobile).$(Rev:r) #increment build counter everytime build is run
 
-  - template: ../templates/install_prereqs.yml
+steps:
 
-  - ${{ each folder in split(variables.package_folders, ',') }}:
-    - template: ../templates/lint_luna.yml
-      parameters:
-        package_path: ${{ folder }}
-        package_name: ${{ folder }}
-    - template: ../templates/run_tests.yml
-      parameters:
-        package_path: ${{ folder }}
-        package_name: ${{ folder }}
+- template: ../templates/install_prereqs.yml
 
-  - template: ../templates/publish_test_lint_results.yml
+- template: ../templates/build_mobile_app.yml
+  parameters:
+    build_name: $(Build.BuildNumber)
+    archive_file: true
+    package_name: $(package_name)
 
-  - template: ../templates/build_authoring_system.yml
-    parameters:
-      build_os: $(buildOS)
-      package_name: $(package_name)
-      release_directory: $(release_dir)
-      build_name: $(Build.BuildNumber)
-      debug_mode: true
-      archive_file: false
-
-  - template: ../templates/run_luna_mobile_tests_firebase.yml
+- template: ../templates/upload_file_gdrive.yml
+  parameters:
+    gdrive_id: $(gdrive_id_luna_mobile)
+    package_name: $(package_name)
+    source_dir: $(Build.SourcesDirectory)

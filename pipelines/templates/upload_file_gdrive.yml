@@ -1,0 +1,29 @@
+#Template to upload a file to google drive
+parameters:
+- name: gdrive_id
+  default: ""
+- name: package_name
+  default: ''
+- name: source_dir
+  default: $(Build.SourcesDirectory)
+
+
+steps:
+
+- task: DownloadSecureFile@1
+  name: firebaseLogin
+  displayName: 'Get firebase service account credentials'
+  inputs:
+    secureFile: 'luna-mhealth-firebase_service.json'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r $(Build.SourcesDirectory)/pipelines/scripts/upload_to_google_requirements.txt
+  displayName: 'Install Google Drive API dependencies'
+
+- task: PythonScript@0
+  displayName: 'Run python script to upload ${{  parameters.package_name  }}'
+  inputs:
+    scriptSource: 'filePath'
+    scriptPath:  $(Build.SourcesDirectory)/pipelines/scripts/upload_to_google.py
+    arguments: '$(firebaseLogin.secureFilePath) ${{  parameters.gdrive_id  }} ${{  parameters.source_dir  }}/${{  parameters.package_name  }}.zip ${{  parameters.package_name  }}.zip'

@@ -6,7 +6,13 @@ parameters:
   default: 'android'
 - name: build_name
   default: 0
-
+- name: archive_file
+  default: true
+- name: package_name
+  default: MobileBuild
+- name: target_dir # directory where zip file will be placed
+  default: '.'
+  
 steps:
 
 - task: PowerShell@2
@@ -20,3 +26,10 @@ steps:
       flutter pub get
       flutter create --platforms=${{ parameters.build_os }} .
       flutter build apk --build-name ${{  parameters.build_name  }}
+
+- task: ArchiveFiles@2
+  condition: ${{ parameters.archive_file }}
+  inputs:
+    rootFolderOrFile: "$(Build.SourcesDirectory)/luna_mobile/build/app/outputs/flutter-apk/app-release.apk"
+    archiveType: 'zip'
+    archiveFile: "${{ parameters.target_dir }}/${{ parameters.package_name }}.zip"
