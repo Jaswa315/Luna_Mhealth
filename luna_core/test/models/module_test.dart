@@ -34,6 +34,8 @@ void main() {
           'authoringVersion': '1.0.0',
           'pages': [],
           'aspectRatio': 1.7777777777777777,
+          'moduleWidth': 1920,
+          'moduleHeight': 1080,
         }
       };
 
@@ -65,6 +67,8 @@ void main() {
             }
           ],
           'aspectRatio': 16 / 9,
+          'moduleWidth': 1920,
+          'moduleHeight': 1080,
         }
       };
 
@@ -157,6 +161,18 @@ void main() {
         () => Module.fromJson(json),
         throwsA(isA<FormatException>()),
       );
+    });
+
+    test('Should correctly set and retrieve module width and height', () {
+      // Arrange
+      int expectedWidth = 1920;
+      int expectedHeight = 1080;
+
+      Module.setDimensions(expectedWidth, expectedHeight);
+
+      // Assert
+      expect(Module.moduleWidth, equals(expectedWidth));
+      expect(Module.moduleHeight, equals(expectedHeight));
     });
   });
 }
