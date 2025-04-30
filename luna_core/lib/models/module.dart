@@ -29,7 +29,6 @@ class Module {
     required this.authoringVersion,
     required this.pages,
     required this.aspectRatio,
-    // Removed static fields from the constructor
   });
 
   /// Factory method to create a [Module] from JSON.
@@ -49,11 +48,12 @@ class Module {
       authoringVersion: json['module']['authoringVersion'],
       pages: pages,
       aspectRatio: (json['module']['aspectRatio'] as num).toDouble(),
-      // moduleWidth: (json['module']['moduleWidth'] as num).toInt(),
-      // moduleHeight: (json['module']['moduleHeight'] as num).toInt(),
     );
   }
 
+  //// Sets the dimensions of the module.
+  /// This is a static method that sets the width and height of the module.
+  /// width and height are in EMU (English Metric Units).
   static void setDimensions(int width, int height) {
     moduleWidth = width;
     moduleHeight = height;
