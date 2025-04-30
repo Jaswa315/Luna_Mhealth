@@ -18,6 +18,9 @@ class Module {
   ///// Aspect ratio (height/width)
   final double aspectRatio;
 
+  static late int moduleWidth;
+  static late int moduleHeight;
+
   // Constructor with required parameters
   Module({
     required this.moduleId,
@@ -26,6 +29,7 @@ class Module {
     required this.authoringVersion,
     required this.pages,
     required this.aspectRatio,
+    // Removed static fields from the constructor
   });
 
   /// Factory method to create a [Module] from JSON.
@@ -33,6 +37,10 @@ class Module {
     var slidesJson = json['module']['pages'] as List<dynamic>;
     var pages =
         slidesJson.map((slideJson) => Page.fromJson(slideJson)).toList();
+    setDimensions(
+      (json['module']['moduleWidth'] as num).toInt(),
+      (json['module']['moduleHeight'] as num).toInt(),
+    );
 
     return Module(
       moduleId: json['module']['moduleId'] as String,
@@ -41,7 +49,14 @@ class Module {
       authoringVersion: json['module']['authoringVersion'],
       pages: pages,
       aspectRatio: (json['module']['aspectRatio'] as num).toDouble(),
+      // moduleWidth: (json['module']['moduleWidth'] as num).toInt(),
+      // moduleHeight: (json['module']['moduleHeight'] as num).toInt(),
     );
+  }
+
+  static void setDimensions(int width, int height) {
+    moduleWidth = width;
+    moduleHeight = height;
   }
 
   /// Converts the [Module] object to a JSON map.
@@ -54,6 +69,8 @@ class Module {
         'authoringVersion': authoringVersion,
         'pages': pages.map((page) => page.toJson()).toList(),
         'aspectRatio': aspectRatio,
+        'moduleWidth': moduleWidth,
+        'moduleHeight': moduleHeight,
       },
     };
   }
