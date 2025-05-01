@@ -1,35 +1,47 @@
-# Build pipeline for luna mobile
-# builds the mobile app and publishes it as an apk file to the pipeline
+# Build pipeline for luna authoring system
+# builds the luna authoring system and zips it up and publishes it as a pipeline artifact. 
+# it does this for the the OS's listed in the strategy matrix
 
 trigger: none
 
+strategy:
+  matrix:
+    mac:
+      imageName: 'macOS-latest'
+      buildOS: 'macos'
+      package_name: 'MacBuild_$(Build.BuildNumber)'
+      release_dir: '/Build/Products/Release'
+      gdrive: $(gdrive_id_mac_build)
+    windows:
+      imageName: 'windows-latest'
+      buildOS: 'windows'
+      package_name: 'WindowsBuild_$(Build.BuildNumber)'
+      release_dir: '/x64/runner/Release'
+      gdrive: $(gdrive_id_windows_build)
+
 pool:
-  vmImage: 'windows-latest'
+  vmImage: $(imageName)
 
 variables:
 - group: 'Version Numbers' #this is a variable group in the library
 - group: 'Google Drive IDs'
-- name: 'mobile_path'
-  value: 'luna_mobile'
-- name: 'build_path'
-  value: 'build/app/outputs/flutter-apk/app-release.apk'
-- name: 'package_name'
-  value: 'Luna_MobileBuild_$(Build.BuildNumber)'
+- name: 'authoring_path'
+  value: 'luna_authoring_system'
 
-name: $(version_numbers_luna_mobile).$(Rev:r) #increment build counter everytime build is run
+name: $(version_numbers_luna_authoring).$(Rev:r) #increment build counter everytime build is run
 
 steps:
 
 - template: ../templates/install_prereqs.yml
-
-- template: ../templates/build_mobile_app.yml
+- template: ../templates/build_authoring_system.yml
   parameters:
-    build_name: $(Build.BuildNumber)
-    archive_file: true
+    build_os: $(buildOS)
     package_name: $(package_name)
+    release_directory: $(release_dir)
+    build_name: $(Build.BuildNumber)
 
 - template: ../templates/upload_file_gdrive.yml
   parameters:
-    gdrive_id: $(gdrive_id_luna_mobile)
+    gdrive_id: $(gdrive)
     package_name: $(package_name)
     source_dir: $(Build.SourcesDirectory)
