@@ -18,9 +18,6 @@ class Module {
   ///// Aspect ratio (height/width)
   final double aspectRatio;
 
-  static late int moduleWidth;
-  static late int moduleHeight;
-
   // Constructor with required parameters
   Module({
     required this.moduleId,
@@ -36,10 +33,6 @@ class Module {
     var slidesJson = json['module']['pages'] as List<dynamic>;
     var pages =
         slidesJson.map((slideJson) => Page.fromJson(slideJson)).toList();
-    setDimensions(
-      (json['module']['moduleWidth'] as num).toInt(),
-      (json['module']['moduleHeight'] as num).toInt(),
-    );
 
     return Module(
       moduleId: json['module']['moduleId'] as String,
@@ -49,14 +42,6 @@ class Module {
       pages: pages,
       aspectRatio: (json['module']['aspectRatio'] as num).toDouble(),
     );
-  }
-
-  //// Sets the dimensions of the module.
-  /// This is a static method that sets the width and height of the module.
-  /// width and height are in EMU (English Metric Units).
-  static void setDimensions(int width, int height) {
-    moduleWidth = width;
-    moduleHeight = height;
   }
 
   /// Converts the [Module] object to a JSON map.
@@ -69,8 +54,6 @@ class Module {
         'authoringVersion': authoringVersion,
         'pages': pages.map((page) => page.toJson()).toList(),
         'aspectRatio': aspectRatio,
-        'moduleWidth': moduleWidth,
-        'moduleHeight': moduleHeight,
       },
     };
   }

@@ -1,5 +1,5 @@
+import 'package:luna_authoring_system/builder/module_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_core/models/module.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/point.dart';
@@ -18,19 +18,14 @@ class LinePositioner {
     Point offset = cxn.transform.offset;
     Point size = cxn.transform.size;
 
-    // Extract the numeric values of the x and y coordinates from the offset in EMU (English Metric Units).
-    // These values represent the starting position of the shape in the module's coordinate system.
-    final offsetXValue = (offset.x as EMU).value;
-    final offsetYValue = (offset.y as EMU).value;
-
     // Convert EMU values to percentage-based coordinates
-    final startX = Percent(offsetXValue / Module.moduleWidth);
-    final startY = Percent(offsetYValue / Module.moduleHeight);
-    final endX = Percent(
-      (offsetXValue + (size.x as EMU).value) / Module.moduleWidth,
-    );
-    final endY =
-        Percent((offsetYValue + (size.y as EMU).value) / Module.moduleHeight);
+    final startX = Percent((offset.x as EMU).value / ModuleBuilder.moduleWidth);
+    final startY =
+        Percent((offset.y as EMU).value / ModuleBuilder.moduleHeight);
+    final endX = Percent(((offset.x as EMU).value + (size.x as EMU).value) /
+        ModuleBuilder.moduleWidth);
+    final endY = Percent(((offset.y as EMU).value + (size.y as EMU).value) /
+        ModuleBuilder.moduleHeight);
 
     // If the shape is flipped vertically, swap startY and endY
     final actualStartY = cxn.isFlippedVertically ? endY : startY;
