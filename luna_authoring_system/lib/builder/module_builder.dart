@@ -19,11 +19,16 @@ class ModuleBuilder implements IBuilder<Module> {
   late String _title;
   late String _author;
   late double _aspectRatio;
+  static late int _moduleWidth;
+  static late int _moduleHeight;
   final List<Page> _pages = [];
 
   ModuleBuilder() {
     _moduleId = Uuid().v4();
   }
+
+  static int get moduleWidth => _moduleWidth;
+  static int get moduleHeight => _moduleHeight;
 
   ModuleBuilder setTitle(String title) {
     _title = title;
@@ -41,8 +46,9 @@ class ModuleBuilder implements IBuilder<Module> {
   /// explicit parameter, it is derived from module dimensions
   /// to prevent inconsistencies.
   ModuleBuilder setDimensions(int moduleWidth, int moduleHeight) {
-    Module.setDimensions(moduleWidth, moduleHeight);
-    _aspectRatio = moduleHeight / moduleWidth;
+    _moduleWidth = moduleWidth;
+    _moduleHeight = moduleHeight;
+    _aspectRatio = _moduleHeight / _moduleWidth;
 
     return this;
   }
