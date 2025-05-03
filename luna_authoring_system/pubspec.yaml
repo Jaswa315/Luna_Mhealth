@@ -60,10 +60,9 @@ dev_dependencies:
   # rules and activating additional ones.
   dart_code_linter: ^1.1.5
   flutter_lints: ^3.0.0
-  mockito: ^5.4.4
-
   flutter_test:
     sdk: flutter
+  mockito: ^5.4.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
