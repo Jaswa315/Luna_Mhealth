@@ -393,8 +393,6 @@ class DartLogger implements ILunaLogger {
         return Level.SEVERE;
       case LunaSeverityLevel.Critical:
         return Level.SHOUT;
-      default:
-        throw Exception("Invalid severity level: $severity");
     }
   }
 }
@@ -505,8 +503,6 @@ class ApplicationInsightsLogger implements ILunaLogger {
         return Severity.error;
       case LunaSeverityLevel.Critical:
         return Severity.critical;
-      default:
-        throw Exception("Invalid severity level: $lunaSeverity");
     }
   }
 

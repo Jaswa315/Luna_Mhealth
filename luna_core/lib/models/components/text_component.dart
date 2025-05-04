@@ -117,7 +117,7 @@ class TextPart {
         'textID': textID,
         'fontSize': fontSize,
         'fontStyle': fontStyle.name == FontStyle.italic ? 'italic' : '',
-        'color': color?.value,
+        'color': color?.toARGB32(),
         'fontWeight': fontWeight == FontWeight.bold ? 'bold' : '',
         'fontUnderline':
             fontUnderline == TextDecoration.underline ? 'underline' : '',

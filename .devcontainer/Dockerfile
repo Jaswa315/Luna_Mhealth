@@ -23,7 +23,7 @@ RUN apt-get update && \
 
 
 #cloning git is own later due to needing to upgrade flutter
-RUN git clone https://github.com/flutter/flutter.git -b 3.22.3 /opt/flutter
+RUN git clone https://github.com/flutter/flutter.git -b stable /opt/flutter
 
 
 #add flutter to path

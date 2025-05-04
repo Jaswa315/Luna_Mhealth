@@ -59,7 +59,7 @@ class LineComponent extends Component {
         'x': (endPoint.x as Percent).value,
         'y': (endPoint.y as Percent).value,
       },
-      'color': color.value,
+      'color': color.toARGB32(),
       'thickness': thickness,
       'style': style.index,
     };
