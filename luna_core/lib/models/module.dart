@@ -5,7 +5,7 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-import 'package:luna_core/models/pages/page.dart';
+import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/types.dart';
 
 class Module {
@@ -13,7 +13,7 @@ class Module {
   final String title;
   final String author;
   final String authoringVersion;
-  final List<Page> pages;
+  final Set<SequenceOfPages> sequences;
 
   ///// Aspect ratio (height/width)
   final double aspectRatio;
@@ -24,22 +24,23 @@ class Module {
     required this.title,
     required this.author,
     required this.authoringVersion,
-    required this.pages,
+    required this.sequences,
     required this.aspectRatio,
   });
 
   /// Factory method to create a [Module] from JSON.
   factory Module.fromJson(Json json) {
-    var slidesJson = json['module']['pages'] as List<dynamic>;
-    var pages =
-        slidesJson.map((slideJson) => Page.fromJson(slideJson)).toList();
+    var sequencesJson = json['module']['sequences'] as List<dynamic>;
+    var sequences = sequencesJson
+        .map((seqJson) => SequenceOfPages.fromJson(seqJson))
+        .toSet();
 
     return Module(
       moduleId: json['module']['moduleId'] as String,
       title: json['module']['title'] as String,
       author: json['module']['author'] as String,
       authoringVersion: json['module']['authoringVersion'],
-      pages: pages,
+      sequences: sequences,
       aspectRatio: (json['module']['aspectRatio'] as num).toDouble(),
     );
   }
@@ -52,7 +53,7 @@ class Module {
         'title': title,
         'author': author,
         'authoringVersion': authoringVersion,
-        'pages': pages.map((page) => page.toJson()).toList(),
+        'sequences': sequences.map((seq) => seq.toJson()).toList(),
         'aspectRatio': aspectRatio,
       },
     };
