@@ -1,7 +1,7 @@
 /// =================================================================================================
 /// XML ELEMENTS CONSTANTS FOR PPTX DOCUMENT PROPERTIES
 /// =================================================================================================
-/// This file contains the XML element constants used in the PptxDocumentPropertyParser.
+/// This file contains the XML element constants used in the PptxDocumentPropertyBuilder.
 ///
 /// The XML element for the core properties.
 const String eCoreProperties = 'cp:coreProperties';
