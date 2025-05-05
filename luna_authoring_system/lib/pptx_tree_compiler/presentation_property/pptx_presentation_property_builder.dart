@@ -5,13 +5,13 @@ import 'package:luna_core/utils/types.dart';
 
 /// This class is responsible for parsing presentation's width and
 /// height from presentation.xml.
-class PptxPresentationPropertyParser {
+class PptxPresentationPropertyBuilder {
   late final PptxXmlToJsonConverter _pptxLoader;
   late final Json _presentationMap;
   late final EMU _width;
   late final EMU _height;
 
-  PptxPresentationPropertyParser(this._pptxLoader) {
+  PptxPresentationPropertyBuilder(this._pptxLoader) {
     _presentationMap = _pptxLoader.getJsonFromPptx("ppt/presentation.xml");
     _width = _parseWidth();
     _height = _parseHeight();
