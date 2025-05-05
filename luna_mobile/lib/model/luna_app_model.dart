@@ -15,7 +15,7 @@ class LunaAppModel {
     required Page initialPage,
   }) : _currentPage = initialPage;
 
-  /// gets the current page to the specified [page].
+  /// gets the current page.
   Page getCurrentPage() => _currentPage;
 
   /// Sets the current page to the specified [page].
