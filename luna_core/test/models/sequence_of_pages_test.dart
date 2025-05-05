@@ -77,39 +77,45 @@ void main() {
       sequenceOfPages.addPage(page3);
       expect(sequenceOfPages.isRightMostPage(page3), true);
     });
-
-    test(
-        'Should correctly identify if a page is between the first and last pages',
-        () {
+    test('Should get the index of a page', () {
       sequenceOfPages = SequenceOfPages(pages: [page1, page2, page3]);
-
-      expect(sequenceOfPages.isBetweenFirstAndLastPage(page1), false);
-      expect(sequenceOfPages.isBetweenFirstAndLastPage(page3), false);
-      expect(sequenceOfPages.isBetweenFirstAndLastPage(page2), true);
-      // Sequence with fewer than 3 pages
-      sequenceOfPages = SequenceOfPages(pages: [page1, page2]);
-      expect(sequenceOfPages.isBetweenFirstAndLastPage(page1), false);
-      expect(sequenceOfPages.isBetweenFirstAndLastPage(page2), false);
-
-      // Empty sequence
-      sequenceOfPages = SequenceOfPages(pages: []);
-      expect(sequenceOfPages.isBetweenFirstAndLastPage(page1), false);
+      expect(sequenceOfPages.getIndexOfPage(page1), 0);
+      expect(sequenceOfPages.getIndexOfPage(page2), 1);
+      expect(sequenceOfPages.getIndexOfPage(page3), 2);
     });
 
-    test('Should correctly identify if a page is the only page in the sequence',
-        () {
-      // Sequence with a single page
-      sequenceOfPages = SequenceOfPages(pages: [page1]);
-      expect(sequenceOfPages.isOnlyPage(page1), true);
-
-      // Sequence with multiple pages
+    test('Should throw ArgumentError if page is not found', () {
       sequenceOfPages = SequenceOfPages(pages: [page1, page2]);
-      expect(sequenceOfPages.isOnlyPage(page1), false);
-      expect(sequenceOfPages.isOnlyPage(page2), false);
+      expect(() => sequenceOfPages.getIndexOfPage(page3), throwsArgumentError);
+    });
 
-      // Empty sequence
+    test('Should get the left page of a given page', () {
+      sequenceOfPages = SequenceOfPages(pages: [page1, page2, page3]);
+      expect(sequenceOfPages.getLeftPage(page2), page1);
+      expect(sequenceOfPages.getLeftPage(page3), page2);
+    });
+
+    test('Should throw StateError if no left page is available', () {
+      sequenceOfPages = SequenceOfPages(pages: [page1, page2]);
+      expect(() => sequenceOfPages.getLeftPage(page1), throwsStateError);
+    });
+
+    test('Should get the right page of a given page', () {
+      sequenceOfPages = SequenceOfPages(pages: [page1, page2, page3]);
+      expect(sequenceOfPages.getRightPage(page1), page2);
+      expect(sequenceOfPages.getRightPage(page2), page3);
+    });
+
+    test('Should throw StateError if no right page is available', () {
+      sequenceOfPages = SequenceOfPages(pages: [page1, page2]);
+      expect(() => sequenceOfPages.getRightPage(page2), throwsStateError);
+    });
+
+    test('Should throw RangeError for left or right page on empty sequence',
+        () {
       sequenceOfPages = SequenceOfPages(pages: []);
-      expect(sequenceOfPages.isOnlyPage(page1), false);
+      expect(() => sequenceOfPages.getLeftPage(page1), throwsRangeError);
+      expect(() => sequenceOfPages.getRightPage(page1), throwsRangeError);
     });
   });
 }
