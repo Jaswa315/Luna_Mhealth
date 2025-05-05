@@ -21,6 +21,10 @@ void main() {
       expect(odpTree.width, isA<EMU>());
       expect(odpTree.width.value, 10080000);
     });
-    
+
+    test('odpTree method initializes height.', () async {
+      expect(odpTree.height, isA<EMU>());
+      expect(odpTree.height.value, 5670000);
+    });
   });
 }
