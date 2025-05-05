@@ -3,7 +3,7 @@ library pptx_parser;
 import 'dart:io';
 
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/document_property/pptx_document_property_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/document_property/pptx_document_property_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/presentation_property/pptx_presentation_property_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_builder.dart';
@@ -15,7 +15,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_
 /// It will only parse the required info to form a luna module.
 class PptxTreeBuilder {
   late PptxXmlToJsonConverter _pptxLoader;
-  late PptxDocumentPropertyParser _pptxDocumentPropertyParser;
+  late PptxDocumentPropertyBuilder _pptxDocumentPropertyParser;
   late PptxPresentationPropertyParser _pptxPresentationPropertyParser;
   late PptxSectionBuilder _pptxSectionBuilder;
   late PptxSlideCountParser _pptxSlideCountParser;
@@ -25,7 +25,7 @@ class PptxTreeBuilder {
 
   PptxTreeBuilder(File pptxFile) {
     _pptxLoader = PptxXmlToJsonConverter(pptxFile);
-    _pptxDocumentPropertyParser = PptxDocumentPropertyParser(_pptxLoader);
+    _pptxDocumentPropertyParser = PptxDocumentPropertyBuilder(_pptxLoader);
     _pptxPresentationPropertyParser = PptxPresentationPropertyParser(_pptxLoader);
     _pptxSlideCountParser = PptxSlideCountParser(_pptxLoader);
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
