@@ -1,3 +1,4 @@
+///Module Constructor Tests
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart';
@@ -9,10 +10,17 @@ import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
+import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'dart:io';
 import 'package:luna_core/utils/version_manager.dart';
+
+class TestSection extends Section {
+  @override
+  final Map<String, List<int>> value;
+  TestSection(this.value) : super(value);
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -30,14 +38,23 @@ void main() {
         PptxTree pptxTree =
             PptxTreeBuilder(File('test/test_assets/A line.pptx')).getPptxTree();
 
+        try {
+          pptxTree.section = TestSection(
+              {'default': List.generate(pptxTree.slides.length, (i) => i + 1)});
+        } catch (_) {
+          // section already initialized, ignore
+        }
+
         ModuleConstructor moduleConstructor = ModuleConstructor(pptxTree);
 
         // Generate the module asynchronously
         Module generatedModule = await moduleConstructor.constructLunaModule();
-        expect(generatedModule.pages.length, 1);
+        final allPages =
+            generatedModule.sequences.expand((seq) => seq.pages).toList();
+        expect(allPages.length, 1);
         expect(generatedModule.authoringVersion, "0.0.1");
-        expect(generatedModule.pages[0].components.length, 1);
-        expect(generatedModule.pages[0].components[0], isA<LineComponent>());
+        expect(allPages[0].components.length, 1);
+        expect(allPages[0].components[0], isA<LineComponent>());
       });
       test('Should create a module with a single slide and single line',
           () async {
@@ -60,13 +77,18 @@ void main() {
         ];
         pptxTree.slides = [slide];
 
+        pptxTree.section = TestSection(
+            {'default': List.generate(pptxTree.slides.length, (i) => i + 1)});
+
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
+        final allPages =
+            generatedModule.sequences.expand((seq) => seq.pages).toList();
 
-        expect(generatedModule.pages.length, 1);
+        expect(allPages.length, 1);
         expect(generatedModule.authoringVersion, "0.0.1");
-        expect(generatedModule.pages[0].components.length, 1);
-        expect(generatedModule.pages[0].components[0], isA<LineComponent>());
+        expect(allPages[0].components.length, 1);
+        expect(allPages[0].components[0], isA<LineComponent>());
       });
 
       test('Should correctly assign title and author from PptxTree', () async {
@@ -76,6 +98,8 @@ void main() {
         pptxTree.width = EMU(1920000);
         pptxTree.height = EMU(1080000);
         pptxTree.slides = [];
+
+        pptxTree.section = TestSection({});
 
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
@@ -120,12 +144,17 @@ void main() {
 
         pptxTree.slides = [slide1, slide2];
 
+        pptxTree.section = TestSection(
+            {'default': List.generate(pptxTree.slides.length, (i) => i + 1)});
+
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
+        final allPages =
+            generatedModule.sequences.expand((seq) => seq.pages).toList();
 
-        expect(generatedModule.pages.length, 2);
-        expect(generatedModule.pages[0].components.length, 1);
-        expect(generatedModule.pages[1].components.length, 1);
+        expect(allPages.length, 2);
+        expect(allPages[0].components.length, 1);
+        expect(allPages[1].components.length, 1);
       });
     });
 
@@ -138,10 +167,12 @@ void main() {
         pptxTree.height = EMU(1080000);
         pptxTree.slides = [];
 
+        pptxTree.section = TestSection({});
+
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
 
-        expect(generatedModule.pages, isEmpty);
+        expect(generatedModule.sequences, isEmpty);
       });
 
       test(
@@ -158,11 +189,16 @@ void main() {
 
         pptxTree.slides = [slide];
 
+        pptxTree.section = TestSection(
+            {'default': List.generate(pptxTree.slides.length, (i) => i + 1)});
+
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
+        final allPages =
+            generatedModule.sequences.expand((seq) => seq.pages).toList();
 
-        expect(generatedModule.pages.length, 1);
-        expect(generatedModule.pages[0].components, isEmpty);
+        expect(allPages.length, 1);
+        expect(allPages[0].components, isEmpty);
       });
     });
   });

@@ -1,4 +1,5 @@
 import 'package:luna_core/models/pages/page.dart';
+import 'package:luna_core/utils/types.dart';
 
 /// Represents a sequence of pages in the application.
 class SequenceOfPages {
@@ -123,5 +124,19 @@ class SequenceOfPages {
     }
 
     return _pages[index + 1];
+  }
+
+  factory SequenceOfPages.fromJson(Json json) {
+    final pagesJson = json['pages'] as List<dynamic>;
+
+    return SequenceOfPages(
+      pages: pagesJson.map((p) => Page.fromJson(p)).toList(),
+    );
+  }
+
+  Json toJson() {
+    return {
+      'pages': pages.map((p) => p.toJson()).toList(),
+    };
   }
 }

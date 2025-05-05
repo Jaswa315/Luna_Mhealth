@@ -75,7 +75,7 @@ class _ModulePageState extends State<ModulePage> {
           Expanded(
             child: PageView.builder(
                 controller: _navigationController.pageController,
-                itemCount: widget.module.pages.length,
+                itemCount: _cachedPagesWidgets.length,
                 onPageChanged: (index) {
                   setState(() => _navigationController.currentPage = index);
                   _saveLastVisitedPage();
@@ -84,7 +84,7 @@ class _ModulePageState extends State<ModulePage> {
           ),
           ModulePageNavigation(
             currentPage: _navigationController.currentPage,
-            pageCount: widget.module.pages.length,
+            pageCount: _cachedPagesWidgets.length,
             onPageChange: (index) => _navigationController.animateToPage(index),
           ),
         ],
@@ -106,7 +106,9 @@ class _ModulePageState extends State<ModulePage> {
 
   void _setupPageWidgets() {
     final screenSize = MediaQuery.of(context).size;
-    _cachedPagesWidgets = widget.module.pages
+    final allPages =
+        widget.module.sequences.expand((seq) => seq.pages).toList();
+    _cachedPagesWidgets = allPages
         .asMap()
         .map((index, page) =>
             MapEntry(index, _getCachedOrBuildSlide(page, screenSize, index)))

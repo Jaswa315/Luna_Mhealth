@@ -1,11 +1,20 @@
 import 'package:test/test.dart';
 import 'package:luna_authoring_system/builder/module_builder.dart';
 import 'package:luna_authoring_system/builder/page_builder.dart';
+import 'package:luna_authoring_system/builder/sequence_of_page_builder.dart';
+import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/utils/version_manager.dart';
+
+class TestSection extends Section {
+  @override
+  final Map<String, List<int>> value;
+
+  TestSection(this.value) : super(value);
+}
 
 void main() {
   group('ModuleBuilder Tests', () {
@@ -40,15 +49,20 @@ void main() {
       dummySlide.shapes = [];
 
       mockTree.slides = [dummySlide, dummySlide, dummySlide];
+      mockTree.section = TestSection({
+        'section-1': [1, 2, 3]
+      });
 
       builder
           .setTitle("Test Module")
           .setAuthor("Test Author")
           .setDimensions(EMU(1920000).value, EMU(1080000).value)
-          .setPages(mockTree)
+          .setSequencesFromSection(mockTree.slides, mockTree.section)
           .build();
 
-      expect(builder.build().pages.length, equals(3));
+      final result = builder.build();
+      final totalPages = result.sequences.expand((seq) => seq.pages).length;
+      expect(totalPages, equals(3));
     });
 
     test('Should correctly process empty pptx tree', () {
@@ -58,15 +72,17 @@ void main() {
       mockTree.width = EMU(1920000);
       mockTree.height = EMU(1080000);
       mockTree.slides = [];
+      mockTree.section = TestSection({});
 
       builder
           .setTitle("Test Module")
           .setAuthor("Test Author")
           .setDimensions(EMU(1920000).value, EMU(1080000).value)
-          .setPages(mockTree)
+          .setSequencesFromSection(mockTree.slides, mockTree.section)
           .build();
 
-      expect(builder.build().pages, isEmpty);
+      final result = builder.build();
+      expect(result.sequences, isEmpty);
     });
 
     test('Should set and get author correctly', () {
