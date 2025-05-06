@@ -36,3 +36,6 @@ const String ePageLayoutProperties = 'style:page-layout-properties';
 
 /// The XML element for the page width.
 const String ePageWidth = '_fo:page-width';
+
+/// The XML element for the page width.
+const String ePageHeight = '_fo:page-height';

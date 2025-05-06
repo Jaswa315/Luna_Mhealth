@@ -34,29 +34,39 @@ class OdpTreeBuilder {
     _odpTree.author = metaMap[eMetaDocument]?[eMeta]?[eAuthor];
   }
 
-  int convertCmToEMU(double cm) {
-    return (cm * emusPerCentimeter).toInt();
+  EMU convertCmToEMU(double cm) {
+    return EMU((cm * emusPerCentimeter).toInt());
   }
 
   String extractNumber(String str) {
-    return str.replaceAll(RegExp(r'[^0-9]'), '');
+    return str.replaceAll(RegExp(r'[^0-9.]'), '');
+  }
+
+  EMU getPageDimension(Json stylesMap, String pageDimensionName) {
+    String pageLayoutName = stylesMap[eStylesDocument]?[eMasterStyles]?
+      [eMasterPage]?[ePageLayoutName];
+    int pageLayoutIndex = int.parse(extractNumber(pageLayoutName));
+    String pageDimension = stylesMap[eStylesDocument]?[eAutomaticStyles]?
+      [ePageLayout]?[pageLayoutIndex]?[ePageLayoutProperties]?[pageDimensionName];
+    double dimension = double.parse(extractNumber(pageDimension));
+    return convertCmToEMU(dimension);
   }
 
   void _updateWidth() {
     Json stylesMap = _odpLoader.getJsonFromPptx("styles.xml");
-    String pageLayoutName = stylesMap[eStylesDocument]?[eMasterStyles]?
-      [eMasterPage]?[ePageLayoutName];
-    int pageLayoutIndex = int.parse(extractNumber(pageLayoutName));
-    String pageWidth = stylesMap[eStylesDocument]?[eAutomaticStyles]?
-      [ePageLayout]?[pageLayoutIndex]?[ePageLayoutProperties]?[ePageWidth];
-    double width = double.parse(extractNumber(pageWidth));
-    _odpTree.width = EMU(convertCmToEMU(width));
+    _odpTree.width = getPageDimension(stylesMap, ePageWidth);
+  }
+
+  void _updateHeight() {
+    Json stylesMap = _odpLoader.getJsonFromPptx("styles.xml");
+    _odpTree.height = getPageDimension(stylesMap, ePageHeight);
   }
 
   PptxTree getOdpTree() {
     _updateTitle();
     _updateAuthor();
     _updateWidth();
+    _updateHeight();
 
     return _odpTree;
   }
