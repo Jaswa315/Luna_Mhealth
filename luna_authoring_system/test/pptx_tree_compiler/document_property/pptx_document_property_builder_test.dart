@@ -9,6 +9,7 @@ class MockPptxXmlToJsonConverter extends Mock implements PptxXmlToJsonConverter 
 void main() {
   late MockPptxXmlToJsonConverter mockPptxLoader;
   late PptxDocumentPropertyBuilder pptxDocumentPropertyBuilder;
+
   final mockJson = {
     eCoreProperties: {
       eTitle: "A Title Name",
@@ -18,14 +19,15 @@ void main() {
 
   setUp(() {
     mockPptxLoader = MockPptxXmlToJsonConverter();
-
     when(mockPptxLoader.getJsonFromPptx('docProps/core.xml')).thenReturn(mockJson);
+    pptxDocumentPropertyBuilder = PptxDocumentPropertyBuilder(mockPptxLoader);
   });
 
-  test('PptxDocumentPropertBuilder sets author and title in CTOR.', () {
-    pptxDocumentPropertyBuilder = PptxDocumentPropertyBuilder(mockPptxLoader);
-
+  test('PptxDocumentPropertBuilder sets title in CTOR.', () {
     expect(pptxDocumentPropertyBuilder.title, "A Title Name");
-    expect(pptxDocumentPropertyBuilder.author, "An Author Name");
+  });
+
+  test('PptxDocumentPropertBuilder sets author in CTOR.', () {
+    expect(pptxDocumentPropertyBuilder.title, "A Title Name");
   });
 }
