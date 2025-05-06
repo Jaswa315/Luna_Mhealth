@@ -35,6 +35,8 @@ void main() {
           equals(2)); // First section has 2 pages
       expect(sequenceOfPagesSet.last.pages.length,
           equals(1)); // Second section has 1 page
+      expect(builder.firstPage, isA<Page>());
+      expect(builder.firstPage.components, isEmpty);
     });
 
     test('Should handle an empty list of slides', () {
@@ -57,6 +59,7 @@ void main() {
       expect(sequenceOfPagesSet.length, equals(1)); // One section
       expect(
           sequenceOfPagesSet.first.pages, isEmpty); // The section has no pages
+      expect(() => builder.firstPage, throwsA(isA<StateError>()));
     });
   });
 }

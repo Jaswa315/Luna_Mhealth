@@ -97,9 +97,11 @@ void main() {
         pptxTree.author = "Test Author";
         pptxTree.width = EMU(1920000);
         pptxTree.height = EMU(1080000);
-        pptxTree.slides = [];
-
-        pptxTree.section = TestSection({});
+        final slide = Slide()..shapes = [];
+        pptxTree.slides = [slide];
+        pptxTree.section = TestSection({
+          'default': [1]
+        });
 
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
@@ -170,9 +172,10 @@ void main() {
         pptxTree.section = TestSection({});
 
         final moduleConstructor = ModuleConstructor(pptxTree);
-        final generatedModule = await moduleConstructor.constructLunaModule();
-
-        expect(generatedModule.sequences, isEmpty);
+        expect(
+          () async => await moduleConstructor.constructLunaModule(),
+          throwsA(isA<StateError>()),
+        );
       });
 
       test(
@@ -199,6 +202,7 @@ void main() {
 
         expect(allPages.length, 1);
         expect(allPages[0].components, isEmpty);
+        expect(generatedModule.entryPage.components, isEmpty);
       });
     });
   });

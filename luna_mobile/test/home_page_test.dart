@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
+import 'package:luna_core/models/pages/page.dart' as luna_page;
 import 'package:luna_mobile/presentation/pages/home_page.dart';
 import 'package:luna_mobile/presentation/pages/start_learning_page.dart';
 import 'package:luna_mobile/presentation/pages/need_help_page.dart';
@@ -106,6 +107,7 @@ void main() {
         authoringVersion: '1.0.0',
         sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-2',
@@ -114,6 +116,7 @@ void main() {
         authoringVersion: '1.0.0',
         sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-3',
@@ -122,6 +125,7 @@ void main() {
         authoringVersion: '1.0.0',
         sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-4',
@@ -130,6 +134,7 @@ void main() {
         authoringVersion: '1.0.0',
         sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
     ];
 
@@ -148,6 +153,7 @@ void main() {
         authoringVersion: '1.0.0',
         sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-2',
@@ -156,6 +162,7 @@ void main() {
         authoringVersion: '1.0.0',
         sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
     ];
 
@@ -187,6 +194,7 @@ void main() {
         authoringVersion: '1.0.0',
         sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
     ];
 

@@ -5,6 +5,7 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/types.dart';
 
@@ -18,6 +19,8 @@ class Module {
   ///// Aspect ratio (height/width)
   final double aspectRatio;
 
+  final Page entryPage;
+
   // Constructor with required parameters
   Module({
     required this.moduleId,
@@ -26,6 +29,7 @@ class Module {
     required this.authoringVersion,
     required this.sequences,
     required this.aspectRatio,
+    required this.entryPage,
   });
 
   /// Factory method to create a [Module] from JSON.
@@ -35,6 +39,8 @@ class Module {
         .map((seqJson) => SequenceOfPages.fromJson(seqJson))
         .toSet();
 
+    var entryPage = Page.fromJson(json['module']['entryPage']);
+
     return Module(
       moduleId: json['module']['moduleId'] as String,
       title: json['module']['title'] as String,
@@ -42,6 +48,7 @@ class Module {
       authoringVersion: json['module']['authoringVersion'],
       sequences: sequences,
       aspectRatio: (json['module']['aspectRatio'] as num).toDouble(),
+      entryPage: entryPage,
     );
   }
 
@@ -55,6 +62,7 @@ class Module {
         'authoringVersion': authoringVersion,
         'sequences': sequences.map((seq) => seq.toJson()).toList(),
         'aspectRatio': aspectRatio,
+        'entryPage': entryPage.toJson(),
       },
     };
   }
