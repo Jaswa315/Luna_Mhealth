@@ -22,7 +22,7 @@ void main() {
     when(mockPptxLoader.getJsonFromPptx('docProps/core.xml')).thenReturn(mockJson);
     pptxDocumentPropertyBuilder = PptxDocumentPropertyBuilder(mockPptxLoader);
   });
-  
+
   test('PptxDocumentPropertBuilder sets title in CTOR.', () {
     expect(pptxDocumentPropertyBuilder.title, "A Title Name");
   });
