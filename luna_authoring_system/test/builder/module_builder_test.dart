@@ -33,6 +33,12 @@ void main() {
       builder.setTitle(expectedTitle);
       builder.setAuthor("Author for Title Test");
       builder.setDimensions(EMU(1920000).value, EMU(1080000).value);
+      final dummySlide = Slide()..shapes = [];
+      builder.setSequencesFromSection(
+          [dummySlide],
+          TestSection({
+            'section': [1]
+          }));
       Module result = builder.build();
       expect(result.title, equals(expectedTitle));
       expect(result.authoringVersion, equals(versionManager.version));
@@ -74,15 +80,14 @@ void main() {
       mockTree.slides = [];
       mockTree.section = TestSection({});
 
-      builder
-          .setTitle("Test Module")
-          .setAuthor("Test Author")
-          .setDimensions(EMU(1920000).value, EMU(1080000).value)
-          .setSequencesFromSection(mockTree.slides, mockTree.section)
-          .build();
-
-      final result = builder.build();
-      expect(result.sequences, isEmpty);
+      expect(
+        () => builder
+            .setTitle("Test Module")
+            .setAuthor("Test Author")
+            .setDimensions(EMU(1920000).value, EMU(1080000).value)
+            .setSequencesFromSection(mockTree.slides, mockTree.section),
+        throwsA(isA<StateError>()),
+      );
     });
 
     test('Should set and get author correctly', () {
@@ -90,6 +95,12 @@ void main() {
       builder.setTitle("Some Title");
       builder.setAuthor(expectedAuthor);
       builder.setDimensions(EMU(1920000).value, EMU(1080000).value);
+      final dummySlide = Slide()..shapes = [];
+      builder.setSequencesFromSection(
+          [dummySlide],
+          TestSection({
+            'section': [1]
+          }));
       Module result = builder.build();
       expect(result.author, equals(expectedAuthor));
       expect(result.authoringVersion, equals(versionManager.version));
@@ -99,6 +110,12 @@ void main() {
       builder.setTitle("Aspect Ratio Title");
       builder.setAuthor("Aspect Ratio Author");
       builder.setDimensions(EMU(2560000).value, EMU(1440000).value);
+      final dummySlide = Slide()..shapes = [];
+      builder.setSequencesFromSection(
+          [dummySlide],
+          TestSection({
+            'section': [1]
+          }));
       Module result = builder.build();
       expect(
           result.aspectRatio, equals(EMU(1440000).value / EMU(2560000).value));
@@ -114,11 +131,23 @@ void main() {
       builder1.setTitle("Module 1");
       builder1.setAuthor("Author 1");
       builder1.setDimensions(EMU(1920000).value, EMU(1080000).value);
+      final dummySlide1 = Slide()..shapes = [];
+      builder1.setSequencesFromSection(
+          [dummySlide1],
+          TestSection({
+            'section': [1]
+          }));
 
       ModuleBuilder builder2 = ModuleBuilder();
       builder2.setTitle("Module 2");
       builder2.setAuthor("Author 2");
       builder2.setDimensions(EMU(1920000).value, EMU(1080000).value);
+      final dummySlide2 = Slide()..shapes = [];
+      builder2.setSequencesFromSection(
+          [dummySlide2],
+          TestSection({
+            'section': [1]
+          }));
 
       Module result1 = builder1.build();
       Module result2 = builder2.build();
@@ -135,6 +164,12 @@ void main() {
 
       // Act
       builder.setDimensions(expectedWidth, expectedHeight);
+      final dummySlide = Slide()..shapes = [];
+      builder.setSequencesFromSection(
+          [dummySlide],
+          TestSection({
+            'section': [1]
+          }));
 
       // Assert
       expect(ModuleBuilder.moduleWidth, equals(expectedWidth));

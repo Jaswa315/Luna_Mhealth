@@ -17,6 +17,7 @@ void main() {
           SequenceOfPages(pages: [Page(components: [])])
         },
         aspectRatio: 16 / 9,
+        entryPage: Page(components: []),
       );
 
       expect(module.moduleId, '12345');
@@ -38,6 +39,7 @@ void main() {
           'authoringVersion': '1.0.0',
           'sequences': [],
           'aspectRatio': 1.7777777777777777,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
@@ -73,6 +75,7 @@ void main() {
             }
           ],
           'aspectRatio': 16 / 9,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
@@ -99,6 +102,7 @@ void main() {
           ])
         },
         aspectRatio: 4 / 3,
+        entryPage: Page(components: []),
       );
 
       final json = module.toJson();
@@ -110,6 +114,7 @@ void main() {
       expect(json['module']['sequences'].length, 1);
       expect(json['module']['sequences'][0]['pages'].length, 2);
       expect(json['module']['aspectRatio'], closeTo(1.3333, 0.0001));
+      expect(json['module']['entryPage'], isA<Map>());
     });
 
     test('Deserialization fails if one required field is missing', () {
@@ -121,6 +126,7 @@ void main() {
           'authoringVersion': '1.0.0',
           'sequences': [],
           'aspectRatio': 1.7777777777777777,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
@@ -139,6 +145,7 @@ void main() {
           'authoringVersion': '1.0.0',
           'sequences': [],
           'aspectRatio': 'not a number', // Wrong type
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
@@ -166,6 +173,7 @@ void main() {
             }
           ],
           'aspectRatio': 16 / 9,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 

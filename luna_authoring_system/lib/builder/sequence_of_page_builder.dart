@@ -15,6 +15,7 @@ class SequenceOfPageBuilder implements IBuilder<Set<SequenceOfPages>> {
   final List<Slide> _slides;
   final Section _section;
   final PageBuilder _pageBuilder = PageBuilder();
+  Page? _firstPage;
 
   SequenceOfPageBuilder({
     required List<Slide> slides,
@@ -55,6 +56,22 @@ class SequenceOfPageBuilder implements IBuilder<Set<SequenceOfPages>> {
 
   /// Adds a [SequenceOfPages] to the set of sequences.
   void _addSequenceOfPages(List<Page> pages) {
-    _sequenceOfPages.add(SequenceOfPages(pages: pages));
+    if (pages.isEmpty) {
+      _sequenceOfPages.add(SequenceOfPages(pages: []));
+
+      return;
+    }
+
+    final sequence = SequenceOfPages(pages: pages);
+    _sequenceOfPages.add(sequence);
+    _firstPage ??= pages.first;
+  }
+
+  Page get firstPage {
+    if (_firstPage == null) {
+      throw StateError('No pages were added. Cannot return firstPage.');
+    }
+
+    return _firstPage!;
   }
 }

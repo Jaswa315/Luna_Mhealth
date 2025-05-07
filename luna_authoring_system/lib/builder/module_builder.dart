@@ -3,6 +3,7 @@ import 'package:luna_authoring_system/builder/sequence_of_page_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/module.dart';
+import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/version_manager.dart';
 import 'package:uuid/uuid.dart';
@@ -17,6 +18,7 @@ class ModuleBuilder implements IBuilder<Module> {
   static late int _moduleWidth;
   static late int _moduleHeight;
   final Set<SequenceOfPages> _sequences = {};
+  late final Page _entryPage;
 
   ModuleBuilder() {
     _moduleId = const Uuid().v4();
@@ -50,11 +52,15 @@ class ModuleBuilder implements IBuilder<Module> {
 
   /// Converts the provided [slides] and [section] into sequences using SequenceOfPageBuilder.
   ModuleBuilder setSequencesFromSection(List<Slide> slides, Section section) {
+    final SequenceOfPageBuilder builder =
+        SequenceOfPageBuilder(slides: slides, section: section);
+    final Set<SequenceOfPages> sequences = builder.build();
+
     _sequences
       ..clear()
-      ..addAll(
-        SequenceOfPageBuilder(slides: slides, section: section).build(),
-      );
+      ..addAll(sequences);
+
+    _entryPage = builder.firstPage;
 
     return this;
   }
@@ -68,6 +74,7 @@ class ModuleBuilder implements IBuilder<Module> {
       authoringVersion: VersionManager().version,
       sequences: _sequences,
       aspectRatio: _aspectRatio,
+      entryPage: _entryPage,
     );
   }
 }
