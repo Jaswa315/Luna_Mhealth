@@ -1,13 +1,12 @@
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/types.dart';
+
+/// Represents a module in the application.
+/// A module can contain multiple sequences of pages.
+/// Each sequence can have multiple pages, and each page can have multiple components.
+/// The module also has metadata such as title, author, and aspect ratio.
+/// The moduleId is a unique identifier for the module.
 
 class Module {
   final String moduleId;

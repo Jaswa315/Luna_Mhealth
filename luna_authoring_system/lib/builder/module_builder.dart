@@ -52,16 +52,13 @@ class ModuleBuilder implements IBuilder<Module> {
 
   /// Converts the provided [slides] and [section] into sequences using SequenceOfPageBuilder.
   ModuleBuilder setSequencesFromSection(List<Slide> slides, Section section) {
-    final builder = SequenceOfPageBuilder(slides: slides, section: section);
-    final sequencesBuilt = builder.build();
-
-    if (sequencesBuilt.isEmpty) {
-      throw StateError('No sequences were built from the provided section.');
-    }
+    final SequenceOfPageBuilder builder =
+        SequenceOfPageBuilder(slides: slides, section: section);
+    final Set<SequenceOfPages> sequences = builder.build();
 
     _sequences
       ..clear()
-      ..addAll(sequencesBuilt);
+      ..addAll(sequences);
 
     _entryPage = builder.firstPage;
 
