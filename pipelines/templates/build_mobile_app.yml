@@ -22,6 +22,7 @@ steps:
     targetType: 'inline'
     script: |
       cd "luna_mobile"
+      Remove-Item android -Recurse
       flutter clean
       flutter pub get
       flutter create --platforms=${{ parameters.build_os }} .
