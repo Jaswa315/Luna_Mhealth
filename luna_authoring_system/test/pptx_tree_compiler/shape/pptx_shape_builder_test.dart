@@ -7,7 +7,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_consta
 import 'package:luna_core/utils/types.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'dart:io';
 
 @GenerateNiceMocks([MockSpec<PptxConnectionShapeBuilder>(), MockSpec<ConnectionShape>()])
 import 'pptx_shape_builder_test.mocks.dart';
