@@ -1,54 +1,46 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_constants.dart';
-import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_constants.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_core/utils/types.dart';
-import 'dart:io';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+
+@GenerateNiceMocks([MockSpec<PptxConnectionShapeBuilder>(), MockSpec<ConnectionShape>()])
+import 'pptx_shape_builder_test.mocks.dart';
 
 void main() {
+  late PptxShapeBuilder shapeBuilder;
+  late MockPptxConnectionShapeBuilder mockConnectionShapeBuilder;
+  late MockConnectionShape mockConnectionShape;
+  late List<Shape> mockShapes;
+
+  setUp(() {
+    mockConnectionShape = MockConnectionShape();
+    mockShapes = [mockConnectionShape];
+    mockConnectionShapeBuilder = MockPptxConnectionShapeBuilder();
+    when(mockConnectionShapeBuilder.getConnectionShapes(any)).thenReturn(mockShapes);
+    shapeBuilder = PptxShapeBuilder(mockConnectionShapeBuilder);
+  });
+
   group('PptxShapeBuilder Tests', () {
-    late PptxShapeBuilder shapeBuilder;
-    late PptxXmlToJsonConverter pptxLoader;
-
-    setUp(() {
-      shapeBuilder = PptxShapeBuilder();
-      pptxLoader = PptxXmlToJsonConverter(File('test/test_assets/A line.pptx'));
-    });
-
-        test('getShapes returns an empty list when shapeTree is empty', () {
+    test('getShapes returns an empty list when shapeTree is empty', () {
       Json shapeTree = {};
-
       List<Shape> shapes = shapeBuilder.getShapes(shapeTree);
-
       expect(shapes, isEmpty);
     });
 
-    test('getShapes returns connection shapes when eConnectionShape is present',
-        () {
-      Json shapeTree =
-          pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[PptxHierarchy.slide.xmlKey]
-              [eCommonSlideData][eShapeTree];
+    test('getShapes returns connection shapes when eConnectionShape is present', () {
+      Json shapeTree = {
+        eConnectionShape: [{}]
+      };
 
       List<Shape> shapes = shapeBuilder.getShapes(shapeTree);
 
-      expect(shapes.length, 1);
-      expect(shapes[0], isA<Shape>());
-    });
-
-    test('getShapes returns connection shapes when eConnectionShape is present',
-        () {
-      Json shapeTree =
-          pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[PptxHierarchy.slide.xmlKey]
-              [eCommonSlideData][eShapeTree];
-
-      List<Shape> shapes = shapeBuilder.getShapes(shapeTree);
-
-      expect(shapes.length, 1);
-      expect(shapes[0], isA<Shape>());
+      expect(shapes.length, mockShapes.length);
+      verify(mockConnectionShapeBuilder.getConnectionShapes(any)).called(1);
     });
 
     test('getShapes ignores unknown keys in the shapeTree', () {
