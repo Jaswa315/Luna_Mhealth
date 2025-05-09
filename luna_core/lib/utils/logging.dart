@@ -10,7 +10,7 @@
 
 import 'dart:io';
 import 'package:azure_application_insights/azure_application_insights.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
@@ -518,7 +518,7 @@ class ApplicationInsightsLogger implements ILunaLogger {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceContext.id = _obfuscateDeviceID(androidInfo.androidId);
+      deviceContext.id = _obfuscateDeviceID(androidInfo.id);
       deviceContext.model = androidInfo.model;
       deviceContext.osVersion = androidInfo.version.toString();
       deviceContext.oemName = androidInfo.manufacturer;
@@ -526,7 +526,7 @@ class ApplicationInsightsLogger implements ILunaLogger {
       deviceContext.type = 'Android';
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceContext.id = _obfuscateDeviceID(iosInfo.identifierForVendor);
+      deviceContext.id = _obfuscateDeviceID(iosInfo.identifierForVendor!);
       deviceContext.model = iosInfo.model;
       deviceContext.osVersion = iosInfo.systemVersion;
       deviceContext.oemName = iosInfo.name;

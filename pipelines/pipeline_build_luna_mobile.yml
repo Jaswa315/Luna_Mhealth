@@ -4,7 +4,7 @@
 trigger: none
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
 - group: 'Version Numbers' #this is a variable group in the library
