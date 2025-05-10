@@ -12,6 +12,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_bu
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 
 /// The PptxTreeBuilder takes a .pptx file and is capable of making a
 /// PptxTree object that represents given PowerPoint file.
@@ -23,7 +24,8 @@ class PptxTreeBuilder {
   late PptxSectionBuilder _pptxSectionBuilder;
   late PptxSlideCountParser _pptxSlideCountParser;
   late PptxShapeBuilder _pptxShapeBuilder;
-  final PptxConnectionShapeBuilder _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder();
+  late PptxTransformBuilder _pptxTransformBuilder;
+  late PptxConnectionShapeBuilder _pptxConnectionShapeBuilder;
   late PptxRelationshipParser _pptxRelationshipParser;
   late PptxSlideBuilder _pptxSlideBuilder;
 
@@ -35,6 +37,8 @@ class PptxTreeBuilder {
     _pptxPresentationPropertyParser = PptxPresentationPropertyBuilder(_pptxLoader);
     _pptxSlideCountParser = PptxSlideCountParser(_pptxLoader);
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
+    _pptxTransformBuilder = PptxTransformBuilder();
+    _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder(_pptxTransformBuilder);
     _pptxShapeBuilder = PptxShapeBuilder(_pptxConnectionShapeBuilder);
     _pptxRelationshipParser = PptxRelationshipParser(_pptxLoader);
     _pptxSlideBuilder = PptxSlideBuilder(_pptxLoader, _pptxSlideCountParser, _pptxShapeBuilder, _pptxRelationshipParser);

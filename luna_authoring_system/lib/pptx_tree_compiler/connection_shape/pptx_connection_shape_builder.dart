@@ -14,9 +14,9 @@ import 'package:luna_core/utils/types.dart';
 /// This class is capable of building ConnectionShapes object
 /// that represent lines in a PowerPoint file.
 class PptxConnectionShapeBuilder {
-  PptxTransformBuilder _transformBuilder = PptxTransformBuilder();
+  final PptxTransformBuilder _transformBuilder;
 
-  PptxConnectionShapeBuilder();
+  PptxConnectionShapeBuilder(this._transformBuilder);
 
   Transform _getTransform(Json transformMap) {
     return _transformBuilder.getTransform(transformMap);
