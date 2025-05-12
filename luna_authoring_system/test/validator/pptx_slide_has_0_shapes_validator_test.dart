@@ -11,22 +11,11 @@ import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_slide_has_no_shapes.dart';
+import 'package:mockito/mockito.dart';
+import '../mocks/mock.mocks.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  Shape _createShape() {
-    EMU emu = EMU(0);
-    bool isFlippedVertically = false;
-    return ConnectionShape(
-      width: emu,
-      transform: Transform(
-        Point(emu, emu),
-        Point(emu, emu),
-      ),
-      isFlippedVertically: isFlippedVertically,
-    );
-  }
-
   group('PptxSlideHasNoShapesValidator', () {
     test('Expect 1 issue in issueList when Slide has 0 shapes', () {
       final pptxTree = PptxTree();
@@ -53,36 +42,41 @@ void main() {
       expect(issues.length, 0);
     });
 
-    test('Expect 0 issues when Slide has 1 shape', () {
-      final pptxTree = PptxTree();
-      pptxTree.title = "";
-      final slide = Slide();
-      slide.shapes = [_createShape()];
-      pptxTree.slides = [slide];
-
-      IValidator validator = PptxSlideHasNoShapesValidator(pptxTree);
-      final Set<IValidationIssue> issues = validator.validate();
-
-      expect(issues.length, 0);
-    });
-
     test('Expect 1 issue when Slide 1 has shapes, but Slide 2 has no shapes',
         () {
-      final pptxTree = PptxTree();
-      pptxTree.title = "";
-      final slide1 = Slide();
-      slide1.shapes = [_createShape()];
-      final slide2 = Slide();
-      slide2.shapes = [];
-      pptxTree.slides = [slide1, slide2];
+      final mockPptxTree = MockPptxTree();
+      final mockSlide1 = MockSlide();
+      final mockSlide2 = MockSlide();
+      final mockShape = MockShape();
 
-      IValidator validator = PptxSlideHasNoShapesValidator(pptxTree);
+      when(mockSlide1.shapes).thenReturn([mockShape]);
+      when(mockSlide2.shapes).thenReturn([]);
+      when(mockPptxTree.slides).thenReturn([mockSlide1, mockSlide2]);
+
+      final validator = PptxSlideHasNoShapesValidator(mockPptxTree);
       final Set<IValidationIssue> issues = validator.validate();
 
       expect(issues.length, 1);
       expect(issues.first, isA<PptxSlideHasNoShapes>());
     });
 
+    test('Expect 0 issues when Slide has 1 shape', () {
+      final mockPptxTree = MockPptxTree();
+      final mockSlide = MockSlide();
+      final mockShape = MockShape();
+
+      // Stub the shapes list to contain 1 mockShape
+      when(mockSlide.shapes).thenReturn([mockShape]);
+
+      // Stub the slides list on pptxTree
+      when(mockPptxTree.slides).thenReturn([mockSlide]);
+
+      // Run validator
+      IValidator validator = PptxSlideHasNoShapesValidator(mockPptxTree);
+      final Set<IValidationIssue> issues = validator.validate();
+
+      expect(issues.length, 0);
+    });
     test(
         'Expect LateInitializationError when slides in PptxTree is not initialized',
         () {
