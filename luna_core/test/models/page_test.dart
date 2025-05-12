@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart' hide Page;
 import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/components/component.dart';
+import 'package:luna_core/models/pages/sequence_of_pages.dart';
 
 // Updated MockComponent to add to the Page for testing purposes
 /* TODO: fix class
@@ -102,6 +103,22 @@ void main() {
       expect(json['components'].length, 1);
       expect(json['components'].first['type'], 'text');
       */
+    });
+
+    test('setSequenceOfPages sets parent only once', () {
+      final page = Page();
+      final sequence1 = SequenceOfPages(pages: []);
+      final sequence2 = SequenceOfPages(pages: []);
+
+      page.setSequenceOfPages(sequence1);
+
+      expect(page.parentSequence, equals(sequence1));
+
+      // Calling again with the same instance should not throw
+      expect(() => page.setSequenceOfPages(sequence1), returnsNormally);
+
+      // Calling again with a different instance should throw
+      expect(() => page.setSequenceOfPages(sequence2), throwsStateError);
     });
   });
 }
