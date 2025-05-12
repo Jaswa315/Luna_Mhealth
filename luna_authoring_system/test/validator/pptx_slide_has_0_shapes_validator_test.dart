@@ -29,6 +29,7 @@ void main() {
 
       expect(issues.length, 1);
       expect(issues.first, isA<PptxSlideHasNoShapes>());
+      expect(issues.first.toText(), PptxSlideHasNoShapes().toText());
     });
 
     test('Expect 0 issues when PptxTree has no slides', () {
@@ -58,6 +59,7 @@ void main() {
 
       expect(issues.length, 1);
       expect(issues.first, isA<PptxSlideHasNoShapes>());
+      expect(issues.first.toText(), PptxSlideHasNoShapes().toText());
     });
 
     test('Expect 0 issues when Slide has 1 shape', () {
@@ -65,13 +67,9 @@ void main() {
       final mockSlide = MockSlide();
       final mockShape = MockShape();
 
-      // Stub the shapes list to contain 1 mockShape
       when(mockSlide.shapes).thenReturn([mockShape]);
-
-      // Stub the slides list on pptxTree
       when(mockPptxTree.slides).thenReturn([mockSlide]);
 
-      // Run validator
       IValidator validator = PptxSlideHasNoShapesValidator(mockPptxTree);
       final Set<IValidationIssue> issues = validator.validate();
 
