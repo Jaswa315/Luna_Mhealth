@@ -1,7 +1,7 @@
 #Template to install prerequisites for running any fluttter items.
 parameters:
 - name: flutter_version
-  default: 3.22.3
+  default: stable
 - name: flutter_pkg
   default: 'luna_core'
 
@@ -18,7 +18,7 @@ steps:
     flutter pub get
     flutter pub global activate junitreport
     flutter pub global activate cobertura
-    flutter pub global activate patrol_cli 3.2.0
+    flutter pub global activate patrol_cli
     echo "##vso[task.prependpath]$HOME/.pub-cache/bin"
   displayName: 'Activate Flutter Packages'
   condition: ne( variables['Agent.OS'], 'Windows_NT' )
@@ -37,14 +37,14 @@ steps:
     flutter pub get
     flutter pub global activate junitreport
     flutter pub global activate cobertura
-    flutter pub global activate patrol_cli 3.2.0
+    flutter pub global activate patrol_cli
     Write-Host "##vso[task.prependpath]C:\Users\VssAdministrator\AppData\Local\Pub\Cache\bin"
   condition: eq( variables['Agent.OS'], 'Windows_NT' )
   displayName: 'Activate Flutter Packages (Windows)'
 
 - task: JavaToolInstaller@0
   inputs:
-    versionSpec: '11'
+    versionSpec: '17'
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
 

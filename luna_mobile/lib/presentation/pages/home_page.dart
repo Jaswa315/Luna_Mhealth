@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                         boxShadow: [
                           BoxShadow(
                             color:
-                                Colors.black.withOpacity(0.1), // Light shadow.
+                                Colors.black.withValues(alpha:0.1), // Light shadow.
                             blurRadius: 12.0, // Shadow blur radius.
                             offset: const Offset(0, 6), // Shadow offset.
                           ),

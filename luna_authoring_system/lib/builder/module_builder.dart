@@ -1,19 +1,15 @@
 import 'package:luna_authoring_system/builder/i_builder.dart';
-import 'package:luna_authoring_system/builder/page_builder.dart';
-import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
+import 'package:luna_authoring_system/builder/sequence_of_page_builder.dart';
+import 'package:luna_authoring_system/pptx_data_objects/section.dart';
+import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/pages/page.dart';
+import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/version_manager.dart';
 import 'package:uuid/uuid.dart';
 
 /// ModuleBuilder is responsible for constructing a [Module] object.
-/// It aggregates metadata such as the title, author, dimensions, and pages.
-
-/// The [ModuleBuilder] follows the builder pattern to construct a Module object.
-/// This approach is chosen to:
-/// - Ensure step-by-step configurability, allowing for flexibility in module creation.
-/// - Maintain immutability in the final [Module] instance, reducing unintended modifications.
-
+/// It aggregates metadata such as the title, author, dimensions, and sequences of pages.
 class ModuleBuilder implements IBuilder<Module> {
   late final String _moduleId;
   late String _title;
@@ -21,10 +17,11 @@ class ModuleBuilder implements IBuilder<Module> {
   late double _aspectRatio;
   static late int _moduleWidth;
   static late int _moduleHeight;
-  final List<Page> _pages = [];
+  final Set<SequenceOfPages> _sequences = {};
+  late final Page _entryPage;
 
   ModuleBuilder() {
-    _moduleId = Uuid().v4();
+    _moduleId = const Uuid().v4();
   }
 
   static int get moduleWidth => _moduleWidth;
@@ -53,13 +50,17 @@ class ModuleBuilder implements IBuilder<Module> {
     return this;
   }
 
-  ModuleBuilder setPages(PptxTree pptxTree) {
-    _pages.clear();
-    for (var slide in pptxTree.slides) {
-      _pages.add(
-        PageBuilder().buildPage(slide.shapes ?? []).build(),
-      );
-    }
+  /// Converts the provided [slides] and [section] into sequences using SequenceOfPageBuilder.
+  ModuleBuilder setSequencesFromSection(List<Slide> slides, Section section) {
+    final SequenceOfPageBuilder builder =
+        SequenceOfPageBuilder(slides: slides, section: section);
+    final Set<SequenceOfPages> sequences = builder.build();
+
+    _sequences
+      ..clear()
+      ..addAll(sequences);
+
+    _entryPage = builder.firstPage;
 
     return this;
   }
@@ -71,8 +72,9 @@ class ModuleBuilder implements IBuilder<Module> {
       title: _title,
       author: _author,
       authoringVersion: VersionManager().version,
-      pages: _pages,
+      sequences: _sequences,
       aspectRatio: _aspectRatio,
+      entryPage: _entryPage,
     );
   }
 }

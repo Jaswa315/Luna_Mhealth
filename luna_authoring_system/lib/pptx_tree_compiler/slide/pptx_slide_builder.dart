@@ -14,13 +14,11 @@ import 'package:luna_core/utils/types.dart';
 class PptxSlideBuilder {
   final PptxXmlToJsonConverter _pptxLoader;
   final PptxSlideCountParser _pptxSlideCountParser;
-  final PptxShapeBuilder _pptxShapeBuilder = PptxShapeBuilder();
+  final PptxShapeBuilder _pptxShapeBuilder;
   final PptxHierarchy _pptxHierarchy = PptxHierarchy.slide;
-  late final PptxRelationshipParser _pptxRelationshipParser;
+  final PptxRelationshipParser _pptxRelationshipParser;
 
-  PptxSlideBuilder(this._pptxLoader, this._pptxSlideCountParser) {
-    _pptxRelationshipParser = PptxRelationshipParser(_pptxLoader);
-  }
+  PptxSlideBuilder(this._pptxLoader, this._pptxSlideCountParser, this._pptxShapeBuilder, this._pptxRelationshipParser);
 
   /// Merge the shapes from the parent and child shape lists.
   List<Shape> _mergeShapeLists(List<Shape> parentShapes, List<Shape> childShapes) {

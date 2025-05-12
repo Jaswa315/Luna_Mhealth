@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/module.dart';
+import 'package:luna_core/models/pages/sequence_of_pages.dart';
+import 'package:luna_core/models/pages/page.dart' as luna_page;
 import 'package:luna_mobile/presentation/pages/home_page.dart';
 import 'package:luna_mobile/presentation/pages/start_learning_page.dart';
 import 'package:luna_mobile/presentation/pages/need_help_page.dart';
@@ -103,32 +105,36 @@ void main() {
         title: 'Module 1',
         author: 'Author 1',
         authoringVersion: '1.0.0',
-        pages: [],
+        sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-2',
         title: '',
         author: 'Author 2',
         authoringVersion: '1.0.0',
-        pages: [],
+        sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-3',
         title: '',
         author: 'Author 3',
         authoringVersion: '1.0.0',
-        pages: [],
+        sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-4',
         title: 'Module 4',
         author: 'Author 4',
         authoringVersion: '1.0.0',
-        pages: [],
+        sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
     ];
 
@@ -145,16 +151,18 @@ void main() {
         title: 'Module 1',
         author: 'Author 1',
         authoringVersion: '1.0.0',
-        pages: [],
+        sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
       Module(
         moduleId: 'module-2',
         title: 'Module 2',
         author: 'Author 2',
         authoringVersion: '1.0.0',
-        pages: [],
+        sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
     ];
 
@@ -184,8 +192,9 @@ void main() {
         title: 'Module 1',
         author: 'Author 1',
         authoringVersion: '1.0.0',
-        pages: [],
+        sequences: {SequenceOfPages(pages: [])},
         aspectRatio: 4 / 3,
+        entryPage: luna_page.Page(components: []),
       ),
     ];
 

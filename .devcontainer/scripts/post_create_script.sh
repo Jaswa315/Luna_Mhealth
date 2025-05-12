@@ -10,8 +10,8 @@ cd /workspaces/Luna_mHealth_Mobile/luna_authoring_system
 flutter pub get
 
 #install android sdk
-SDK_MANAGER="/usr/local/lib/android/cmdline-tools/latest/bin/sdkmanager"
-yes | "$SDK_MANAGER" --licenses
+#SDK_MANAGER="/usr/local/lib/android/cmdline-tools/latest/bin/sdkmanager"
+#yes | "$SDK_MANAGER" --licenses
 
 #ensure git is setup for user credential use
 git config --global credential.useHttpPath true

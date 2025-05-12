@@ -75,6 +75,7 @@ steps:
       & $gcloudBin\gcloud init
       Write-Host "##vso[task.prependpath]$gcloudBin"
 
+
 # use gcload to run patrol tests in firebase
 - task: PowerShell@2
   displayName: 'Run ${{  parameters.package_path  }} integration tests via patrol on firbase'
@@ -83,20 +84,19 @@ steps:
     script: |
       cd ${{  parameters.package_path  }}
       $luna_file_string = "$(luna_test_modules_string)"
-      flutter create --platform=android .
-      patrol build android --target integration_test/luna_mobile_e2e_test.dart
+      $p_workspace = "$(Pipeline.Workspace)"
       gcloud auth activate-service-account --key-file=$(firebaseLogin.secureFilePath)
       gcloud config set project luna-mhealth
       $testResults = gcloud firebase test android run `
           --type instrumentation `
-          --app build/app/outputs/apk/debug/app-debug.apk `
-          --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk `
+          --app $p_workspace/patrolAPK/debug/app-debug.apk `
+          --test $p_workspace/patrolAPK/androidTest/debug/app-debug-androidTest.apk `
           --device model=Pixel2.arm `
           --timeout 10m `
           --use-orchestrator `
           --other-files $luna_file_string `
           --environment-variables clearPackageData=true
-      if (Select-String -InputObject $testResults "Failed") {
+      if ($null -eq $testResults -or $testResults -match "Failed") {
         Write-Host "##vso[task.logissue type=error]Integration Test Failed"
         Write-Host "##vso[task.complete result=Failed]"
       }

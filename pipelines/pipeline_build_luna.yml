@@ -9,19 +9,22 @@ strategy:
     mac:
       imageName: 'macOS-latest'
       buildOS: 'macos'
-      package_name: 'MacBuild_$(Build.BuildNumber)'
+      package_name: 'Luna_MacBuild_$(Build.BuildNumber)'
       release_dir: '/Build/Products/Release'
+      gdrive: $(gdrive_id_mac_build)
     windows:
       imageName: 'windows-latest'
       buildOS: 'windows'
-      package_name: 'WindowsBuild_$(Build.BuildNumber)'
+      package_name: 'Luna_WindowsBuild_$(Build.BuildNumber)'
       release_dir: '/x64/runner/Release'
+      gdrive: $(gdrive_id_windows_build)
 
 pool:
   vmImage: $(imageName)
 
 variables:
 - group: 'Version Numbers' #this is a variable group in the library
+- group: 'Google Drive IDs'
 - name: 'authoring_path'
   value: 'luna_authoring_system'
 
@@ -37,9 +40,8 @@ steps:
     release_directory: $(release_dir)
     build_name: $(Build.BuildNumber)
 
-# publish built zip files as a pipeline artifact
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(package_name).zip' 
-    artifact: "Authoring_System_Build_$(package_name)"
-    publishLocation: 'pipeline' 
+- template: templates/upload_file_gdrive.yml
+  parameters:
+    gdrive_id: $(gdrive)
+    package_name: $(package_name)
+    source_dir: $(Build.SourcesDirectory)

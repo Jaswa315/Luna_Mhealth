@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/pages/page.dart';
+import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'dart:convert';
 
@@ -12,16 +13,20 @@ void main() {
         title: 'This is title',
         author: 'Test Author',
         authoringVersion: '1.0.0',
-        pages: [Page(components: [])],
+        sequences: {
+          SequenceOfPages(pages: [Page(components: [])])
+        },
         aspectRatio: 16 / 9,
+        entryPage: Page(components: []),
       );
 
       expect(module.moduleId, '12345');
       expect(module.title, 'This is title');
       expect(module.author, 'Test Author');
       expect(module.authoringVersion, '1.0.0');
-      expect(module.pages.length, 1);
-      expect(module.pages[0].components, isEmpty);
+      expect(module.sequences.length, 1);
+      expect(module.sequences.first.pages.length, 1);
+      expect(module.sequences.first.pages[0].components, isEmpty);
       expect(module.aspectRatio, closeTo(1.7777, 0.0001));
     });
 
@@ -32,8 +37,9 @@ void main() {
           'title': 'This is title',
           'author': 'John Doe',
           'authoringVersion': '1.0.0',
-          'pages': [],
+          'sequences': [],
           'aspectRatio': 1.7777777777777777,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
@@ -43,7 +49,7 @@ void main() {
       expect(module.title, 'This is title');
       expect(module.author, 'John Doe');
       expect(module.authoringVersion, '1.0.0');
-      expect(module.pages, isEmpty);
+      expect(module.sequences, isEmpty);
       expect(module.aspectRatio, closeTo(1.7777777, 0.0001));
     });
 
@@ -54,26 +60,32 @@ void main() {
           'title': 'Module with Pages',
           'author': 'Jane Doe',
           'authoringVersion': '1.0.0',
-          'pages': [
+          'sequences': [
             {
-              'type': 'page',
-              'shapes': [],
-            },
-            {
-              'type': 'page',
-              'shapes': [],
+              'pages': [
+                {
+                  'type': 'page',
+                  'shapes': [],
+                },
+                {
+                  'type': 'page',
+                  'shapes': [],
+                }
+              ]
             }
           ],
           'aspectRatio': 16 / 9,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
       final module = Module.fromJson(json);
 
       expect(module.moduleId, '54321');
-      expect(module.pages.length, 2);
-      expect(module.pages[0].components, isEmpty);
-      expect(module.pages[1].components, isEmpty);
+      expect(module.sequences.length, 1);
+      expect(module.sequences.first.pages.length, 2);
+      expect(module.sequences.first.pages[0].components, isEmpty);
+      expect(module.sequences.first.pages[1].components, isEmpty);
       expect(module.aspectRatio, closeTo(1.7777, 0.0001));
     });
 
@@ -83,11 +95,14 @@ void main() {
         title: 'Serializable Module',
         author: 'Author Name',
         authoringVersion: '1.0.0',
-        pages: [
-          Page(components: []),
-          Page(components: []),
-        ],
+        sequences: {
+          SequenceOfPages(pages: [
+            Page(components: []),
+            Page(components: []),
+          ])
+        },
         aspectRatio: 4 / 3,
+        entryPage: Page(components: []),
       );
 
       final json = module.toJson();
@@ -96,8 +111,10 @@ void main() {
       expect(json['module']['title'], 'Serializable Module');
       expect(json['module']['author'], 'Author Name');
       expect(json['module']['authoringVersion'], '1.0.0');
-      expect(json['module']['pages'].length, 2);
+      expect(json['module']['sequences'].length, 1);
+      expect(json['module']['sequences'][0]['pages'].length, 2);
       expect(json['module']['aspectRatio'], closeTo(1.3333, 0.0001));
+      expect(json['module']['entryPage'], isA<Map>());
     });
 
     test('Deserialization fails if one required field is missing', () {
@@ -107,8 +124,9 @@ void main() {
           'title': 'This is title',
           // Missing 'author'
           'authoringVersion': '1.0.0',
-          'pages': [],
+          'sequences': [],
           'aspectRatio': 1.7777777777777777,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
@@ -125,8 +143,9 @@ void main() {
           'title': 'This is title',
           'author': 'John Doe',
           'authoringVersion': '1.0.0',
-          'pages': [],
+          'sequences': [],
           'aspectRatio': 'not a number', // Wrong type
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 
@@ -143,13 +162,18 @@ void main() {
           'title': 'Module with Invalid Page',
           'author': 'John Doe',
           'authoringVersion': '1.0.0',
-          'pages': [
+          'sequences': [
             {
-              'type': 'not_page', // Invalid type, should be 'page'
-              'shapes': [],
-            },
+              'pages': [
+                {
+                  'type': 'not_page', // Invalid type, should be 'page'
+                  'shapes': [],
+                },
+              ]
+            }
           ],
           'aspectRatio': 16 / 9,
+          'entryPage': {'type': 'page', 'shapes': []},
         }
       };
 

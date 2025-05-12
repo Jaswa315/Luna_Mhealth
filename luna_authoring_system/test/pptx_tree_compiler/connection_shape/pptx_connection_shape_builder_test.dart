@@ -1,63 +1,107 @@
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_element_constants.dart';
-import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
+import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/units/emu.dart';
-import 'dart:io';
+import 'package:luna_core/utils/types.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+
+@GenerateNiceMocks([
+  MockSpec<PptxTransformBuilder>(),
+  MockSpec<Transform>(),
+])
+import 'pptx_connection_shape_builder_test.mocks.dart';
 
 void main() {
-  group('Tests for PptxTreeBuilder using A line.pptx', () {
-    final pptxFile = File('test/test_assets/A line.pptx');
-    PptxConnectionShapeBuilder pptxConnectionShapeBuilder =
-        PptxConnectionShapeBuilder();
-    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+  late PptxConnectionShapeBuilder pptxConnectionShapeBuilder;
+  late MockPptxTransformBuilder mockPptxTransformBuilder;
+  final MockTransform mockTransform = MockTransform();
+  const Json mockTransformMap = {"": {}};
+  const String mockSrgbColor = "FF0000";
+  const String mockAlpha = "255";
+  const String mockLineWidth = "6350";
+  const Json mockRedConnectionShapeMap = {
+    eShapeProperty: {
+      eTransform: mockTransformMap,
+      eLine: {
+        eSolidFill: {
+          eSrgbColor: {eValue: mockSrgbColor}
+        },
+        eAlpha: mockAlpha,
+        eLineWidth: mockLineWidth
+      }
+    }
+  };
 
-    test('A line is parsed', () async {
-      List<Shape> connectionShapes =
-          pptxConnectionShapeBuilder.getConnectionShapes(
-              await pptxLoader.getJsonFromPptx("ppt/slides/slide1.xml")[eSlide]
-                  [eCommonSlideData][eShapeTree][eConnectionShape]);
-      ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
-
-      expect(cShape.type, ShapeType.connection);
-      expect(cShape.width.value, 6350);
-      expect((cShape.transform.offset.x as EMU).value, 2655518);
-      expect((cShape.transform.offset.y as EMU).value, 2580362);
-      expect((cShape.transform.size.x as EMU).value, 2755726);
-      expect((cShape.transform.size.y as EMU).value, 1929008);
-      expect(cShape.isFlippedVertically, isTrue);
-    });
+  setUp(() {
+    mockPptxTransformBuilder = MockPptxTransformBuilder();
+    when(mockPptxTransformBuilder.getTransform(mockTransformMap))
+        .thenReturn(mockTransform);
+    pptxConnectionShapeBuilder =
+        PptxConnectionShapeBuilder(mockPptxTransformBuilder);
   });
 
-  group('Tests for PptxTreeBuilder using Empty slide with slideLayout.pptx',
-      () {
-    final pptxFile = File('test/test_assets/Empty slide with slideLayout.pptx');
-    PptxConnectionShapeBuilder pptxConnectionShapeBuilder =
-        PptxConnectionShapeBuilder();
-    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+  test('Invalid connection shape amp returns Exception', () {
+    int invalidConnectionShape = 1;
 
-    test('A Red line is parsed', () async {
-      List<Shape> connectionShapes = pptxConnectionShapeBuilder
-          .getConnectionShapes(await pptxLoader.getJsonFromPptx(
-                  "ppt/slideLayouts/slideLayout13.xml")[eSlideLayoutData]
-              [eCommonSlideData][eShapeTree][eConnectionShape]);
-      ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
+    expect(
+        () => pptxConnectionShapeBuilder
+            .getConnectionShapes(invalidConnectionShape),
+        throwsA(isA<Exception>()));
+  });
 
-      expect(cShape.type, ShapeType.connection);
-      expect(cShape.width.value, 19050);
-      expect((cShape.transform.offset.x as EMU).value, 179189);
-      expect((cShape.transform.offset.y as EMU).value, 645068);
-      expect((cShape.transform.size.x as EMU).value, 3756423);
-      expect(cShape.color.alpha, 255);
-      expect(cShape.color.red, 255);
-      expect(cShape.color.green, 0);
-      expect(cShape.color.blue, 0);
-      expect(cShape.isFlippedVertically, isFalse);
-    });
+  test('A red line is parsed', () async {
+    Json mockConnectionShapeMap = mockRedConnectionShapeMap;
+
+    List<Shape> connectionShapes =
+        pptxConnectionShapeBuilder.getConnectionShapes(mockConnectionShapeMap);
+    ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
+
+    expect(connectionShapes.length, 1);
+    expect(cShape.type, ShapeType.connection);
+    expect(cShape.width.value, int.parse(mockLineWidth));
+    expect(cShape.color.alpha, 1);
+    expect(
+        cShape.color.red, int.parse(mockSrgbColor.substring(0, 2), radix: 16));
+    expect(cShape.color.green,
+        int.parse(mockSrgbColor.substring(2, 4), radix: 16));
+    expect(
+        cShape.color.blue, int.parse(mockSrgbColor.substring(4, 6), radix: 16));
+    expect(cShape.transform, mockTransform);
+    verify(mockPptxTransformBuilder.getTransform(mockTransformMap));
+  });
+
+  test('Two red lines are parsed', () async {
+    List<Json> mockConnectionShapeMap = [
+      mockRedConnectionShapeMap,
+      mockRedConnectionShapeMap,
+    ];
+    List<Shape> connectionShapes =
+        pptxConnectionShapeBuilder.getConnectionShapes(mockConnectionShapeMap);
+    ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
+
+    expect(connectionShapes.length, 2);
+    expect(cShape.type, ShapeType.connection);
+    expect(cShape.width.value, int.parse(mockLineWidth));
+    expect(cShape.color.alpha, 1);
+    expect(
+        cShape.color.red, int.parse(mockSrgbColor.substring(0, 2), radix: 16));
+    expect(cShape.color.green,
+        int.parse(mockSrgbColor.substring(2, 4), radix: 16));
+    expect(
+        cShape.color.blue, int.parse(mockSrgbColor.substring(4, 6), radix: 16));
+    expect(cShape.transform, mockTransform);
+    verify(mockPptxTransformBuilder.getTransform(mockTransformMap));
   });
 }

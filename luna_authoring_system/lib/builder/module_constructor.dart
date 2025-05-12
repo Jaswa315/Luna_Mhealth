@@ -27,7 +27,7 @@ class ModuleConstructor {
         .setTitle(pptxTree.title)
         .setAuthor(pptxTree.author)
         .setDimensions(moduleWidth, moduleHeight)
-        .setPages(pptxTree)
+        .setSequencesFromSection(pptxTree.slides, pptxTree.section)
         .build();
   }
 }

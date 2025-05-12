@@ -7,33 +7,22 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 import 'package:luna_core/units/emu.dart';
-import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// This class parses slide{n}.xml and slideLayout{n}.xml files,
-/// where it is capable of building ConnectionShapes object
+/// This class is capable of building ConnectionShapes object
 /// that represent lines in a PowerPoint file.
 class PptxConnectionShapeBuilder {
-  PptxConnectionShapeBuilder();
+  final PptxTransformBuilder _transformBuilder;
+
+  PptxConnectionShapeBuilder(this._transformBuilder);
 
   Transform _getTransform(Json transformMap) {
-    Point offset = Point(
-      EMU(int.parse(transformMap[eOffset][eX])),
-      EMU(int.parse(transformMap[eOffset][eY])),
-    );
-
-    Point size = Point(
-      EMU(int.parse(transformMap[eSize][eCX])),
-      EMU(int.parse(transformMap[eSize][eCY])),
-    );
-
-    return Transform(
-      offset,
-      size,
-    );
+    return _transformBuilder.getTransform(transformMap);
   }
 
+  /// Extracts the line color from the connection shape's line properties.
   Color _getLineColor(Json lineMap) {
     SrgbColor color = SrgbColor(lineMap[eLine]?[eSolidFill]?[eSrgbColor]
             ?[eValue] ??
@@ -46,11 +35,13 @@ class PptxConnectionShapeBuilder {
     return lineColor;
   }
 
+  /// Extracts the line width from the connection shape's line properties.
   EMU _getLineWidth(Json lineMap) {
     return EMU(int.parse(lineMap[eLine]?[eLineWidth] ??
         "${ConnectionShape.defaultWidth.value}"));
   }
 
+  /// Builds a ConnectionShape object from the provided connection shape map.
   ConnectionShape _buildConnectionShape(Json connectionShapeMap) {
     Transform transform =
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
@@ -74,6 +65,7 @@ class PptxConnectionShapeBuilder {
     );
   }
 
+  /// Builds a list of ConnectionShape objects from the provided shape tree.
   List<Shape> getConnectionShapes(dynamic shapeTree) {
     List<Shape> shapes = [];
 
