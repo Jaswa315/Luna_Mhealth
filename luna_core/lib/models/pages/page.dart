@@ -2,6 +2,7 @@
 /// A page can contain multiple components.
 
 import 'dart:convert';
+import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/types.dart';
 import '../components/component.dart';
 
@@ -13,6 +14,9 @@ class Page {
   /// A list of components on the slide.
   final List<Component> components;
 
+  /// The parent sequence of pages to which this page belongs.
+  SequenceOfPages? _sequenceOfPages;
+
   /// Constructs a new instance of [Page].
   Page({
     List<Component>? components,
@@ -20,6 +24,17 @@ class Page {
 
   /// Gets the list of components in the page.
   List<Component> get getPageComponents => List.unmodifiable(components);
+
+  /// Returns the SequenceOfPages this Page belongs to.
+  SequenceOfPages? get parentSequence => _sequenceOfPages;
+
+  /// Sets the parent sequence, only if not set or set to the same sequence.
+  void setSequenceOfPages(SequenceOfPages sequence) {
+    if (_sequenceOfPages != null && _sequenceOfPages != sequence) {
+      throw StateError('Parent sequence already set');
+    }
+    _sequenceOfPages = sequence;
+  }
 
   /// Adds a component to the page.
   void addComponent(Component component) {

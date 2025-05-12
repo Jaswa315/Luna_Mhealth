@@ -62,7 +62,12 @@ class SequenceOfPageBuilder implements IBuilder<Set<SequenceOfPages>> {
       return;
     }
 
-    final sequence = SequenceOfPages(pages: pages);
+    final sequence = SequenceOfPages(pages: []);
+    for (final page in pages) {
+      page.setSequenceOfPages(sequence);
+      sequence.addPage(page);
+    }
+
     _sequenceOfPages.add(sequence);
     _firstPage ??= pages.first;
   }
