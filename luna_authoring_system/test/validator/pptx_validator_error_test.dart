@@ -13,6 +13,7 @@ void main() {
       pptxTree.title = '   '; // only whitespace – considered empty
       // Simulate long title
       pptxTree.title += 'a' * 300; // exceeds max length
+      pptxTree.slides = [];
 
       expect(
         () => PptxValidatorRunner.runValidatiors(pptxTree),
@@ -25,6 +26,7 @@ void main() {
     test('passes when title is valid', () {
       final pptxTree = PptxTree();
       pptxTree.title = 'A valid PPTX title';
+      pptxTree.slides = [];
 
       expect(
         () => PptxValidatorRunner.runValidatiors(pptxTree),

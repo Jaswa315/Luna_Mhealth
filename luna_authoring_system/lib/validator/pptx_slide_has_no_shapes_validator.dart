@@ -13,14 +13,14 @@ class PptxSlideHasNoShapesValidator extends IValidator {
   Set<IValidationIssue> validate() {
     final validationIssues = <IValidationIssue>{};
 
-    if (_pptxTree.slides.isEmpty) {
+    if (_pptxTree.slides == null || _pptxTree.slides!.isEmpty) {
       return validationIssues;
     }
 
     /// Loop through each slide in the PPTX tree and check if it has shapes.
-    for (var i = 0; i < _pptxTree.slides.length; i++) {
+    for (var i = 0; i < _pptxTree.slides!.length; i++) {
       /// If a slide has no shapes, add a validation issue.
-      if (_pptxTree.slides[i].shapes?.isEmpty ?? true) {
+      if (_pptxTree.slides![i].shapes?.isEmpty ?? true) {
         validationIssues.add(PptxSlideHasNoShapes());
       }
     }
