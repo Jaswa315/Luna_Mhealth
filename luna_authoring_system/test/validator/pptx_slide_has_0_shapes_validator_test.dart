@@ -27,8 +27,8 @@ void main() {
     );
   }
 
-  group('Pptx Slide Has No Shapes Validator Tests', () {
-    test('Slide has 0 shapes', () {
+  group('PptxSlideHasNoShapesValidator', () {
+    test('Expect 1 issue in issueList when Slide has 0 shapes', () {
       final pptxTree = PptxTree();
       pptxTree.title = "";
       final slide = Slide();
@@ -42,7 +42,7 @@ void main() {
       expect(issues.first, isA<PptxSlideHasNoShapes>());
     });
 
-    test('Slide has no slides', () {
+    test('Expect 0 issues when PptxTree has no slides', () {
       final pptxTree = PptxTree();
       pptxTree.title = "";
       pptxTree.slides = [];
@@ -53,7 +53,7 @@ void main() {
       expect(issues.length, 0);
     });
 
-    test('Slide has 1 shape', () {
+    test('Expect 0 issues when Slide has 1 shape', () {
       final pptxTree = PptxTree();
       pptxTree.title = "";
       final slide = Slide();
@@ -66,7 +66,8 @@ void main() {
       expect(issues.length, 0);
     });
 
-    test('Only Slide 2 has no shapes', () {
+    test('Expect 1 issue when Slide 1 has shapes, but Slide 2 has no shapes',
+        () {
       final pptxTree = PptxTree();
       pptxTree.title = "";
       final slide1 = Slide();
@@ -80,6 +81,20 @@ void main() {
 
       expect(issues.length, 1);
       expect(issues.first, isA<PptxSlideHasNoShapes>());
+    });
+
+    test(
+        'Expect LateInitializationError when slides in PptxTree is not initialized',
+        () {
+      final pptxTree = PptxTree();
+      IValidator validator = PptxSlideHasNoShapesValidator(pptxTree);
+
+      expect(
+        () => validator.validate(),
+        throwsA(predicate((e) =>
+            e.runtimeType.toString().contains('LateError') &&
+            e.toString().contains("Field 'slides' has not been initialized."))),
+      );
     });
   });
 }
