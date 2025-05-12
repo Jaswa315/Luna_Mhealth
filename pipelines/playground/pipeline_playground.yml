@@ -2,11 +2,30 @@
 # Runs unit tests and then integration tests
 
 trigger: none
-
 jobs:
 
-- job: WindowsTests
 
+- job: BuildPatrolApp
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+    - template: ../templates/install_prereqs.yml
+    - task: PowerShell@2
+      displayName: 'Create Patrol Mobile App'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd luna_mobile
+          flutter create --platform=android .
+          patrol build android --target integration_test/luna_mobile_e2e_test.dart
+
+    - publish: $(Build.SourcesDirectory)/luna_mobile/build/app/outputs/apk
+      artifact: patrolAPK
+      displayName: 'Publish artifact'
+
+
+- job: WindowsTests
+  dependsOn: BuildPatrolApp
   pool:
     vmImage: windows-latest
   variables:
@@ -20,6 +39,9 @@ jobs:
       value: /x64/runner/Debug
 
   steps:
+
+  - download: current
+    artifact: patrolAPK
 
   - template: ../templates/install_prereqs.yml
 
