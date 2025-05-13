@@ -14,16 +14,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_
 import 'package:luna_core/utils/types.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-
-@GenerateNiceMocks([
-  MockSpec<PptxXmlToJsonConverter>(),
-  MockSpec<PptxSlideCountParser>(),
-  MockSpec<PptxShapeBuilder>(),
-  MockSpec<PptxRelationshipParser>(),
-  MockSpec<PptxConnectionShapeBuilder>(),
-  MockSpec<ConnectionShape>(),
-])
-import 'pptx_slide_builder_test.mocks.dart';
+import '../../mocks/mock.mocks.dart';
 
 void stubMockPptxLoader(MockPptxXmlToJsonConverter mockPptxLoader,
     PptxHierarchy hierarchy, int slideIndex, Json shapeTree) {
@@ -75,7 +66,6 @@ void main() {
           mockSlideIndex, mockEmptyShapeTree);
       stubMockPptxLoader(
           mockPptxLoader, PptxHierarchy.slide, mockSlideIndex, mockShapeTree);
-
       List<Slide> slides = pptxSlideBuilder.getSlides();
 
       expect(slides.length, 1);
