@@ -70,7 +70,11 @@ class OdpTreeBuilder {
   int _getSlideCount() {
     Json contentMap = _odpLoader.getJsonFromPptx("content.xml");
     final slides = contentMap[eContentDocument]?[eBody]?[ePresentation]?[ePage];
-    return (slides is List) ? slides.length : 1;
+    if (slides is List) {
+      return slides.length;
+    } else { // If slides is not a list, slides is a map (single slide presentation)
+      return 1;
+    }
   }
 
   EMU _getOffsetFromCoordinates(String startCoordinate, String endCoordinate) {
