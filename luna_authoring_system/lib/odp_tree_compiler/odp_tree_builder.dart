@@ -7,7 +7,6 @@ import 'package:luna_authoring_system/odp_tree_compiler/unit_conversion_constant
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
@@ -74,19 +73,25 @@ class OdpTreeBuilder {
     return (slides is List) ? slides.length : 1;
   }
 
+  EMU _computeOffset(String startCoordinate, String endCoordinate) {
+    return _convertCmToEMU(min(double.parse(_extractNumber(startCoordinate)), 
+        double.parse(_extractNumber(endCoordinate))));
+  }
+
   Point _getOffset(Json shapeMap) {
-    EMU offsetX = _convertCmToEMU(min((double.parse(_extractNumber(shapeMap[eX1]))), 
-        double.parse(_extractNumber(shapeMap[eX2]))));
-    EMU offsetY = _convertCmToEMU(min((double.parse(_extractNumber(shapeMap[eY1]))), 
-        double.parse(_extractNumber(shapeMap[eY2]))));
+    EMU offsetX = _computeOffset(shapeMap[eX1], shapeMap[eX2]);
+    EMU offsetY = _computeOffset(shapeMap[eY1], shapeMap[eY2]);
     return Point(offsetX, offsetY);
   }
 
+  EMU _computeSize(String startCoordinate, String endCoordinate) {
+    return _convertCmToEMU((double.parse(_extractNumber(endCoordinate)) - 
+        double.parse(_extractNumber(startCoordinate))).abs());
+  }
+
   Point _getSize(Json shapeMap) {
-    EMU sizeX = _convertCmToEMU((double.parse(_extractNumber(shapeMap[eX2])) - 
-        double.parse(_extractNumber(shapeMap[eX1])).abs()));
-    EMU sizeY = _convertCmToEMU((double.parse(_extractNumber(shapeMap[eY2])) -
-        double.parse(_extractNumber(shapeMap[eY1])).abs()));
+    EMU sizeX = _computeSize(shapeMap[eX1], shapeMap[eX2]);
+    EMU sizeY = _computeSize(shapeMap[eY1], shapeMap[eY2]);
     return Point(sizeX, sizeY); 
   }
 

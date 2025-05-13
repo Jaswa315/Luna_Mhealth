@@ -31,7 +31,7 @@ void main() {
       expect(odpTree.height.value, 5670000);
     });
 
-    test('parsePptx method initialzes slides.', () async {
+    test('odpTree method initialzes slides.', () async {
       expect(odpTree.slides, isA<List<Slide>>());
       expect(odpTree.slides.length, 1);
     });
