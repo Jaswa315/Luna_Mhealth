@@ -33,5 +33,27 @@ void main() {
         returnsNormally,
       );
     });
+
+    test('throws LateInitalisationError when slides are null', () {
+      // Create a PptxTree with an valid title and null List<Slide>
+      final pptxTree = PptxTree();
+      pptxTree.title = 'title';
+      expect(
+        () => PptxValidatorRunner.runValidatiors(pptxTree),
+        throwsA(predicate((e) =>
+            e.runtimeType.toString().contains('LateError') &&
+            e.toString().contains("Field 'slides' has not been initialized."))),
+      );
+    });
+    test('Passes when slides are []', () {
+      // Create a PptxTree with an valid title and null List<Slide>
+      final pptxTree = PptxTree();
+      pptxTree.title = 'title';
+      pptxTree.slides = [];
+      expect(
+        () => PptxValidatorRunner.runValidatiors(pptxTree),
+        returnsNormally,
+      );
+    });
   });
 }
