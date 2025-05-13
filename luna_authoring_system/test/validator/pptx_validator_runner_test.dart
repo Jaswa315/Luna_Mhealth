@@ -13,6 +13,7 @@ void main() {
       pptxTree.title = '   '; // only whitespace – considered empty
       // Simulate long title
       pptxTree.title += 'a' * 300; // exceeds max length
+      pptxTree.slides = [];
 
       expect(
         () => PptxValidatorRunner.runValidatiors(pptxTree),
@@ -25,7 +26,30 @@ void main() {
     test('passes when title is valid', () {
       final pptxTree = PptxTree();
       pptxTree.title = 'A valid PPTX title';
+      pptxTree.slides = [];
 
+      expect(
+        () => PptxValidatorRunner.runValidatiors(pptxTree),
+        returnsNormally,
+      );
+    });
+
+    test('throws LateInitalisationError when slides are null', () {
+      // Create a PptxTree with an valid title and null List<Slide>
+      final pptxTree = PptxTree();
+      pptxTree.title = 'title';
+      expect(
+        () => PptxValidatorRunner.runValidatiors(pptxTree),
+        throwsA(predicate((e) =>
+            e.runtimeType.toString().contains('LateError') &&
+            e.toString().contains("Field 'slides' has not been initialized."))),
+      );
+    });
+    test('Passes when slides are []', () {
+      // Create a PptxTree with an valid title and null List<Slide>
+      final pptxTree = PptxTree();
+      pptxTree.title = 'title';
+      pptxTree.slides = [];
       expect(
         () => PptxValidatorRunner.runValidatiors(pptxTree),
         returnsNormally,
