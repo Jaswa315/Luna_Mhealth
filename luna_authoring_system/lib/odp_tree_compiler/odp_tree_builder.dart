@@ -1,11 +1,18 @@
 library odp_parser;
 
 import 'dart:io';
+import 'dart:math';
 import 'package:luna_authoring_system/odp_tree_compiler/odp_xml_element_constants.dart';
 import 'package:luna_authoring_system/odp_tree_compiler/unit_conversion_constants.dart';
+import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
+import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
+import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// =================================================================================================
@@ -34,32 +41,93 @@ class OdpTreeBuilder {
     _odpTree.author = metaMap[eMetaDocument]?[eMeta]?[eAuthor];
   }
 
-  EMU convertCmToEMU(double cm) {
+  EMU _convertCmToEMU(double cm) {
     return EMU((cm * emusPerCentimeter).toInt());
   }
 
-  String extractNumber(String str) {
+  String _extractNumber(String str) {
     return str.replaceAll(RegExp(r'[^0-9.]'), '');
   }
 
-  EMU getPageDimension(Json stylesMap, String pageDimensionName) {
+  EMU _getPageDimension(Json stylesMap, String pageDimensionName) {
     String pageLayoutName = stylesMap[eStylesDocument]?[eMasterStyles]?
       [eMasterPage]?[ePageLayoutName];
-    int pageLayoutIndex = int.parse(extractNumber(pageLayoutName));
+    int pageLayoutIndex = int.parse(_extractNumber(pageLayoutName));
     String pageDimension = stylesMap[eStylesDocument]?[eAutomaticStyles]?
       [ePageLayout]?[pageLayoutIndex]?[ePageLayoutProperties]?[pageDimensionName];
-    double dimension = double.parse(extractNumber(pageDimension));
-    return convertCmToEMU(dimension);
+    return _convertCmToEMU(double.parse(_extractNumber(pageDimension)));
   }
 
   void _updateWidth() {
     Json stylesMap = _odpLoader.getJsonFromPptx("styles.xml");
-    _odpTree.width = getPageDimension(stylesMap, ePageWidth);
+    _odpTree.width = _getPageDimension(stylesMap, ePageWidth);
   }
 
   void _updateHeight() {
     Json stylesMap = _odpLoader.getJsonFromPptx("styles.xml");
-    _odpTree.height = getPageDimension(stylesMap, ePageHeight);
+    _odpTree.height = _getPageDimension(stylesMap, ePageHeight);
+  }
+
+  int _getSlideCount() {
+    Json contentMap = _odpLoader.getJsonFromPptx("content.xml");
+    final slides = contentMap[eContentDocument]?[eBody]?[ePresentation]?[ePage];
+    return (slides is List) ? slides.length : 1;
+  }
+
+  Point _getOffset(Json shapeMap) {
+    EMU offsetX = _convertCmToEMU(min((double.parse(_extractNumber(shapeMap[eX1]))), 
+        double.parse(_extractNumber(shapeMap[eX2]))));
+    EMU offsetY = _convertCmToEMU(min((double.parse(_extractNumber(shapeMap[eY1]))), 
+        double.parse(_extractNumber(shapeMap[eY2]))));
+    return Point(offsetX, offsetY);
+  }
+
+  Point _getSize(Json shapeMap) {
+    EMU sizeX = _convertCmToEMU((double.parse(_extractNumber(shapeMap[eX2])) - 
+        double.parse(_extractNumber(shapeMap[eX1])).abs()));
+    EMU sizeY = _convertCmToEMU((double.parse(_extractNumber(shapeMap[eY2])) -
+        double.parse(_extractNumber(shapeMap[eY1])).abs()));
+    return Point(sizeX, sizeY); 
+  }
+
+  Transform _getTransform(Json shapeMap) {
+    Point offset = _getOffset(shapeMap);
+    Point size = _getSize(shapeMap);
+    return Transform(offset, size);
+  }
+
+  ConnectionShape _getConnectionShape(Json shapeMap) {
+    Transform transform = _getTransform(shapeMap);
+    bool isFlippedVertically = double.parse(_extractNumber(shapeMap[eY2])) <
+        double.parse(_extractNumber(shapeMap[eY1]));
+    return ConnectionShape(
+      transform : transform,
+      isFlippedVertically: isFlippedVertically
+    );
+  }
+
+  List<Shape> _getShapes(Json contentMap, int slideIndex) {
+    List<Shape> shapes = [];
+    Json shapeTree = contentMap[eContentDocument]?[eBody]?[ePresentation]?[ePage]?[slideIndex] ??
+      contentMap[eContentDocument]?[eBody]?[ePresentation]?[ePage];
+    shapeTree.forEach((key, value) {
+      switch (key) {
+        case eConnectionShape:
+          shapes.add(_getConnectionShape(shapeTree[key]));
+          break;
+      }
+    });
+    return shapes;
+  }
+
+  void _updateSlides() {
+    List<Slide> slides = [];
+    for (int i = 0; i < _getSlideCount(); i++) {
+      Slide slide = Slide();
+      slide.shapes = _getShapes(_odpLoader.getJsonFromPptx("content.xml"), i);
+      slides.add(slide);
+    }
+    _odpTree.slides = slides;
   }
 
   PptxTree getOdpTree() {
@@ -67,6 +135,7 @@ class OdpTreeBuilder {
     _updateAuthor();
     _updateWidth();
     _updateHeight();
+    _updateSlides();
 
     return _odpTree;
   }
