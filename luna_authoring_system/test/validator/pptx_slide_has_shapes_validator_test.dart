@@ -3,7 +3,7 @@ import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
-import 'package:luna_authoring_system/validator/pptx_slide_has_no_shapes_validator.dart';
+import 'package:luna_authoring_system/validator/pptx_slide_has_shapes_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
@@ -16,7 +16,7 @@ import '../mocks/mock.mocks.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  group('PptxSlideHasNoShapesValidator', () {
+  group('PptxSlideHasShapesValidator', () {
     test('Expect 1 issue in issueList when Slide has 0 shapes', () {
       final pptxTree = PptxTree();
       pptxTree.title = "";
@@ -24,7 +24,7 @@ void main() {
       slide.shapes = [];
       pptxTree.slides = [slide];
 
-      IValidator validator = PptxSlideHasNoShapesValidator(pptxTree);
+      IValidator validator = PptxSlideHasShapesValidator(pptxTree);
       final Set<IValidationIssue> issues = validator.validate();
 
       expect(issues.length, 1);
@@ -37,7 +37,7 @@ void main() {
       pptxTree.title = "";
       pptxTree.slides = [];
 
-      IValidator validator = PptxSlideHasNoShapesValidator(pptxTree);
+      IValidator validator = PptxSlideHasShapesValidator(pptxTree);
       final Set<IValidationIssue> issues = validator.validate();
 
       expect(issues.length, 0);
@@ -54,7 +54,7 @@ void main() {
       when(mockSlide2.shapes).thenReturn([]);
       when(mockPptxTree.slides).thenReturn([mockSlide1, mockSlide2]);
 
-      final validator = PptxSlideHasNoShapesValidator(mockPptxTree);
+      final validator = PptxSlideHasShapesValidator(mockPptxTree);
       final Set<IValidationIssue> issues = validator.validate();
 
       expect(issues.length, 1);
@@ -70,7 +70,7 @@ void main() {
       when(mockSlide.shapes).thenReturn([mockShape]);
       when(mockPptxTree.slides).thenReturn([mockSlide]);
 
-      IValidator validator = PptxSlideHasNoShapesValidator(mockPptxTree);
+      IValidator validator = PptxSlideHasShapesValidator(mockPptxTree);
       final Set<IValidationIssue> issues = validator.validate();
 
       expect(issues.length, 0);
@@ -79,7 +79,7 @@ void main() {
         'Expect LateInitializationError when slides in PptxTree is not initialized',
         () {
       final pptxTree = PptxTree();
-      IValidator validator = PptxSlideHasNoShapesValidator(pptxTree);
+      IValidator validator = PptxSlideHasShapesValidator(pptxTree);
 
       expect(
         () => validator.validate(),
