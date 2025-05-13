@@ -112,7 +112,7 @@ void main() {
 
       page.setSequenceOfPages(sequence1);
 
-      expect(page.parentSequence, equals(sequence1));
+      expect(page.sequenceOfPages, equals(sequence1));
 
       // Calling again with the same instance should not throw
       expect(() => page.setSequenceOfPages(sequence1), returnsNormally);

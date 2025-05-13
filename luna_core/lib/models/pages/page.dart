@@ -15,7 +15,7 @@ class Page {
   final List<Component> components;
 
   /// The parent sequence of pages to which this page belongs.
-  SequenceOfPages? _sequenceOfPages;
+  late SequenceOfPages _sequenceOfPages;
 
   /// Constructs a new instance of [Page].
   Page({
@@ -26,11 +26,11 @@ class Page {
   List<Component> get getPageComponents => List.unmodifiable(components);
 
   /// Returns the SequenceOfPages this Page belongs to.
-  SequenceOfPages? get parentSequence => _sequenceOfPages;
+  SequenceOfPages get sequenceOfPages => _sequenceOfPages;
 
   /// Sets the parent sequence, only if not set or set to the same sequence.
   void setSequenceOfPages(SequenceOfPages sequence) {
-    if (_sequenceOfPages != null && _sequenceOfPages != sequence) {
+    if (_sequenceOfPages != sequence) {
       throw StateError('Parent sequence already set');
     }
     _sequenceOfPages = sequence;
