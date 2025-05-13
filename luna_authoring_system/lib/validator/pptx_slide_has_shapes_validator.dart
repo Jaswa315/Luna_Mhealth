@@ -3,11 +3,11 @@ import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_slide_has_no_shapes.dart';
 
-/// A validator that checks the PPTX tree for slides that have no shapes.
-class PptxSlideHasNoShapesValidator extends IValidator {
+/// A validator that checks the PPTX tree for slides that has shapes.
+class PptxSlideHasShapesValidator extends IValidator {
   final PptxTree _pptxTree;
 
-  PptxSlideHasNoShapesValidator(this._pptxTree);
+  PptxSlideHasShapesValidator(this._pptxTree);
 
   @override
   Set<IValidationIssue> validate() {
