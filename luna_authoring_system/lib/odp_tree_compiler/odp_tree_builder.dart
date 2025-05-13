@@ -73,25 +73,25 @@ class OdpTreeBuilder {
     return (slides is List) ? slides.length : 1;
   }
 
-  EMU _computeOffset(String startCoordinate, String endCoordinate) {
+  EMU _getOffsetFromCoordinates(String startCoordinate, String endCoordinate) {
     return _convertCmToEMU(min(double.parse(_extractNumber(startCoordinate)), 
         double.parse(_extractNumber(endCoordinate))));
   }
 
   Point _getOffset(Json shapeMap) {
-    EMU offsetX = _computeOffset(shapeMap[eX1], shapeMap[eX2]);
-    EMU offsetY = _computeOffset(shapeMap[eY1], shapeMap[eY2]);
+    EMU offsetX = _getOffsetFromCoordinates(shapeMap[eX1], shapeMap[eX2]);
+    EMU offsetY = _getOffsetFromCoordinates(shapeMap[eY1], shapeMap[eY2]);
     return Point(offsetX, offsetY);
   }
 
-  EMU _computeSize(String startCoordinate, String endCoordinate) {
+  EMU _getSizeFromCoordinates(String startCoordinate, String endCoordinate) {
     return _convertCmToEMU((double.parse(_extractNumber(endCoordinate)) - 
         double.parse(_extractNumber(startCoordinate))).abs());
   }
 
   Point _getSize(Json shapeMap) {
-    EMU sizeX = _computeSize(shapeMap[eX1], shapeMap[eX2]);
-    EMU sizeY = _computeSize(shapeMap[eY1], shapeMap[eY2]);
+    EMU sizeX = _getSizeFromCoordinates(shapeMap[eX1], shapeMap[eX2]);
+    EMU sizeY = _getSizeFromCoordinates(shapeMap[eY1], shapeMap[eY2]);
     return Point(sizeX, sizeY); 
   }
 
@@ -103,7 +103,7 @@ class OdpTreeBuilder {
 
   ConnectionShape _getConnectionShape(Json shapeMap) {
     Transform transform = _getTransform(shapeMap);
-    bool isFlippedVertically = double.parse(_extractNumber(shapeMap[eY2])) <
+    bool isFlippedVertically = double.parse(_extractNumber(shapeMap[eY2]))<
         double.parse(_extractNumber(shapeMap[eY1]));
     return ConnectionShape(
       transform : transform,
