@@ -7,9 +7,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_consta
 import 'package:luna_core/utils/types.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-
-@GenerateNiceMocks([MockSpec<PptxConnectionShapeBuilder>(), MockSpec<ConnectionShape>()])
-import 'pptx_shape_builder_test.mocks.dart';
+import '../../mocks/mock.mocks.dart';
 
 void main() {
   late PptxShapeBuilder shapeBuilder;
@@ -21,7 +19,8 @@ void main() {
     mockConnectionShape = MockConnectionShape();
     mockShapes = [mockConnectionShape];
     mockConnectionShapeBuilder = MockPptxConnectionShapeBuilder();
-    when(mockConnectionShapeBuilder.getConnectionShapes(any)).thenReturn(mockShapes);
+    when(mockConnectionShapeBuilder.getConnectionShapes(any))
+        .thenReturn(mockShapes);
     shapeBuilder = PptxShapeBuilder(mockConnectionShapeBuilder);
   });
 
@@ -32,7 +31,8 @@ void main() {
       expect(shapes, isEmpty);
     });
 
-    test('getShapes returns connection shapes when eConnectionShape is present', () {
+    test('getShapes returns connection shapes when eConnectionShape is present',
+        () {
       Json shapeTree = {
         eConnectionShape: [{}]
       };

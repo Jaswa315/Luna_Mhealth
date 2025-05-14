@@ -16,12 +16,7 @@ import 'package:luna_core/utils/types.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-
-@GenerateNiceMocks([
-  MockSpec<PptxTransformBuilder>(),
-  MockSpec<Transform>(),
-])
-import 'pptx_connection_shape_builder_test.mocks.dart';
+import '../../mocks/mock.mocks.dart';
 
 void main() {
   late PptxConnectionShapeBuilder pptxConnectionShapeBuilder;
