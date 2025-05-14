@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-// import 'package:luna_mobile/presentation/widgets/page_view.dart' as custom;
 import 'package:luna_mobile/states/module_state.dart';
 import 'package:luna_core/models/pages/page.dart';
 import 'package:luna_core/models/components/component.dart';
@@ -35,7 +34,6 @@ void main() {
 
     testWidgets('PageView renders all components using IRenderer',
         (WidgetTester tester) async {
-      // Arrange
       when(mockModuleState.getCurrentPage()).thenReturn(mockPage);
       when(mockPage.getPageComponents)
           .thenReturn([mockComponent1, mockComponent2]);
