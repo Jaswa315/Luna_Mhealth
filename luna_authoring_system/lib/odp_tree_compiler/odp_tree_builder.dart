@@ -72,6 +72,10 @@ class OdpTreeBuilder {
     }
   }
 
+  /// Gets the offset (top left corner) of the bounding box of the connection shape
+  /// from the given coordinates.
+  /// Top left corner of the bounding box is the minimum of the x and y coordinates.
+  /// min(x1, x2) and min(y1, y2) gives the top left corner of the bounding box.
   EMU _getOffsetFromCoordinates(String startCoordinate, String endCoordinate) {
     return _convertCmToEMU(min(double.parse(_extractNumber(startCoordinate)), 
         double.parse(_extractNumber(endCoordinate))));
@@ -102,7 +106,7 @@ class OdpTreeBuilder {
 
   ConnectionShape _getConnectionShape(Json shapeMap) {
     Transform transform = _getTransform(shapeMap);
-    bool isFlippedVertically = double.parse(_extractNumber(shapeMap[eY2]))<
+    bool isFlippedVertically = double.parse(_extractNumber(shapeMap[eY2])) <
         double.parse(_extractNumber(shapeMap[eY1]));
     return ConnectionShape(
       transform : transform,
