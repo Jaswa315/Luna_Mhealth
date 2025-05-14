@@ -3,10 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:luna_core/models/components/component.dart' as _i5;
+import 'dart:async' as _i7;
+import 'dart:ui' as _i8;
+
+import 'package:flutter/widgets.dart' as _i4;
+import 'package:luna_core/models/components/component.dart' as _i6;
 import 'package:luna_core/models/pages/page.dart' as _i2;
 import 'package:luna_core/models/pages/sequence_of_pages.dart' as _i3;
-import 'package:luna_mobile/states/module_state.dart' as _i4;
+import 'package:luna_mobile/renderers/irenderer.dart' as _i9;
+import 'package:luna_mobile/states/module_state.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -44,10 +49,24 @@ class _FakeSequenceOfPages_1 extends _i1.SmartFake
         );
 }
 
+class _FakeWidget_2 extends _i1.SmartFake implements _i4.Widget {
+  _FakeWidget_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+
+  @override
+  String toString({_i4.DiagnosticLevel? minLevel = _i4.DiagnosticLevel.info}) =>
+      super.toString();
+}
+
 /// A class which mocks [ModuleState].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockModuleState extends _i1.Mock implements _i4.ModuleState {
+class MockModuleState extends _i1.Mock implements _i5.ModuleState {
   MockModuleState() {
     _i1.throwOnMissingStub(this);
   }
@@ -86,16 +105,16 @@ class MockPage extends _i1.Mock implements _i2.Page {
   }
 
   @override
-  List<_i5.Component> get components => (super.noSuchMethod(
+  List<_i6.Component> get components => (super.noSuchMethod(
         Invocation.getter(#components),
-        returnValue: <_i5.Component>[],
-      ) as List<_i5.Component>);
+        returnValue: <_i6.Component>[],
+      ) as List<_i6.Component>);
 
   @override
-  List<_i5.Component> get getPageComponents => (super.noSuchMethod(
+  List<_i6.Component> get getPageComponents => (super.noSuchMethod(
         Invocation.getter(#getPageComponents),
-        returnValue: <_i5.Component>[],
-      ) as List<_i5.Component>);
+        returnValue: <_i6.Component>[],
+      ) as List<_i6.Component>);
 
   @override
   _i3.SequenceOfPages getsequenceOfPages() => (super.noSuchMethod(
@@ -113,7 +132,7 @@ class MockPage extends _i1.Mock implements _i2.Page {
       ) as _i3.SequenceOfPages);
 
   @override
-  void addComponent(_i5.Component? component) => super.noSuchMethod(
+  void addComponent(_i6.Component? component) => super.noSuchMethod(
         Invocation.method(
           #addComponent,
           [component],
@@ -122,7 +141,7 @@ class MockPage extends _i1.Mock implements _i2.Page {
       );
 
   @override
-  void removeComponent(_i5.Component? component) => super.noSuchMethod(
+  void removeComponent(_i6.Component? component) => super.noSuchMethod(
         Invocation.method(
           #removeComponent,
           [component],
@@ -252,4 +271,62 @@ class MockSequenceOfPages extends _i1.Mock implements _i3.SequenceOfPages {
         ),
         returnValue: <String, dynamic>{},
       ) as Map<String, dynamic>);
+}
+
+/// A class which mocks [Component].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockComponent extends _i1.Mock implements _i6.Component {
+  MockComponent() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<_i4.Widget> render(_i8.Size? screenSize) => (super.noSuchMethod(
+        Invocation.method(
+          #render,
+          [screenSize],
+        ),
+        returnValue: _i7.Future<_i4.Widget>.value(_FakeWidget_2(
+          this,
+          Invocation.method(
+            #render,
+            [screenSize],
+          ),
+        )),
+      ) as _i7.Future<_i4.Widget>);
+}
+
+/// A class which mocks [IRenderer].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockIRenderer extends _i1.Mock implements _i9.IRenderer {
+  MockIRenderer() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Widget renderComponent(
+    dynamic component,
+    _i8.Size? screenSize,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #renderComponent,
+          [
+            component,
+            screenSize,
+          ],
+        ),
+        returnValue: _FakeWidget_2(
+          this,
+          Invocation.method(
+            #renderComponent,
+            [
+              component,
+              screenSize,
+            ],
+          ),
+        ),
+      ) as _i4.Widget);
 }
