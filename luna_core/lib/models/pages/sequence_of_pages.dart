@@ -128,10 +128,14 @@ class SequenceOfPages {
 
   factory SequenceOfPages.fromJson(Json json) {
     final pagesJson = json['pages'] as List<dynamic>;
+    final sequence = SequenceOfPages(pages: []);
 
-    return SequenceOfPages(
-      pages: pagesJson.map((p) => Page.fromJson(p)).toList(),
-    );
+    for (final p in pagesJson) {
+      final page = Page.fromJson(p, sequence);
+      sequence.addPage(page);
+    }
+
+    return sequence;
   }
 
   Json toJson() {

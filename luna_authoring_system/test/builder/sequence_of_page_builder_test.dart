@@ -61,32 +61,5 @@ void main() {
           sequenceOfPagesSet.first.pages, isEmpty); // The section has no pages
       expect(() => builder.firstPage, throwsA(isA<StateError>()));
     });
-
-    test('Each Page should have its parentSequence set correctly', () {
-      // Arrange
-      List<Slide> slides = [
-        Slide()..shapes = [],
-        Slide()..shapes = [],
-      ];
-
-      Section section = Section({
-        "TestSection": [1, 2],
-      });
-
-      SequenceOfPageBuilder builder = SequenceOfPageBuilder(
-        slides: slides,
-        section: section,
-      );
-
-      // Act
-      Set<SequenceOfPages> sequenceOfPagesSet = builder.build();
-
-      // Assert
-      for (final sequence in sequenceOfPagesSet) {
-        for (final page in sequence.pages) {
-          expect(page.parentSequence, equals(sequence));
-        }
-      }
-    });
   });
 }

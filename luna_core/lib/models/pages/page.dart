@@ -15,7 +15,7 @@ class Page {
   final List<Component> components;
 
   /// The parent sequence of pages to which this page belongs.
-  SequenceOfPages? _sequenceOfPages;
+  late SequenceOfPages _sequenceOfPages;
 
   /// Constructs a new instance of [Page].
   Page({
@@ -26,15 +26,9 @@ class Page {
   List<Component> get getPageComponents => List.unmodifiable(components);
 
   /// Returns the SequenceOfPages this Page belongs to.
-  SequenceOfPages? get parentSequence => _sequenceOfPages;
+  SequenceOfPages getsequenceOfPages() => _sequenceOfPages;
 
   /// Sets the parent sequence, only if not set or set to the same sequence.
-  void setSequenceOfPages(SequenceOfPages sequence) {
-    if (_sequenceOfPages != null && _sequenceOfPages != sequence) {
-      throw StateError('Parent sequence already set');
-    }
-    _sequenceOfPages = sequence;
-  }
 
   /// Adds a component to the page.
   void addComponent(Component component) {
@@ -46,8 +40,8 @@ class Page {
     components.remove(component);
   }
 
-  /// Converts a JSON map into a Page, ensuring it only includes slides of type "slide".
-  factory Page.fromJson(Json json) {
+  /// Converts a JSON map into a Page, ensuring it only includes slides of type "page".
+  factory Page.fromJson(Json json, SequenceOfPages sequence) {
     if (json['type'] != 'page') {
       throw FormatException('Only page type components are allowed');
     }
@@ -56,9 +50,10 @@ class Page {
         .map((shapeJson) => Component.fromJson(shapeJson))
         .toList();
 
-    return Page(
-      components: components,
-    );
+    final page = Page(components: components);
+    page._sequenceOfPages = sequence;
+
+    return page;
   }
 
   /// Converts a Page into a JSON map.
