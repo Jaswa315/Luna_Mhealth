@@ -34,11 +34,24 @@ class Module {
   /// Factory method to create a [Module] from JSON.
   factory Module.fromJson(Json json) {
     var sequencesJson = json['module']['sequences'] as List<dynamic>;
-    var sequences = sequencesJson
-        .map((seqJson) => SequenceOfPages.fromJson(seqJson))
-        .toSet();
+    final Set<SequenceOfPages> sequences = {};
 
-    var entryPage = Page.fromJson(json['module']['entryPage']);
+    for (final seqJson in sequencesJson) {
+      final pagesJson = seqJson['pages'] as List<dynamic>;
+      final sequence = SequenceOfPages(pages: []);
+
+      for (final pageJson in pagesJson) {
+        final page = Page.fromJson(pageJson, sequence);
+        sequence.addPage(page);
+      }
+
+      sequences.add(sequence);
+    }
+
+    var entryPageJson = json['module']['entryPage'] as Json;
+    // Temporarily create a dummy sequence for entryPage (if needed)
+    final dummySequence = SequenceOfPages(pages: []);
+    final entryPage = Page.fromJson(entryPageJson, dummySequence);
 
     return Module(
       moduleId: json['module']['moduleId'] as String,

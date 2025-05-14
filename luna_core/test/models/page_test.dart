@@ -104,21 +104,5 @@ void main() {
       expect(json['components'].first['type'], 'text');
       */
     });
-
-    test('setSequenceOfPages sets parent only once', () {
-      final page = Page();
-      final sequence1 = SequenceOfPages(pages: []);
-      final sequence2 = SequenceOfPages(pages: []);
-
-      page.setSequenceOfPages(sequence1);
-
-      expect(page.sequenceOfPages, equals(sequence1));
-
-      // Calling again with the same instance should not throw
-      expect(() => page.setSequenceOfPages(sequence1), returnsNormally);
-
-      // Calling again with a different instance should throw
-      expect(() => page.setSequenceOfPages(sequence2), throwsStateError);
-    });
   });
 }
