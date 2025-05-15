@@ -57,12 +57,12 @@ class SequenceOfPageBuilder implements IBuilder<Set<SequenceOfPages>> {
   /// Adds a [SequenceOfPages] to the set of sequences.
   void _addSequenceOfPages(List<Page> pages) {
     if (pages.isEmpty) {
-      _sequenceOfPages.add(SequenceOfPages(pages: []));
+      _sequenceOfPages.add(SequenceOfPages(sequenceOfPages: []));
 
       return;
     }
 
-    final sequence = SequenceOfPages(pages: []);
+    final sequence = SequenceOfPages(sequenceOfPages: []);
     for (final page in pages) {
       page.setSequenceOfPages(sequence); // Set back-reference
       sequence.addPage(page);
