@@ -3,7 +3,7 @@ import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// Represents a module in the application.
-/// A module can contain multiple sequences of pages.
+/// A module can contain multiple setOfSequenceOfPages of pages.
 /// Each sequence can have multiple pages, and each page can have multiple components.
 /// The module also has metadata such as title, author, and aspect ratio.
 /// The moduleId is a unique identifier for the module.
@@ -13,7 +13,7 @@ class Module {
   final String title;
   final String author;
   final String authoringVersion;
-  final Set<SequenceOfPages> sequences;
+  final Set<SequenceOfPages> setOfSequenceOfPages;
 
   ///// Aspect ratio (height/width)
   final double aspectRatio;
@@ -26,7 +26,7 @@ class Module {
     required this.title,
     required this.author,
     required this.authoringVersion,
-    required this.sequences,
+    required this.setOfSequenceOfPages,
     required this.aspectRatio,
     required this.entryPage,
   });
@@ -35,9 +35,9 @@ class Module {
   factory Module.fromJson(Json json) {
     final serializedDefinitions = Map<String, Json>.from(json['definitions']);
     final idToObject = <String, Object>{};
-    final sequences = <SequenceOfPages>{};
+    final setOfSequenceOfPages = <SequenceOfPages>{};
 
-    for (final seqId in json['module']['sequences']) {
+    for (final seqId in json['module']['setOfSequenceOfPages']) {
       final seqJson = serializedDefinitions[seqId];
       final sequence = SequenceOfPages.fromJson(
         seqJson!,
@@ -45,7 +45,7 @@ class Module {
         idToObject,
         serializedDefinitions,
       );
-      sequences.add(sequence);
+      setOfSequenceOfPages.add(sequence);
     }
 
     final entryPageId = json['module']['entryPage'];
@@ -56,7 +56,7 @@ class Module {
       title: json['module']['title'] as String,
       author: json['module']['author'] as String,
       authoringVersion: json['module']['authoringVersion'],
-      sequences: sequences,
+      setOfSequenceOfPages: setOfSequenceOfPages,
       aspectRatio: (json['module']['aspectRatio'] as num).toDouble(),
       entryPage: entryPage,
     );
@@ -67,7 +67,7 @@ class Module {
     final objectIdMap = <Object, String>{};
     final serializedDefinitions = <String, Json>{};
 
-    final sequenceIds = sequences.map((seq) {
+    final sequenceIds = setOfSequenceOfPages.map((seq) {
       final id =
           objectIdMap.putIfAbsent(seq, () => 'seq_${objectIdMap.length}');
       serializedDefinitions[id] =
@@ -87,7 +87,7 @@ class Module {
         'title': title,
         'author': author,
         'authoringVersion': authoringVersion,
-        'sequences': sequenceIds,
+        'setOfSequenceOfPages': sequenceIds,
         'aspectRatio': aspectRatio,
         'entryPage': entryPageId,
       },

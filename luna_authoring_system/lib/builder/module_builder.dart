@@ -72,7 +72,7 @@ class ModuleBuilder implements IBuilder<Module> {
       title: _title,
       author: _author,
       authoringVersion: VersionManager().version,
-      sequences: _sequences,
+      setOfSequenceOfPages: _sequences,
       aspectRatio: _aspectRatio,
       entryPage: _entryPage,
     );
