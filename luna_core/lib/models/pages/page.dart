@@ -35,6 +35,8 @@ class Page {
     components.add(component);
   }
 
+  List<Component> get pageComponents => List.unmodifiable(components);
+
   void setSequenceOfPages(SequenceOfPages sequence) {
     _sequenceOfPages = sequence;
   }

@@ -23,7 +23,7 @@ void main() {
 
       // Create a real SequenceOfPages instance
       realSequenceOfPages = SequenceOfPages(
-        pages: [validPage1, validPage2, validPage3],
+        sequenceOfPages: [validPage1, validPage2, validPage3],
       );
 
       // Mock the ModuleState to return validPage2 as the current page

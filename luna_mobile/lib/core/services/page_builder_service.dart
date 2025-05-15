@@ -54,7 +54,9 @@ class ModulePageBuilderService {
       if (cachedPages.length >= cacheSizeLimit) {
         cachedPages.remove(cachedPages.keys.first);
       }
-      final allPages = module.sequences.expand((seq) => seq.pages).toList();
+      final allPages = module.setOfSequenceOfPages
+          .expand((seq) => seq.sequenceOfPages)
+          .toList();
       cachedPages[pageIndex] = buildPage(allPages[pageIndex], screenSize);
     } else {
       // Move the accessed page to the end of the map to implement LRU policy.

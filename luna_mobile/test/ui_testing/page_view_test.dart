@@ -35,7 +35,7 @@ void main() {
     testWidgets('PageView renders all components using IRenderer',
         (WidgetTester tester) async {
       when(mockModuleState.getCurrentPage()).thenReturn(mockPage);
-      when(mockPage.getPageComponents)
+      when(mockPage.pageComponents)
           .thenReturn([mockComponent1, mockComponent2]);
 
       // Use a testable PageView that doesn't depend on RendererFactory.
@@ -63,7 +63,7 @@ class TestablePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final page = moduleState.getCurrentPage();
-    final components = page.getPageComponents;
+    final components = page.pageComponents;
     return Column(
       children: List.generate(
         components.length,

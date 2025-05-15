@@ -19,6 +19,8 @@ class SequenceOfPages {
     return _sequenceOfPages[index];
   }
 
+  List<Page> get sequenceOfPages => List.unmodifiable(_sequenceOfPages);
+
   /// Adds a page to the sequence.
   void addPage(Page page) {
     _sequenceOfPages.add(page);
