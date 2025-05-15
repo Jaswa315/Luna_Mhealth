@@ -126,21 +126,42 @@ class SequenceOfPages {
     return _pages[index + 1];
   }
 
-  factory SequenceOfPages.fromJson(Json json) {
-    final pagesJson = json['pages'] as List<dynamic>;
-    final sequence = SequenceOfPages(pages: []);
+  Json toJson(
+    Map<Object, String> objectIdMap,
+    Map<String, Json> serializedDefinitions,
+  ) {
+    final pageIds = <String>[];
 
-    for (final p in pagesJson) {
-      final page = Page.fromJson(p, sequence);
+    for (final page in _pages) {
+      final id =
+          objectIdMap.putIfAbsent(page, () => 'page_${objectIdMap.length}');
+      serializedDefinitions[id] =
+          page.toJson(objectIdMap, serializedDefinitions);
+      pageIds.add(id);
+    }
+
+    return {
+      'pages': pageIds,
+    };
+  }
+
+  static SequenceOfPages fromJson(
+    Json json,
+    String sequenceId,
+    Map<String, Object> idToObject,
+    Map<String, Json> serializedDefinitions,
+  ) {
+    final pageIds = json['pages'] as List<dynamic>;
+    final sequence = SequenceOfPages(pages: []);
+    idToObject[sequenceId] = sequence;
+
+    for (final pageId in pageIds) {
+      final pageJson = serializedDefinitions[pageId];
+      final page = Page.fromJson(pageJson!, sequence);
+      idToObject[pageId] = page;
       sequence.addPage(page);
     }
 
     return sequence;
-  }
-
-  Json toJson() {
-    return {
-      'pages': pages.map((p) => p.toJson()).toList(),
-    };
   }
 }

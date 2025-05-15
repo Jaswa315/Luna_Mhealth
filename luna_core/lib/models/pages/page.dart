@@ -35,6 +35,10 @@ class Page {
     components.add(component);
   }
 
+  void setSequenceOfPages(SequenceOfPages sequence) {
+    _sequenceOfPages = sequence;
+  }
+
   /// Removes a component from the page.
   void removeComponent(Component component) {
     components.remove(component);
@@ -56,16 +60,24 @@ class Page {
     return page;
   }
 
-  /// Converts a Page into a JSON map.
-  Json toJson() {
+  Json toJson(
+    Map<Object, String> objectIdMap,
+    Map<String, Json> serializedDefinitions,
+  ) {
+    final sequenceId = objectIdMap.putIfAbsent(
+      _sequenceOfPages,
+      () => 'seq_${objectIdMap.length}',
+    );
+
     return {
       'type': 'page',
+      'sequence': sequenceId,
       'shapes': components.map((c) => Component.serializeComponent(c)).toList(),
     };
   }
 
   @override
   String toString() {
-    return jsonEncode(toJson());
+    return jsonEncode(toJson({}, {}));
   }
 }

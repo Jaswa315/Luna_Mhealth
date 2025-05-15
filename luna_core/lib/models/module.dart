@@ -33,25 +33,23 @@ class Module {
 
   /// Factory method to create a [Module] from JSON.
   factory Module.fromJson(Json json) {
-    var sequencesJson = json['module']['sequences'] as List<dynamic>;
-    final Set<SequenceOfPages> sequences = {};
+    final serializedDefinitions = Map<String, Json>.from(json['definitions']);
+    final idToObject = <String, Object>{};
+    final sequences = <SequenceOfPages>{};
 
-    for (final seqJson in sequencesJson) {
-      final pagesJson = seqJson['pages'] as List<dynamic>;
-      final sequence = SequenceOfPages(pages: []);
-
-      for (final pageJson in pagesJson) {
-        final page = Page.fromJson(pageJson, sequence);
-        sequence.addPage(page);
-      }
-
+    for (final seqId in json['module']['sequences']) {
+      final seqJson = serializedDefinitions[seqId];
+      final sequence = SequenceOfPages.fromJson(
+        seqJson!,
+        seqId,
+        idToObject,
+        serializedDefinitions,
+      );
       sequences.add(sequence);
     }
 
-    var entryPageJson = json['module']['entryPage'] as Json;
-    // Temporarily create a dummy sequence for entryPage (if needed)
-    final dummySequence = SequenceOfPages(pages: []);
-    final entryPage = Page.fromJson(entryPageJson, dummySequence);
+    final entryPageId = json['module']['entryPage'];
+    final entryPage = idToObject[entryPageId] as Page;
 
     return Module(
       moduleId: json['module']['moduleId'] as String,
@@ -66,16 +64,34 @@ class Module {
 
   /// Converts the [Module] object to a JSON map.
   Json toJson() {
+    final objectIdMap = <Object, String>{};
+    final serializedDefinitions = <String, Json>{};
+
+    final sequenceIds = sequences.map((seq) {
+      final id =
+          objectIdMap.putIfAbsent(seq, () => 'seq_${objectIdMap.length}');
+      serializedDefinitions[id] =
+          seq.toJson(objectIdMap, serializedDefinitions);
+
+      return id;
+    }).toList();
+
+    final entryPageId =
+        objectIdMap.putIfAbsent(entryPage, () => 'page_${objectIdMap.length}');
+    serializedDefinitions[entryPageId] =
+        entryPage.toJson(objectIdMap, serializedDefinitions);
+
     return {
       'module': {
         'moduleId': moduleId,
         'title': title,
         'author': author,
         'authoringVersion': authoringVersion,
-        'sequences': sequences.map((seq) => seq.toJson()).toList(),
+        'sequences': sequenceIds,
         'aspectRatio': aspectRatio,
-        'entryPage': entryPage.toJson(),
+        'entryPage': entryPageId,
       },
+      'definitions': serializedDefinitions,
     };
   }
 
