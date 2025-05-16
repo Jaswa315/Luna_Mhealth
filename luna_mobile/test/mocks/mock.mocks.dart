@@ -117,6 +117,12 @@ class MockPage extends _i1.Mock implements _i2.Page {
       ) as List<_i6.Component>);
 
   @override
+  List<_i6.Component> get pageComponents => (super.noSuchMethod(
+        Invocation.getter(#pageComponents),
+        returnValue: <_i6.Component>[],
+      ) as List<_i6.Component>);
+
+  @override
   _i3.SequenceOfPages getsequenceOfPages() => (super.noSuchMethod(
         Invocation.method(
           #getsequenceOfPages,
@@ -141,6 +147,15 @@ class MockPage extends _i1.Mock implements _i2.Page {
       );
 
   @override
+  void setSequenceOfPages(_i3.SequenceOfPages? sequence) => super.noSuchMethod(
+        Invocation.method(
+          #setSequenceOfPages,
+          [sequence],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   void removeComponent(_i6.Component? component) => super.noSuchMethod(
         Invocation.method(
           #removeComponent,
@@ -150,10 +165,17 @@ class MockPage extends _i1.Mock implements _i2.Page {
       );
 
   @override
-  Map<String, dynamic> toJson() => (super.noSuchMethod(
+  Map<String, dynamic> toJson(
+    Map<Object, String>? objectIdMap,
+    Map<String, Map<String, dynamic>>? serializedDefinitions,
+  ) =>
+      (super.noSuchMethod(
         Invocation.method(
           #toJson,
-          [],
+          [
+            objectIdMap,
+            serializedDefinitions,
+          ],
         ),
         returnValue: <String, dynamic>{},
       ) as Map<String, dynamic>);
@@ -168,8 +190,8 @@ class MockSequenceOfPages extends _i1.Mock implements _i3.SequenceOfPages {
   }
 
   @override
-  List<_i2.Page> get pages => (super.noSuchMethod(
-        Invocation.getter(#pages),
+  List<_i2.Page> get sequenceOfPages => (super.noSuchMethod(
+        Invocation.getter(#sequenceOfPages),
         returnValue: <_i2.Page>[],
       ) as List<_i2.Page>);
 
@@ -264,10 +286,17 @@ class MockSequenceOfPages extends _i1.Mock implements _i3.SequenceOfPages {
       ) as _i2.Page);
 
   @override
-  Map<String, dynamic> toJson() => (super.noSuchMethod(
+  Map<String, dynamic> toJson(
+    Map<Object, String>? objectIdMap,
+    Map<String, Map<String, dynamic>>? serializedDefinitions,
+  ) =>
+      (super.noSuchMethod(
         Invocation.method(
           #toJson,
-          [],
+          [
+            objectIdMap,
+            serializedDefinitions,
+          ],
         ),
         returnValue: <String, dynamic>{},
       ) as Map<String, dynamic>);

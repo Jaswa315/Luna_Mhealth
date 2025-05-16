@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/builder/sequence_of_page_builder.dart';
+import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
@@ -31,9 +32,9 @@ void main() {
 
       // Assert
       expect(sequenceOfPagesSet.length, equals(2)); // Two sections
-      expect(sequenceOfPagesSet.first.pages.length,
+      expect(sequenceOfPagesSet.first.sequenceOfPages.length,
           equals(2)); // First section has 2 pages
-      expect(sequenceOfPagesSet.last.pages.length,
+      expect(sequenceOfPagesSet.last.sequenceOfPages.length,
           equals(1)); // Second section has 1 page
       expect(builder.firstPage, isA<Page>());
       expect(builder.firstPage.components, isEmpty);
@@ -57,8 +58,8 @@ void main() {
 
       // Assert
       expect(sequenceOfPagesSet.length, equals(1)); // One section
-      expect(
-          sequenceOfPagesSet.first.pages, isEmpty); // The section has no pages
+      expect(sequenceOfPagesSet.first.sequenceOfPages,
+          isEmpty); // The section has no pages
       expect(() => builder.firstPage, throwsA(isA<StateError>()));
     });
   });

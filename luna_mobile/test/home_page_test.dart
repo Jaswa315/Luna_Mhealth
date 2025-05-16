@@ -105,7 +105,7 @@ void main() {
         title: 'Module 1',
         author: 'Author 1',
         authoringVersion: '1.0.0',
-        sequences: {SequenceOfPages(pages: [])},
+        setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
         entryPage: luna_page.Page(components: []),
       ),
@@ -114,7 +114,7 @@ void main() {
         title: '',
         author: 'Author 2',
         authoringVersion: '1.0.0',
-        sequences: {SequenceOfPages(pages: [])},
+        setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
         entryPage: luna_page.Page(components: []),
       ),
@@ -123,7 +123,7 @@ void main() {
         title: '',
         author: 'Author 3',
         authoringVersion: '1.0.0',
-        sequences: {SequenceOfPages(pages: [])},
+        setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
         entryPage: luna_page.Page(components: []),
       ),
@@ -132,14 +132,14 @@ void main() {
         title: 'Module 4',
         author: 'Author 4',
         authoringVersion: '1.0.0',
-        sequences: {SequenceOfPages(pages: [])},
+        setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
         entryPage: luna_page.Page(components: []),
       ),
     ];
 
     final mockModuleUIPicker = MockModuleUIPicker();
-    mockModuleUIPicker.mockModules = mockModules;
+    mockModuleUIPicker.mockModules = mockModules.cast<Module>();
     mockModuleUIPicker.areModulesLoaded = true;
   });
 
@@ -151,7 +151,7 @@ void main() {
         title: 'Module 1',
         author: 'Author 1',
         authoringVersion: '1.0.0',
-        sequences: {SequenceOfPages(pages: [])},
+        setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
         entryPage: luna_page.Page(components: []),
       ),
@@ -160,14 +160,14 @@ void main() {
         title: 'Module 2',
         author: 'Author 2',
         authoringVersion: '1.0.0',
-        sequences: {SequenceOfPages(pages: [])},
+        setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
         entryPage: luna_page.Page(components: []),
       ),
     ];
 
     final mockModuleUIPicker = MockModuleUIPicker();
-    mockModuleUIPicker.mockModules = mockModules;
+    mockModuleUIPicker.mockModules = mockModules.cast<Module>();
     mockModuleUIPicker.areModulesLoaded = true;
 
     await tester.pumpWidget(
@@ -192,14 +192,14 @@ void main() {
         title: 'Module 1',
         author: 'Author 1',
         authoringVersion: '1.0.0',
-        sequences: {SequenceOfPages(pages: [])},
+        setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
         entryPage: luna_page.Page(components: []),
       ),
     ];
 
     final mockModuleUIPicker = MockModuleUIPicker();
-    mockModuleUIPicker.mockModules = mockModules;
+    mockModuleUIPicker.mockModules = mockModules.cast<Module>();
     mockModuleUIPicker.areModulesLoaded = true;
 
     // Load StartLearningPage with mock provider

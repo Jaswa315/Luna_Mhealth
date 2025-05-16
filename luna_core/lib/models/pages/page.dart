@@ -35,12 +35,22 @@ class Page {
     components.add(component);
   }
 
+  List<Component> get pageComponents => List.unmodifiable(components);
+
+  void setSequenceOfPages(SequenceOfPages sequence) {
+    _sequenceOfPages = sequence;
+  }
+
   /// Removes a component from the page.
   void removeComponent(Component component) {
     components.remove(component);
   }
 
-  /// Converts a JSON map into a Page, ensuring it only includes slides of type "page".
+  /// Factory constructor that creates a [Page] from JSON.
+  ///
+  /// It validates that the object is of type 'page', deserializes the shapes into
+  /// [Component] objects, and assigns the given [SequenceOfPages] reference to
+  /// establish ownership. This supports reconstructing full navigation context.
   factory Page.fromJson(Json json, SequenceOfPages sequence) {
     if (json['type'] != 'page') {
       throw FormatException('Only page type components are allowed');
@@ -56,16 +66,29 @@ class Page {
     return page;
   }
 
-  /// Converts a Page into a JSON map.
-  Json toJson() {
+  /// Converts the [Page] object to a JSON-friendly format.
+  ///
+  /// This includes serializing all component shapes and referencing its parent
+  /// [SequenceOfPages] by a unique ID from [objectIdMap]. The full serialized
+  /// data is stored in [serializedDefinitions] to avoid inline duplication.
+  Json toJson(
+    Map<Object, String> objectIdMap,
+    Map<String, Json> serializedDefinitions,
+  ) {
+    final sequenceId = objectIdMap.putIfAbsent(
+      _sequenceOfPages,
+      () => 'seq_${objectIdMap.length}',
+    );
+
     return {
       'type': 'page',
+      'sequence': sequenceId,
       'shapes': components.map((c) => Component.serializeComponent(c)).toList(),
     };
   }
 
   @override
   String toString() {
-    return jsonEncode(toJson());
+    return jsonEncode(toJson({}, {}));
   }
 }

@@ -67,7 +67,9 @@ void main() {
           .build();
 
       final result = builder.build();
-      final totalPages = result.sequences.expand((seq) => seq.pages).length;
+      final totalPages = result.setOfSequenceOfPages
+          .expand((seq) => seq.sequenceOfPages)
+          .length;
       expect(totalPages, equals(3));
     });
 

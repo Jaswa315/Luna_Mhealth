@@ -106,8 +106,9 @@ class _ModulePageState extends State<ModulePage> {
 
   void _setupPageWidgets() {
     final screenSize = MediaQuery.of(context).size;
-    final allPages =
-        widget.module.sequences.expand((seq) => seq.pages).toList();
+    final allPages = widget.module.setOfSequenceOfPages
+        .expand((seq) => seq.sequenceOfPages)
+        .toList();
     _cachedPagesWidgets = allPages
         .asMap()
         .map((index, page) =>

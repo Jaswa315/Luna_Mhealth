@@ -3,43 +3,42 @@ import 'package:luna_core/utils/types.dart';
 
 /// Represents a sequence of pages in the application.
 class SequenceOfPages {
-  final List<Page> _pages;
+  final List<Page> _sequenceOfPages;
 
   /// Constructs a new [SequenceOfPages] with a list of pages.
   SequenceOfPages({
-    required List<Page> pages,
-  }) : _pages = pages;
-
-  /// A list of pages in the sequence.
-  List<Page> get pages => List.unmodifiable(_pages);
+    required List<Page> sequenceOfPages,
+  }) : _sequenceOfPages = sequenceOfPages;
 
   /// Gets the page at the specified index.
   Page getPage(int index) {
-    if (index < 0 || index >= _pages.length) {
+    if (index < 0 || index >= _sequenceOfPages.length) {
       throw RangeError('Index out of range');
     }
 
-    return _pages[index];
+    return _sequenceOfPages[index];
   }
+
+  List<Page> get sequenceOfPages => List.unmodifiable(_sequenceOfPages);
 
   /// Adds a page to the sequence.
   void addPage(Page page) {
-    _pages.add(page);
+    _sequenceOfPages.add(page);
   }
 
   /// Removes a page from the sequence.
   void removePage(Page page) {
-    _pages.remove(page);
+    _sequenceOfPages.remove(page);
   }
 
   /// Checks if the given page is the leftmost (first) page in the sequence.
   bool isLeftMostPage(Page page) {
-    return _pages.isNotEmpty && _pages.first == page;
+    return _sequenceOfPages.isNotEmpty && _sequenceOfPages.first == page;
   }
 
   /// Checks if the given page is the rightmost (last) page in the sequence.
   bool isRightMostPage(Page page) {
-    return _pages.isNotEmpty && _pages.last == page;
+    return _sequenceOfPages.isNotEmpty && _sequenceOfPages.last == page;
   }
 
   /// Gets the current index of a [Page] in the sequence of pages (SOP).
@@ -58,11 +57,11 @@ class SequenceOfPages {
   /// - [RangeError]: If the sequence of pages is empty.
   /// - [ArgumentError]: If the specified [Page] is not found in the sequence.
   int getIndexOfPage(Page page) {
-    if (_pages.isEmpty) {
+    if (_sequenceOfPages.isEmpty) {
       throw RangeError('No pages in the sequence');
     }
 
-    int index = _pages.indexOf(page);
+    int index = _sequenceOfPages.indexOf(page);
     if (index == -1) {
       throw ArgumentError('Page not found in the sequence');
     }
@@ -86,7 +85,7 @@ class SequenceOfPages {
   /// - [StateError]: If the specified [Page] is the first page and no left page is available.
   /// - [ArgumentError]: If the specified [Page] is not found in the sequence.
   Page getLeftPage(Page page) {
-    if (_pages.isEmpty) {
+    if (_sequenceOfPages.isEmpty) {
       throw RangeError('No pages in the sequence');
     }
 
@@ -95,7 +94,7 @@ class SequenceOfPages {
       throw StateError('No left page available');
     }
 
-    return _pages[index - 1];
+    return _sequenceOfPages[index - 1];
   }
 
   /// Retrieves the page to the right of the specified [Page] in the sequence of pages (SOP).
@@ -114,33 +113,66 @@ class SequenceOfPages {
   /// - [StateError]: If the specified [Page] is the last page and no right page is available.
   /// - [ArgumentError]: If the specified [Page] is not found in the sequence.
   Page getRightPage(Page page) {
-    if (_pages.isEmpty) {
+    if (_sequenceOfPages.isEmpty) {
       throw RangeError('No pages in the sequence');
     }
 
     int index = getIndexOfPage(page);
-    if (index >= _pages.length - 1) {
+    if (index >= _sequenceOfPages.length - 1) {
       throw StateError('No right page available');
     }
 
-    return _pages[index + 1];
+    return _sequenceOfPages[index + 1];
   }
 
-  factory SequenceOfPages.fromJson(Json json) {
-    final pagesJson = json['pages'] as List<dynamic>;
-    final sequence = SequenceOfPages(pages: []);
+  /// Converts the [SequenceOfPages] object into a JSON-friendly format.
+  ///
+  /// It assigns a unique ID to each [Page] in the sequence using [objectIdMap],
+  /// and serializes each page's content into [serializedDefinitions] so they
+  /// can be referenced by ID. This structure helps to prevent duplication
+  /// and keeps the serialized module concise and modular.
+  Json toJson(
+    Map<Object, String> objectIdMap,
+    Map<String, Json> serializedDefinitions,
+  ) {
+    final pageIds = <String>[];
 
-    for (final p in pagesJson) {
-      final page = Page.fromJson(p, sequence);
+    for (final page in _sequenceOfPages) {
+      final id =
+          objectIdMap.putIfAbsent(page, () => 'page_${objectIdMap.length}');
+      serializedDefinitions[id] =
+          page.toJson(objectIdMap, serializedDefinitions);
+      pageIds.add(id);
+    }
+
+    return {
+      'sequenceOfPages': pageIds,
+    };
+  }
+
+  /// Factory constructor that creates a [SequenceOfPages] object from JSON.
+  ///
+  /// It reads a list of page IDs from the JSON input, retrieves each page's JSON
+  /// from [serializedDefinitions], deserializes them using [Page.fromJson], and
+  /// associates each with the current sequence. The [idToObject] map is updated
+  /// to store references to the reconstructed objects for future lookups.
+  factory SequenceOfPages.fromJson(
+    Json json,
+    String sequenceId,
+    Map<String, Object> idToObject,
+    Map<String, Json> serializedDefinitions,
+  ) {
+    final pageIds = json['sequenceOfPages'] as List<dynamic>;
+    final sequence = SequenceOfPages(sequenceOfPages: []);
+    idToObject[sequenceId] = sequence;
+
+    for (final pageId in pageIds) {
+      final pageJson = serializedDefinitions[pageId];
+      final page = Page.fromJson(pageJson!, sequence);
+      idToObject[pageId] = page;
       sequence.addPage(page);
     }
 
     return sequence;
-  }
-
-  Json toJson() {
-    return {
-      'pages': pages.map((p) => p.toJson()).toList(),
-    };
   }
 }

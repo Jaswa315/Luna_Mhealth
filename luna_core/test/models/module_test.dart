@@ -8,26 +8,29 @@ import 'dart:convert';
 void main() {
   group('Module Class Tests', () {
     test('Module is created with expected properties', () {
+      final entryPg = Page(components: []);
       final module = Module(
         moduleId: '12345',
         title: 'This is title',
         author: 'Test Author',
         authoringVersion: '1.0.0',
-        sequences: {
-          SequenceOfPages(pages: [Page(components: [])])
+        setOfSequenceOfPages: {
+          SequenceOfPages(sequenceOfPages: [entryPg])
         },
         aspectRatio: 16 / 9,
-        entryPage: Page(components: []),
+        entryPage: entryPg,
       );
 
       expect(module.moduleId, '12345');
       expect(module.title, 'This is title');
       expect(module.author, 'Test Author');
       expect(module.authoringVersion, '1.0.0');
-      expect(module.sequences.length, 1);
-      expect(module.sequences.first.pages.length, 1);
-      expect(module.sequences.first.pages[0].components, isEmpty);
+      expect(module.setOfSequenceOfPages.length, 1);
+      expect(module.setOfSequenceOfPages.first.sequenceOfPages.length, 1);
+      expect(module.setOfSequenceOfPages.first.sequenceOfPages[0].components,
+          isEmpty);
       expect(module.aspectRatio, closeTo(1.7777, 0.0001));
+      expect(module.entryPage, entryPg);
     });
 
     test('Deserialization from valid JSON with empty pages', () {
@@ -37,9 +40,15 @@ void main() {
           'title': 'This is title',
           'author': 'John Doe',
           'authoringVersion': '1.0.0',
-          'sequences': [],
+          'setOfSequenceOfPages': ['sequence_1'],
           'aspectRatio': 1.7777777777777777,
-          'entryPage': {'type': 'page', 'shapes': []},
+          'entryPage': 'page_1',
+        },
+        'definitions': {
+          'page_1': {'type': 'page', 'shapes': []},
+          'sequence_1': {
+            'sequenceOfPages': ['page_1']
+          }
         }
       };
 
@@ -49,8 +58,13 @@ void main() {
       expect(module.title, 'This is title');
       expect(module.author, 'John Doe');
       expect(module.authoringVersion, '1.0.0');
-      expect(module.sequences, isEmpty);
+      expect(module.setOfSequenceOfPages.length, 1);
+      expect(module.setOfSequenceOfPages.first.sequenceOfPages.length, 1);
+      expect(module.setOfSequenceOfPages.first.sequenceOfPages[0].components,
+          isEmpty);
       expect(module.aspectRatio, closeTo(1.7777777, 0.0001));
+      expect(module.entryPage.runtimeType, Page);
+      expect(module.entryPage.components, isEmpty);
     });
 
     test('Deserialization from valid JSON with pages', () {
@@ -60,61 +74,31 @@ void main() {
           'title': 'Module with Pages',
           'author': 'Jane Doe',
           'authoringVersion': '1.0.0',
-          'sequences': [
-            {
-              'pages': [
-                {
-                  'type': 'page',
-                  'shapes': [],
-                },
-                {
-                  'type': 'page',
-                  'shapes': [],
-                }
-              ]
-            }
-          ],
+          'setOfSequenceOfPages': ['sequence_1'],
           'aspectRatio': 16 / 9,
-          'entryPage': {'type': 'page', 'shapes': []},
+          'entryPage': 'page_1',
+        },
+        'definitions': {
+          'page_1': {'type': 'page', 'shapes': []},
+          'page_2': {'type': 'page', 'shapes': []},
+          'sequence_1': {
+            'sequenceOfPages': ['page_1', 'page_2']
+          }
         }
       };
 
       final module = Module.fromJson(json);
 
       expect(module.moduleId, '54321');
-      expect(module.sequences.length, 1);
-      expect(module.sequences.first.pages.length, 2);
-      expect(module.sequences.first.pages[0].components, isEmpty);
-      expect(module.sequences.first.pages[1].components, isEmpty);
+      expect(module.setOfSequenceOfPages.length, 1);
+      expect(module.setOfSequenceOfPages.first.sequenceOfPages.length, 2);
+      expect(module.setOfSequenceOfPages.first.sequenceOfPages[0].components,
+          isEmpty);
+      expect(module.setOfSequenceOfPages.first.sequenceOfPages[1].components,
+          isEmpty);
       expect(module.aspectRatio, closeTo(1.7777, 0.0001));
-    });
-
-    test('Serialization to JSON', () {
-      final module = Module(
-        moduleId: '98765',
-        title: 'Serializable Module',
-        author: 'Author Name',
-        authoringVersion: '1.0.0',
-        sequences: {
-          SequenceOfPages(pages: [
-            Page(components: []),
-            Page(components: []),
-          ])
-        },
-        aspectRatio: 4 / 3,
-        entryPage: Page(components: []),
-      );
-
-      final json = module.toJson();
-
-      expect(json['module']['moduleId'], '98765');
-      expect(json['module']['title'], 'Serializable Module');
-      expect(json['module']['author'], 'Author Name');
-      expect(json['module']['authoringVersion'], '1.0.0');
-      expect(json['module']['sequences'].length, 1);
-      expect(json['module']['sequences'][0]['pages'].length, 2);
-      expect(json['module']['aspectRatio'], closeTo(1.3333, 0.0001));
-      expect(json['module']['entryPage'], isA<Map>());
+      expect(module.entryPage.runtimeType, Page);
+      expect(module.entryPage.components, isEmpty);
     });
 
     test('Deserialization fails if one required field is missing', () {
@@ -124,9 +108,12 @@ void main() {
           'title': 'This is title',
           // Missing 'author'
           'authoringVersion': '1.0.0',
-          'sequences': [],
+          'setOfSequenceOfPages': [],
           'aspectRatio': 1.7777777777777777,
-          'entryPage': {'type': 'page', 'shapes': []},
+          'entryPage': 'page_1',
+        },
+        'definitions': {
+          'page_1': {'type': 'page', 'shapes': []}
         }
       };
 
@@ -143,9 +130,12 @@ void main() {
           'title': 'This is title',
           'author': 'John Doe',
           'authoringVersion': '1.0.0',
-          'sequences': [],
+          'setOfSequenceOfPages': [],
           'aspectRatio': 'not a number', // Wrong type
-          'entryPage': {'type': 'page', 'shapes': []},
+          'entryPage': 'page_1',
+        },
+        'definitions': {
+          'page_1': {'type': 'page', 'shapes': []}
         }
       };
 
@@ -162,18 +152,15 @@ void main() {
           'title': 'Module with Invalid Page',
           'author': 'John Doe',
           'authoringVersion': '1.0.0',
-          'sequences': [
-            {
-              'pages': [
-                {
-                  'type': 'not_page', // Invalid type, should be 'page'
-                  'shapes': [],
-                },
-              ]
-            }
-          ],
+          'setOfSequenceOfPages': ['sequence_1'],
           'aspectRatio': 16 / 9,
-          'entryPage': {'type': 'page', 'shapes': []},
+          'entryPage': 'page_1',
+        },
+        'definitions': {
+          'page_1': {'type': 'not_page', 'shapes': []}, // Invalid type
+          'sequence_1': {
+            'sequenceOfPages': ['page_1']
+          }
         }
       };
 

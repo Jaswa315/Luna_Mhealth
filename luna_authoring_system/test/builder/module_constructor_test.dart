@@ -49,8 +49,9 @@ void main() {
 
         // Generate the module asynchronously
         Module generatedModule = await moduleConstructor.constructLunaModule();
-        final allPages =
-            generatedModule.sequences.expand((seq) => seq.pages).toList();
+        final allPages = generatedModule.setOfSequenceOfPages
+            .expand((seq) => seq.sequenceOfPages)
+            .toList();
         expect(allPages.length, 1);
         expect(generatedModule.authoringVersion, "0.0.1");
         expect(allPages[0].components.length, 1);
@@ -82,8 +83,9 @@ void main() {
 
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
-        final allPages =
-            generatedModule.sequences.expand((seq) => seq.pages).toList();
+        final allPages = generatedModule.setOfSequenceOfPages
+            .expand((seq) => seq.sequenceOfPages)
+            .toList();
 
         expect(allPages.length, 1);
         expect(generatedModule.authoringVersion, "0.0.1");
@@ -151,8 +153,9 @@ void main() {
 
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
-        final allPages =
-            generatedModule.sequences.expand((seq) => seq.pages).toList();
+        final allPages = generatedModule.setOfSequenceOfPages
+            .expand((seq) => seq.sequenceOfPages)
+            .toList();
 
         expect(allPages.length, 2);
         expect(allPages[0].components.length, 1);
@@ -197,8 +200,9 @@ void main() {
 
         final moduleConstructor = ModuleConstructor(pptxTree);
         final generatedModule = await moduleConstructor.constructLunaModule();
-        final allPages =
-            generatedModule.sequences.expand((seq) => seq.pages).toList();
+        final allPages = generatedModule.setOfSequenceOfPages
+            .expand((seq) => seq.sequenceOfPages)
+            .toList();
 
         expect(allPages.length, 1);
         expect(allPages[0].components, isEmpty);
