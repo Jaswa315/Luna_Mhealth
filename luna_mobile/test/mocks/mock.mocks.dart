@@ -10,6 +10,8 @@ import 'package:flutter/widgets.dart' as _i4;
 import 'package:luna_core/models/components/component.dart' as _i6;
 import 'package:luna_core/models/pages/page.dart' as _i2;
 import 'package:luna_core/models/pages/sequence_of_pages.dart' as _i3;
+import 'package:luna_mobile/controllers/page_navigation_controller.dart'
+    as _i10;
 import 'package:luna_mobile/renderers/irenderer.dart' as _i9;
 import 'package:luna_mobile/states/module_state.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
@@ -61,6 +63,16 @@ class _FakeWidget_2 extends _i1.SmartFake implements _i4.Widget {
   @override
   String toString({_i4.DiagnosticLevel? minLevel = _i4.DiagnosticLevel.info}) =>
       super.toString();
+}
+
+class _FakeModuleState_3 extends _i1.SmartFake implements _i5.ModuleState {
+  _FakeModuleState_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [ModuleState].
@@ -358,4 +370,59 @@ class MockIRenderer extends _i1.Mock implements _i9.IRenderer {
           ),
         ),
       ) as _i4.Widget);
+}
+
+/// A class which mocks [PageNavigationController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPageNavigationController extends _i1.Mock
+    implements _i10.PageNavigationController {
+  MockPageNavigationController() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.ModuleState get moduleState => (super.noSuchMethod(
+        Invocation.getter(#moduleState),
+        returnValue: _FakeModuleState_3(
+          this,
+          Invocation.getter(#moduleState),
+        ),
+      ) as _i5.ModuleState);
+
+  @override
+  _i2.Page get currentPage => (super.noSuchMethod(
+        Invocation.getter(#currentPage),
+        returnValue: _FakePage_0(
+          this,
+          Invocation.getter(#currentPage),
+        ),
+      ) as _i2.Page);
+
+  @override
+  _i3.SequenceOfPages get currentSequence => (super.noSuchMethod(
+        Invocation.getter(#currentSequence),
+        returnValue: _FakeSequenceOfPages_1(
+          this,
+          Invocation.getter(#currentSequence),
+        ),
+      ) as _i3.SequenceOfPages);
+
+  @override
+  void navigateToNextPage() => super.noSuchMethod(
+        Invocation.method(
+          #navigateToNextPage,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void navigateToPreviousPage() => super.noSuchMethod(
+        Invocation.method(
+          #navigateToPreviousPage,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
