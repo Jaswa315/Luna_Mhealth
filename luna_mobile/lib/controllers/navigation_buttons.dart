@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:luna_mobile/controllers/page_navigation_controller.dart';
 
-/// A widget that provides left, right, and top-left back navigation controls
+/// A widget that provides prev, next, and top-left back navigation controls
 /// for use within a module page.
 class NavigationButtons extends StatelessWidget {
   /// Controller that handles navigation between pages.
@@ -31,7 +31,7 @@ class NavigationButtons extends StatelessWidget {
           ),
         ),
 
-        /// Left page navigation button (center-left)
+        /// prev page navigation button (center-left)
         Align(
           alignment: Alignment.centerLeft,
           child: IconButton(
@@ -43,7 +43,7 @@ class NavigationButtons extends StatelessWidget {
           ),
         ),
 
-        /// Right page navigation button (center-right)
+        /// next page navigation button (center-right)
         Align(
           alignment: Alignment.centerRight,
           child: IconButton(
