@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_mobile/core/services/page_builder_service.dart';
-import 'package:luna_mobile/core/services/page_persistence_service.dart';
 import 'package:luna_mobile/presentation/pages/module_page.dart';
 import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
@@ -99,18 +97,12 @@ class _StartLearningPageState extends State<StartLearningPage> {
 
   /// Navigates to the ModulePage when a module is selected.
   void _navigateToModulePage(BuildContext context, Module module) {
-    /// Initialize services required by the ModulePage.
-    ModulePageBuilderService pageServices = ModulePageBuilderService();
-    PagePersistenceService persistenceService = PagePersistenceService();
-
-    /// Navigate to the ModulePage, passing the selected module and services.
+    /// Navigate to the ModulePage, passing the selected module.
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ModulePage(
           module: module, // The selected module.
-          pageServices: pageServices, // Service for building module pages.
-          persistenceService: persistenceService, // Service for saving state.
         ),
       ),
     );
