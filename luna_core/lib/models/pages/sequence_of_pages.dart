@@ -125,6 +125,12 @@ class SequenceOfPages {
     return _sequenceOfPages[index + 1];
   }
 
+  /// Converts the [SequenceOfPages] object into a JSON-friendly format.
+  ///
+  /// It assigns a unique ID to each [Page] in the sequence using [objectIdMap],
+  /// and serializes each page's content into [serializedDefinitions] so they
+  /// can be referenced by ID. This structure helps to prevent duplication
+  /// and keeps the serialized module concise and modular.
   Json toJson(
     Map<Object, String> objectIdMap,
     Map<String, Json> serializedDefinitions,
@@ -144,7 +150,13 @@ class SequenceOfPages {
     };
   }
 
-  static SequenceOfPages fromJson(
+  /// Factory constructor that creates a [SequenceOfPages] object from JSON.
+  ///
+  /// It reads a list of page IDs from the JSON input, retrieves each page's JSON
+  /// from [serializedDefinitions], deserializes them using [Page.fromJson], and
+  /// associates each with the current sequence. The [idToObject] map is updated
+  /// to store references to the reconstructed objects for future lookups.
+  factory SequenceOfPages.fromJson(
     Json json,
     String sequenceId,
     Map<String, Object> idToObject,

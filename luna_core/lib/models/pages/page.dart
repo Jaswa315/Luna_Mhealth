@@ -46,7 +46,11 @@ class Page {
     components.remove(component);
   }
 
-  /// Converts a JSON map into a Page, ensuring it only includes slides of type "page".
+  /// Factory constructor that creates a [Page] from JSON.
+  ///
+  /// It validates that the object is of type 'page', deserializes the shapes into
+  /// [Component] objects, and assigns the given [SequenceOfPages] reference to
+  /// establish ownership. This supports reconstructing full navigation context.
   factory Page.fromJson(Json json, SequenceOfPages sequence) {
     if (json['type'] != 'page') {
       throw FormatException('Only page type components are allowed');
@@ -62,6 +66,11 @@ class Page {
     return page;
   }
 
+  /// Converts the [Page] object to a JSON-friendly format.
+  ///
+  /// This includes serializing all component shapes and referencing its parent
+  /// [SequenceOfPages] by a unique ID from [objectIdMap]. The full serialized
+  /// data is stored in [serializedDefinitions] to avoid inline duplication.
   Json toJson(
     Map<Object, String> objectIdMap,
     Map<String, Json> serializedDefinitions,

@@ -31,7 +31,11 @@ class Module {
     required this.entryPage,
   });
 
-  /// Factory method to create a [Module] from JSON.
+  /// Factory constructor that creates a [Module] from a JSON structure.
+  ///
+  /// It reconstructs [SequenceOfPages] and [Page] objects using their serialized
+  /// representations in the 'definitions' map. References such as the entry page
+  /// are resolved using the ID-to-object map to restore full object linkage.
   factory Module.fromJson(Json json) {
     final serializedDefinitions = Map<String, Json>.from(json['definitions']);
     final idToObject = <String, Object>{};
@@ -62,7 +66,12 @@ class Module {
     );
   }
 
-  /// Converts the [Module] object to a JSON map.
+  /// Converts the [Module] object to a JSON-compatible map.
+  ///
+  /// It assigns unique string IDs to all [SequenceOfPages] and [Page] objects,
+  /// stores their serialized data under a 'definitions' map, and references
+  /// them by ID in the main 'module' object. This structure reduces duplication
+  /// and preserves clear references between objects.
   Json toJson() {
     final objectIdMap = <Object, String>{};
     final serializedDefinitions = <String, Json>{};
