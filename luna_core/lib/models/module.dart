@@ -66,6 +66,10 @@ class Module {
     );
   }
 
+  Page getEntryPage() {
+    return entryPage;
+  }
+
   /// Converts the [Module] object to a JSON-compatible map.
   ///
   /// It assigns unique string IDs to all [SequenceOfPages] and [Page] objects,
