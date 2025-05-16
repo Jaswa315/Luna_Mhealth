@@ -28,6 +28,6 @@ void main() {
   });
 
   test('PptxDocumentPropertBuilder sets author in CTOR.', () {
-    expect(pptxDocumentPropertyBuilder.title, "A Title Name");
+    expect(pptxDocumentPropertyBuilder.author, "An Author Name");
   });
 }
