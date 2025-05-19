@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/module.dart';
+import 'package:luna_mobile/core/constants/keys.dart';
 import 'package:luna_mobile/presentation/pages/module_page.dart';
 import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:provider/provider.dart';
+
 
 /// This is the Start Learning page of the application.
 /// It displays a list of all available modules that the user can explore.
@@ -20,6 +22,7 @@ class _StartLearningPageState extends State<StartLearningPage> {
     return Scaffold(
       /// AppBar provides the title for the Start Learning page with custom styling.
       appBar: AppBar(
+        leading: BackButton(key: Keys.startLearningBackButton),
         title: const Text(
           'Start Learning',
           style: TextStyle(
@@ -29,7 +32,8 @@ class _StartLearningPageState extends State<StartLearningPage> {
             color: Colors.black, // Black text for better contrast.
           ),
         ),
-        backgroundColor: Colors.white, // White background for AppBar.
+          backgroundColor: Colors.white, // White background for AppBar.
+          key: Keys.startLearningTitle, // mark title with start learning key
       ),
       backgroundColor: Colors.white, // Matches the overall theme.
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:luna_mobile/controllers/page_navigation_controller.dart';
+import 'package:luna_mobile/core/constants/keys.dart';
 
 /// A widget that provides prev, next, and top-left back navigation controls
 /// for use within a module page.
@@ -25,6 +26,7 @@ class NavigationButtons extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: IconButton(
             icon: const Icon(Icons.arrow_back),
+            key: Keys.backContextButton, // identify button with back key
             onPressed: () {
               Navigator.pop(context); // Returns to StartLearningPage
             },

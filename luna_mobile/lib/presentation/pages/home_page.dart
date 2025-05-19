@@ -9,6 +9,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_mobile/core/constants/constants.dart';
+import 'package:luna_mobile/core/constants/keys.dart';
 import 'package:luna_mobile/presentation/pages/need_help_page.dart';
 import 'package:luna_mobile/presentation/pages/settings_page.dart';
 import 'package:luna_mobile/presentation/pages/start_learning_page.dart';
@@ -95,6 +96,7 @@ class _HomePageState extends State<HomePage> {
                       /// Container for the button with a card-like design.
                       width: screenWidth * 0.8, // 80% of the screen width.
                       height: screenHeight * 0.32, // 32% of the screen height.
+                      key: Keys.startLearningButton,
                       decoration: BoxDecoration(
                         color: Colors.white, // White background for the card.
                         borderRadius:
@@ -162,6 +164,7 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.settings), // Icon for Settings.
             label: 'Settings',
+            key: Keys.homeSettingsButton,
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.add_circled), // Icon for Add Module.

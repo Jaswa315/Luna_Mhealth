@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:luna_core/utils/logging.dart';
+import 'package:luna_mobile/core/constants/keys.dart';
 import 'package:luna_mobile/main.dart';
 import 'package:luna_mobile/providers/module_ui_picker.dart';
 import 'package:patrol/patrol.dart' as p;
@@ -33,7 +34,7 @@ void main() {
       Widget testApp = await createTestApp();
       await $.pumpWidgetAndSettle(testApp);
 
-      expect($('Settings'), findsOneWidget);
+      expect($(Keys.homeSettingsButton), findsOneWidget);
       expect($('Lorem ipsum does not exist. NO TEXT'), findsNothing);
     },
     
@@ -45,8 +46,8 @@ void main() {
       Widget testApp = await createTestApp();
       await $.pumpWidgetAndSettle(testApp);
 
-      expect($('Settings'), findsOneWidget);
-      await $('Settings').tap();
+      expect($(Keys.homeSettingsButton), findsOneWidget);
+      await $(Keys.homeSettingsButton).tap();
       await $('About Luna').tap();
       expect($('Version: 1.0.0'), findsOneWidget);
     },
@@ -95,13 +96,21 @@ void main() {
 
       for (var fileNameTitle in lunaFileTitlesTest.entries){
         await loadModule($,fileNameTitle.key);
-        await $.waitUntilExists($("Home"));
+        await $.waitUntilExists($(Keys.homeSettingsButton));
         //open the module
-        await $.tester.tap(find.text("Start Learning"));
-        await $.tap($(fileNameTitle.value));
+        await $.tester.tap($(Keys.startLearningButton));
+        //await $.tap($(fileNameTitle.value));
+        //make sure title is listed in module list
+        await $.waitUntilVisible($(Keys.startLearningTitle));
         expect($(fileNameTitle.value), findsOneWidget);
-        await $.tap(find.byIcon(CupertinoIcons.back));
-        await $.tap(find.byType(BackButton));
+        //tap the module
+        await $.tap($(fileNameTitle.value));
+        //navigate into module. 
+        expect($(Keys.startLearningTitle), findsNothing);
+        //navigatge back to module list
+        await $.tap(find.byKey(Keys.backContextButton));
+        //await $.tap(find.byIcon(CupertinoIcons.back));
+        await $.tap(find.byKey(Keys.startLearningBackButton));
       }
     },
   );
