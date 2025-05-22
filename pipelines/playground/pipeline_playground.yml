@@ -1,57 +1,96 @@
-# Nightly Build for Luna mHealth
-# Runs unit tests and then integration tests
+# Build pipeline for luna authoring system
+# builds the luna authoring system and zips it up and publishes it as a pipeline artifact. 
+# it does this for the the OS's listed in the strategy matrix
 
 trigger: none
+
 jobs:
 
-
-- job: BuildPatrolApp
+- job: UpdateVersionNumber
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-    - template: ../templates/install_prereqs.yml
-    - task: PowerShell@2
-      displayName: 'Create Patrol Mobile App'
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd luna_mobile
-          flutter create --platform=android .
-          patrol build android --target integration_test/luna_mobile_e2e_test.dart
 
-    - publish: $(Build.SourcesDirectory)/luna_mobile/build/app/outputs/apk
-      artifact: patrolAPK
-      displayName: 'Publish artifact'
+    - checkout: self
+      persistCredentials: true
+    - bash: |
+        git config --global user.email "pipeline@dev.azure.com"
+        git config --global user.name "Azure DevOps Pipeline"
+      name: GitConfig
+
+    - template: ../templates/update_version.yml
 
 
-- job: WindowsTests
-  dependsOn: BuildPatrolApp
-  pool:
-    vmImage: windows-latest
-  variables:
-    - name: package_folders
-      value: luna_core,luna_authoring_system,luna_mobile
-    - name: buildOS
-      value: windows
-    - name: package_name
-      value: WindowsBuild_$(Build.BuildNumber)
-    - name: release_dir
-      value: /x64/runner/Debug
+# - job: BuildLunaAuthoring
+#   pool:
+#     vmImage: 'ubuntu-latest'
 
-  steps:
+#   variables:
+#   - name: 'mobile_path'
+#     value: 'luna_mobile'
+#   - name: 'build_path'
+#     value: 'build/app/outputs/flutter-apk/app-release.apk'
+#   - name: 'package_name'
+#     value: 'Luna_MobileBuild_$(Build.BuildNumber)'
+#   - name: 'version_number'
+#     value: $[ dependencies.UpdateVersionNumber.outputs['setVersion.version'] ]
+    
 
-  - download: current
-    artifact: patrolAPK
+#   steps:
 
-  - template: ../templates/install_prereqs.yml
+#   - template: templates/install_prereqs.yml
 
-  - template: ../templates/build_authoring_system.yml
-    parameters:
-      build_os: $(buildOS)
-      package_name: $(package_name)
-      release_directory: $(release_dir)
-      build_name: $(Build.BuildNumber)
-      debug_mode: true
-      archive_file: false
+#   - template: templates/build_mobile_app.yml
+#     parameters:
+#       build_name: $(Build.BuildNumber)
+#       archive_file: true
+#       package_name: $(package_name)
 
-  - template: ../templates/run_luna_mobile_tests_firebase.yml
+#   - template: templates/upload_file_gdrive.yml
+#     parameters:
+#       gdrive_id: $(gdrive_id_luna_mobile)
+#       package_name: $(package_name)
+#       source_dir: $(Build.SourcesDirectory)
+
+
+# - job: BuildLunaAuthoring
+
+#   strategy:
+#     matrix:
+#       mac:
+#         imageName: 'macOS-latest'
+#         buildOS: 'macos'
+#         package_name: 'Luna_MacBuild_$(Build.BuildNumber)'
+#         release_dir: '/Build/Products/Release'
+#         gdrive: $(gdrive_id_mac_build)
+#       windows:
+#         imageName: 'windows-latest'
+#         buildOS: 'windows'
+#         package_name: 'Luna_WindowsBuild_$(Build.BuildNumber)'
+#         release_dir: '/x64/runner/Release'
+#         gdrive: $(gdrive_id_windows_build)
+
+#   pool:
+#     vmImage: $(imageName)
+
+#   variables:
+#   - group: 'Google Drive IDs'
+#   - name: 'authoring_path'
+#     value: 'luna_authoring_system'
+
+
+#   steps:
+
+#   - template: templates/install_prereqs.yml
+#   - template: templates/build_authoring_system.yml
+#     parameters:
+#       build_os: $(buildOS)
+#       package_name: $(package_name)
+#       release_directory: $(release_dir)
+#       build_name: $(Build.BuildNumber)
+
+#   - template: templates/upload_file_gdrive.yml
+#     parameters:
+#       gdrive_id: $(gdrive)
+#       package_name: $(package_name)
+#       source_dir: $(Build.SourcesDirectory)

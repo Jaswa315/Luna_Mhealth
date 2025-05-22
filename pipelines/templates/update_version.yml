@@ -1,0 +1,37 @@
+#Template to update the git tags for newest version of luna authoring
+# this template requires setting git config and persisting credentials
+# see https://learn.microsoft.com/en-us/azure/devops/pipelines/scripts/git-commands?view=azure-devops&tabs=yaml
+parameters:
+- name: max_tags
+  default: 50
+
+
+steps:
+
+- task: PowerShell@2
+  displayName: 'Update Version Git Tag'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $versionReg = "^\d+\.\d+\.\d+$"
+      $firstMinorVerReg = "^\d+\.\d+\.0$"
+      $versions = (git tag --sort=-v:refname) | ? { $_ -match  $versionReg }
+      $max_tags = ${{  parameters.max_tags  }}
+
+      # if more than $max_tags version, delete the oldest patch version
+      if ($versions.length -ge $max_tags){
+          for ($i = $versions.Length-1; $i -gt -1; $i--){
+              if($versions[$i] -match $firstMinorVerReg){continue}
+              # Push an empty source to delete the tag on remote
+              $deleteTag = $versions[$i]
+              git push origin :refs/tags/$deleteTag
+              break
+          } 
+      }
+      # Get most recent tag
+      $split_tag = $versions[0].split(".")
+      $newVersion = ([int]$split_tag[0] + 1)
+      $newTag = "{0}.{1}.{2}" -f $split_tag[0],$split_tag[1],$newVersion
+      git tag $newTag
+      git push --tags
+      exit 0
