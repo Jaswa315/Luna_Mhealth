@@ -4,4 +4,7 @@ class PptxTitleHasNoVisibleCharacters extends IValidationIssue {
   String toText() {
     return 'pptx_title_has_no_visible_characters';
   }
+
+  @override
+  int get severity => 0;
 }

@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/pptx_title_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/issue/pptx_title_has_no_visible_characters.dart';
-import 'package:luna_authoring_system/validator/issue/pptx_title_is_too_long.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_issues/pptx_title_has_no_visible_characters.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_issues/pptx_title_is_too_long.dart';
 import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 

@@ -2,58 +2,46 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/validator/pptx_validator_runner.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
-import 'package:luna_authoring_system/validator/issue/pptx_title_has_no_visible_characters.dart';
-import 'package:luna_authoring_system/validator/issue/pptx_title_is_too_long.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_issues/pptx_title_has_no_visible_characters.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_issues/pptx_title_is_too_long.dart';
+import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 
 void main() {
   group('PptxValidatorRunner', () {
-    test('throws ArgumentError when title is empty and too long', () {
-      // Create a PptxTree with an invalid title
-      final pptxTree = PptxTree();
-      pptxTree.title = '   '; // only whitespace – considered empty
-      // Simulate long title
-      pptxTree.title += 'a' * 300; // exceeds max length
-      pptxTree.slides = [];
+    late ValidationIssuesStore store;
+    late PptxValidatorRunner runner;
 
-      expect(
-        () => PptxValidatorRunner.runValidatiors(pptxTree),
-        throwsA(predicate((e) =>
-            e is ArgumentError &&
-            e.message.toString().contains('Validation failed'))),
-      );
+    setUp(() {
+      store = ValidationIssuesStore();
+      runner = PptxValidatorRunner();
     });
 
-    test('passes when title is valid', () {
+    test('adds issues when title is empty', () {
       final pptxTree = PptxTree();
-      pptxTree.title = 'A valid PPTX title';
+      pptxTree.title = ''; // whitespace + long
       pptxTree.slides = [];
 
-      expect(
-        () => PptxValidatorRunner.runValidatiors(pptxTree),
-        returnsNormally,
-      );
+      runner.runValidatiors(pptxTree, store);
+      expect(store.issues.first, isA<PptxTitleHasNoVisibleCharacters>());
+      expect(store.hasIssues, isTrue);
     });
 
-    test('throws LateInitalisationError when slides are null', () {
-      // Create a PptxTree with an valid title and null List<Slide>
+    test('no issues when title is valid', () {
       final pptxTree = PptxTree();
-      pptxTree.title = 'title';
-      expect(
-        () => PptxValidatorRunner.runValidatiors(pptxTree),
-        throwsA(predicate((e) =>
-            e.runtimeType.toString().contains('LateError') &&
-            e.toString().contains("Field 'slides' has not been initialized."))),
-      );
-    });
-    test('Passes when slides are []', () {
-      // Create a PptxTree with an valid title and null List<Slide>
-      final pptxTree = PptxTree();
-      pptxTree.title = 'title';
+      pptxTree.title = 'A valid title';
       pptxTree.slides = [];
-      expect(
-        () => PptxValidatorRunner.runValidatiors(pptxTree),
-        returnsNormally,
-      );
+      runner.runValidatiors(pptxTree, store);
+      expect(store.issues.isEmpty, isTrue);
+    });
+
+    test('no issues with title and empty slide list', () {
+      final pptxTree = PptxTree();
+      pptxTree.title = 'Title';
+      pptxTree.slides = [];
+
+      runner.runValidatiors(pptxTree, store);
+
+      expect(store.issues, isEmpty);
     });
   });
 }

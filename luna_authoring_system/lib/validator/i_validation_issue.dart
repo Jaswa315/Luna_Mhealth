@@ -4,4 +4,5 @@
 abstract class IValidationIssue {
   /// This is textual representation of the validation issue.
   String toText();
+  int get severity;
 }
