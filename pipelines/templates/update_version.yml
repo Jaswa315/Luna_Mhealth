@@ -29,8 +29,13 @@ steps:
           } 
       }
       # Get most recent tag
-      $split_tag = $versions[0].split(".")
-      $newVersion = ([int]$split_tag[0] + 1)
+      # PowerShell returns a char, not a list, when only one tag
+      if($versions -is [array]){
+        $split_tag = $versions[0].split(".")
+      }else{
+        $split_tag = $versions.split(".")
+      }
+      $newVersion = ([int]$split_tag[-1] + 1)
       $newTag = "{0}.{1}.{2}" -f $split_tag[0],$split_tag[1],$newVersion
       git tag $newTag
       git push --tags

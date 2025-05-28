@@ -4,13 +4,19 @@
 
 trigger: none
 
+parameters:
+- name: build_mobile  # whether to build_mobile or not
+  default: 'true' #ADO recommends using string for bools
+- name: build_authoring  # whether to authoring or not
+  default: 'true' #ADO recommends using string for bools
+
 jobs:
 
-- job: UpdateVersionNumber
+- job: UpdateGitTags
   pool:
     vmImage: 'ubuntu-latest'
-  steps:
 
+  steps:
     - checkout: self
       persistCredentials: true
     - bash: |
@@ -18,79 +24,100 @@ jobs:
         git config --global user.name "Azure DevOps Pipeline"
       name: GitConfig
 
+    # update version for new build
     - template: ../templates/update_version.yml
+    # get most recent version and set to variable
+
+    - task: PowerShell@2
+      displayName: 'Set Version Variable'
+      inputs:
+        targetType: 'inline'
+        script: |
+            $versionReg = "^\d+\.\d+\.\d+$"
+            $versions = (git tag --sort=-v:refname) | ? { $_ -match  $versionReg }
+            # Check if versions is an array due to powershell dynamic typing
+            if($versions -is [array]){
+              $most_recent_ver = $versions[0]
+            }else{
+              $most_recent_ver = $versions.split(".")
+            }  
+            Write-Host "##vso[task.setvariable variable=version;isOutput=true]$most_recent_ver"
+      name: versionVar
 
 
-# - job: BuildLunaAuthoring
-#   pool:
-#     vmImage: 'ubuntu-latest'
+- ${{ if contains(parameters.build_authoring, 'true') }}:
+  - job: BuildLunaAuthoringAuthoring
+    dependsOn: UpdateGitTags
+    strategy:
+      matrix:
+        mac:
+          imageName: 'macOS-latest'
+          buildOS: 'macos'
+          package_name: 'Luna_MacBuild'
+          release_dir: '/Build/Products/Release'
+          gdrive: $(gdrive_id_mac_build)
+        windows:
+          imageName: 'windows-latest'
+          buildOS: 'windows'
+          package_name: 'Luna_WindowsBuild'
+          release_dir: '/x64/runner/Release'
+          gdrive: $(gdrive_id_windows_build)
 
-#   variables:
-#   - name: 'mobile_path'
-#     value: 'luna_mobile'
-#   - name: 'build_path'
-#     value: 'build/app/outputs/flutter-apk/app-release.apk'
-#   - name: 'package_name'
-#     value: 'Luna_MobileBuild_$(Build.BuildNumber)'
-#   - name: 'version_number'
-#     value: $[ dependencies.UpdateVersionNumber.outputs['setVersion.version'] ]
-    
+    pool:
+      vmImage: $(imageName)
 
-#   steps:
+    variables:
+    - group: 'Google Drive IDs'
+    - name: 'authoring_path'
+      value: 'luna_authoring_system'
+    - name: 'version_num'
+      value: $[ dependencies.UpdateGitTags.outputs['versionVar.version'] ]  
 
-#   - template: templates/install_prereqs.yml
+    steps:
 
-#   - template: templates/build_mobile_app.yml
-#     parameters:
-#       build_name: $(Build.BuildNumber)
-#       archive_file: true
-#       package_name: $(package_name)
+    - template: ../templates/install_prereqs.yml
+    - template: ../templates/build_authoring_system.yml
+      parameters:
+        build_os: $(buildOS)
+        package_name: "$(package_name)_$(version_num)"
+        release_directory: $(release_dir)
+        build_name: $(version_num)
 
-#   - template: templates/upload_file_gdrive.yml
-#     parameters:
-#       gdrive_id: $(gdrive_id_luna_mobile)
-#       package_name: $(package_name)
-#       source_dir: $(Build.SourcesDirectory)
+    - template: ../templates/upload_file_gdrive.yml
+      parameters:
+        gdrive_id: $(gdrive)
+        package_name: "$(package_name)_$(version_num)"
+        source_dir: $(Build.SourcesDirectory)
+- ${{ if contains(parameters.build_mobile, 'true') }}:
+  - job: BuildLunaMobile
+    dependsOn: UpdateGitTags
+    pool:
+      vmImage: 'ubuntu-latest'
 
+    variables:
+    - group: 'Version Numbers' #this is a variable group in the library
+    - group: 'Google Drive IDs'
+    - name: 'mobile_path'
+      value: 'luna_mobile'
+    - name: 'build_path'
+      value: 'build/app/outputs/flutter-apk/app-release.apk'
+    - name: 'package_name'
+      value: 'Luna_MobileBuild'
+    - name: 'version_num'
+      value: $[ dependencies.UpdateGitTags.outputs['versionVar.version'] ]  
 
-# - job: BuildLunaAuthoring
+    steps:
 
-#   strategy:
-#     matrix:
-#       mac:
-#         imageName: 'macOS-latest'
-#         buildOS: 'macos'
-#         package_name: 'Luna_MacBuild_$(Build.BuildNumber)'
-#         release_dir: '/Build/Products/Release'
-#         gdrive: $(gdrive_id_mac_build)
-#       windows:
-#         imageName: 'windows-latest'
-#         buildOS: 'windows'
-#         package_name: 'Luna_WindowsBuild_$(Build.BuildNumber)'
-#         release_dir: '/x64/runner/Release'
-#         gdrive: $(gdrive_id_windows_build)
+    - template: ../templates/install_prereqs.yml
 
-#   pool:
-#     vmImage: $(imageName)
+    - template: ../templates/build_mobile_app.yml
+      parameters:
+        build_name: $(version_num)
+        archive_file: true
+        package_name: "$(package_name)_$(version_num)"
 
-#   variables:
-#   - group: 'Google Drive IDs'
-#   - name: 'authoring_path'
-#     value: 'luna_authoring_system'
-
-
-#   steps:
-
-#   - template: templates/install_prereqs.yml
-#   - template: templates/build_authoring_system.yml
-#     parameters:
-#       build_os: $(buildOS)
-#       package_name: $(package_name)
-#       release_directory: $(release_dir)
-#       build_name: $(Build.BuildNumber)
-
-#   - template: templates/upload_file_gdrive.yml
-#     parameters:
-#       gdrive_id: $(gdrive)
-#       package_name: $(package_name)
-#       source_dir: $(Build.SourcesDirectory)
+    - template: ../templates/upload_file_gdrive.yml
+      parameters:
+        gdrive_id: $(gdrive_id_luna_mobile)
+        package_name: "$(package_name)_$(version_num)"
+        source_dir: $(Build.SourcesDirectory)
