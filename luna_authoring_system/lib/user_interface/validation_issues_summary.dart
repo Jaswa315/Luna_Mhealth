@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_issues/i_pptx_validation_issues.dart';
 

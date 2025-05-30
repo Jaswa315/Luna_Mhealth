@@ -4,6 +4,7 @@ import 'package:luna_authoring_system/helper/authoring_initializer.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
+import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 
 void main() {
   group('Tests for PptxRunner using A line.pptx', () {
@@ -56,8 +57,9 @@ void main() {
     test('Process PPTX makes a luna file.', () async {
       const fileName = 'unit_test_luna';
       var filePath = join(testDir, "$fileName.luna");
+      ValidationIssuesStore store = ValidationIssuesStore();
       await AuthoringInitializer.initializeAuthoring();
-      await PptxRunner().processPptx(pptxFile.path, fileName);
+      await PptxRunner(store).processPptx(pptxFile.path, fileName);
       expect(await File(filePath).exists(), true);
     });
   });

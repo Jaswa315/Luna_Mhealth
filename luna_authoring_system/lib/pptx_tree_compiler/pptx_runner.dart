@@ -5,7 +5,8 @@ import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_input_handler.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
-import 'package:luna_authoring_system/validator/pptx_validator_runner.dart';
+import 'package:luna_authoring_system/validator/pptx_validator.dart';
+import 'package:luna_authoring_system/validator/validator_runner.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 
@@ -27,9 +28,10 @@ class PptxRunner {
     PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
     _pptxTree = pptxTreeBuilder.getPptxTree();
 
-    // Step 3: Run validatiors via a dedicated runner
-    PptxValidatorRunner validatorRunner = PptxValidatorRunner();
-    validatorRunner.runValidatiors(_pptxTree, store);
+    // Step 3: Run validators via a dedicated runner
+    final validator = PptxValidator(_pptxTree);
+    ValidatorRunner validatorRunner = ValidatorRunner(validator);
+    validatorRunner.runValidators(store);
 
     // Step 4: Generate .luna module from pptx tree
     await _generateLunaModule();

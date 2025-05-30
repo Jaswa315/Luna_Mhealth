@@ -1,4 +1,3 @@
-import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
 class PptxTitleIsTooLong extends IValidationIssue {
