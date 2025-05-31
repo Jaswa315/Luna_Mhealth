@@ -5,13 +5,13 @@ import 'package:luna_authoring_system/validator/i_validator.dart';
 /// The [ValidatorRunner] class is responsible for executing the validation logic
 /// and adding any issues found to the [ValidationIssuesStore].
 class ValidatorRunner {
-  final IValidator validator;
+  final IValidator _validator;
 
   /// Accepts an [IValidator] via dependency injection.
-  ValidatorRunner(this.validator);
+  ValidatorRunner(this._validator);
 
   void runValidators(ValidationIssuesStore store) {
-    final Set<IValidationIssue> issues = validator.validate();
+    final Set<IValidationIssue> issues = _validator.validate();
 
     for (final issue in issues) {
       // Add each validation issue to the store.

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
-import 'package:luna_authoring_system/validator/pptx_validator_runner.dart';
+import 'package:luna_authoring_system/validator/validator_runner.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_issues/pptx_title_has_no_visible_characters.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_issues/pptx_title_is_too_long.dart';
@@ -29,11 +29,10 @@ class ValidatorHasZeroIssues implements IValidator {
 }
 
 void main() {
-  group('PptxValidatorRunner', () {
+  group('ValidatorRunner', () {
     late ValidationIssuesStore store;
 
     // Initialize the ValidationIssuesStore before each test
-    // This ensures a fresh store for each test case.
     setUp(() {
       store = ValidationIssuesStore();
     });
@@ -43,7 +42,7 @@ void main() {
         () {
       final mockValidator = ValidatorHasOneIssue();
 
-      final runner = PptxValidatorRunner(mockValidator);
+      final runner = ValidatorRunner(mockValidator);
       runner.runValidators(store);
 
       expect(store.issues.isNotEmpty, true);
@@ -57,7 +56,7 @@ void main() {
         () {
       final mockValidator = ValidatorHasTwoIssues();
 
-      final runner = PptxValidatorRunner(mockValidator);
+      final runner = ValidatorRunner(mockValidator);
       runner.runValidators(store);
 
       expect(store.issues.isNotEmpty, true);
@@ -71,7 +70,7 @@ void main() {
         () {
       final mockValidator = ValidatorHasZeroIssues();
 
-      final runner = PptxValidatorRunner(mockValidator);
+      final runner = ValidatorRunner(mockValidator);
       runner.runValidators(store);
 
       expect(store.issues.isEmpty, true);

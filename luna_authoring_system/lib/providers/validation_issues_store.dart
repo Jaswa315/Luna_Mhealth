@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
-// This class [ValidationIssuesStore] is responsible for managing the state of validation issues.
-/// It allows adding issues, clearing them, and notifying listeners about changes.
+/// This class [ValidationIssuesStore] is responsible for managing the state of validation issues.
+/// Allows adding issues, clearing them, and notifying listeners about changes.
 class ValidationIssuesStore extends ChangeNotifier {
   final List<IValidationIssue> _issues = [];
 
