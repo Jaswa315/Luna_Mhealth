@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
+import 'package:luna_authoring_system/luna_constants.dart';
 
 /// Mock issue classes for testing purposes.
 
@@ -8,24 +9,32 @@ class MockIssueOne extends IValidationIssue {
   String toText() {
     return 'mock_issue_one';
   }
+
+  int get severity => 0;
 }
 
 class MockIssueTwo extends IValidationIssue {
   String toText() {
     return 'mock_issue_two';
   }
+
+  int get severity => 0;
 }
 
 class MockIssueThree extends IValidationIssue {
   String toText() {
     return 'mock_issue_three';
   }
+
+  int get severity => 0;
 }
 
 class MockIssueFour extends IValidationIssue {
   String toText() {
     return 'mock_issue_four';
   }
+
+  int get severity => 0;
 }
 
 void main() {
@@ -61,7 +70,9 @@ void main() {
     expect(issues.any((issue) => issue is MockIssueTwo), isTrue);
   });
 
-  test('Combining three validators with one returning two issues should return four issues', () {
+  test(
+      'Combining three validators with one returning two issues should return four issues',
+      () {
     // Mock validator 1 that returns one issue.
     final mockValidator1 = _MockValidatorWithOneIssue();
 

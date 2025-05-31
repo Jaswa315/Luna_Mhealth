@@ -10,7 +10,7 @@ import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/units/emu.dart';
-import 'package:luna_authoring_system/validator/issue/pptx_slide_has_no_shapes.dart';
+import 'package:luna_authoring_system/validator/issue/pptx_issues/pptx_slide_has_no_shapes.dart';
 import 'package:mockito/mockito.dart';
 import '../mocks/mock.mocks.dart';
 
@@ -29,7 +29,7 @@ void main() {
 
       expect(issues.length, 1);
       expect(issues.first, isA<PptxSlideHasNoShapes>());
-      expect(issues.first.toText(), PptxSlideHasNoShapes().toText());
+      expect(issues.first.toText(), PptxSlideHasNoShapes(slide).toText());
     });
 
     test('Expect 0 issues when PptxTree has no slides', () {
@@ -58,8 +58,11 @@ void main() {
       final Set<IValidationIssue> issues = validator.validate();
 
       expect(issues.length, 1);
-      expect(issues.first, isA<PptxSlideHasNoShapes>());
-      expect(issues.first.toText(), PptxSlideHasNoShapes().toText());
+      final firstIssue = issues.first as PptxSlideHasNoShapes;
+
+      expect(firstIssue, isA<PptxSlideHasNoShapes>());
+      expect(firstIssue.toText(), PptxSlideHasNoShapes(mockSlide2).toText());
+      expect(firstIssue.slide, mockSlide2);
     });
 
     test('Expect 0 issues when Slide has 1 shape', () {

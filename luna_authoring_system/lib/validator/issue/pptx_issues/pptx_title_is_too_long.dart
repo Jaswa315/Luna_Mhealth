@@ -4,4 +4,7 @@ class PptxTitleIsTooLong extends IValidationIssue {
   String toText() {
     return 'pptx_title_is_too_long';
   }
+
+  @override
+  int get severity => 0;
 }

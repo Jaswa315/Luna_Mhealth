@@ -11,6 +11,9 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
+import 'package:luna_authoring_system/providers/validation_issues_store.dart';
+import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
+import 'package:provider/provider.dart';
 
 /// Home page for the Authoring System
 /// Goes through each input for the system
@@ -26,6 +29,14 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   bool textEntered = false;
 
   final TextEditingController _controller = TextEditingController();
+  final store = ValidationIssuesStore();
+  late final PptxRunner _runner;
+
+  @override
+  void initState() {
+    super.initState();
+    _runner = PptxRunner(store);
+  }
 
   Future _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -37,8 +48,12 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
     }
   }
 
-  Future _submitText() async{
-    await PptxRunner().processPptx(filePath!,_controller.text);
+  Future _submitText() async {
+    await _runner.processPptx(filePath!, _controller.text);
+    if (store.hasIssues) {
+      // If there are validation issues, we will not proceed further.
+      return;
+    }
     setState(() {
       textEntered = true;
     });
@@ -46,38 +61,51 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Luna Authoring System")),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-              if (!filePicked) 
-                ElevatedButton(
-                  onPressed: () => _pickFile(), 
-                  child: Text("Pick a PPTX File"),
+    return ChangeNotifierProvider(
+      create: (_) => store,
+      child: Scaffold(
+        appBar: AppBar(title: Text("Luna Authoring System")),
+        body: Consumer<ValidationIssuesStore>(
+          builder: (context, store, child) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (!filePicked)
+                      ElevatedButton(
+                        onPressed: () => _pickFile(),
+                        child: Text("Pick a PPTX File"),
+                      ),
+                    if (filePicked && !textEntered) ...[
+                      Text("File Selected: $filePath"),
+                      TextField(
+                        controller: _controller,
+                        decoration:
+                            InputDecoration(labelText: "Enter Module Name"),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () => _submitText(),
+                        child: Text("Submit"),
+                      ),
+                    ],
+                    if (textEntered && !store.hasIssues)
+                      Text(
+                        "Job done!",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    if (store.hasIssues) ...[
+                      SizedBox(height: 20),
+                      ValidationIssuesSummary(issues: store.issues),
+                    ],
+                  ],
                 ),
-
-              if (filePicked && !textEntered) ...[ // spread operator
-                Text("File Selected: $filePath"),
-                TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(labelText: "Enter Module Name"),
-                ),
-
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () => _submitText(),
-                  child: Text("Submit"),
-                ),
-
-              ],
-              if (textEntered) Text("Job done!", style: TextStyle(fontSize: 20)), // text has been entered so luna file should be generated
-            ],
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

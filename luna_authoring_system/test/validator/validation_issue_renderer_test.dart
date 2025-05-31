@@ -12,6 +12,8 @@ class DummyValidationIssue extends IValidationIssue {
   String toText() {
     return 'dummy_validation_issue';
   }
+
+  int get severity => 0;
 }
 
 void main() {
