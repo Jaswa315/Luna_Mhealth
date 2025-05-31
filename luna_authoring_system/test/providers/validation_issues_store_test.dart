@@ -20,8 +20,14 @@ void main() {
     });
 
     test('initial store is empty', () {
+      bool notified = false;
+      store.addListener(() {
+        notified = true;
+      });
+
       expect(store.issues, isEmpty);
       expect(store.hasIssues, isFalse);
+      expect(notified, isFalse);
     });
 
     test('addIssue adds an issue and notifies listeners', () {

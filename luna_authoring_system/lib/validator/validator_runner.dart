@@ -2,8 +2,7 @@ import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
 
-/// The [ValidatorRunner] class is responsible for executing the validation logic
-/// and adding any issues found to the [ValidationIssuesStore].
+/// Responsible for executing the validation logic and adding any issues found to the [ValidationIssuesStore].
 class ValidatorRunner {
   final IValidator _validator;
 
