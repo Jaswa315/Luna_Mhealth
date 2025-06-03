@@ -1,3 +1,4 @@
+import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 
 class PptxTitleIsTooLong extends IValidationIssue {
@@ -6,5 +7,5 @@ class PptxTitleIsTooLong extends IValidationIssue {
   }
 
   @override
-  int get severity => 0;
+  Severity get severity => Severity.warning;
 }
