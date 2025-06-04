@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Luna Authoring
+Exec=/workspaces/Luna_mHealth_Mobile/.devcontainer/scripts/desktop_icons/run_luna_authoring.sh
+Icon=/usr/share/icons/hicolor/48x48/apps/org.xfce.settings.display.png
+Terminal=true
+Categories=Utility;

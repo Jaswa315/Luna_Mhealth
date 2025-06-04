@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Luna Mobile
+Exec=/workspaces/Luna_mHealth_Mobile/.devcontainer/scripts/desktop_icons/run_luna_mobile.sh
+Icon=/usr/share/icons/hicolor/48x48/apps/org.xfce.panel.png
+Terminal=true
+Categories=Utility;
