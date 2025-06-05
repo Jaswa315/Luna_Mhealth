@@ -45,7 +45,7 @@ void main() {
     mockPptxShapeBuilder = MockPptxShapeBuilder();
     mockPptxRelationshipParser = MockPptxRelationshipParser();
 
-    when(mockPptxShapeBuilder.getShapes({eConnectionShape: []}))
+    when(mockPptxShapeBuilder.getShapes({eConnectionShape: []}, any, any))
         .thenReturn([mockConnectionShape]);
     when(mockPptxSlideCountParser.slideCount).thenReturn(mockSlideCount);
     when(mockPptxRelationshipParser.getParentIndex(any, any))

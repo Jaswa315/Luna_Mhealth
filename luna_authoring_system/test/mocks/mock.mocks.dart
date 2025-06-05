@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart' as _i15;
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart'
     as _i14;
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart'
-    as _i20;
+    as _i19;
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart' as _i7;
 import 'package:luna_authoring_system/pptx_data_objects/section.dart' as _i3;
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart' as _i10;
@@ -22,7 +22,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_c
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart'
     as _i16;
 import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart'
-    as _i19;
+    as _i20;
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart'
     as _i18;
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart'
@@ -550,11 +550,19 @@ class MockPptxSlideCountParser extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxShapeBuilder extends _i1.Mock implements _i18.PptxShapeBuilder {
   @override
-  List<_i10.Shape> getShapes(Map<String, dynamic>? shapeTree) =>
+  List<_i10.Shape> getShapes(
+    Map<String, dynamic>? shapeTree,
+    int? slideIndex,
+    _i19.PptxHierarchy? hierarchy,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #getShapes,
-          [shapeTree],
+          [
+            shapeTree,
+            slideIndex,
+            hierarchy,
+          ],
         ),
         returnValue: <_i10.Shape>[],
         returnValueForMissingStub: <_i10.Shape>[],
@@ -565,11 +573,11 @@ class MockPptxShapeBuilder extends _i1.Mock implements _i18.PptxShapeBuilder {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxRelationshipParser extends _i1.Mock
-    implements _i19.PptxRelationshipParser {
+    implements _i20.PptxRelationshipParser {
   @override
   int getParentIndex(
     int? currentIndex,
-    _i20.PptxHierarchy? pptxHierarchy,
+    _i19.PptxHierarchy? pptxHierarchy,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
