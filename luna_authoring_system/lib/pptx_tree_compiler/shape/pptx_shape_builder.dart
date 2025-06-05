@@ -1,3 +1,4 @@
+import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_constants.dart';
@@ -10,7 +11,7 @@ class PptxShapeBuilder {
   PptxShapeBuilder(this._pptxConnectionShapeBuilder);
 
   /// Parses the shape tree and returns a list of shapes.
-  List<Shape> getShapes(Json shapeTree) {
+  List<Shape> getShapes(Json shapeTree, int slideIndex, PptxHierarchy hierarchy) {
     List<Shape> shapes = [];
 
     shapeTree.forEach((key, value) {
