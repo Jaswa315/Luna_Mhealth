@@ -47,6 +47,7 @@ class PptxRelationshipParser {
     );
   }
 
+  /// Find the target string by the relationship ID (rId).
   String findTargetByRId(int currentIndex, PptxHierarchy pptxHierarchy, String rId) {
     // Every slide/slideLayout/slideMaster has a .rels file that contains the relationships.
     dynamic slideRelationships = _pptxLoader.getJsonFromPptx(
