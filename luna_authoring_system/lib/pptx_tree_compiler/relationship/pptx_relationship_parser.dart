@@ -46,4 +46,27 @@ class PptxRelationshipParser {
       "Slide layout not found in ppt/${pptxHierarchy.name}s/_rels/${pptxHierarchy.name}$currentIndex.xml.rels",
     );
   }
+
+  /// Find the target string by the relationship ID (rId).
+  String findTargetByRId(int currentIndex, PptxHierarchy pptxHierarchy, String rId) {
+    // Every slide/slideLayout/slideMaster has a .rels file that contains the relationships.
+    dynamic slideRelationships = _pptxLoader.getJsonFromPptx(
+      "ppt/${pptxHierarchy.name}s/_rels/${pptxHierarchy.name}$currentIndex.xml.rels",
+    )[eRelationships][eRelationship];
+
+    if (slideRelationships is List) {
+      for (Json relationship in slideRelationships) {
+        if (relationship[eId] == rId) {
+          return relationship[eTarget];
+        }
+      }
+    } else if (slideRelationships is Map) {
+      if (slideRelationships[eId] == rId) {
+        return slideRelationships[eTarget];
+      }
+    } else {
+      throw Exception("Invalid slide relationships format: $slideRelationships");
+    }
+    throw Exception("Relationship with rId $rId not found.");
+  }
 }
