@@ -5,3 +5,6 @@
 ///
 /// The XML element for the connection shape element in a PowerPoint presentation.
 const String eConnectionShape = 'p:cxnSp';
+
+/// The XML element for the shape properties within a shape.
+const String ePictureShape = 'p:pic';
