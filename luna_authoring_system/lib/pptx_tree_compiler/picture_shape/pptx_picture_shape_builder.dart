@@ -1,0 +1,74 @@
+import 'package:luna_authoring_system/pptx_data_objects/picture_shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/source_rectangle.dart';
+import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/picture_shape/pptx_picture_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
+import 'package:luna_core/utils/types.dart';
+
+/// This class is responsible for building PictureShape objects from the PowerPoint XML structure.
+class PptxPictureShapeBuilder {
+  late final PptxTransformBuilder _transformBuilder;
+  late final PptxRelationshipParser _relationshipParser;
+  late int _slideIndex;
+  late PptxHierarchy _hierarchy;
+
+  PptxPictureShapeBuilder(this._transformBuilder, this._relationshipParser);
+
+  set slideIndex(int value) => _slideIndex = value;
+  set hierarchy(PptxHierarchy value) => _hierarchy = value;
+
+  /// Parses the transform map and returns a Transform object.
+  Transform _getTransform(Json transformMap) {
+    return _transformBuilder.getTransform(transformMap);
+  }
+
+  /// Extracts the URL from the provided map using the relationship parser.
+  String _getUrl(Json urlMap) {
+    return _relationshipParser.findTargetByRId(_slideIndex, _hierarchy, urlMap[eEmbed]);
+  }
+
+  /// Extracts the source rectangle from the provided map.
+  SourceRectangle _getSourceRectangle(Json? sourceRectangleMap) {
+    return SourceRectangle(
+      left: sourceRectangleMap?[eSourceRectangleLeft],
+      top: sourceRectangleMap?[eSourceRectangleTop],
+      right: sourceRectangleMap?[eSourceRectangleRight],
+      bottom: sourceRectangleMap?[eSourceRectangleBottom],
+    );
+  }
+
+  /// Builds a ConnectionShape object from the provided connection shape map.
+  PictureShape _buildPictureShape(Json pictureShapeMap) {
+    Transform transform = _getTransform(pictureShapeMap[eShapeProperty][eTransform]);
+    String url = _getUrl(pictureShapeMap[eBlipFill][eBlip]);
+    SourceRectangle sourceRectangle = _getSourceRectangle(pictureShapeMap[eBlipFill]?[eSourceRectangle]);
+
+    return PictureShape(
+      transform: transform,
+      url: url,
+      sourceRectangle: sourceRectangle,
+    );
+  }
+
+  /// Builds a list of PictureShape object from the provided shape tree.
+  List<Shape> getPictureShapes(dynamic shapeTree) {
+    List<Shape> shapes = [];
+
+    if (shapeTree is List) {
+      for (Json pictureShape in shapeTree) {
+        shapes.add(_buildPictureShape(pictureShape));
+      }
+    } else if (shapeTree is Map) {
+      shapes.add(_buildPictureShape(shapeTree as Json));
+    } else {
+      throw Exception(
+        "Invalid picture shape format: $shapeTree",
+      );
+    }
+
+    return shapes;
+  }
+}
