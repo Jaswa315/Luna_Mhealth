@@ -1,7 +1,7 @@
 /// =================================================================================================
 /// XML ELEMENTS CONSTANTS FOR PICTURE SHAPE BUILDER
 /// =================================================================================================
-/// This file contains the XML element constants used in the [PptxPictureShapeBuilder] class.
+/// This file contains the XML element constants used in the PptxPictureShapeBuilder class.
 /// The XML element for the shape properties within a shape.
 const String eShapeProperty = 'p:spPr';
 
