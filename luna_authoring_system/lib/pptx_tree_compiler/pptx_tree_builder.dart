@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/document_property/pptx_document_property_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/picture_shape/pptx_picture_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/presentation_property/pptx_presentation_property_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart';
@@ -26,6 +27,7 @@ class PptxTreeBuilder {
   late PptxShapeBuilder _pptxShapeBuilder;
   late PptxTransformBuilder _pptxTransformBuilder;
   late PptxConnectionShapeBuilder _pptxConnectionShapeBuilder;
+  late PptxPictureShapeBuilder _pptxPictureShapeBuilder;
   late PptxRelationshipParser _pptxRelationshipParser;
   late PptxSlideBuilder _pptxSlideBuilder;
 
@@ -39,7 +41,8 @@ class PptxTreeBuilder {
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
     _pptxTransformBuilder = PptxTransformBuilder();
     _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder(_pptxTransformBuilder);
-    _pptxShapeBuilder = PptxShapeBuilder(_pptxConnectionShapeBuilder);
+    _pptxPictureShapeBuilder = PptxPictureShapeBuilder(_pptxTransformBuilder, _pptxRelationshipParser);
+    _pptxShapeBuilder = PptxShapeBuilder(_pptxConnectionShapeBuilder, _pptxPictureShapeBuilder);
     _pptxRelationshipParser = PptxRelationshipParser(_pptxLoader);
     _pptxSlideBuilder = PptxSlideBuilder(_pptxLoader, _pptxSlideCountParser, _pptxShapeBuilder, _pptxRelationshipParser);
   }
