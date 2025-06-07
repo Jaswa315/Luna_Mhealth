@@ -41,9 +41,9 @@ class PptxTreeBuilder {
     _pptxSectionBuilder = PptxSectionBuilder(_pptxLoader, _pptxSlideCountParser);
     _pptxTransformBuilder = PptxTransformBuilder();
     _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder(_pptxTransformBuilder);
+    _pptxRelationshipParser = PptxRelationshipParser(_pptxLoader);
     _pptxPictureShapeBuilder = PptxPictureShapeBuilder(_pptxTransformBuilder, _pptxRelationshipParser);
     _pptxShapeBuilder = PptxShapeBuilder(_pptxConnectionShapeBuilder, _pptxPictureShapeBuilder);
-    _pptxRelationshipParser = PptxRelationshipParser(_pptxLoader);
     _pptxSlideBuilder = PptxSlideBuilder(_pptxLoader, _pptxSlideCountParser, _pptxShapeBuilder, _pptxRelationshipParser);
   }
 
