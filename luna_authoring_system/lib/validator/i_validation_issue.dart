@@ -6,5 +6,5 @@ import 'package:luna_authoring_system/luna_constants.dart';
 abstract class IValidationIssue {
   /// This is textual representation of the validation issue.
   String toText();
-  Severity get severity;
+  ValidationSeverity get severity;
 }

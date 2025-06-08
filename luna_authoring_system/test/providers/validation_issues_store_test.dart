@@ -5,7 +5,7 @@ import 'package:luna_authoring_system/luna_constants.dart';
 
 class DummyIssue implements IValidationIssue {
   String toText() => "issue";
-  Severity get severity => Severity.warning;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
 
 void main() {

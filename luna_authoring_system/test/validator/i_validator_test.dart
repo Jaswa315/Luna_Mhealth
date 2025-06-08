@@ -10,7 +10,7 @@ class MockIssueOne extends IValidationIssue {
     return 'mock_issue_one';
   }
 
-  Severity get severity => Severity.warning;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
 
 class MockIssueTwo extends IValidationIssue {
@@ -18,7 +18,7 @@ class MockIssueTwo extends IValidationIssue {
     return 'mock_issue_two';
   }
 
-  Severity get severity => Severity.warning;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
 
 class MockIssueThree extends IValidationIssue {
@@ -26,7 +26,7 @@ class MockIssueThree extends IValidationIssue {
     return 'mock_issue_three';
   }
 
-  Severity get severity => Severity.warning;
+  ValidationSeverity get severity => ValidationValidationSeverity.warning;
 }
 
 class MockIssueFour extends IValidationIssue {
@@ -34,7 +34,7 @@ class MockIssueFour extends IValidationIssue {
     return 'mock_issue_four';
   }
 
-  Severity get severity => Severity.warning;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
 
 void main() {

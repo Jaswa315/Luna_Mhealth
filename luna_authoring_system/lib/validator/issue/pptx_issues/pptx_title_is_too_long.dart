@@ -7,5 +7,5 @@ class PptxTitleIsTooLong extends IValidationIssue {
   }
 
   @override
-  Severity get severity => Severity.warning;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }

@@ -4,7 +4,7 @@ class LunaConstants {
 }
 
 /// Severity levels enum for validation issues in Luna authoring system
-enum Severity {
+enum ValidationSeverity {
   info, // Informational issues that do not require immediate attention
   warning, // Issues that should be addressed but do not block functionality
   error, // Issues that block functionality and need to be fixed

@@ -15,5 +15,5 @@ class PptxSlideHasNoShapes extends IPptxValidationIssues {
   Shape? get shape => null;
 
   @override
-  Severity get severity => Severity.warning;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
