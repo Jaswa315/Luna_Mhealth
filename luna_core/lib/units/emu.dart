@@ -6,7 +6,7 @@ import 'package:luna_core/units/i_dimension.dart';
 /// More information about EMU:
 /// https://c-rex.net/samples/ooxml/e1/Part4/OOXML_P4_DOCX_sldSz_topic_ID0EULOGB.html
 /// https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-odraw/40cd0cf9-f038-4603-b790-252d93e3e8fd
-/// The value of EMU can be nagarive in PowerPoint if the component is outside the slide area.
+/// The value of EMU can be negative in PowerPoint if the component is outside the slide area.
 class EMU extends IDimension {
   final int value;
 
