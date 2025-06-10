@@ -3,10 +3,6 @@ import 'package:luna_core/units/emu.dart';
 
 void main() {
   group('Tests for EMU', () {
-    test('Argument error is thrown when input is negative', () async {
-      expect(() => EMU(-1), throwsA(isArgumentError));
-    });
-
     test('Value can be initialized with zero', () async {
       EMU emu = EMU(0);
 

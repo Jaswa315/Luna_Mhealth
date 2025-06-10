@@ -9,14 +9,7 @@ import 'package:luna_core/units/i_dimension.dart';
 class EMU extends IDimension {
   final int value;
 
-  EMU(this.value) {
-    if (value < 0) {
-      throw ArgumentError(
-        'The EMU value must not be negative.: $value',
-        'value',
-      );
-    }
-  }
+  EMU(this.value);
 
   @override
   Map<String, dynamic> toJson() => {
