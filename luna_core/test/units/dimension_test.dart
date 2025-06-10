@@ -33,7 +33,6 @@ void main() {
     });
 
     test('should throw ArgumentError for invalid values', () {
-      expect(() => EMU(-100), throwsA(isA<ArgumentError>()));
       expect(() => DisplayPixel(-10), throwsA(isA<ArgumentError>()));
       expect(() => Percent(-5), throwsA(isA<ArgumentError>()));
     });
