@@ -1,6 +1,7 @@
 import 'package:luna_authoring_system/pptx_data_objects/picture_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_percentage.dart';
 import 'package:luna_authoring_system/pptx_data_objects/source_rectangle.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/picture_shape/pptx_picture_shape_constants.dart';
@@ -27,24 +28,58 @@ class PptxPictureShapeBuilder {
 
   /// Extracts the URL from the provided map using the relationship parser.
   String _getUrl(Json urlMap) {
-    return _relationshipParser.findTargetByRId(_slideIndex, _hierarchy, urlMap[eEmbed]);
+    return _relationshipParser.findTargetByRId(
+      _slideIndex,
+      _hierarchy,
+      urlMap[eEmbed],
+    );
   }
 
   /// Extracts the source rectangle from the provided map.
   SourceRectangle _getSourceRectangle(Json? sourceRectangleMap) {
+    int parseOrDefault(dynamic value) {
+      if (value == null) {
+        return SourceRectangle.defaultValue;
+      } else if (value == "") {
+        return SourceRectangle.defaultValue;
+      } else if (value is String && value.isNotEmpty) {
+        return int.parse(value);
+      } else {
+        throw ArgumentError(
+          "Invalid value for source rectangle: $value",
+        );
+      }
+    }
+
     return SourceRectangle(
-      left: sourceRectangleMap?[eSourceRectangleLeft],
-      top: sourceRectangleMap?[eSourceRectangleTop],
-      right: sourceRectangleMap?[eSourceRectangleRight],
-      bottom: sourceRectangleMap?[eSourceRectangleBottom],
+      left: SimpleTypePercentage(
+        parseOrDefault(sourceRectangleMap?[eSourceRectangleLeft]),
+      ),
+      top: SimpleTypePercentage(
+        parseOrDefault(sourceRectangleMap?[eSourceRectangleTop]),
+      ),
+      right: SimpleTypePercentage(
+        parseOrDefault(sourceRectangleMap?[eSourceRectangleRight]),
+      ),
+      bottom: SimpleTypePercentage(
+        parseOrDefault(sourceRectangleMap?[eSourceRectangleBottom]),
+      ),
     );
   }
 
   /// Builds a ConnectionShape object from the provided connection shape map.
   PictureShape _buildPictureShape(Json pictureShapeMap) {
-    Transform transform = _getTransform(pictureShapeMap[eShapeProperty][eTransform]);
+    Transform transform =
+        _getTransform(pictureShapeMap[eShapeProperty][eTransform]);
     String url = _getUrl(pictureShapeMap[eBlipFill][eBlip]);
-    SourceRectangle sourceRectangle = _getSourceRectangle(pictureShapeMap[eBlipFill]?[eSourceRectangle]);
+    SourceRectangle sourceRectangle;
+    if (pictureShapeMap[eBlipFill]?[eSourceRectangle] == null ||
+        pictureShapeMap[eBlipFill]?[eSourceRectangle] == "") {
+      sourceRectangle = SourceRectangle();
+    } else {
+      sourceRectangle =
+          _getSourceRectangle(pictureShapeMap[eBlipFill]?[eSourceRectangle]);
+    }
 
     return PictureShape(
       transform: transform,
