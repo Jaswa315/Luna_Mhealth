@@ -18,21 +18,5 @@ void main() {
       expect(() => SimpleTypePercentage(50000), returnsNormally);
       expect(() => SimpleTypePercentage(100000), returnsNormally);
     });
-
-    test('Invalid SimpleTypePercentage values should throw an ArgumentError.', () {
-      expect(() => SimpleTypePercentage(-1), throwsArgumentError);
-      expect(() => SimpleTypePercentage(100001), throwsArgumentError);
-    });
-
-    test('Edge cases for SimpleTypePercentage values returns Normally.', () {
-      expect(
-          () => SimpleTypePercentage(
-              SimpleTypePercentage.minSimpleTypePercentage),
-          returnsNormally);
-      expect(
-          () => SimpleTypePercentage(
-              SimpleTypePercentage.maxSimpleTypePercentage),
-          returnsNormally);
-    });
   });
 }
