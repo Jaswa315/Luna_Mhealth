@@ -6,11 +6,13 @@ parameters:
   default: main_coverage
 - name: cur_cov_folder
   default: current_coverage
+- name: include_coverage
+  default: 'false'
 
 steps:
 #Download most recent code coverage from main
 - task: DownloadPipelineArtifact@2
-  condition: succeededOrFailed()
+  condition: and(succeededOrFailed(), eq(${{ parameters.include_coverage }},'true'))
   displayName: 'Get most recent coverage from main'
   inputs:
     buildType: 'specific'
@@ -27,7 +29,7 @@ steps:
 #calculate coverage from last run in main versus coverage in this run
 - task: PowerShell@2
   displayName: 'Calculate code coverage change'
-  condition: succeededOrFailed()
+  condition: and(succeededOrFailed(), eq(${{ parameters.include_coverage }},'true'))
   inputs:
     targetType: 'inline'
     script: |
@@ -78,6 +80,6 @@ steps:
 
 - task: PublishCodeCoverageResults@2
   displayName: 'Publish coverage results'
-  condition: succeededOrFailed()
+  condition: and(succeededOrFailed(), eq(${{ parameters.include_coverage }},'true'))
   inputs:
     summaryFileLocation: '**/${{ parameters.cur_cov_folder }}/coverage-*.xml'
