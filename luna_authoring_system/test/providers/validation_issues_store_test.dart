@@ -1,10 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
+import 'package:luna_authoring_system/luna_constants.dart';
 
 class DummyIssue implements IValidationIssue {
   String toText() => "issue";
-  int get severity => 0;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
 
 void main() {

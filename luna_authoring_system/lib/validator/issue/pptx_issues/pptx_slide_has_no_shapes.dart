@@ -1,3 +1,4 @@
+import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_issues/i_pptx_validation_issues.dart';
@@ -14,5 +15,5 @@ class PptxSlideHasNoShapes extends IPptxValidationIssues {
   Shape? get shape => null;
 
   @override
-  int get severity => 1;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
