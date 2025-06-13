@@ -14,3 +14,6 @@ const String eType = '_Type';
 
 /// The XML element for the Target of an relationships.
 const String eTarget = '_Target';
+
+/// The XML element for the Id of an relationships.
+const String eId = '_Id';

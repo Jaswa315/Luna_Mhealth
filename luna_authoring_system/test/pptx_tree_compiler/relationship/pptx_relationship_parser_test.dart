@@ -5,52 +5,177 @@ import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'dart:io';
 
 void main() {
-  final pptxFile = File('test/test_assets/Sections.pptx');
-  PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
-  PptxRelationshipParser pptxRelationshipParser =
-      PptxRelationshipParser(pptxLoader);
+  group('Tests for Section', () {
+    final pptxFile = File('test/test_assets/Sections.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxRelationshipParser pptxRelationshipParser =
+        PptxRelationshipParser(pptxLoader);
+    group('PptxRelationshipParser Tests for Slide', () {
+      test('getParentIndex returns correct slideLayout index for a slide', () {
+        int slideIndex = 1;
+        int slideLayoutIndex = pptxRelationshipParser.getParentIndex(
+            slideIndex, PptxHierarchy.slide);
 
-  group('PptxRelationshipParser Tests for Slide', () {
-    test('getParentIndex returns correct slideLayout index for a slide', () {
+        expect(slideLayoutIndex, 1);
+      });
+
+      test('Throws exception for invalid slide index', () {
+        expect(
+          () => pptxRelationshipParser.getParentIndex(999, PptxHierarchy.slide),
+          throwsException,
+        );
+      });
+    });
+
+    group('PptxRelationshipParser Tests for SlideLayout', () {
+      test('getParentIndex returns correct slideMaster index for a slideLayout',
+          () {
+        int slideLayoutIndex = 1;
+        int slideMasterIndex = pptxRelationshipParser.getParentIndex(
+            slideLayoutIndex, PptxHierarchy.slideLayout);
+
+        expect(slideMasterIndex, 1);
+      });
+
+      test('Throws exception for invalid slideLayout index', () {
+        expect(
+          () => pptxRelationshipParser.getParentIndex(
+              999, PptxHierarchy.slideLayout),
+          throwsException,
+        );
+      });
+    });
+
+    group('PptxRelationshipParser Tests for SlideMaster', () {
+      test('Throws exception for invalid slideMaster index', () {
+        expect(
+          () => pptxRelationshipParser.getParentIndex(
+              999, PptxHierarchy.slideMaster),
+          throwsException,
+        );
+      });
+    });
+  });
+
+  group('Tests for a pptx file that has one picture in a slide', () {
+    final pptxFile = File('test/test_assets/1 Picture.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxRelationshipParser pptxRelationshipParser =
+        PptxRelationshipParser(pptxLoader);
+
+    test('findTargetByRId returns correct target for a given rId', () {
       int slideIndex = 1;
-      int slideLayoutIndex = pptxRelationshipParser.getParentIndex(
-          slideIndex, PptxHierarchy.slide);
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slide;
+      String rId = 'rId2';
 
-      expect(slideLayoutIndex, 1);
+      String target = pptxRelationshipParser.findTargetByRId(
+          slideIndex, pptxHierarchy, rId);
+
+      expect(target, '../media/image1.jpeg');
     });
 
-    test('Throws exception for invalid slide index', () {
+    test('Throws exception for invalid rId', () {
+      int slideIndex = 1;
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slide;
+      String rId = 'invalidRId';
+
       expect(
-        () => pptxRelationshipParser.getParentIndex(999, PptxHierarchy.slide),
+        () => pptxRelationshipParser.findTargetByRId(
+            slideIndex, pptxHierarchy, rId),
         throwsException,
       );
     });
   });
 
-  group('PptxRelationshipParser Tests for SlideLayout', () {
-    test('getParentIndex returns correct slideMaster index for a slideLayout',
-        () {
-      int slideLayoutIndex = 1;
-      int slideMasterIndex = pptxRelationshipParser.getParentIndex(
-          slideLayoutIndex, PptxHierarchy.slideLayout);
+  group('Tests for a pptx file that has two pictures in a slide', () {
+    final pptxFile = File('test/test_assets/2 Pictures.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxRelationshipParser pptxRelationshipParser =
+        PptxRelationshipParser(pptxLoader);
 
-      expect(slideMasterIndex, 1);
+    test('findTargetByRId returns correct target for a given rId', () {
+      int slideIndex = 1;
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slide;
+      String rId1 = 'rId2';
+      String rId2 = 'rId3';
+
+      String target1 = pptxRelationshipParser.findTargetByRId(
+          slideIndex, pptxHierarchy, rId1);
+      String target2 = pptxRelationshipParser.findTargetByRId(
+          slideIndex, pptxHierarchy, rId2);
+
+      expect(target1, '../media/image1.jpeg');
+      expect(target2, '../media/image2.png');
     });
 
-    test('Throws exception for invalid slideLayout index', () {
+    test('Throws exception for invalid rId', () {
+      int slideIndex = 1;
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slide;
+      String rId = 'invalidRId';
+
       expect(
-        () => pptxRelationshipParser.getParentIndex(
-            999, PptxHierarchy.slideLayout),
+        () => pptxRelationshipParser.findTargetByRId(
+            slideIndex, pptxHierarchy, rId),
         throwsException,
       );
     });
   });
 
-  group('PptxRelationshipParser Tests for SlideMaster', () {
-    test('Throws exception for invalid slideMaster index', () {
+  group('Tests for a pptx file that has one picture in a slide layout', () {
+    final pptxFile = File('test/test_assets/1 Picture in slide layout.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxRelationshipParser pptxRelationshipParser =
+        PptxRelationshipParser(pptxLoader);
+
+    test('findTargetByRId returns correct target for a given rId', () {
+      int slideIndex = 1;
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slideLayout;
+      String rId = 'rId2';
+
+      String target = pptxRelationshipParser.findTargetByRId(
+          slideIndex, pptxHierarchy, rId);
+
+      expect(target, '../media/image1.jpeg');
+    });
+
+    test('Throws exception for invalid rId', () {
+      int slideIndex = 1;
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slideLayout;
+      String rId = 'invalidRId';
+
       expect(
-        () => pptxRelationshipParser.getParentIndex(
-            999, PptxHierarchy.slideMaster),
+        () => pptxRelationshipParser.findTargetByRId(
+            slideIndex, pptxHierarchy, rId),
+        throwsException,
+      );
+    });
+  });
+
+  group('Tests for a pptx file that has one picture in a slide master', () {
+    final pptxFile = File('test/test_assets/1 Picture in slide master.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxRelationshipParser pptxRelationshipParser =
+        PptxRelationshipParser(pptxLoader);
+
+    test('findTargetByRId returns correct target for a given rId', () {
+      int slideIndex = 1;
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slideMaster;
+      String rId = 'rId13';
+
+      String target = pptxRelationshipParser.findTargetByRId(
+          slideIndex, pptxHierarchy, rId);
+
+      expect(target, '../media/image1.jpeg');
+    });
+
+    test('Throws exception for invalid rId', () {
+      int slideIndex = 1;
+      PptxHierarchy pptxHierarchy = PptxHierarchy.slideMaster;
+      String rId = 'invalidRId';
+
+      expect(
+        () => pptxRelationshipParser.findTargetByRId(
+            slideIndex, pptxHierarchy, rId),
         throwsException,
       );
     });

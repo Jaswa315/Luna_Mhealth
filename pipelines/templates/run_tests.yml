@@ -7,6 +7,8 @@ parameters:
   default: ''
 - name: cur_cov_folder
   default: current_coverage
+- name: include_coverage
+  default: 'false'
 
 
 steps:
@@ -15,9 +17,22 @@ steps:
     flutter pub get
   displayName: 'Get Flutter packages for the ${{ parameters.package_name }}'
 
-- script: |
-    mkdir -p ${{ parameters.cur_cov_folder }}
-    cd ${{ parameters.package_path }}
-    flutter test --machine --coverage | tojunit --output ../test-${{ parameters.package_name }}-results.xml
-    cobertura convert --output ../${{ parameters.cur_cov_folder }}/coverage-${{ parameters.package_name }}.xml
+- task: PowerShell@2
+  condition: eq(${{ parameters.include_coverage }}, 'true')
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -ItemType Directory -Path ${{ parameters.cur_cov_folder }} -ErrorAction SilentlyContinue
+      cd ${{ parameters.package_path }}
+      flutter test --machine --coverage | tojunit --output ../test-${{ parameters.package_name }}-results.xml
+      cobertura convert --output ../${{ parameters.cur_cov_folder }}/coverage-${{ parameters.package_name }}.xml
+  displayName: 'Run ${{ parameters.package_name }} tests with coverage'
+
+- task: PowerShell@2
+  condition: not(eq(${{ parameters.include_coverage }},'true'))
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd ${{ parameters.package_path }}
+      flutter test --machine | tojunit --output ../test-${{ parameters.package_name }}-results.xml
   displayName: 'Run ${{ parameters.package_name }} tests'

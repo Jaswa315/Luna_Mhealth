@@ -62,8 +62,11 @@ jobs:
       parameters:
         package_path: ${{ folder }}
         package_name: ${{ folder }}
+        include_coverage: 'true'
 
   - template: templates/publish_test_lint_results.yml
+    parameters:
+      include_coverage: 'true'
 
   - template: templates/build_authoring_system.yml
     parameters:
@@ -104,8 +107,11 @@ jobs:
       parameters:
         package_path: ${{ folder }}
         package_name: ${{ folder }}
+        include_coverage: 'true'
 
   - template: templates/publish_test_lint_results.yml
+    parameters:
+      include_coverage: 'true'
 
   - template: templates/build_authoring_system.yml
     parameters:

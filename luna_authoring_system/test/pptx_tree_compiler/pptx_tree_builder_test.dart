@@ -2,6 +2,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_tree_builder.dart'
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/picture_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
@@ -121,6 +122,15 @@ void main() {
         "Section 3": [],
         "Section 4": [5, 6, 7]
       });
+    });
+
+    test('Picture shpaes are extracted.', () async {
+      final pptxFile = File('test/test_assets/2 Pictures.pptx');
+      PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
+      PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
+      List<Shape> shapes = pptxTree.slides[0].shapes!;
+      expect(shapes[0], isA<PictureShape>());
+      expect(shapes[1], isA<PictureShape>());
     });
   });
 }
