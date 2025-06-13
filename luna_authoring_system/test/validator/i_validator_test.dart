@@ -26,7 +26,7 @@ class MockIssueThree extends IValidationIssue {
     return 'mock_issue_three';
   }
 
-  ValidationSeverity get severity => ValidationValidationSeverity.warning;
+  ValidationSeverity get severity => ValidationSeverity.warning;
 }
 
 class MockIssueFour extends IValidationIssue {
