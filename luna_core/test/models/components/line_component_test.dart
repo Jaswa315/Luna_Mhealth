@@ -35,7 +35,6 @@ void main() {
 
       final json = line.toJson();
 
-      expect(json['type'], 'line');
       expect(json['startPoint']['x'], 0.1);
       expect(json['startPoint']['y'], 0.2);
       expect(json['endPoint']['x'], 0.4);
@@ -47,7 +46,7 @@ void main() {
 
     test('Creates LineComponent from valid JSON', () {
       final json = {
-        'type': 'line',
+        'componentType': 'line',
         'startPoint': {'x': 0.1, 'y': 0.2},
         'endPoint': {'x': 0.4, 'y': 0.5},
         'color': 0xFF0D47A1,
@@ -68,7 +67,7 @@ void main() {
 
     test('Throws error when invalid style index is provided', () {
       final json = {
-        'type': 'line',
+        'componentType': 'line',
         'startPoint': {'x': 0.1, 'y': 0.2},
         'endPoint': {'x': 0.4, 'y': 0.5},
         'color': 0xFF0D47A1,
@@ -81,7 +80,7 @@ void main() {
 
     test('Throws error when color is missing', () {
       final json = {
-        'type': 'line',
+        'componentType': 'line',
         'startPoint': {'x': 0.1, 'y': 0.2},
         'endPoint': {'x': 0.4, 'y': 0.5},
         // 'color' is missing
@@ -94,7 +93,7 @@ void main() {
 
     test('Throws error when thickness is missing', () {
       final json = {
-        'type': 'line',
+        'componentType': 'line',
         'startPoint': {'x': 0.1, 'y': 0.2},
         'endPoint': {'x': 0.4, 'y': 0.5},
         'color': 0xFF0D47A1,
@@ -107,7 +106,7 @@ void main() {
 
     test('Throws error when both color and thickness are missing', () {
       final json = {
-        'type': 'line',
+        'componentType': 'line',
         'startPoint': {'x': 0.1, 'y': 0.2},
         'endPoint': {'x': 0.4, 'y': 0.5},
         // 'color' and 'thickness' are missing

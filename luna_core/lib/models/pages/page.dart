@@ -2,8 +2,11 @@
 /// A page can contain multiple components.
 
 import 'dart:convert';
+
+import 'package:luna_core/models/components/component_serializer.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
 import 'package:luna_core/utils/types.dart';
+
 import '../components/component.dart';
 
 /// Represents a page in the application.
@@ -57,7 +60,7 @@ class Page {
     }
 
     List<Component> components = (json['shapes'] as List<dynamic>)
-        .map((shapeJson) => Component.fromJson(shapeJson))
+        .map((shapeJson) => ComponentSerializer.fromJson(shapeJson))
         .toList();
 
     final page = Page(components: components);
@@ -83,7 +86,9 @@ class Page {
     return {
       'type': 'page',
       'sequence': sequenceId,
-      'shapes': components.map((c) => Component.serializeComponent(c)).toList(),
+      'shapes': components
+          .map((c) => ComponentSerializer.serializeComponent(c))
+          .toList(),
     };
   }
 
