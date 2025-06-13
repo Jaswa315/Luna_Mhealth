@@ -32,7 +32,6 @@ void main() {
       final component = BoundingBoxComponent(boundingBox: boundingBox);
       final json = component.toJson();
 
-      expect(json['type'], 'boundingBoxComponent');
       expect(json['boundingBox']['topLeftCorner']['dx'], 5.0);
       expect(json['boundingBox']['topLeftCorner']['dy'], 15.0);
       expect(json['boundingBox']['width']['unit'], 'emu');
@@ -43,7 +42,7 @@ void main() {
 
     test('should deserialize BoundingBoxComponent from JSON correctly', () {
       final json = {
-        'type': 'boundingBoxComponent',
+        'componentType': 'boundingBox',
         'boundingBox': {
           'topLeftCorner': {'dx': 3.0, 'dy': 6.0},
           'width': {'unit': 'emu', 'value': 4000},

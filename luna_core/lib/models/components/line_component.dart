@@ -38,7 +38,7 @@ class LineComponent extends Component {
     required this.style,
     required this.startPoint,
     required this.endPoint,
-  }) : super(name: 'LineComponent');
+  });
 
   /// Renders the line as a [Widget].
   @override
@@ -50,7 +50,6 @@ class LineComponent extends Component {
   /// Returns: A [Json] object containing all the properties of the line.
   Json toJson() {
     return {
-      'type': 'line',
       'startPoint': {
         'x': (startPoint.x as Percent).value,
         'y': (startPoint.y as Percent).value,

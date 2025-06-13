@@ -13,8 +13,7 @@ class BoundingBoxComponent extends Component {
   final BoundingBox boundingBox;
 
   /// Creates a BBComponent with a required bounding box.
-  BoundingBoxComponent({required this.boundingBox})
-      : super(name: 'boundingBoxComponent');
+  BoundingBoxComponent({required this.boundingBox});
 
   /// Factory method to create a BBComponent instance from a JSON map.
   factory BoundingBoxComponent.fromJson(Map<String, dynamic> json) {
@@ -26,7 +25,6 @@ class BoundingBoxComponent extends Component {
   /// Converts the BBComponent instance to a JSON map.
   Json toJson() {
     return {
-      'type': 'boundingBoxComponent',
       'boundingBox': boundingBox.toJson(),
     };
   }
