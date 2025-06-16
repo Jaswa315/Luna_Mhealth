@@ -6,6 +6,9 @@ import 'package:luna_authoring_system/luna_constants.dart';
 class DummyIssue implements IValidationIssue {
   String toText() => "issue";
   ValidationSeverity get severity => ValidationSeverity.warning;
+  @override
+  bool ignore;
+  DummyIssue({this.ignore = false});
 }
 
 void main() {
@@ -59,6 +62,40 @@ void main() {
       expect(store.issues, isEmpty);
       expect(store.hasIssues, isFalse);
       expect(notified, isTrue);
+    });
+
+    test('updates ignore to true and notifies listeners', () {
+      bool notified = false;
+      store.addListener(() => notified = true);
+
+      store.addIssue(issue1);
+      store.toggleIgnore(issue1, true);
+
+      expect(issue1.ignore, true);
+      expect(notified, isTrue);
+    });
+
+    test('updates ignore to false and notifies listeners', () {
+      final issue = DummyIssue(ignore: true);
+      bool notified = false;
+      store.addListener(() => notified = true);
+
+      store.addIssue(issue);
+      store.toggleIgnore(issue, false);
+
+      expect(issue.ignore, false);
+      expect(notified, isTrue);
+    });
+
+    test('does nothing if issue not found', () {
+      bool notified = false;
+      store.addListener(() => notified = true);
+      store.addIssue(issue1);
+      store.toggleIgnore(issue2, true);
+
+      expect(issue1.ignore, false);
+      expect(
+          notified, isTrue); // Listener will be called for addIssue for issue1
     });
   });
 }
