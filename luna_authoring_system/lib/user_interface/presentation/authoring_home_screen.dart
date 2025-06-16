@@ -6,8 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
@@ -99,7 +97,10 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                       ),
                     if (store.hasIssues) ...[
                       SizedBox(height: 20),
-                      ValidationIssuesSummary(issues: store.issues),
+                      ValidationIssuesSummary(
+                        issues: store.issues,
+                        store: store,
+                      ),
                     ],
                   ],
                 ),

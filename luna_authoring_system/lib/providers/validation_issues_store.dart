@@ -17,5 +17,14 @@ class ValidationIssuesStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Toggles the ignore state of a specific validation issue
+  void toggleIgnore(IValidationIssue target, bool value) {
+    final index = _issues.indexWhere((issue) => identical(issue, target));
+    if (index != -1) {
+      _issues[index].ignore = value;
+      notifyListeners();
+    }
+  }
+
   bool get hasIssues => _issues.isNotEmpty;
 }
