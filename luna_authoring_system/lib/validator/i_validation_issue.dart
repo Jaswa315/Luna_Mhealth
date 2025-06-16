@@ -7,4 +7,5 @@ abstract class IValidationIssue {
   /// This is textual representation of the validation issue.
   String toText();
   ValidationSeverity get severity;
+  bool ignore = false;
 }

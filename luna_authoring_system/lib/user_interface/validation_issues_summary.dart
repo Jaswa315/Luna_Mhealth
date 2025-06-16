@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/issue/pptx_issues/i_pptx_validation_issues.dart';
 
@@ -6,10 +7,13 @@ import 'package:luna_authoring_system/validator/issue/pptx_issues/i_pptx_validat
 /// It takes a list of [IValidationIssue] and displays them in a formatted manner.
 class ValidationIssuesSummary extends StatelessWidget {
   final List<IValidationIssue> _issues;
+  final ValidationIssuesStore store;
 
-  const ValidationIssuesSummary(
-      {Key? key, required List<IValidationIssue> issues})
-      : _issues = issues,
+  ValidationIssuesSummary({
+    Key? key,
+    required List<IValidationIssue> issues,
+    required this.store,
+  })  : _issues = issues,
         super(key: key);
 
   bool get hasIssues => _issues.isNotEmpty;
@@ -29,11 +33,13 @@ class ValidationIssuesSummary extends StatelessWidget {
   }
 
   Widget _buildIssueRow(IValidationIssue issue) {
+    Widget widget;
     switch (issue.runtimeType) {
       case IPptxValidationIssues:
-        return _buildPptxValidationIssueRow(issue as IPptxValidationIssues);
+        widget = _buildPptxValidationIssueRow(issue as IPptxValidationIssues);
+        break;
       default:
-        return Row(
+        widget = Row(
           children: [
             const SizedBox(width: 6),
             Expanded(
@@ -44,6 +50,19 @@ class ValidationIssuesSummary extends StatelessWidget {
           ],
         );
     }
+
+    return Row(
+      children: [
+        const SizedBox(width: 6),
+        Expanded(child: widget),
+        Checkbox(
+          value: issue.ignore,
+          onChanged: (bool? value) {
+            store.toggleIgnore(issue, value ?? false);
+          },
+        ),
+      ],
+    );
   }
 
   @override
