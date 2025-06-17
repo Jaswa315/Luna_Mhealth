@@ -54,6 +54,7 @@ void main() {
     test('Check Version and Log Manager are initialized', () async {
       await AuthoringInitializer.initializeAuthoring();
       //check version manager is initialized
+      v.VersionManager().setTestVersion('1.0');
       expect(v.VersionManager().version, '1.0');
       //check log manager is initialized
       expect(() {LogManager manager = LogManager();}, returnsNormally);

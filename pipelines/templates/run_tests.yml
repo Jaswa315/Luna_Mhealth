@@ -9,7 +9,8 @@ parameters:
   default: current_coverage
 - name: include_coverage
   default: 'false'
-
+- name: test_file_name # parameter to determine if a custom test file is run
+  default: ''
 
 steps:
 - script: |
@@ -18,13 +19,23 @@ steps:
   displayName: 'Get Flutter packages for the ${{ parameters.package_name }}'
 
 - task: PowerShell@2
+  displayName: 'Generate all test file for ${{ parameters.package_name }}'
+  condition: ${{ ne(parameters.test_file_name, '') }} 
+  inputs: 
+    filePath: pipelines/scripts/generate_luna_test_files.ps1
+    arguments: >
+      -LunaFolder ${{  parameters.package_path  }}
+      -OutputFile ${{  parameters.test_file_name  }}
+
+
+- task: PowerShell@2
   condition: eq(${{ parameters.include_coverage }}, 'true')
   inputs:
     targetType: 'inline'
     script: |
-      New-Item -ItemType Directory -Path ${{ parameters.cur_cov_folder }} -ErrorAction SilentlyContinue
+      New-Item -ItemType Directory -Path ${{  parameters.cur_cov_folder  }} -ErrorAction SilentlyContinue
       cd ${{ parameters.package_path }}
-      flutter test --machine --coverage | tojunit --output ../test-${{ parameters.package_name }}-results.xml
+      flutter test ${{  parameters.test_file_name  }} --machine --coverage | tojunit --output ../test-${{ parameters.package_name }}-results.xml
       cobertura convert --output ../${{ parameters.cur_cov_folder }}/coverage-${{ parameters.package_name }}.xml
   displayName: 'Run ${{ parameters.package_name }} tests with coverage'
 
@@ -34,5 +45,5 @@ steps:
     targetType: 'inline'
     script: |
       cd ${{ parameters.package_path }}
-      flutter test --machine | tojunit --output ../test-${{ parameters.package_name }}-results.xml
+      flutter test ${{  parameters.test_file_name  }} --machine | tojunit --output ../test-${{ parameters.package_name }}-results.xml
   displayName: 'Run ${{ parameters.package_name }} tests'

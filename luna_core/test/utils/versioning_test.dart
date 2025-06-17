@@ -57,6 +57,7 @@ void main() {
     test('VersionManager - Test Version Equivalence', () async {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       VersionManager manager = VersionManager();
+      manager.resetVersion();
       await manager.setVersion();
       expect((packageInfo.version == manager.version), true);
 

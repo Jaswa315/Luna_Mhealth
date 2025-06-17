@@ -165,6 +165,12 @@ class LogManager {
     return _loggers;
   }
 
+  /// Reset singleton
+  void resetLogger() {
+    _instance.clearLoggers();
+    _initialized = false;
+  }
+
   /// Logs an event with the specified event name and severity level.
   ///
   /// [eventName] is the name of the event to be logged.
