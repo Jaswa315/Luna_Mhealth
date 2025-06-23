@@ -37,7 +37,6 @@ steps:
     flutter pub get
     flutter pub global activate junitreport
     flutter pub global activate cobertura
-    flutter pub global activate patrol_cli
     Write-Host "##vso[task.prependpath]C:\Users\VssAdministrator\AppData\Local\Pub\Cache\bin"
   condition: eq( variables['Agent.OS'], 'Windows_NT' )
   displayName: 'Activate Flutter Packages (Windows)'

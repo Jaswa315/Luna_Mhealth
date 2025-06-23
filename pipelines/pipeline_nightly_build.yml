@@ -23,6 +23,7 @@ jobs:
         targetType: 'inline'
         script: |
           cd luna_mobile
+          flutter pub global activate patrol_cli 3.6.0
           flutter create --platform=android .
           patrol build android --target integration_test/luna_mobile_e2e_test.dart
 
