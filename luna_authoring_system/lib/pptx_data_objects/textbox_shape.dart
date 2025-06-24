@@ -3,7 +3,8 @@ import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 
-/// The TextboxShape represents the text box in the PowerPoint.
+/// The TextboxShape class represents the textbox shape element (p:sp) in the PowerPoint.
+/// textbody is text contained within the corresponding textbox shape.
 class TextboxShape implements Shape {
   @override
   Transform transform;
