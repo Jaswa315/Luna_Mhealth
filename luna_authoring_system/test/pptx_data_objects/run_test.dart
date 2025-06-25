@@ -14,7 +14,7 @@ void main() {
     const testTextFrench = 'Texte exemple';
     const testTextChinese = '示例文本';
 
-    test('Constructor initializes with correct properties for only code', () {
+    test('Constructor initializes with correct properties for lang only code', () {
       final run = Run(lang: french, text: testTextFrench);
       expect(run.lang.languageCode, 'fr');
       expect(run.lang.countryCode, isNull);
