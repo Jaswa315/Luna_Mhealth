@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
@@ -6,11 +7,11 @@ import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 void main() {
   group('Tests for Textbody class', () {
     // Test constants
-    const lang1 = 'en-US';
+    const lang1 = Locale('en', 'us');
     const text1 = 'Hello';
-    const lang2 = 'es-ES';
+    const lang2 = Locale('es', 'ES');
     const text2 = 'Hola';
-    const lang3 = 'fr-FR';
+    const lang3 = Locale('fr', 'FR');
     const text3 = 'Bonjour';
 
     // Shared test runs
@@ -22,6 +23,7 @@ void main() {
     final paragraph1 = Paragraph(runs: [run1]);
     final paragraph2 = Paragraph(runs: [run2, run3]);
     final emptyParagraph = Paragraph(runs: []);
+
     test('Constructor initializes with single paragraph', () {
       final textbody = Textbody(paragraphs: [paragraph1]);
       

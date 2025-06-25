@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
@@ -5,17 +6,18 @@ import 'package:luna_authoring_system/pptx_data_objects/run.dart';
 void main() {
   group('Tests for Paragraph class', () {
     // Test constants
-    const lang1 = 'en-US';
+    const lang1 = Locale('en', 'us');
     const text1 = 'Hello';
-    const lang2 = 'es-ES';
+    const lang2 = Locale('es', 'ES');
     const text2 = 'Hola';
-    const lang3 = 'fr-FR';
+    const lang3 = Locale('fr', 'FR');
     const text3 = 'Bonjour';
 
     // Shared test runs
     final run1 = Run(lang: lang1, text: text1);
     final run2 = Run(lang: lang2, text: text2);
     final run3 = Run(lang: lang3, text: text3);
+
     test('Constructor initializes with empty runs list', () {
       final paragraph = Paragraph(runs: []);
       expect(paragraph.runs, isEmpty);

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' hide Transform;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
@@ -11,7 +12,7 @@ import 'package:luna_core/units/point.dart';
 void main() {
   group('Tests for Textbody class', () {
     // Test constants
-    const lang = 'en-US';
+    const lang = Locale('en', 'US');
     const text = 'Hello';
 
     // Shared test objects
