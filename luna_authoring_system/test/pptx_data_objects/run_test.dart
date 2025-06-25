@@ -14,6 +14,8 @@ void main() {
     const testTextFrench = 'Texte exemple';
     const testTextChinese = '示例文本';
 
+    // Unit tests will test out every possible locale combination that is supported
+    // as discussed in https://api.flutter.dev/flutter/material/MaterialApp/supportedLocales.html
     test('Constructor initializes with correct properties for lang only code', () {
       final run = Run(lang: french, text: testTextFrench);
       expect(run.lang.languageCode, 'fr');
