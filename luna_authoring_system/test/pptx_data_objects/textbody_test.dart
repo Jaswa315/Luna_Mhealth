@@ -15,9 +15,9 @@ void main() {
     const text3 = 'Bonjour';
 
     // Shared test runs
-    final run1 = Run(lang: lang1, text: text1);
-    final run2 = Run(lang: lang2, text: text2);
-    final run3 = Run(lang: lang3, text: text3);
+    final run1 = Run(languageID: lang1, text: text1);
+    final run2 = Run(languageID: lang2, text: text2);
+    final run3 = Run(languageID: lang3, text: text3);
 
     // Shared test paragraphs
     final paragraph1 = Paragraph(runs: [run1]);
@@ -28,7 +28,7 @@ void main() {
       final textbody = Textbody(paragraphs: [paragraph1]);
       
       expect(textbody.paragraphs, hasLength(1));
-      expect(textbody.paragraphs.first.runs.first.lang, lang1);
+      expect(textbody.paragraphs.first.runs.first.languageID, lang1);
       expect(textbody.paragraphs.first.runs.first.text, text1);
     });
 
@@ -36,12 +36,12 @@ void main() {
       final textbody = Textbody(paragraphs: [paragraph1, emptyParagraph, paragraph2]);
       
       expect(textbody.paragraphs, hasLength(3));
-      expect(textbody.paragraphs[0].runs.first.lang, lang1);
+      expect(textbody.paragraphs[0].runs.first.languageID, lang1);
       expect(textbody.paragraphs[0].runs.first.text, text1);
       expect(textbody.paragraphs[1].runs, isEmpty);
-      expect(textbody.paragraphs[2].runs.first.lang, lang2);
+      expect(textbody.paragraphs[2].runs.first.languageID, lang2);
       expect(textbody.paragraphs[2].runs.first.text, text2);
-      expect(textbody.paragraphs[2].runs.last.lang, lang3);
+      expect(textbody.paragraphs[2].runs.last.languageID, lang3);
       expect(textbody.paragraphs[2].runs.last.text, text3);
     });
 
