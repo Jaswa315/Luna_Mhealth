@@ -16,7 +16,7 @@ void main() {
     const text = 'Hello';
 
     // Shared test objects
-    final run = Run(lang: lang, text: text);
+    final run = Run(languageID: lang, text: text);
     final paragraph = Paragraph(runs: [run]);
     final textbody = Textbody(paragraphs: [paragraph]);
     final transform = Transform(
