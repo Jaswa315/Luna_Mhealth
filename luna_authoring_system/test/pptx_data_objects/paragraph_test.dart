@@ -14,9 +14,9 @@ void main() {
     const text3 = 'Bonjour';
 
     // Shared test runs
-    final run1 = Run(lang: lang1, text: text1);
-    final run2 = Run(lang: lang2, text: text2);
-    final run3 = Run(lang: lang3, text: text3);
+    final run1 = Run(languageID: lang1, text: text1);
+    final run2 = Run(languageID: lang2, text: text2);
+    final run3 = Run(languageID: lang3, text: text3);
 
     test('Constructor initializes with empty runs list', () {
       final paragraph = Paragraph(runs: []);
@@ -27,7 +27,7 @@ void main() {
       final paragraph = Paragraph(runs: [run1]);
       
       expect(paragraph.runs, hasLength(1));
-      expect(paragraph.runs.first.lang, lang1);
+      expect(paragraph.runs.first.languageID, lang1);
       expect(paragraph.runs.first.text, text1);
     });
 
@@ -35,11 +35,11 @@ void main() {
       final paragraph = Paragraph(runs: [run1, run2, run3]);
       
       expect(paragraph.runs, hasLength(3));
-      expect(paragraph.runs[0].lang, lang1);
+      expect(paragraph.runs[0].languageID, lang1);
       expect(paragraph.runs[0].text, text1);
-      expect(paragraph.runs[1].lang, lang2);
+      expect(paragraph.runs[1].languageID, lang2);
       expect(paragraph.runs[1].text, text2);
-      expect(paragraph.runs[2].lang, lang3);
+      expect(paragraph.runs[2].languageID, lang3);
       expect(paragraph.runs[2].text, text3);
     });
 
