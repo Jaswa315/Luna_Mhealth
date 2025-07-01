@@ -7,26 +7,22 @@ class Run {
   /// Text
   final String text;
 
-  /// Run properties - lang
-  /// For now, we will just use the language attribute for translation purposes
-  /// In the future, we will add more style properties like font size, color, etc.
-  final Locale lang;
+  /// In Microsoft PowerPoint, an ID called ST_TextLanguageID is used to specify 
+  /// the language of a text run.
+  /// See more information at:
+  /// https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/b8cc7825-aa4b-49e1-98e7-a2ee5132ab86
+  /// This ID consists of an ISO 639-1 language code followed by an ISO 3166-1 alpha-2 country code.
+  /// The languageID property is represented as Flutter's Locale object because it already follows
+  /// the same languageCode-countryCode format.
+  final Locale languageID;
 
   Run({
-    required this.lang,
+    required this.languageID,
     required this.text,
   });
 
-  /// Returns the language code as a string (e.g., "en-US" or "zh-Hans-CN").
+  /// Returns the language code as a string (e.g., "en-US").
   String get languageCode {
-    if (lang.scriptCode != null && lang.countryCode != null) {
-      return '${lang.languageCode}-${lang.scriptCode}-${lang.countryCode}';
-    } else if (lang.scriptCode != null) {
-      return '${lang.languageCode}-${lang.scriptCode}';
-    } else if (lang.countryCode != null) {
-      return '${lang.languageCode}-${lang.countryCode}';
-    }
-
-    return lang.languageCode;
+    return '${languageID.languageCode}-${languageID.countryCode}';
   }
 }
