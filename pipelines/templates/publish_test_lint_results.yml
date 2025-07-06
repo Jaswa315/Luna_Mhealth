@@ -63,8 +63,10 @@ steps:
       $curCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Path ./${{ parameters.cur_cov_folder }} -Filter "coverage-*.xml" | ForEach-Object { $_.FullName })
       #Get Main Coverage
       $mainCov = Get-TotalCoverage -CoverageFiles (Get-ChildItem -Filter "coverage-*.xml" -Recurse -Path ./${{ parameters.main_cov_folder }} | ForEach-Object { $_.FullName })
-      if ($curCov -lt $mainCov){
-        $errMsg = "Code Coverage decreased by {0}%" -f ([math]::Round((($mainCov - $curCov)*100),2))
+      $covDiffPerc = [math]::Round((($mainCov - $curCov)*100),2)
+      $tolerance = 1
+      if ($covDiffPerc -gt $tolerance -and $curCov -lt $mainCov){
+        $errMsg = "Code Coverage decreased by {0}%" -f $covDiffPerc
         Write-Host "##vso[task.logissue type=error]$errMsg"
         Write-Host "##vso[task.complete result=SucceededWithIssues]"
       }

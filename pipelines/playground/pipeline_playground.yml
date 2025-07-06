@@ -1,6 +1,3 @@
-# This a pipeline for just running unit tests in an adhoc manner.
-# Lint and Testing pipeline for Luna mHealth
-# YML that gets run when a PR is requested
 trigger: none
 
 pool:
@@ -10,19 +7,21 @@ variables:
   - name: package_folders
     value: luna_core,luna_authoring_system,luna_mobile
 
-
 steps:
-  - template: ../templates/install_prereqs.yml
-  - task: PowerShell@2
-    displayName: 'Create Patrol Mobile App'
-    inputs:
-      targetType: 'inline'
-      script: |
-        cd luna_mobile
-        flutter pub global activate patrol_cli 3.6.0
-        flutter create --platform=android .
-        patrol build android --target integration_test/luna_mobile_e2e_test.dart
 
-  - publish: $(Build.SourcesDirectory)/luna_mobile/build/app/outputs/apk
-    artifact: patrolAPK
-    displayName: 'Publish artifact'
+- template: ../templates/install_prereqs.yml
+
+- ${{ each folder in split(variables.package_folders, ',') }}:
+  - template: ../templates/lint_luna.yml
+    parameters:
+      package_path: ${{ folder }}
+      package_name: ${{ folder }}
+  - template: ../templates/run_tests.yml
+    parameters:
+      package_path: ${{ folder }}
+      package_name: ${{ folder }}
+      include_coverage: 'true'
+
+- template: ../templates/publish_test_lint_results.yml
+  parameters:
+    include_coverage: 'true'
