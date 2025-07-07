@@ -1,7 +1,7 @@
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/models/components/image_component.dart';
 import 'package:luna_core/models/components/line_component.dart';
-import 'package:luna_core/models/components/text_component.dart';
+import 'package:luna_core/models/components/text_component/text_component.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// A utility class responsible for serializing and deserializing [Component] objects.
