@@ -20,6 +20,7 @@ class PptxTextboxShapeBuilder {
     return _pptxTransformBuilder.getTransform(transformMap);
   }
 
+  /// Builds a Run object from the provided run map.
   Run _getRun(Json runMap) {
     String text = runMap[eT];
     String lang = runMap[eRPr][eLang] ?? '';
@@ -33,6 +34,7 @@ class PptxTextboxShapeBuilder {
     );
   }
 
+  /// Extracts runs from the provided run map and returns a list of Run objects.
   List<Run> _getRuns(dynamic runMap) {
     List<Run> runs = [];
 
@@ -47,7 +49,9 @@ class PptxTextboxShapeBuilder {
     return runs;
   }
 
+  /// Builds a Paragraph object from the provided paragraph map.
   Paragraph _getParagraph(Map<dynamic, dynamic> paragraphMap) {
+    // If the paragraph map does not contain the 'eR' key, return an empty Paragraph.
     if (paragraphMap[eR] == null) {
       return Paragraph(runs: []);
     } else {
@@ -59,6 +63,7 @@ class PptxTextboxShapeBuilder {
     }
   }
 
+  /// Extracts paragraphs from the provided paragraph map and returns a list of Paragraph objects.
   List<Paragraph> _getParagraphs(dynamic paragraphMap) {
     List<Paragraph> paragraphs = [];
     if (paragraphMap is List) {
@@ -74,6 +79,7 @@ class PptxTextboxShapeBuilder {
     return paragraphs;
   }
 
+  /// Builds a TextboxShape object from the provided textbox shape map.
   TextboxShape _buildTextboxShape(Json textboxShapeMap) {  
     Transform transform = _getTransform(textboxShapeMap[eShapeProperty][eTransform]);
 
@@ -89,20 +95,21 @@ class PptxTextboxShapeBuilder {
     );
   }
 
+  /// Extracts all textbox shapes from the provided shape tree.
   List<Shape> getTextboxShapes(dynamic shapeTree) {
-      List<Shape> shapes = [];
-      if (shapeTree is List) {
-        for (Json textboxShape in shapeTree) {
-          if (textboxShape[eShapeProperty].isNotEmpty) {
-            shapes.add(_buildTextboxShape(textboxShape));
-          }
-        }
-      } else if (shapeTree is Map) {
-        if (shapeTree[eShapeProperty].isNotEmpty) {
-          shapes.add(_buildTextboxShape(shapeTree as Json));
+    List<Shape> shapes = [];
+    if (shapeTree is List) {
+      for (Json textboxShape in shapeTree) {
+        if (textboxShape[eShapeProperty].isNotEmpty) {
+          shapes.add(_buildTextboxShape(textboxShape));
         }
       }
+    } else if (shapeTree is Map) {
+      if (shapeTree[eShapeProperty].isNotEmpty) {
+        shapes.add(_buildTextboxShape(shapeTree as Json));
+      }
+    }
 
-      return shapes;
+    return shapes;
   }
 }
