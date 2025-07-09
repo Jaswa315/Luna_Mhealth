@@ -1,0 +1,108 @@
+import 'package:flutter/widgets.dart' hide Transform;
+import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
+import 'package:luna_authoring_system/pptx_data_objects/run.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
+import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constant.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
+import 'package:luna_core/utils/types.dart';
+
+/// This class is capable of building TextboxShape object
+/// that represent text boxes in a PowerPoint file.
+class PptxTextboxShapeBuilder {
+  final PptxTransformBuilder _pptxTransformBuilder;
+  
+  PptxTextboxShapeBuilder(this._pptxTransformBuilder);
+
+  Transform _getTransform(Json transformMap) {
+    return _pptxTransformBuilder.getTransform(transformMap);
+  }
+
+  Run _getRun(Json runMap) {
+    String text = runMap[eT];
+    String lang = runMap[eRPr][eLang] ?? '';
+    List<String> codes = lang.split('-');
+    Locale languageID;
+    languageID = Locale(codes[0], codes[1]);
+
+    return Run(
+      languageID: languageID,
+      text: text,
+    );
+  }
+
+  List<Run> _getRuns(dynamic runMap) {
+    List<Run> runs = [];
+
+    if (runMap is List) {
+      for (Json run in runMap) {
+        runs.add(_getRun(run));
+      }
+    } else if (runMap is Map) {
+      runs.add(_getRun(runMap as Json));
+    }
+
+    return runs;
+  }
+
+  Paragraph _getParagraph(Map<dynamic, dynamic> paragraphMap) {
+    if (paragraphMap[eR] == null) {
+      return Paragraph(runs: []);
+    } else {
+      List<Run> runs = _getRuns(paragraphMap[eR]);
+
+      return Paragraph(
+      runs: runs,
+      );
+    }
+  }
+
+  List<Paragraph> _getParagraphs(dynamic paragraphMap) {
+    List<Paragraph> paragraphs = [];
+    if (paragraphMap is List) {
+      for (var paragraph in paragraphMap) {
+        if (paragraph is Map) {
+          paragraphs.add(_getParagraph(paragraph));
+        }
+      }
+    } else if (paragraphMap is Map) {
+      paragraphs.add(_getParagraph(paragraphMap as Json));
+    }
+
+    return paragraphs;
+  }
+
+  TextboxShape _buildTextboxShape(Json textboxShapeMap) {  
+    Transform transform = _getTransform(textboxShapeMap[eShapeProperty][eTransform]);
+
+    List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP]);
+
+    Textbody textbody = Textbody(
+      paragraphs: paragraphs,
+    );
+
+    return TextboxShape(
+      transform: transform,
+      textbody: textbody,
+    );
+  }
+
+  List<Shape> getTextboxShapes(dynamic shapeTree) {
+      List<Shape> shapes = [];
+      if (shapeTree is List) {
+        for (Json textboxShape in shapeTree) {
+          if (textboxShape[eShapeProperty].isNotEmpty) {
+            shapes.add(_buildTextboxShape(textboxShape));
+          }
+        }
+      } else if (shapeTree is Map) {
+        if (shapeTree[eShapeProperty].isNotEmpty) {
+          shapes.add(_buildTextboxShape(shapeTree as Json));
+        }
+      }
+
+      return shapes;
+  }
+}

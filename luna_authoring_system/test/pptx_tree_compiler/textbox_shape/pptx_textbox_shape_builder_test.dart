@@ -1,0 +1,225 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
+import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_builder.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constant.dart';
+import 'package:luna_core/utils/types.dart';
+import 'package:mockito/mockito.dart';
+import '../../mocks/mock.mocks.dart';
+
+void main() {
+  late PptxTextboxShapeBuilder pptxTextboxShapeBuilder;
+  late MockPptxTransformBuilder mockPptxTransformBuilder;
+  final MockTransform mockTransform = MockTransform();
+  const Json mockTransformMap = {"": {}};
+  const String mockText = "Hello World";
+  const String mockText1 = "Foo";
+  const String mockText2 = "Bar";
+  const String englishLanguageCode = "en-US";
+
+  const Json mockTextboxSingleTextRunShapeMap = {
+    eShapeProperty: {
+      eTransform: mockTransformMap,
+    },
+    eTextBody: {
+      eP: {
+        eR: {
+            eRPr: {
+              eLang: englishLanguageCode,
+            },
+            eT: mockText,
+        },
+      },
+    },
+  };
+
+  const Json mockTextboxMultiTextRunShapeMap = {
+    eShapeProperty: {
+      eTransform: mockTransformMap,
+    },
+    eTextBody: {
+      eP: {
+        eR: [
+          {
+            eRPr: {
+              eLang: englishLanguageCode,
+            },
+            eT: mockText1,
+          },
+          {
+            eRPr: {
+              eLang: englishLanguageCode,
+            },
+            eT: mockText2,
+          },
+        ],
+      },
+    },
+  };
+
+  const Json mockTextboxMultiParagraphShapeMap = {
+    eShapeProperty: {
+      eTransform: mockTransformMap,
+    },
+    eTextBody: {
+      eP: [
+        {
+          eR: {
+            eRPr: {
+              eLang: englishLanguageCode,
+            },
+            eT: mockText1,
+          },
+        },
+        {
+          eR: {
+            eRPr: {
+              eLang: englishLanguageCode,
+            },
+            eT: mockText2,
+          },
+        },
+      ],
+    },
+  };
+
+  const Json mockTextboxNoTransformShapeMap = {
+    eShapeProperty: {
+    },
+    eTextBody: {
+      eP: {
+        eR: {
+            eRPr: {
+              eLang: englishLanguageCode,
+            },
+            eT: mockText,
+        },
+      },
+    },
+  };
+
+  const Json mockTextboxWithEmptyParagraphShapeMap = {
+    eShapeProperty: {
+      eTransform: mockTransformMap,
+    },
+    eTextBody: {
+      eP: [
+        {
+          eR: {
+            eRPr: {
+              eLang: englishLanguageCode,
+            },
+            eT: mockText,
+          },
+        },
+        {
+        },
+      ],
+    },
+  };
+
+  setUp(() {
+    mockPptxTransformBuilder = MockPptxTransformBuilder();
+    when(mockPptxTransformBuilder.getTransform(mockTransformMap))
+        .thenReturn(mockTransform);
+    pptxTextboxShapeBuilder =
+        PptxTextboxShapeBuilder(mockPptxTransformBuilder);
+  });
+
+  test('A text box shape with single paragraph and text run is parsed', () async {
+    Json mockTextboxShapeMap = mockTextboxSingleTextRunShapeMap;
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+    TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
+
+    expect(textboxShapes.length, 1);
+    expect(textboxShape.type, ShapeType.textbox);
+    expect(textboxShape.transform, mockTransform);
+    expect(textboxShape.textbody.paragraphs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
+  });
+
+  test('A text box shape with single paragraph and multiple text runs is parsed', () async {
+    Json mockTextboxShapeMap = mockTextboxMultiTextRunShapeMap;
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+    TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
+
+    expect(textboxShapes.length, 1);
+    expect(textboxShape.type, ShapeType.textbox);
+    expect(textboxShape.transform, mockTransform);
+    expect(textboxShape.textbody.paragraphs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs.length, 2);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
+    expect(textboxShape.textbody.paragraphs[0].runs[1].text, mockText2);
+    expect(textboxShape.textbody.paragraphs[0].runs[1].languageCode, englishLanguageCode);
+  });
+
+  test('A text box shape with multiple paragraphs and single text run is parsed', () async {
+    Json mockTextboxShapeMap = mockTextboxMultiParagraphShapeMap;
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+    TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
+
+    expect(textboxShapes.length, 1);
+    expect(textboxShape.type, ShapeType.textbox);
+    expect(textboxShape.transform, mockTransform);
+    expect(textboxShape.textbody.paragraphs.length, 2);
+    expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
+    expect(textboxShape.textbody.paragraphs[1].runs[0].text, mockText2);
+    expect(textboxShape.textbody.paragraphs[1].runs[0].languageCode, englishLanguageCode);
+  });
+
+  test('2 text box shapes are parsed', () async {
+    List<Json> mockTextboxShapeMap = [
+      mockTextboxSingleTextRunShapeMap,
+      mockTextboxSingleTextRunShapeMap,
+    ];
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+    TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
+
+    expect(textboxShapes.length, 2);
+    expect(textboxShape.type, ShapeType.textbox);
+    expect(textboxShape.transform, mockTransform);
+    expect(textboxShape.textbody.paragraphs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText);
+  });
+
+  test('A text box shape without transform property is parsed', () async {
+    Json mockTextboxShapeMap = mockTextboxNoTransformShapeMap;
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+
+    expect(textboxShapes.length, 0);
+  });
+
+  test('A text box shape with empty paragraph is parsed', () async {
+    Json mockTextboxShapeMap = mockTextboxWithEmptyParagraphShapeMap;
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+    TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
+
+    expect(textboxShapes.length, 1);
+    expect(textboxShape.type, ShapeType.textbox);
+    expect(textboxShape.transform, mockTransform);
+    expect(textboxShape.textbody.paragraphs.length, 2);
+    expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
+    expect(textboxShape.textbody.paragraphs[1].runs.length, 0);
+  });
+}
