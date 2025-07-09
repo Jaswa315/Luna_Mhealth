@@ -25,8 +25,7 @@ class PptxTextboxShapeBuilder {
     String text = runMap[eT];
     String lang = runMap[eRPr][eLang] ?? '';
     List<String> codes = lang.split('-');
-    Locale languageID;
-    languageID = Locale(codes[0], codes[1]);
+    Locale languageID = Locale(codes[0], codes[1]);
 
     return Run(
       languageID: languageID,
@@ -54,13 +53,12 @@ class PptxTextboxShapeBuilder {
     // If the paragraph map does not contain the 'eR' key, return an empty Paragraph.
     if (paragraphMap[eR] == null) {
       return Paragraph(runs: []);
-    } else {
-      List<Run> runs = _getRuns(paragraphMap[eR]);
-
-      return Paragraph(
-      runs: runs,
-      );
     }
+    List<Run> runs = _getRuns(paragraphMap[eR]);
+
+    return Paragraph(
+      runs: runs,
+    );
   }
 
   /// Extracts paragraphs from the provided paragraph map and returns a list of Paragraph objects.
