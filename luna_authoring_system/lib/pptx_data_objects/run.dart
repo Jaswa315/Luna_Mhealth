@@ -21,8 +21,8 @@ class Run {
     required this.text,
   });
 
-  /// Returns the language code as a string (e.g., "en-US").
+  /// Returns the languageID as a string (e.g., "en-US").
   String get languageCode {
-    return '${languageID.languageCode}-${languageID.countryCode}';
+    return languageID.toLanguageTag();
   }
 }
