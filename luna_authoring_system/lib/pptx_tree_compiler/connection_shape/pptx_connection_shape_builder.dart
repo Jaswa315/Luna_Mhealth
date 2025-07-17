@@ -18,6 +18,10 @@ class PptxConnectionShapeBuilder extends PptxBaseShapeBuilder<ConnectionShape> {
 
   PptxConnectionShapeBuilder(this._transformBuilder);
 
+  Transform _getTransform(Json transformMap) {
+    return _transformBuilder.getTransform(transformMap);
+  }
+
   /// Extracts the line color from the connection shape's line properties.
   Color _getLineColor(Json lineMap) {
     SrgbColor color = SrgbColor(lineMap[eLine]?[eSolidFill]?[eSrgbColor]
@@ -41,7 +45,7 @@ class PptxConnectionShapeBuilder extends PptxBaseShapeBuilder<ConnectionShape> {
   @override
   ConnectionShape buildShape(Json connectionShapeMap) {
     Transform transform =
-        _transformBuilder.getTransform(connectionShapeMap[eShapeProperty][eTransform]);
+        _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
     Color lineColor = _getLineColor(connectionShapeMap[eShapeProperty]);
 
