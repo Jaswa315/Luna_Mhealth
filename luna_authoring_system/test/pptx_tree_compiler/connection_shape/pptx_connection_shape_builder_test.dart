@@ -52,7 +52,7 @@ void main() {
 
     expect(
         () => pptxConnectionShapeBuilder
-            .getConnectionShapes(invalidConnectionShape),
+            .getShapes(invalidConnectionShape),
         throwsA(isA<Exception>()));
   });
 
@@ -60,7 +60,7 @@ void main() {
     Json mockConnectionShapeMap = mockRedConnectionShapeMap;
 
     List<Shape> connectionShapes =
-        pptxConnectionShapeBuilder.getConnectionShapes(mockConnectionShapeMap);
+        pptxConnectionShapeBuilder.getShapes(mockConnectionShapeMap);
     ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
 
     expect(connectionShapes.length, 1);
@@ -83,7 +83,7 @@ void main() {
       mockRedConnectionShapeMap,
     ];
     List<Shape> connectionShapes =
-        pptxConnectionShapeBuilder.getConnectionShapes(mockConnectionShapeMap);
+        pptxConnectionShapeBuilder.getShapes(mockConnectionShapeMap);
     ConnectionShape cShape = connectionShapes[0] as ConnectionShape;
 
     expect(connectionShapes.length, 2);

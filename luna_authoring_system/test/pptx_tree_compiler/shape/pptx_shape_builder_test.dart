@@ -28,7 +28,7 @@ void main() {
     mockPictureShapes = [mockPictureShape];
     mockConnectionShapeBuilder = MockPptxConnectionShapeBuilder();
     mockPictureShapeBuilder = MockPptxPictureShapeBuilder();
-    when(mockConnectionShapeBuilder.getConnectionShapes(any))
+    when(mockConnectionShapeBuilder.getShapes(any))
         .thenReturn(mockConnectionShapes);
     when(mockPictureShapeBuilder.getPictureShapes(any))
         .thenReturn(mockPictureShapes);
@@ -54,7 +54,7 @@ void main() {
           shapeBuilder.getShapes(shapeTree, slideIndex, hierarchy);
 
       expect(shapes.length, mockConnectionShapes.length);
-      verify(mockConnectionShapeBuilder.getConnectionShapes(any)).called(1);
+      verify(mockConnectionShapeBuilder.getShapes(any)).called(1);
     });
 
     test('getShapes returns picture shapes when ePictureShape is present', () {

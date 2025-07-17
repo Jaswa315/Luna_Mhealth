@@ -23,7 +23,7 @@ class PptxShapeBuilder {
       switch (key) {
         case eConnectionShape:
           shapes.addAll(
-            _pptxConnectionShapeBuilder.getConnectionShapes(shapeTree[key]),
+            _pptxConnectionShapeBuilder.getShapes(shapeTree[key]),
           );
           break;
         case ePictureShape:
