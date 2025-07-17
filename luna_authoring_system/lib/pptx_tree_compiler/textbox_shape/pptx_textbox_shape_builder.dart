@@ -5,13 +5,16 @@ import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_base_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constant.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
+import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// This class is capable of building TextboxShape object
 /// that represent text boxes in a PowerPoint file.
-class PptxTextboxShapeBuilder {
+class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   final PptxTransformBuilder _pptxTransformBuilder;
   
   PptxTextboxShapeBuilder(this._pptxTransformBuilder);
@@ -78,8 +81,14 @@ class PptxTextboxShapeBuilder {
   }
 
   /// Builds a TextboxShape object from the provided textbox shape map.
-  TextboxShape _buildTextboxShape(Json textboxShapeMap) {  
-    Transform transform = _getTransform(textboxShapeMap[eShapeProperty][eTransform]);
+  @override
+  TextboxShape buildShape(Json textboxShapeMap) {
+    late Transform transform;
+    if (textboxShapeMap[eShapeProperty].isNotEmpty) {
+      transform = _getTransform(textboxShapeMap[eShapeProperty][eTransform]);
+    } else {
+      transform = Transform(Point(EMU(0), EMU(0)), Point(EMU(0), EMU(0)));
+    }
 
     List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP]);
 
@@ -91,23 +100,5 @@ class PptxTextboxShapeBuilder {
       transform: transform,
       textbody: textbody,
     );
-  }
-
-  /// Extracts all textbox shapes from the provided shape tree.
-  List<Shape> getTextboxShapes(dynamic shapeTree) {
-    List<Shape> shapes = [];
-    if (shapeTree is List) {
-      for (Json textboxShape in shapeTree) {
-        if (textboxShape[eShapeProperty].isNotEmpty) {
-          shapes.add(_buildTextboxShape(textboxShape));
-        }
-      }
-    } else if (shapeTree is Map) {
-      if (shapeTree[eShapeProperty].isNotEmpty) {
-        shapes.add(_buildTextboxShape(shapeTree as Json));
-      }
-    }
-
-    return shapes;
   }
 }

@@ -131,7 +131,7 @@ void main() {
     Json mockTextboxShapeMap = mockTextboxSingleTextRunShapeMap;
 
     List<Shape> textboxShapes =
-        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
     TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
 
     expect(textboxShapes.length, 1);
@@ -147,7 +147,7 @@ void main() {
     Json mockTextboxShapeMap = mockTextboxMultiTextRunShapeMap;
 
     List<Shape> textboxShapes =
-        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
     TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
 
     expect(textboxShapes.length, 1);
@@ -165,7 +165,7 @@ void main() {
     Json mockTextboxShapeMap = mockTextboxMultiParagraphShapeMap;
 
     List<Shape> textboxShapes =
-        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
     TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
 
     expect(textboxShapes.length, 1);
@@ -186,7 +186,7 @@ void main() {
     ];
 
     List<Shape> textboxShapes =
-        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
     TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
 
     expect(textboxShapes.length, 2);
@@ -201,16 +201,16 @@ void main() {
     Json mockTextboxShapeMap = mockTextboxNoTransformShapeMap;
 
     List<Shape> textboxShapes =
-        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
 
-    expect(textboxShapes.length, 0);
+    expect(textboxShapes.length, 1);
   });
 
   test('A text box shape with empty paragraph is parsed', () async {
     Json mockTextboxShapeMap = mockTextboxWithEmptyParagraphShapeMap;
 
     List<Shape> textboxShapes =
-        pptxTextboxShapeBuilder.getTextboxShapes(mockTextboxShapeMap);
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
     TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
 
     expect(textboxShapes.length, 1);
