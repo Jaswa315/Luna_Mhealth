@@ -30,7 +30,7 @@ class PptxShapeBuilder {
           _pptxPictureShapeBuilder.slideIndex = slideIndex;
           _pptxPictureShapeBuilder.hierarchy = hierarchy;
           shapes.addAll(
-            _pptxPictureShapeBuilder.getPictureShapes(shapeTree[key]),
+            _pptxPictureShapeBuilder.getShapes(shapeTree[key]),
           );
           break;
       }

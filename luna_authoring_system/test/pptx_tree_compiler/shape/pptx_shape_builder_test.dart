@@ -30,7 +30,7 @@ void main() {
     mockPictureShapeBuilder = MockPptxPictureShapeBuilder();
     when(mockConnectionShapeBuilder.getShapes(any))
         .thenReturn(mockConnectionShapes);
-    when(mockPictureShapeBuilder.getPictureShapes(any))
+    when(mockPictureShapeBuilder.getShapes(any))
         .thenReturn(mockPictureShapes);
     shapeBuilder =
         PptxShapeBuilder(mockConnectionShapeBuilder, mockPictureShapeBuilder);
@@ -66,7 +66,7 @@ void main() {
           shapeBuilder.getShapes(shapeTree, slideIndex, hierarchy);
 
       expect(shapes.length, mockPictureShapes.length);
-      verify(mockPictureShapeBuilder.getPictureShapes(any)).called(1);
+      verify(mockPictureShapeBuilder.getShapes(any)).called(1);
     });
 
     test('getShapes ignores unknown keys in the shapeTree', () {
