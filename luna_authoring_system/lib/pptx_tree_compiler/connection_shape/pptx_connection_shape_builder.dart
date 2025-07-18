@@ -3,17 +3,17 @@ import 'dart:ui';
 import 'package:luna_authoring_system/helper/color_conversions.dart';
 import 'package:luna_authoring_system/pptx_data_objects/alpha.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
-import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_base_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// This class is capable of building ConnectionShapes object
+/// This class builds ConnectionShapes objects
 /// that represent lines in a PowerPoint file.
-class PptxConnectionShapeBuilder {
+class PptxConnectionShapeBuilder extends PptxBaseShapeBuilder<ConnectionShape> {
   final PptxTransformBuilder _transformBuilder;
 
   PptxConnectionShapeBuilder(this._transformBuilder);
@@ -42,7 +42,8 @@ class PptxConnectionShapeBuilder {
   }
 
   /// Builds a ConnectionShape object from the provided connection shape map.
-  ConnectionShape _buildConnectionShape(Json connectionShapeMap) {
+  @override
+  ConnectionShape buildShape(Json connectionShapeMap) {
     Transform transform =
         _getTransform(connectionShapeMap[eShapeProperty][eTransform]);
 
@@ -63,24 +64,5 @@ class PptxConnectionShapeBuilder {
       color: lineColor,
       width: lineWidth,
     );
-  }
-
-  /// Builds a list of ConnectionShape objects from the provided shape tree.
-  List<Shape> getConnectionShapes(dynamic shapeTree) {
-    List<Shape> shapes = [];
-
-    if (shapeTree is List) {
-      for (Json connectionShape in shapeTree) {
-        shapes.add(_buildConnectionShape(connectionShape));
-      }
-    } else if (shapeTree is Map) {
-      shapes.add(_buildConnectionShape(shapeTree as Json));
-    } else {
-      throw Exception(
-        "Invalid connection shape format: $shapeTree",
-      );
-    }
-
-    return shapes;
   }
 }

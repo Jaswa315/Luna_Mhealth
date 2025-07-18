@@ -23,14 +23,14 @@ class PptxShapeBuilder {
       switch (key) {
         case eConnectionShape:
           shapes.addAll(
-            _pptxConnectionShapeBuilder.getConnectionShapes(shapeTree[key]),
+            _pptxConnectionShapeBuilder.getShapes(shapeTree[key]),
           );
           break;
         case ePictureShape:
           _pptxPictureShapeBuilder.slideIndex = slideIndex;
           _pptxPictureShapeBuilder.hierarchy = hierarchy;
           shapes.addAll(
-            _pptxPictureShapeBuilder.getPictureShapes(shapeTree[key]),
+            _pptxPictureShapeBuilder.getShapes(shapeTree[key]),
           );
           break;
       }

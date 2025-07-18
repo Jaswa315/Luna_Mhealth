@@ -28,9 +28,9 @@ void main() {
     mockPictureShapes = [mockPictureShape];
     mockConnectionShapeBuilder = MockPptxConnectionShapeBuilder();
     mockPictureShapeBuilder = MockPptxPictureShapeBuilder();
-    when(mockConnectionShapeBuilder.getConnectionShapes(any))
+    when(mockConnectionShapeBuilder.getShapes(any))
         .thenReturn(mockConnectionShapes);
-    when(mockPictureShapeBuilder.getPictureShapes(any))
+    when(mockPictureShapeBuilder.getShapes(any))
         .thenReturn(mockPictureShapes);
     shapeBuilder =
         PptxShapeBuilder(mockConnectionShapeBuilder, mockPictureShapeBuilder);
@@ -54,7 +54,7 @@ void main() {
           shapeBuilder.getShapes(shapeTree, slideIndex, hierarchy);
 
       expect(shapes.length, mockConnectionShapes.length);
-      verify(mockConnectionShapeBuilder.getConnectionShapes(any)).called(1);
+      verify(mockConnectionShapeBuilder.getShapes(any)).called(1);
     });
 
     test('getShapes returns picture shapes when ePictureShape is present', () {
@@ -66,7 +66,7 @@ void main() {
           shapeBuilder.getShapes(shapeTree, slideIndex, hierarchy);
 
       expect(shapes.length, mockPictureShapes.length);
-      verify(mockPictureShapeBuilder.getPictureShapes(any)).called(1);
+      verify(mockPictureShapeBuilder.getShapes(any)).called(1);
     });
 
     test('getShapes ignores unknown keys in the shapeTree', () {

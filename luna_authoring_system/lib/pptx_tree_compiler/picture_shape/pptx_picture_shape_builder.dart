@@ -1,16 +1,16 @@
 import 'package:luna_authoring_system/pptx_data_objects/picture_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
-import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_percentage.dart';
 import 'package:luna_authoring_system/pptx_data_objects/source_rectangle.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/picture_shape/pptx_picture_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_base_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// This class is responsible for building PictureShape objects from the PowerPoint XML structure.
-class PptxPictureShapeBuilder {
+class PptxPictureShapeBuilder extends PptxBaseShapeBuilder<PictureShape> {
   late final PptxTransformBuilder _transformBuilder;
   late final PptxRelationshipParser _relationshipParser;
   late int _slideIndex;
@@ -67,8 +67,9 @@ class PptxPictureShapeBuilder {
     );
   }
 
-  /// Builds a ConnectionShape object from the provided connection shape map.
-  PictureShape _buildPictureShape(Json pictureShapeMap) {
+  /// Builds a PictureShape object from the provided picture shape map.
+  @override
+  PictureShape buildShape(Json pictureShapeMap) {
     Transform transform =
         _getTransform(pictureShapeMap[eShapeProperty][eTransform]);
     String url = _getUrl(pictureShapeMap[eBlipFill][eBlip]);
@@ -86,24 +87,5 @@ class PptxPictureShapeBuilder {
       url: url,
       sourceRectangle: sourceRectangle,
     );
-  }
-
-  /// Builds a list of PictureShape object from the provided shape tree.
-  List<Shape> getPictureShapes(dynamic shapeTree) {
-    List<Shape> shapes = [];
-
-    if (shapeTree is List) {
-      for (Json pictureShape in shapeTree) {
-        shapes.add(_buildPictureShape(pictureShape));
-      }
-    } else if (shapeTree is Map) {
-      shapes.add(_buildPictureShape(shapeTree as Json));
-    } else {
-      throw Exception(
-        "Invalid picture shape format: $shapeTree",
-      );
-    }
-
-    return shapes;
   }
 }

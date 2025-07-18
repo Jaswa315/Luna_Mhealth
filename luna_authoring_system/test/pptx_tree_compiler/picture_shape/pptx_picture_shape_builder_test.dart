@@ -23,7 +23,7 @@ void main() {
       pptxPictureShapeBuilder.hierarchy = PptxHierarchy.slide;
 
       // Act
-      final shapes = pptxPictureShapeBuilder.getPictureShapes(shapeTree);
+      final shapes = pptxPictureShapeBuilder.getShapes(shapeTree);
 
       // Assert
       expect(shapes.length, 1);
@@ -46,7 +46,7 @@ void main() {
       pptxPictureShapeBuilder.hierarchy = PptxHierarchy.slide;
 
       // Act
-      final shapes = pptxPictureShapeBuilder.getPictureShapes(shapeTree);
+      final shapes = pptxPictureShapeBuilder.getShapes(shapeTree);
 
       // Assert
       expect(shapes.length, 2);
@@ -70,7 +70,7 @@ void main() {
       pptxPictureShapeBuilder.hierarchy = PptxHierarchy.slideLayout;
 
       // Act
-      final shapes = pptxPictureShapeBuilder.getPictureShapes(shapeTree);
+      final shapes = pptxPictureShapeBuilder.getShapes(shapeTree);
 
       // Assert
       expect(shapes.length, 1);
@@ -93,7 +93,7 @@ void main() {
       pptxPictureShapeBuilder.hierarchy = PptxHierarchy.slideMaster;
 
       // Act
-      final shapes = pptxPictureShapeBuilder.getPictureShapes(shapeTree);
+      final shapes = pptxPictureShapeBuilder.getShapes(shapeTree);
 
       // Assert
       expect(shapes.length, 1);
