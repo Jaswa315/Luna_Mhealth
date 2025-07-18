@@ -1,6 +1,8 @@
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_core/utils/types.dart';
 
+/// This is an abstract class that serves as a base for building
+/// different types of shapes in a PowerPoint file.
 abstract class PptxBaseShapeBuilder<T extends Shape> {
 
   T buildShape(Json shapeMap);

@@ -11,7 +11,7 @@ import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// This class is capable of building TextboxShape object
+/// This class builds TextboxShape objects
 /// that represent text boxes in a PowerPoint file.
 class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   final PptxTransformBuilder _pptxTransformBuilder;

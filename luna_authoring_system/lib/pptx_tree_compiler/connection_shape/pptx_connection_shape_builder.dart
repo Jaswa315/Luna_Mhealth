@@ -11,7 +11,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transfor
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 
-/// This class is capable of building ConnectionShapes object
+/// This class builds ConnectionShapes objects
 /// that represent lines in a PowerPoint file.
 class PptxConnectionShapeBuilder extends PptxBaseShapeBuilder<ConnectionShape> {
   final PptxTransformBuilder _transformBuilder;
