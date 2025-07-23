@@ -33,6 +33,8 @@ import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builde
     as _i22;
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart'
     as _i21;
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart'
+    as _i24;
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart'
     as _i15;
 import 'package:luna_core/units/emu.dart' as _i2;
@@ -825,4 +827,29 @@ class MockPptxRelationshipParser extends _i1.Mock
           ),
         ),
       ) as String);
+}
+
+/// A class which mocks [PptxSlideLayoutParser].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPptxSlideLayoutParser extends _i1.Mock
+    implements _i24.PptxSlideLayoutParser {
+  @override
+  Map<String, dynamic> getPlaceholderShape(
+    int? parentIndex,
+    int? idx,
+    String? shapeType,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getPlaceholderShape,
+          [
+            parentIndex,
+            idx,
+            shapeType,
+          ],
+        ),
+        returnValue: <String, dynamic>{},
+        returnValueForMissingStub: <String, dynamic>{},
+      ) as Map<String, dynamic>);
 }

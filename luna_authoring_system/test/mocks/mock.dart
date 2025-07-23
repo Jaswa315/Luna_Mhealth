@@ -12,6 +12,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_conver
 import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
 
 @GenerateMocks([PptxTree, Slide, Shape])
 @GenerateNiceMocks([
@@ -25,5 +26,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_
   MockSpec<PptxSlideCountParser>(),
   MockSpec<PptxShapeBuilder>(),
   MockSpec<PptxRelationshipParser>(),
+  MockSpec<PptxSlideLayoutParser>(),
 ])
 void main() {}

@@ -27,3 +27,24 @@ const String eRPr = 'a:rPr';
 
 /// The XML attribute for the language of the text.
 const String eLang = '_lang';
+
+/// The XML element for the non visual properties for a shape.
+const String eNvSpPr = 'p:nvSpPr';
+
+/// The XML element for the the non visual properties for objects.
+const String eNvPr = 'p:nvPr';
+
+/// The XML element for the placeholder shape.
+const String ePlaceholder = 'p:ph';
+
+/// The XML attribute for the placeholder index.
+const String eIdx = '_idx';
+
+/// The XML attribute for the placeholder type.
+const String eType = '_type';
+
+/// The XML element for the text box shape.
+const String eTextboxShape = 'p:sp';
+
+/// The XML element for an instance of a slide layout in the PowerPoint file.
+const String eSlideLayout = 'p:sldLayout';
