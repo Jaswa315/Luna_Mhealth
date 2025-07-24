@@ -10,8 +10,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relat
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
-import 'package:luna_core/units/emu.dart';
-import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
 
 /// This class builds TextboxShape objects
@@ -111,7 +109,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
         transform = _getTransformFromSlideLayout(textboxShapeMap);
       } else {
         /// TODO: handle this case properly, need to get transform from slide master placeholder shape
-        transform = Transform(Point(EMU(0), EMU(0)), Point(EMU(0), EMU(0)));
+        throw UnimplementedError("Getting transform from slide master placeholder shape is not implemented yet.");
       }
     }
 
