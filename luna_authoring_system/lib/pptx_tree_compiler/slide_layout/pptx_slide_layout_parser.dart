@@ -10,7 +10,7 @@ class PptxSlideLayoutParser {
 
   /// Get the placeholder shape from the parent slide layout that corresponds
   /// to the given parent index and placeholder index.
-  Json getPlaceholderShape(int parentIndex, int idx, String shapeType) {
+  Json getPlaceholderShape(int parentIndex, int placeholderIndex, String shapeType) {
     
     final parentShapeMap = _pptxLoader.getJsonFromPptx(
       'ppt/slideLayouts/slideLayout$parentIndex.xml',
@@ -22,15 +22,15 @@ class PptxSlideLayoutParser {
 
     if (parentShapeMap is List) {
       for (final shape in parentShapeMap) {
-        if (int.parse(shape[eNvSpPr][eNvPr][ePlaceholder][eIdx]) == idx) {
+        if (int.parse(shape[eNvSpPr][eNvPr][ePlaceholder][eIdx]) == placeholderIndex) {
           return shape;
         }
       }
     } else if (parentShapeMap is Map) {
-      if (int.parse(parentShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]) == idx) {
+      if (int.parse(parentShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]) == placeholderIndex) {
         return parentShapeMap as Json;
       }
     }
-    throw Exception('Placeholder shape with index $idx not found in parent slide layout.');
+    throw Exception('Placeholder shape with index $placeholderIndex not found in parent slide layout.');
   }
 }
