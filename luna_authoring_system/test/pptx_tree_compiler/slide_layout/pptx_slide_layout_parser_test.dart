@@ -7,7 +7,7 @@ import 'package:luna_core/utils/types.dart';
 import 'dart:io';
 
 void main() {
-  group('Text placeholder tests', () {
+  group('Text placeholder tests for 1 placeholder in slide layout - parentShapeMap is Map', () {
     final pptxFile = File('test/test_assets/1 textbox from placeholder in slide layout.pptx');
     PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
     PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
@@ -22,7 +22,7 @@ void main() {
       PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
 
       expect(
-        () => pptxSlideLayoutParser.getPlaceholderShape(12, -1, eTextboxShape),
+        () => pptxSlideLayoutParser.getPlaceholderShape(12, 0, eTextboxShape),
         throwsException,
       );
     });
@@ -35,6 +35,38 @@ void main() {
         throwsException,
       );
     });
+  });
 
+  group('Text placeholder tests for multiple placeholders in slide layout - parentShapeMap is List', () {
+    final pptxFile = File('test/test_assets/2 textbox from placeholder in slide layout.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
+
+    test('getPlaceholderShape returns correct placeholder shape for valid parent index and placeholder index', () {
+      Json placeholderShape1 = pptxSlideLayoutParser.getPlaceholderShape(12, 13, eTextboxShape);
+      Json placeholderShape2 = pptxSlideLayoutParser.getPlaceholderShape(12, 14, eTextboxShape);
+
+      expect(placeholderShape1, isNotNull);
+      expect(placeholderShape2, isNotNull);
+      
+    });
+
+    test('getPlaceholderShape throws exception for invalid placeholder index', () {
+      PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
+
+      expect(
+        () => pptxSlideLayoutParser.getPlaceholderShape(12, 0, eTextboxShape),
+        throwsException,
+      );
+    });
+
+    test('getPlaceholderShape throws exception for invalid parent index', () {
+      PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
+
+      expect(
+        () => pptxSlideLayoutParser.getPlaceholderShape(0, 14, eTextboxShape),
+        throwsException,
+      );
+    });
   });
 }
