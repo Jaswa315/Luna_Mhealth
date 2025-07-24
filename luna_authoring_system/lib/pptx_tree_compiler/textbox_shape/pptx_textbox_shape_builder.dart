@@ -18,15 +18,13 @@ import 'package:luna_core/utils/types.dart';
 /// that represent text boxes in a PowerPoint file.
 class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   final PptxTransformBuilder _pptxTransformBuilder;
-
   final PptxRelationshipParser _relationshipParser;
-
   final PptxSlideLayoutParser _pptxSlideLayoutParser;
-
-  PptxTextboxShapeBuilder(this._pptxTransformBuilder, this._relationshipParser, this._pptxSlideLayoutParser);
 
   late int _slideIndex;
   late PptxHierarchy _hierarchy;
+
+  PptxTextboxShapeBuilder(this._pptxTransformBuilder, this._relationshipParser, this._pptxSlideLayoutParser);
 
   set slideIndex(int value) => _slideIndex = value;
   set hierarchy(PptxHierarchy value) => _hierarchy = value;
