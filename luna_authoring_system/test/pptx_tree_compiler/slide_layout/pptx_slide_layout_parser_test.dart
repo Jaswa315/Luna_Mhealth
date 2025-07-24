@@ -35,6 +35,15 @@ void main() {
         throwsException,
       );
     });
+
+    test('getPlaceholderShape throws exception for invalid shapeType', () {
+      PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
+
+      expect(
+        () => pptxSlideLayoutParser.getPlaceholderShape(12, 10, 'nonExistentShapeType'),
+        throwsException,
+      );
+    });
   });
 
   group('Text placeholder tests for multiple placeholders in slide layout - parentShapeMap is List', () {
@@ -65,6 +74,15 @@ void main() {
 
       expect(
         () => pptxSlideLayoutParser.getPlaceholderShape(0, 14, eTextboxShape),
+        throwsException,
+      );
+    });
+
+    test('getPlaceholderShape throws exception for invalid shapeType', () {
+      PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
+
+      expect(
+        () => pptxSlideLayoutParser.getPlaceholderShape(12, 10, 'nonExistentShapeType'),
         throwsException,
       );
     });
