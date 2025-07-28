@@ -95,4 +95,60 @@ void main() {
       );
     });
   });
+
+  group('parseBoundingBoxFromLegacyJson', () {
+    test('should parse bounding box from legacy JSON correctly', () {
+      final legacyJson = {
+        'boundingBox': {
+          'topLeftCorner': {
+            'dx': 5.0, 
+            'dy': 10.0
+          },
+          'width': {
+            'unit': 'displayPixels',
+            'value': 300.0
+          },
+          'height': {
+            'unit': 'emu',
+            'value': 150
+          },
+        },
+      };
+
+      final boundingBox = BoundingBoxComponent.parseBoundingBoxFromLegacyJson(legacyJson);
+      expect(boundingBox.topLeftCorner.dx, 5.0);
+      expect(boundingBox.topLeftCorner.dy, 10.0);
+      expect(boundingBox.width.toString(), DisplayPixel(300.0).toString());
+      expect(boundingBox.height.toString(), EMU(150).toString());
+    });
+
+    test('should throw error when dy and height are missing', () {
+      final invalidLegacyJson = {
+        'boundingBox': {
+          'topLeftCorner': {'dx': 5.0},
+          'width': {'unit': 'displayPixels', 'value': 300.0},
+        },
+      };
+
+      expect(
+        () => BoundingBoxComponent.parseBoundingBoxFromLegacyJson(invalidLegacyJson),
+        throwsA(isA<TypeError>()),
+      );
+    });
+
+    test('should throw error when width unit is invalid', () {
+      final invalidLegacyJson = {
+        'boundingBox': {
+          'topLeftCorner': {'dx': 5.0, 'dy': 10.0},
+          'width': {'unit': 'invalidUnit', 'value': 300.0},
+          'height': {'unit': 'emu', 'value': 150},
+        },
+      };
+
+      expect(
+        () => BoundingBoxComponent.parseBoundingBoxFromLegacyJson(invalidLegacyJson),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+  });
 }

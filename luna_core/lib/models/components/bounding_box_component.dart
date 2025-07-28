@@ -33,11 +33,11 @@ class BoundingBoxComponent extends Component {
   static BoundingBox parseBoundingBoxFromLegacyJson(Json json) {
     return BoundingBox.fromJson({
       'topLeftCorner': {
-        'dx': (json['x'] as num).toDouble(),
-        'dy': (json['y'] as num).toDouble(),
+        'dx': (json['boundingBox']['topLeftCorner']['dx'] as num).toDouble(),
+        'dy': (json['boundingBox']['topLeftCorner']['dy'] as num).toDouble(),
       },
-      'width': json['width'],
-      'height': json['height'],
+      'width': json['boundingBox']['width'],
+      'height': json['boundingBox']['height'],
     });
   }
 
