@@ -1,16 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_builder.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constant.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constants.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
+import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 import 'package:mockito/mockito.dart';
 import '../../mocks/mock.mocks.dart';
+import 'dart:io';
 
 void main() {
   late PptxTextboxShapeBuilder pptxTextboxShapeBuilder;
   late MockPptxTransformBuilder mockPptxTransformBuilder;
+  late MockPptxRelationshipParser mockPptxRelationshipParser;
+  late MockPptxSlideLayoutParser mockPptxSlideLayoutParser;
   final MockTransform mockTransform = MockTransform();
   const Json mockTransformMap = {"": {}};
   const String mockText = "Hello World";
@@ -84,21 +93,6 @@ void main() {
     },
   };
 
-  const Json mockTextboxNoTransformShapeMap = {
-    eShapeProperty: {
-    },
-    eTextBody: {
-      eP: {
-        eR: {
-            eRPr: {
-              eLang: englishLanguageCode,
-            },
-            eT: mockText,
-        },
-      },
-    },
-  };
-
   const Json mockTextboxWithEmptyParagraphShapeMap = {
     eShapeProperty: {
       eTransform: mockTransformMap,
@@ -123,8 +117,10 @@ void main() {
     mockPptxTransformBuilder = MockPptxTransformBuilder();
     when(mockPptxTransformBuilder.getTransform(mockTransformMap))
         .thenReturn(mockTransform);
+    mockPptxRelationshipParser = MockPptxRelationshipParser();
+    mockPptxSlideLayoutParser = MockPptxSlideLayoutParser();
     pptxTextboxShapeBuilder =
-        PptxTextboxShapeBuilder(mockPptxTransformBuilder);
+        PptxTextboxShapeBuilder(mockPptxTransformBuilder, mockPptxRelationshipParser, mockPptxSlideLayoutParser);
   });
 
   test('A text box shape with single paragraph and text run is parsed', () async {
@@ -197,15 +193,6 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText);
   });
 
-  test('A text box shape without transform property is parsed', () async {
-    Json mockTextboxShapeMap = mockTextboxNoTransformShapeMap;
-
-    List<Shape> textboxShapes =
-        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
-
-    expect(textboxShapes.length, 1);
-  });
-
   test('A text box shape with empty paragraph is parsed', () async {
     Json mockTextboxShapeMap = mockTextboxWithEmptyParagraphShapeMap;
 
@@ -221,5 +208,33 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText);
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
     expect(textboxShape.textbody.paragraphs[1].runs.length, 0);
+  });
+
+  test('A text box shape from placeholder is parsed', () async {
+    final pptxFile = File('test/test_assets/1 textbox from placeholder in slide layout.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxTextboxShapeBuilder pptxTextboxShapeBuilder = PptxTextboxShapeBuilder(
+        PptxTransformBuilder(), PptxRelationshipParser(pptxLoader), PptxSlideLayoutParser(pptxLoader));
+
+    final shapeTree = pptxLoader.getJsonFromPptx(
+              'ppt/slides/slide1.xml')['p:sld']['p:cSld']
+          ['p:spTree']['p:sp'];
+      pptxTextboxShapeBuilder.slideIndex = 1;
+      pptxTextboxShapeBuilder.hierarchy = PptxHierarchy.slide;
+
+    final shapes = pptxTextboxShapeBuilder.getShapes(shapeTree);
+
+    expect(shapes.length, 1);
+    expect(shapes.first, isA<TextboxShape>());
+    TextboxShape textboxShape = shapes.first as TextboxShape;
+    expect(textboxShape.type, ShapeType.textbox);
+    expect(textboxShape.textbody.paragraphs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Hello World");
+    expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
+    expect((textboxShape.transform.offset.x as EMU).value, 1247775);
+    expect((textboxShape.transform.offset.y as EMU).value, 561975);
+    expect((textboxShape.transform.size.x as EMU).value, 1961417);
+    expect((textboxShape.transform.size.y as EMU).value, 818417);
   });
 }
