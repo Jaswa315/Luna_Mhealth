@@ -1,3 +1,5 @@
+import 'package:luna_authoring_system/custom_exception_types/parent_shape_map_not_found_exception.dart';
+import 'package:luna_authoring_system/custom_exception_types/placeholder_shape_not_found_exception.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_constants.dart';
 import 'package:luna_core/utils/types.dart';
@@ -17,7 +19,7 @@ class PptxSlideLayoutParser {
     )[eSlideLayout][eCommonSlideData][eShapeTree][shapeType];
 
     if (parentShapeMap == null) {
-      throw Exception('Parent shape map is null for index $parentIndex');
+      throw ParentShapeMapNotFoundException(parentIndex, shapeType);
     }
 
     if (parentShapeMap is List) {
@@ -31,6 +33,6 @@ class PptxSlideLayoutParser {
         return parentShapeMap as Json;
       }
     }
-    throw Exception('Placeholder shape with index $placeholderIndex not found in parent slide layout.');
+    throw PlaceholderShapeNotFoundException(placeholderIndex);
   }
 }

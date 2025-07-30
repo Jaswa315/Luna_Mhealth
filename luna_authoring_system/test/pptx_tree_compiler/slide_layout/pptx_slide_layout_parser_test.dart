@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_authoring_system/custom_exception_types/parent_shape_map_not_found_exception.dart';
+import 'package:luna_authoring_system/custom_exception_types/placeholder_shape_not_found_exception.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_constants.dart';
@@ -23,7 +25,7 @@ void main() {
 
       expect(
         () => pptxSlideLayoutParser.getPlaceholderShape(12, 0, eTextboxShape),
-        throwsException,
+        throwsA(isA<PlaceholderShapeNotFoundException>()),
       );
     });
 
@@ -41,7 +43,7 @@ void main() {
 
       expect(
         () => pptxSlideLayoutParser.getPlaceholderShape(12, 10, 'nonExistentShapeType'),
-        throwsException,
+        throwsA(isA<ParentShapeMapNotFoundException>()),
       );
     });
   });
@@ -65,7 +67,7 @@ void main() {
 
       expect(
         () => pptxSlideLayoutParser.getPlaceholderShape(12, 0, eTextboxShape),
-        throwsException,
+        throwsA(isA<PlaceholderShapeNotFoundException>()),
       );
     });
 
@@ -83,7 +85,7 @@ void main() {
 
       expect(
         () => pptxSlideLayoutParser.getPlaceholderShape(12, 10, 'nonExistentShapeType'),
-        throwsException,
+        throwsA(isA<ParentShapeMapNotFoundException>()),
       );
     });
   });
