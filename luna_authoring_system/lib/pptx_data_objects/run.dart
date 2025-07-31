@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
 
 /// Represents the text run element (a:r) of a textbody element in PowerPoint.
 /// This class contains the run of text within the containing text body
-/// and its properties such as language.
+/// and its properties such as language, font size, italics, bold, and underline.
 class Run {
-  /// Text
   final String text;
-
-  /// In Microsoft PowerPoint, an ID called ST_TextLanguageID is used to specify 
-  /// the language of a text run.
-  /// See more information at:
-  /// https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/b8cc7825-aa4b-49e1-98e7-a2ee5132ab86
-  /// This ID consists of an ISO 639-1 language code followed by an ISO 3166-1 alpha-2 country code.
-  /// The languageID property is represented as Flutter's Locale object because it already follows
-  /// the same languageCode-countryCode format.
   final Locale languageID;
+  final SimpleTypeTextFontSize fontSize;
+  final bool bold;
+  final bool italics;
+  final bool underline;
 
   Run({
     required this.languageID,
     required this.text,
+    required this.fontSize,
+    required this.bold,
+    required this.italics,
+    required this.underline,
   });
 
   /// Returns the languageID as a string (e.g., "en-US").
