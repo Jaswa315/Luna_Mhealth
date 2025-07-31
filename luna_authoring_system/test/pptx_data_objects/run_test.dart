@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 
 void main() {
   group('Tests for Run class', () {
@@ -10,6 +11,8 @@ void main() {
     const invalidLanguageID = Locale('xx', 'xx');
     const testTextEnglish = 'Sample text';
     var validFontSize = SimpleTypeTextFontSize(1200);
+    var validTextUnderlineType = SimpleTypeTextUnderlineType.none;
+    var validTextUnderlineType1 = SimpleTypeTextUnderlineType.sng;
 
     test('Constructor initializes with correct properties for lang and country code', () {
       final run1 = Run(
@@ -18,7 +21,7 @@ void main() {
         fontSize: validFontSize,
         bold: false,
         italics: false,
-        underline: false);
+        underline: validTextUnderlineType);
 
       final run2 = Run(
         languageID: englishUS,
@@ -26,7 +29,7 @@ void main() {
         fontSize: validFontSize,
         bold: true,
         italics: true,
-        underline: true);
+        underline: validTextUnderlineType1);
 
       expect(run1.languageID.languageCode, 'en');
       expect(run1.languageID.countryCode, 'US');
@@ -35,7 +38,7 @@ void main() {
       expect(run1.fontSize, validFontSize);
       expect(run1.bold, false);
       expect(run1.italics, false);
-      expect(run1.underline, false);
+      expect(run1.underline, validTextUnderlineType);
 
       expect(run2.languageID.languageCode, 'en');
       expect(run2.languageID.countryCode, 'US');
@@ -44,7 +47,7 @@ void main() {
       expect(run2.fontSize, validFontSize);
       expect(run2.bold, true);
       expect(run2.italics, true);
-      expect(run2.underline, true);
+      expect(run2.underline, validTextUnderlineType1);
     });
 
     test('Constructor initializes with invalid languageID', () {
@@ -53,7 +56,7 @@ void main() {
       fontSize: validFontSize,
       bold: false,
       italics: false,
-      underline: false);
+      underline: validTextUnderlineType);
       expect(run.languageID.languageCode, 'xx');
       expect(run.languageID.countryCode, 'xx');
       expect(run.languageCode, 'xx-xx');
@@ -61,7 +64,7 @@ void main() {
       expect(run.fontSize, validFontSize);
       expect(run.bold, false);
       expect(run.italics, false);
-      expect(run.underline, false);
+      expect(run.underline, validTextUnderlineType);
     });
 
     test('Constructor throws error from invalid font size(0)', () {
@@ -72,7 +75,7 @@ void main() {
           fontSize: SimpleTypeTextFontSize(0),
           bold: false,
           italics: false,
-          underline: false,
+          underline: validTextUnderlineType,
         ),
         throwsA(isA<ArgumentError>()),
       );
