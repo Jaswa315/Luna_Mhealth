@@ -41,7 +41,8 @@ void main() {
         eR: {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800'
+              eSz: '1800',
+              eB: '1',
             },
             eT: mockText,
         },
@@ -63,14 +64,14 @@ void main() {
           {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800'
+              eSz: '1800',
             },
             eT: mockText1,
           },
           {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800'
+              eSz: '1800',
             },
             eT: mockText2,
           },
@@ -93,7 +94,8 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800'
+              eSz: '1800',
+              eB: '1',
             },
             eT: mockText1,
           },
@@ -102,7 +104,7 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800'
+              eSz: '1800',
             },
             eT: mockText2,
           },
@@ -125,7 +127,7 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800'
+              eSz: '1800',
             },
             eT: mockText,
           },
@@ -161,6 +163,7 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText);
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
     expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1800);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].bold, true);
   });
 
   test('A text box shape with single paragraph and multiple text runs is parsed', () async {
@@ -176,6 +179,7 @@ void main() {
     expect(textboxShape.textbody.paragraphs.length, 1);
     expect(textboxShape.textbody.paragraphs[0].runs.length, 2);
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].bold, false);
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
     expect(textboxShape.textbody.paragraphs[0].runs[1].text, mockText2);
     expect(textboxShape.textbody.paragraphs[0].runs[1].languageCode, englishLanguageCode);
@@ -261,5 +265,6 @@ void main() {
     expect((textboxShape.transform.size.x as EMU).value, 2778125);
     expect((textboxShape.transform.size.y as EMU).value, 1081088);
     expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 2000);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].bold, true);
   });
 }

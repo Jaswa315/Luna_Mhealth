@@ -8,11 +8,13 @@ class Run {
   final String text;
   final Locale languageID;
   final SimpleTypeTextFontSize fontSize;
+  final bool bold;
 
   Run({
     required this.languageID,
     required this.text,
     required this.fontSize,
+    required this.bold,
   });
 
   /// Returns the languageID as a string (e.g., "en-US").

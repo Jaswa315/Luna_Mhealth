@@ -16,24 +16,27 @@ void main() {
       final run1 = Run(
         languageID: englishUS,
         text: testTextEnglish,
-        fontSize: validFontSize);
+        fontSize: validFontSize
+        bold: false);
 
       final run2 = Run(
         languageID: englishUS,
         text: testTextEnglish,
-        fontSize: validFontSize);
+        fontSize: validFontSize
 
       expect(run1.languageID.languageCode, 'en');
       expect(run1.languageID.countryCode, 'US');
       expect(run1.languageCode, 'en-US');
       expect(run1.text, testTextEnglish);
       expect(run1.fontSize, validFontSize);
+      expect(run1.bold, false);
 
       expect(run2.languageID.languageCode, 'en');
       expect(run2.languageID.countryCode, 'US');
       expect(run2.languageCode, 'en-US');
       expect(run2.text, testTextEnglish);
       expect(run2.fontSize, validFontSize);
+      expect(run2.bold, true);
     });
 
     test('Constructor initializes with invalid languageID', () {
@@ -45,6 +48,7 @@ void main() {
       expect(run.languageCode, 'xx-xx');
       expect(run.text, testTextEnglish);
       expect(run.fontSize, validFontSize);
+      expect(run.bold, false);
     });
 
     test('Constructor throws error from invalid font size(0)', () {
@@ -53,6 +57,7 @@ void main() {
           languageID: englishUS,
           text: testTextEnglish,
           fontSize: SimpleTypeTextFontSize(0),
+          bold: false,
         ),
         throwsA(isA<ArgumentError>()),
       );

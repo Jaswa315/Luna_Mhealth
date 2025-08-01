@@ -42,6 +42,15 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return SimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
   }
 
+  bool _getBoldFromSlideLayout(int placeholderIndex) {
+    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
+    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
+      parentIndex, placeholderIndex, eTextboxShape,
+    );
+
+    return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eB]?.toString() == "1";
+  }
+
   /// Builds a Run object from the provided run map.
   Run _getRun(Json runMap, int placeholderIndex) {
     String text = runMap[eT];
@@ -54,11 +63,18 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     } else {
       fontSize = SimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
     }
+    bool isBold;
+    if(placeholderIndex != -1) {
+      isBold = _getBoldFromSlideLayout(placeholderIndex);
+    } else {
+      isBold = runMap[eRPr][eB]?.toString() == "1";
+    }
 
     return Run(
       languageID: languageID,
       text: text,
       fontSize: fontSize,
+      bold: isBold,
     );
   }
 
