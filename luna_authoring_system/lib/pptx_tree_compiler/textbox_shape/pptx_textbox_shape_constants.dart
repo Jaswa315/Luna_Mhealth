@@ -48,3 +48,26 @@ const String eTextboxShape = 'p:sp';
 
 /// The XML element for an instance of a slide layout in the PowerPoint file.
 const String eSlideLayout = 'p:sldLayout';
+
+/// The XML attribute to specifiy whether the text run is bold.
+const String eB = '_b';
+
+/// The XML attribute to specify whether the text run is italicized.
+const String eI = '_i';
+
+/// The XML attribute to specify whether the text run is underlined.
+const String eU = '_u';
+
+/// The XML attribute to specify the font size of the text run.
+const String eSz = '_sz';
+
+/// The XML element specifies the list of styles associated with this body of text.
+const String eLstStyle = 'a:lstStyle';
+
+/// The XML element specifies all paragraph level text properties for
+/// all elements that have the attribute <lvl="0">. 
+const String eLvl1pPr = 'a:lvl1pPr';
+
+/// The XML element contains all default run level text properties for
+/// the text runs within a containing paragraph.
+const String eDefRPr = 'a:defRPr';

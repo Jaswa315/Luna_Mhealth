@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart' hide Transform;
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
@@ -31,41 +32,58 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return _pptxTransformBuilder.getTransform(transformMap);
   }
 
+  /// Gets the font size from the parent slide layout placeholder shape
+  SimpleTypeTextFontSize _getFontSizeFromSlideLayout(int placeholderIndex) {
+    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
+    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
+      parentIndex, placeholderIndex, eTextboxShape,
+    );
+
+    return SimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
+  }
+
   /// Builds a Run object from the provided run map.
-  Run _getRun(Json runMap) {
+  Run _getRun(Json runMap, int placeholderIndex) {
     String text = runMap[eT];
     String lang = runMap[eRPr][eLang] ?? '';
     List<String> codes = lang.split('-');
     Locale languageID = Locale(codes[0], codes[1]);
+    SimpleTypeTextFontSize fontSize;
+    if (runMap[eRPr][eSz] == null) { // if font size is not specified in slide xml, need to parse slide layout
+      fontSize = _getFontSizeFromSlideLayout(placeholderIndex);
+    } else {
+      fontSize = SimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
+    }
 
     return Run(
       languageID: languageID,
       text: text,
+      fontSize: fontSize,
     );
   }
 
   /// Extracts runs from the provided run map and returns a list of Run objects.
-  List<Run> _getRuns(dynamic runMap) {
+  List<Run> _getRuns(dynamic runMap, int placeholderIndex) {
     List<Run> runs = [];
 
     if (runMap is List) {
       for (Json run in runMap) {
-        runs.add(_getRun(run));
+        runs.add(_getRun(run, placeholderIndex));
       }
     } else if (runMap is Map) {
-      runs.add(_getRun(runMap as Json));
+      runs.add(_getRun(runMap as Json, placeholderIndex));
     }
 
     return runs;
   }
 
   /// Builds a Paragraph object from the provided paragraph map.
-  Paragraph _getParagraph(Map<dynamic, dynamic> paragraphMap) {
+  Paragraph _getParagraph(Map<dynamic, dynamic> paragraphMap, int placeholderIndex) {
     // If the paragraph map does not contain the 'eR' key, return an empty Paragraph.
     if (paragraphMap[eR] == null) {
       return Paragraph(runs: []);
     }
-    List<Run> runs = _getRuns(paragraphMap[eR]);
+    List<Run> runs = _getRuns(paragraphMap[eR], placeholderIndex);
 
     return Paragraph(
       runs: runs,
@@ -73,22 +91,22 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   }
 
   /// Extracts paragraphs from the provided paragraph map and returns a list of Paragraph objects.
-  List<Paragraph> _getParagraphs(dynamic paragraphMap) {
+  List<Paragraph> _getParagraphs(dynamic paragraphMap, int placeholderIndex) {
     List<Paragraph> paragraphs = [];
     if (paragraphMap is List) {
       for (var paragraph in paragraphMap) {
         if (paragraph is Map) {
-          paragraphs.add(_getParagraph(paragraph));
+          paragraphs.add(_getParagraph(paragraph, placeholderIndex));
         }
       }
     } else if (paragraphMap is Map) {
-      paragraphs.add(_getParagraph(paragraphMap as Json));
+      paragraphs.add(_getParagraph(paragraphMap as Json, placeholderIndex));
     }
 
     return paragraphs;
   }
 
-  /// Gets transform from corresponding parent placeholder
+  /// Gets transform from corresponding parent slide layout placeholder
   Transform _getTransformFromSlideLayout(Json shapeMap) {
     int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
     int placeholderIndex = int.parse(shapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
@@ -113,7 +131,12 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       }
     }
 
-    List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP]);
+    int placeholderIndex = -1;
+    if (textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
+      placeholderIndex = int.parse(textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
+    }
+
+    List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP], placeholderIndex);
 
     Textbody textbody = Textbody(
       paragraphs: paragraphs,

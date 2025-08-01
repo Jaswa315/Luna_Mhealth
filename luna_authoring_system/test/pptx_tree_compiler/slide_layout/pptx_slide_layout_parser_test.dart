@@ -15,7 +15,7 @@ void main() {
     PptxSlideLayoutParser pptxSlideLayoutParser = PptxSlideLayoutParser(pptxLoader);
 
     test('getPlaceholderShape returns correct placeholder shape for valid parent index and placeholder index', () {
-      Json placeholderShape = pptxSlideLayoutParser.getPlaceholderShape(12, 10, eTextboxShape);
+      Json placeholderShape = pptxSlideLayoutParser.getPlaceholderShape(12, 11, eTextboxShape);
 
       expect(placeholderShape, isNotNull);
     });

@@ -9,6 +9,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 import 'package:mockito/mockito.dart';
@@ -28,6 +29,10 @@ void main() {
   const String englishLanguageCode = "en-US";
 
   const Json mockTextboxSingleTextRunShapeMap = {
+    eNvSpPr: {
+      eNvPr: {
+      },
+    },
     eShapeProperty: {
       eTransform: mockTransformMap,
     },
@@ -36,6 +41,7 @@ void main() {
         eR: {
             eRPr: {
               eLang: englishLanguageCode,
+              eSz: '1800'
             },
             eT: mockText,
         },
@@ -44,6 +50,10 @@ void main() {
   };
 
   const Json mockTextboxMultiTextRunShapeMap = {
+    eNvSpPr: {
+      eNvPr: {
+      },
+    },
     eShapeProperty: {
       eTransform: mockTransformMap,
     },
@@ -53,12 +63,14 @@ void main() {
           {
             eRPr: {
               eLang: englishLanguageCode,
+              eSz: '1800'
             },
             eT: mockText1,
           },
           {
             eRPr: {
               eLang: englishLanguageCode,
+              eSz: '1800'
             },
             eT: mockText2,
           },
@@ -68,6 +80,10 @@ void main() {
   };
 
   const Json mockTextboxMultiParagraphShapeMap = {
+    eNvSpPr: {
+      eNvPr: {
+      },
+    },
     eShapeProperty: {
       eTransform: mockTransformMap,
     },
@@ -77,6 +93,7 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
+              eSz: '1800'
             },
             eT: mockText1,
           },
@@ -85,6 +102,7 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
+              eSz: '1800'
             },
             eT: mockText2,
           },
@@ -94,6 +112,10 @@ void main() {
   };
 
   const Json mockTextboxWithEmptyParagraphShapeMap = {
+    eNvSpPr: {
+      eNvPr: {
+      },
+    },
     eShapeProperty: {
       eTransform: mockTransformMap,
     },
@@ -103,6 +125,7 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
+              eSz: '1800'
             },
             eT: mockText,
           },
@@ -137,6 +160,7 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText);
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1800);
   });
 
   test('A text box shape with single paragraph and multiple text runs is parsed', () async {
@@ -232,9 +256,10 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Hello World");
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
-    expect((textboxShape.transform.offset.x as EMU).value, 1247775);
-    expect((textboxShape.transform.offset.y as EMU).value, 561975);
-    expect((textboxShape.transform.size.x as EMU).value, 1961417);
-    expect((textboxShape.transform.size.y as EMU).value, 818417);
+    expect((textboxShape.transform.offset.x as EMU).value, 1274763);
+    expect((textboxShape.transform.offset.y as EMU).value, 1644650);
+    expect((textboxShape.transform.size.x as EMU).value, 2778125);
+    expect((textboxShape.transform.size.y as EMU).value, 1081088);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 2000);
   });
 }
