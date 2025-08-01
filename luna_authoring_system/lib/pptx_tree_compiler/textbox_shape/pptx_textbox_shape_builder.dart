@@ -64,7 +64,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       fontSize = SimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
     }
     bool isBold;
-    if(placeholderIndex != -1) {
+    if(placeholderIndex != -1 && runMap[eRPr][eB] == null) {
       isBold = _getBoldFromSlideLayout(placeholderIndex);
     } else {
       isBold = runMap[eRPr][eB]?.toString() == "1";
