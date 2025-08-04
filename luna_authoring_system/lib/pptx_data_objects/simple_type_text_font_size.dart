@@ -1,6 +1,6 @@
 /// This class represents the ST_TextFontSize value in the PowerPoint XML.
 /// The value of SimpleTypeTextFontSize is an integer that 
-/// represents the font size in points. 
+/// represents the font size in hundredths of a point. 
 /// For example, a value of 1200 represents a font size of 12.
 /// Its minimum value is 100 and maximum value is 400000.
 /// See more information about the unit in this documentation:
