@@ -134,4 +134,9 @@ luna_authoring_system/test\\test_output/images
 luna_authoring_system/sample
 luna_authoring_system/test/output
 poc_sandboxes/flutter_blue_app/
+# Sub gitignores and analysis_options
+# Don't ignore root git ignore
+**/.gitignore
+!/.gitignore 
+*/analysis_options.yaml
 
