@@ -33,41 +33,35 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return _pptxTransformBuilder.getTransform(transformMap);
   }
 
+  Json _getPlaceholderShape(int placeholderIndex) {
+    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
+
+    return _pptxSlideLayoutParser.getPlaceholderShape(parentIndex, placeholderIndex, eTextboxShape);
+  }
+
   /// Gets the font size from the parent slide layout placeholder shape
   SimpleTypeTextFontSize _getFontSizeFromSlideLayout(int placeholderIndex) {
-    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
-    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
-      parentIndex, placeholderIndex, eTextboxShape,
-    );
+    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
 
     return SimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
   }
 
   /// Gets the bold property from the parent slide layout placeholder shape
   bool _getBoldFromSlideLayout(int placeholderIndex) {
-    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
-    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
-      parentIndex, placeholderIndex, eTextboxShape,
-    );
+    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
 
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eB]?.toString() == "1";
   }
 
   /// Gets the italics property from the parent slide layout placeholder shape
   bool _getItalicsFromSlideLayout(int placeholderIndex) {
-    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
-    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
-      parentIndex, placeholderIndex, eTextboxShape,
-    );
+    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
 
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eI]?.toString() == "1";
   }
 
   SimpleTypeTextUnderlineType _getTextUnderlineTypeFromSlideLayout(int placeholderIndex) {
-    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
-    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
-      parentIndex, placeholderIndex, eTextboxShape,
-    );
+    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
 
     String underlineValue = placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eU]?.toString() ?? 'none';
 
