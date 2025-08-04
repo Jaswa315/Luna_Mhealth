@@ -8,6 +8,8 @@ import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/units/point.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 
 void main() {
   group('Tests for Textbody class', () {
@@ -16,7 +18,9 @@ void main() {
     const text = 'Hello';
 
     // Shared test objects
-    final run = Run(languageID: lang, text: text);
+    final run = Run(languageID: lang, text: text, 
+      fontSize: SimpleTypeTextFontSize(1200), bold: false, italics: false, 
+      underlineType: SimpleTypeTextUnderlineType.none);
     final paragraph = Paragraph(runs: [run]);
     final textbody = Textbody(paragraphs: [paragraph]);
     final transform = Transform(
