@@ -43,6 +43,7 @@ void main() {
               eLang: englishLanguageCode,
               eSz: '1800',
               eB: '1',
+              eI: '1',
             },
             eT: mockText,
         },
@@ -164,6 +165,7 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
     expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1800);
     expect(textboxShape.textbody.paragraphs[0].runs[0].bold, true);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].italics, true);
   });
 
   test('A text box shape with single paragraph and multiple text runs is parsed', () async {
@@ -266,5 +268,6 @@ void main() {
     expect((textboxShape.transform.size.y as EMU).value, 1081088);
     expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 2000);
     expect(textboxShape.textbody.paragraphs[0].runs[0].bold, true);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].italics, false);
   });
 }

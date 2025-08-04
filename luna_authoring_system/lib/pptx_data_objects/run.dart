@@ -9,12 +9,14 @@ class Run {
   final Locale languageID;
   final SimpleTypeTextFontSize fontSize;
   final bool bold;
+  final bool italics;
 
   Run({
     required this.languageID,
     required this.text,
     required this.fontSize,
     required this.bold,
+    required this.italics,
   });
 
   /// Returns the languageID as a string (e.g., "en-US").

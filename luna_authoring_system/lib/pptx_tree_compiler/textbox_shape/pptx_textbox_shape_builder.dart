@@ -42,6 +42,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return SimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
   }
 
+  /// Gets the bold property from the parent slide layout placeholder shape
   bool _getBoldFromSlideLayout(int placeholderIndex) {
     int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
     Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
@@ -51,18 +52,29 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eB]?.toString() == "1";
   }
 
+  bool _getItalicsFromSlideLayout(int placeholderIndex) {
+    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
+    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
+      parentIndex, placeholderIndex, eTextboxShape,
+    );
+
+    return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eI]?.toString() == "1";
+  }
+
   /// Builds a Run object from the provided run map.
   Run _getRun(Json runMap, int placeholderIndex) {
     String text = runMap[eT];
     String lang = runMap[eRPr][eLang] ?? '';
     List<String> codes = lang.split('-');
     Locale languageID = Locale(codes[0], codes[1]);
+
     SimpleTypeTextFontSize fontSize;
     if (runMap[eRPr][eSz] == null) { // if font size is not specified in slide xml, need to parse slide layout
       fontSize = _getFontSizeFromSlideLayout(placeholderIndex);
     } else {
       fontSize = SimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
     }
+
     bool isBold;
     if(placeholderIndex != -1 && runMap[eRPr][eB] == null) {
       isBold = _getBoldFromSlideLayout(placeholderIndex);
@@ -70,11 +82,19 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       isBold = runMap[eRPr][eB]?.toString() == "1";
     }
 
+    bool isItalic;
+    if(placeholderIndex != -1 && runMap[eRPr][eI] == null) {
+      isItalic = _getItalicsFromSlideLayout(placeholderIndex);
+    } else {
+      isItalic = runMap[eRPr][eI]?.toString() == "1";
+    }
+
     return Run(
       languageID: languageID,
       text: text,
       fontSize: fontSize,
       bold: isBold,
+      italics: isItalic,
     );
   }
 
