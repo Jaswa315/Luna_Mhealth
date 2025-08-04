@@ -67,7 +67,7 @@ enum SimpleTypeTextUnderlineType {
       return SimpleTypeTextUnderlineType.values.firstWhere(
         (type) => type.xmlValue == xmlValue,
       );
-    } on StateError catch (e) {
+    } on StateError {
       throw ArgumentError('Unknown TextUnderlineType value: "$xmlValue"');
     }
   }
