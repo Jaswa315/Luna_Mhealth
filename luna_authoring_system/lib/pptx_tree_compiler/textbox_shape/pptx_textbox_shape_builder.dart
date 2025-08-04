@@ -3,6 +3,7 @@ import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
@@ -52,6 +53,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eB]?.toString() == "1";
   }
 
+  /// Gets the italics property from the parent slide layout placeholder shape
   bool _getItalicsFromSlideLayout(int placeholderIndex) {
     int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
     Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
@@ -59,6 +61,17 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     );
 
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eI]?.toString() == "1";
+  }
+
+  SimpleTypeTextUnderlineType? _getTextUnderlineTypeFromSlideLayout(int placeholderIndex) {
+    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
+    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
+      parentIndex, placeholderIndex, eTextboxShape,
+    );
+
+    String underlineValue = placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eU]?.toString() ?? 'none';
+
+    return SimpleTypeTextUnderlineType.fromXml(underlineValue);
   }
 
   /// Builds a Run object from the provided run map.
@@ -89,12 +102,21 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       isItalic = runMap[eRPr][eI]?.toString() == "1";
     }
 
+    SimpleTypeTextUnderlineType? underlineType;
+    if(placeholderIndex != -1 && runMap[eRPr][eU] == null) {
+      underlineType = _getTextUnderlineTypeFromSlideLayout(placeholderIndex);
+    } else {
+      String underlineValue = runMap[eRPr][eU]?.toString() ?? 'none';
+      underlineType = SimpleTypeTextUnderlineType.fromXml(underlineValue);
+    }
+
     return Run(
       languageID: languageID,
       text: text,
       fontSize: fontSize,
       bold: isBold,
       italics: isItalic,
+      underlineType: underlineType ?? SimpleTypeTextUnderlineType.none,
     );
   }
 

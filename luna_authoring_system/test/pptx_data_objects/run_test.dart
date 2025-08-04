@@ -18,14 +18,16 @@ void main() {
         text: testTextEnglish,
         fontSize: validFontSize,
         bold: false,
-        italics: false);
+        italics: false,
+        underlineType: SimpleTypeTextUnderlineType.none);
 
       final run2 = Run(
         languageID: englishUS,
         text: testTextEnglish,
         fontSize: validFontSize,
         bold: true,
-        italics: true);
+        italics: true,
+        underlineType: SimpleTypeTextUnderlineType.sng);
 
       expect(run1.languageID.languageCode, 'en');
       expect(run1.languageID.countryCode, 'US');
@@ -34,6 +36,7 @@ void main() {
       expect(run1.fontSize, validFontSize);
       expect(run1.bold, false);
       expect(run1.italics, false);
+      expect(run1.underlineType, SimpleTypeTextUnderlineType.none);
 
       expect(run2.languageID.languageCode, 'en');
       expect(run2.languageID.countryCode, 'US');
@@ -42,6 +45,7 @@ void main() {
       expect(run2.fontSize, validFontSize);
       expect(run2.bold, true);
       expect(run2.italics, true);
+      expect(run2.underlineType, SimpleTypeTextUnderlineType.sng);
     });
 
     test('Constructor initializes with invalid languageID', () {
@@ -49,7 +53,8 @@ void main() {
       text: testTextEnglish,
       fontSize: validFontSize,
       bold: false,
-      italics: false);
+      italics: false,
+      underlineType: SimpleTypeTextUnderlineType.dbl);
       expect(run.languageID.languageCode, 'xx');
       expect(run.languageID.countryCode, 'xx');
       expect(run.languageCode, 'xx-xx');
@@ -57,6 +62,7 @@ void main() {
       expect(run.fontSize, validFontSize);
       expect(run.bold, false);
       expect(run.italics, false);
+      expect(run.underlineType, SimpleTypeTextUnderlineType.dbl);
     });
 
     test('Constructor throws error from invalid font size(0)', () {
@@ -67,6 +73,7 @@ void main() {
           fontSize: SimpleTypeTextFontSize(0),
           bold: false,
           italics: false,
+          underlineType: SimpleTypeTextUnderlineType.none,
         ),
         throwsA(isA<ArgumentError>()),
       );

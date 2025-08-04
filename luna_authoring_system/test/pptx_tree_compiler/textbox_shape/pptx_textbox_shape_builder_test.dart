@@ -10,6 +10,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_text
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 import 'package:luna_core/units/emu.dart';
 import 'package:luna_core/utils/types.dart';
 import 'package:mockito/mockito.dart';
@@ -44,6 +45,7 @@ void main() {
               eSz: '1800',
               eB: '1',
               eI: '1',
+              eU: 'sng',
             },
             eT: mockText,
         },
@@ -73,6 +75,7 @@ void main() {
             eRPr: {
               eLang: englishLanguageCode,
               eSz: '1800',
+              eU: 'dash',
             },
             eT: mockText2,
           },
@@ -166,6 +169,7 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1800);
     expect(textboxShape.textbody.paragraphs[0].runs[0].bold, true);
     expect(textboxShape.textbody.paragraphs[0].runs[0].italics, true);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].underlineType, SimpleTypeTextUnderlineType.sng);
   });
 
   test('A text box shape with single paragraph and multiple text runs is parsed', () async {
@@ -182,9 +186,13 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs.length, 2);
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText1);
     expect(textboxShape.textbody.paragraphs[0].runs[0].bold, false);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].italics, false);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].underlineType, SimpleTypeTextUnderlineType.none);
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
     expect(textboxShape.textbody.paragraphs[0].runs[1].text, mockText2);
     expect(textboxShape.textbody.paragraphs[0].runs[1].languageCode, englishLanguageCode);
+    expect(textboxShape.textbody.paragraphs[0].runs[1].fontSize.value, 1800);
+    expect(textboxShape.textbody.paragraphs[0].runs[1].underlineType, SimpleTypeTextUnderlineType.dash);
   });
 
   test('A text box shape with multiple paragraphs and single text run is parsed', () async {
@@ -269,5 +277,6 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 2000);
     expect(textboxShape.textbody.paragraphs[0].runs[0].bold, true);
     expect(textboxShape.textbody.paragraphs[0].runs[0].italics, false);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].underlineType, SimpleTypeTextUnderlineType.none);
   });
 }
