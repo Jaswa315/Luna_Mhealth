@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
-import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_simple_type_text_font_size.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 
 void main() {
@@ -11,7 +11,7 @@ void main() {
       final run1 = Run(
         languageID: Locale('en', 'US'),
         text: 'Sample text',
-        fontSize: SimpleTypeTextFontSize(1200),
+        fontSize: PptxSimpleTypeTextFontSize(1200),
         bold: false,
         italics: false,
         underlineType: SimpleTypeTextUnderlineType.none);
@@ -29,7 +29,7 @@ void main() {
     test('Constructor initializes with invalid languageID', () {
       final run = Run(languageID: Locale('xx', 'xx'),
       text: 'Sample text',
-      fontSize: SimpleTypeTextFontSize(1200),
+      fontSize: PptxSimpleTypeTextFontSize(1200),
       bold: false,
       italics: false,
       underlineType: SimpleTypeTextUnderlineType.dbl);
@@ -48,7 +48,7 @@ void main() {
         () => Run(
           languageID: Locale('en', 'US'),
           text: 'Sample text',
-          fontSize: SimpleTypeTextFontSize(0),
+          fontSize: PptxSimpleTypeTextFontSize(0),
           bold: false,
           italics: false,
           underlineType: SimpleTypeTextUnderlineType.none,

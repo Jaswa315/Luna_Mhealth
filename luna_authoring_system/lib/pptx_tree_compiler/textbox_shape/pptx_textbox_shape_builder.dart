@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart' hide Transform;
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_simple_type_text_font_size.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
-import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
@@ -40,10 +40,10 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   }
 
   /// Gets the font size from the parent slide layout placeholder shape
-  SimpleTypeTextFontSize _getFontSizeFromSlideLayout(int placeholderIndex) {
+  PptxSimpleTypeTextFontSize _getFontSizeFromSlideLayout(int placeholderIndex) {
     Json placeholderShape = _getPlaceholderShape(placeholderIndex);
 
-    return SimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
+    return PptxSimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
   }
 
   /// Gets the bold property from the parent slide layout placeholder shape
@@ -75,11 +75,11 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     List<String> codes = lang.split('-');
     Locale languageID = Locale(codes[0], codes[1]);
 
-    SimpleTypeTextFontSize fontSize;
+    PptxSimpleTypeTextFontSize fontSize;
     if (runMap[eRPr][eSz] == null) { // if font size is not specified in slide xml, need to parse slide layout
       fontSize = _getFontSizeFromSlideLayout(placeholderIndex);
     } else {
-      fontSize = SimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
+      fontSize = PptxSimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
     }
 
     bool isBold;

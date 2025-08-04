@@ -3,14 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
-import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_font_size.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_simple_type_text_font_size.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 
 void main() {
   group('Tests for Textbody class', () {
     test('Constructor initializes with single paragraph', () {
       final run1 = Run(languageID: Locale('en', 'us'), text: 'Hello', 
-      fontSize: SimpleTypeTextFontSize(1200), bold: false, italics: false, 
+      fontSize: PptxSimpleTypeTextFontSize(1200), bold: false, italics: false, 
       underlineType: SimpleTypeTextUnderlineType.none);
       final paragraph1 = Paragraph(runs: [run1]);
       final textbody = Textbody(paragraphs: [paragraph1]);
@@ -26,10 +26,10 @@ void main() {
 
     test('Constructor initializes with multiple paragraphs', () {
       final run1 = Run(languageID: Locale('en', 'us'), text: 'Hello', 
-      fontSize: SimpleTypeTextFontSize(1200), bold: false, italics: false, 
+      fontSize: PptxSimpleTypeTextFontSize(1200), bold: false, italics: false, 
       underlineType: SimpleTypeTextUnderlineType.none);
       final run2 = Run(languageID: Locale('es', 'ES'), text: 'Hola', 
-      fontSize: SimpleTypeTextFontSize(1500), bold: true, italics: true, 
+      fontSize: PptxSimpleTypeTextFontSize(1500), bold: true, italics: true, 
       underlineType: SimpleTypeTextUnderlineType.sng);
       final paragraph1 = Paragraph(runs: [run1]);
       final paragraph2 = Paragraph(runs: [run1, run2]);
