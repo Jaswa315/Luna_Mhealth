@@ -63,7 +63,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eI]?.toString() == "1";
   }
 
-  SimpleTypeTextUnderlineType? _getTextUnderlineTypeFromSlideLayout(int placeholderIndex) {
+  SimpleTypeTextUnderlineType _getTextUnderlineTypeFromSlideLayout(int placeholderIndex) {
     int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
     Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
       parentIndex, placeholderIndex, eTextboxShape,
@@ -102,7 +102,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       isItalic = runMap[eRPr][eI]?.toString() == "1";
     }
 
-    SimpleTypeTextUnderlineType? underlineType;
+    SimpleTypeTextUnderlineType underlineType;
     if(placeholderIndex != -1 && runMap[eRPr][eU] == null) {
       underlineType = _getTextUnderlineTypeFromSlideLayout(placeholderIndex);
     } else {
@@ -116,7 +116,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       fontSize: fontSize,
       bold: isBold,
       italics: isItalic,
-      underlineType: underlineType ?? SimpleTypeTextUnderlineType.none,
+      underlineType: underlineType,
     );
   }
 

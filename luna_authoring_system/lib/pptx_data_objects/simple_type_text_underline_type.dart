@@ -62,13 +62,13 @@ enum SimpleTypeTextUnderlineType {
   const SimpleTypeTextUnderlineType(this.xmlValue);
 
   /// Creates a TextUnderlineType from the XML string value
-  static SimpleTypeTextUnderlineType? fromXml(String xmlValue) {
+  static SimpleTypeTextUnderlineType fromXml(String xmlValue) {
     try {
       return SimpleTypeTextUnderlineType.values.firstWhere(
         (type) => type.xmlValue == xmlValue,
       );
     } catch (e) {
-      return null;
+      throw ArgumentError('Unknown TextUnderlineType value: "$xmlValue"');
     }
   }
 }

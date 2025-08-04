@@ -54,8 +54,7 @@ void main() {
 
     test('fromXml should return null for invalid xmlValue', () {
       // Test handling of invalid values
-      expect(SimpleTypeTextUnderlineType.fromXml('invalid'), isNull);
-      expect(SimpleTypeTextUnderlineType.fromXml(''), isNull);
+      expect(() => SimpleTypeTextUnderlineType.fromXml('invalidValue'), throwsArgumentError);
     });
   });
 }
