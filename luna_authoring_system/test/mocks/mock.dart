@@ -1,3 +1,4 @@
+import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:mockito/annotations.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
@@ -22,6 +23,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide
   MockSpec<ConnectionShape>(),
   MockSpec<PptxPictureShapeBuilder>(),
   MockSpec<PictureShape>(),
+  MockSpec<TextboxShape>(),
   MockSpec<PptxXmlToJsonConverter>(),
   MockSpec<PptxSlideCountParser>(),
   MockSpec<PptxShapeBuilder>(),
