@@ -45,7 +45,7 @@ class TextBuilder implements IBuilder<TextComponent>{
     return this;
   }
 
-  /// The [build] method finalizes the object and returns a `LineComponent`.
+  /// The [build] method finalizes the object and returns a `TextComponent`.
   @override
   TextComponent build() {
     return TextComponent(
