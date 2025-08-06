@@ -40,32 +40,7 @@ void main() {
     });
 
     test('Ignores empty or whitespace-only TextParts', () { // This test ensures empty and whitespace-only TextParts are skipped
-      final emptyTextPart = TextPart(text: '');
-      final whitespaceTextPart = TextPart(text: '   ');
-      final validTextPart = TextPart(text: 'Valid text');
-
-      final textComponent = TextComponent(
-        textChildren: [emptyTextPart, whitespaceTextPart, validTextPart], // Only 'Valid text' should be included
-        boundingBox: BoundingBox(
-          topLeftCorner: const Offset(0, 0),
-          width: DisplayPixel(0),
-          height: Percent(0),
-        ),
-      );
-
-      final page = Page(components: [textComponent]);
-      final sequence = SequenceOfPages(sequenceOfPages: [page]);
-
-      final module = Module(
-        moduleId: 'testModule',
-        title: 'Test Title',
-        author: 'Test Author',
-        authoringVersion: '1.0',
-        setOfSequenceOfPages: {sequence},
-        aspectRatio: 1.0,
-        entryPage: page,
-      );
-
+      final module = createFakeModuleWithEmptyTextParts();
       final chunks = extractTextChunks(module);
 
       expect(chunks.length, 1);
