@@ -44,3 +44,32 @@ Module createFakeModule() {
     entryPage: page1,
   );
 }
+
+/// Test-only factory: creates a Module that includes empty and whitespace-only TextParts.
+Module createFakeModuleWithEmptyTextParts() {
+  final emptyTextPart = TextPart(text: '');
+  final whitespaceTextPart = TextPart(text: '   ');
+  final validTextPart = TextPart(text: 'Valid text');
+
+  final textComponent = TextComponent(
+    textChildren: [emptyTextPart, whitespaceTextPart, validTextPart],
+    boundingBox: BoundingBox(
+      topLeftCorner: const Offset(0, 0),
+      width: DisplayPixel(0),
+      height: Percent(0),
+    ),
+  );
+
+  final page = Page(components: [textComponent]);
+  final sequence = SequenceOfPages(sequenceOfPages: [page]);
+
+  return Module(
+    moduleId: 'fakeModuleWithEmptyParts',
+    title: 'Test Module with Empty TextParts',
+    author: 'Lakshmi',
+    authoringVersion: '1.0',
+    setOfSequenceOfPages: {sequence},
+    aspectRatio: 1.0,
+    entryPage: page,
+  );
+}
