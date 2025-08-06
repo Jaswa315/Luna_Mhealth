@@ -5,42 +5,45 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:ui' as _i7;
 
-import 'package:flutter/rendering.dart' as _i17;
+import 'package:flutter/rendering.dart' as _i18;
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart'
     as _i6;
 import 'package:luna_authoring_system/pptx_data_objects/picture_shape.dart'
     as _i8;
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart'
-    as _i19;
-import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart' as _i10;
+    as _i20;
+import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart' as _i11;
 import 'package:luna_authoring_system/pptx_data_objects/section.dart' as _i3;
-import 'package:luna_authoring_system/pptx_data_objects/shape.dart' as _i13;
+import 'package:luna_authoring_system/pptx_data_objects/shape.dart' as _i14;
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart'
-    as _i14;
-import 'package:luna_authoring_system/pptx_data_objects/slide.dart' as _i12;
+    as _i15;
+import 'package:luna_authoring_system/pptx_data_objects/slide.dart' as _i13;
 import 'package:luna_authoring_system/pptx_data_objects/source_rectangle.dart'
     as _i9;
+import 'package:luna_authoring_system/pptx_data_objects/textbody.dart' as _i10;
+import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart'
+    as _i21;
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart' as _i4;
 import 'package:luna_authoring_system/pptx_tree_compiler/connection_shape/pptx_connection_shape_builder.dart'
-    as _i16;
+    as _i17;
 import 'package:luna_authoring_system/pptx_tree_compiler/picture_shape/pptx_picture_shape_builder.dart'
-    as _i18;
+    as _i19;
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart'
-    as _i20;
-import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart'
-    as _i23;
-import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart'
     as _i22;
-import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart'
-    as _i21;
-import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart'
+import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart'
+    as _i25;
+import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart'
     as _i24;
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart'
+    as _i23;
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart'
+    as _i26;
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart'
-    as _i15;
+    as _i16;
 import 'package:luna_core/units/emu.dart' as _i2;
 import 'package:luna_core/units/point.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i11;
+import 'package:mockito/src/dummies.dart' as _i12;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -138,10 +141,20 @@ class _FakeSourceRectangle_7 extends _i1.SmartFake
         );
 }
 
+class _FakeTextbody_8 extends _i1.SmartFake implements _i10.Textbody {
+  _FakeTextbody_8(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [PptxTree].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPptxTree extends _i1.Mock implements _i10.PptxTree {
+class MockPptxTree extends _i1.Mock implements _i11.PptxTree {
   MockPptxTree() {
     _i1.throwOnMissingStub(this);
   }
@@ -149,7 +162,7 @@ class MockPptxTree extends _i1.Mock implements _i10.PptxTree {
   @override
   String get title => (super.noSuchMethod(
         Invocation.getter(#title),
-        returnValue: _i11.dummyValue<String>(
+        returnValue: _i12.dummyValue<String>(
           this,
           Invocation.getter(#title),
         ),
@@ -167,7 +180,7 @@ class MockPptxTree extends _i1.Mock implements _i10.PptxTree {
   @override
   String get author => (super.noSuchMethod(
         Invocation.getter(#author),
-        returnValue: _i11.dummyValue<String>(
+        returnValue: _i12.dummyValue<String>(
           this,
           Invocation.getter(#author),
         ),
@@ -237,13 +250,13 @@ class MockPptxTree extends _i1.Mock implements _i10.PptxTree {
       );
 
   @override
-  List<_i12.Slide> get slides => (super.noSuchMethod(
+  List<_i13.Slide> get slides => (super.noSuchMethod(
         Invocation.getter(#slides),
-        returnValue: <_i12.Slide>[],
-      ) as List<_i12.Slide>);
+        returnValue: <_i13.Slide>[],
+      ) as List<_i13.Slide>);
 
   @override
-  set slides(List<_i12.Slide>? _slides) => super.noSuchMethod(
+  set slides(List<_i13.Slide>? _slides) => super.noSuchMethod(
         Invocation.setter(
           #slides,
           _slides,
@@ -255,13 +268,13 @@ class MockPptxTree extends _i1.Mock implements _i10.PptxTree {
 /// A class which mocks [Slide].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSlide extends _i1.Mock implements _i12.Slide {
+class MockSlide extends _i1.Mock implements _i13.Slide {
   MockSlide() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  set shapes(List<_i13.Shape>? _shapes) => super.noSuchMethod(
+  set shapes(List<_i14.Shape>? _shapes) => super.noSuchMethod(
         Invocation.setter(
           #shapes,
           _shapes,
@@ -272,7 +285,7 @@ class MockSlide extends _i1.Mock implements _i12.Slide {
   @override
   String get fileName => (super.noSuchMethod(
         Invocation.getter(#fileName),
-        returnValue: _i11.dummyValue<String>(
+        returnValue: _i12.dummyValue<String>(
           this,
           Invocation.getter(#fileName),
         ),
@@ -291,16 +304,16 @@ class MockSlide extends _i1.Mock implements _i12.Slide {
 /// A class which mocks [Shape].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockShape extends _i1.Mock implements _i13.Shape {
+class MockShape extends _i1.Mock implements _i14.Shape {
   MockShape() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i14.ShapeType get type => (super.noSuchMethod(
+  _i15.ShapeType get type => (super.noSuchMethod(
         Invocation.getter(#type),
-        returnValue: _i14.ShapeType.picture,
-      ) as _i14.ShapeType);
+        returnValue: _i15.ShapeType.picture,
+      ) as _i15.ShapeType);
 
   @override
   _i4.Transform get transform => (super.noSuchMethod(
@@ -325,7 +338,7 @@ class MockShape extends _i1.Mock implements _i13.Shape {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxTransformBuilder extends _i1.Mock
-    implements _i15.PptxTransformBuilder {
+    implements _i16.PptxTransformBuilder {
   @override
   _i4.Transform getTransform(Map<String, dynamic>? transformMap) =>
       (super.noSuchMethod(
@@ -403,7 +416,7 @@ class MockTransform extends _i1.Mock implements _i4.Transform {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxConnectionShapeBuilder extends _i1.Mock
-    implements _i16.PptxConnectionShapeBuilder {
+    implements _i17.PptxConnectionShapeBuilder {
   @override
   _i6.ConnectionShape buildShape(Map<String, dynamic>? connectionShapeMap) =>
       (super.noSuchMethod(
@@ -428,14 +441,14 @@ class MockPptxConnectionShapeBuilder extends _i1.Mock
       ) as _i6.ConnectionShape);
 
   @override
-  List<_i13.Shape> getShapes(dynamic shapeTree) => (super.noSuchMethod(
+  List<_i14.Shape> getShapes(dynamic shapeTree) => (super.noSuchMethod(
         Invocation.method(
           #getShapes,
           [shapeTree],
         ),
-        returnValue: <_i13.Shape>[],
-        returnValueForMissingStub: <_i13.Shape>[],
-      ) as List<_i13.Shape>);
+        returnValue: <_i14.Shape>[],
+        returnValueForMissingStub: <_i14.Shape>[],
+      ) as List<_i14.Shape>);
 }
 
 /// A class which mocks [ConnectionShape].
@@ -487,14 +500,14 @@ class MockConnectionShape extends _i1.Mock implements _i6.ConnectionShape {
       );
 
   @override
-  _i17.BorderStyle get style => (super.noSuchMethod(
+  _i18.BorderStyle get style => (super.noSuchMethod(
         Invocation.getter(#style),
-        returnValue: _i17.BorderStyle.none,
-        returnValueForMissingStub: _i17.BorderStyle.none,
-      ) as _i17.BorderStyle);
+        returnValue: _i18.BorderStyle.none,
+        returnValueForMissingStub: _i18.BorderStyle.none,
+      ) as _i18.BorderStyle);
 
   @override
-  set style(_i17.BorderStyle? _style) => super.noSuchMethod(
+  set style(_i18.BorderStyle? _style) => super.noSuchMethod(
         Invocation.setter(
           #style,
           _style,
@@ -541,18 +554,18 @@ class MockConnectionShape extends _i1.Mock implements _i6.ConnectionShape {
       );
 
   @override
-  _i14.ShapeType get type => (super.noSuchMethod(
+  _i15.ShapeType get type => (super.noSuchMethod(
         Invocation.getter(#type),
-        returnValue: _i14.ShapeType.picture,
-        returnValueForMissingStub: _i14.ShapeType.picture,
-      ) as _i14.ShapeType);
+        returnValue: _i15.ShapeType.picture,
+        returnValueForMissingStub: _i15.ShapeType.picture,
+      ) as _i15.ShapeType);
 }
 
 /// A class which mocks [PptxPictureShapeBuilder].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxPictureShapeBuilder extends _i1.Mock
-    implements _i18.PptxPictureShapeBuilder {
+    implements _i19.PptxPictureShapeBuilder {
   @override
   set slideIndex(int? value) => super.noSuchMethod(
         Invocation.setter(
@@ -563,7 +576,7 @@ class MockPptxPictureShapeBuilder extends _i1.Mock
       );
 
   @override
-  set hierarchy(_i19.PptxHierarchy? value) => super.noSuchMethod(
+  set hierarchy(_i20.PptxHierarchy? value) => super.noSuchMethod(
         Invocation.setter(
           #hierarchy,
           value,
@@ -595,14 +608,14 @@ class MockPptxPictureShapeBuilder extends _i1.Mock
       ) as _i8.PictureShape);
 
   @override
-  List<_i13.Shape> getShapes(dynamic shapeTree) => (super.noSuchMethod(
+  List<_i14.Shape> getShapes(dynamic shapeTree) => (super.noSuchMethod(
         Invocation.method(
           #getShapes,
           [shapeTree],
         ),
-        returnValue: <_i13.Shape>[],
-        returnValueForMissingStub: <_i13.Shape>[],
-      ) as List<_i13.Shape>);
+        returnValue: <_i14.Shape>[],
+        returnValueForMissingStub: <_i14.Shape>[],
+      ) as List<_i14.Shape>);
 }
 
 /// A class which mocks [PictureShape].
@@ -634,11 +647,11 @@ class MockPictureShape extends _i1.Mock implements _i8.PictureShape {
   @override
   String get url => (super.noSuchMethod(
         Invocation.getter(#url),
-        returnValue: _i11.dummyValue<String>(
+        returnValue: _i12.dummyValue<String>(
           this,
           Invocation.getter(#url),
         ),
-        returnValueForMissingStub: _i11.dummyValue<String>(
+        returnValueForMissingStub: _i12.dummyValue<String>(
           this,
           Invocation.getter(#url),
         ),
@@ -677,18 +690,74 @@ class MockPictureShape extends _i1.Mock implements _i8.PictureShape {
       );
 
   @override
-  _i14.ShapeType get type => (super.noSuchMethod(
+  _i15.ShapeType get type => (super.noSuchMethod(
         Invocation.getter(#type),
-        returnValue: _i14.ShapeType.picture,
-        returnValueForMissingStub: _i14.ShapeType.picture,
-      ) as _i14.ShapeType);
+        returnValue: _i15.ShapeType.picture,
+        returnValueForMissingStub: _i15.ShapeType.picture,
+      ) as _i15.ShapeType);
+}
+
+/// A class which mocks [TextboxShape].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTextboxShape extends _i1.Mock implements _i21.TextboxShape {
+  @override
+  _i4.Transform get transform => (super.noSuchMethod(
+        Invocation.getter(#transform),
+        returnValue: _FakeTransform_2(
+          this,
+          Invocation.getter(#transform),
+        ),
+        returnValueForMissingStub: _FakeTransform_2(
+          this,
+          Invocation.getter(#transform),
+        ),
+      ) as _i4.Transform);
+
+  @override
+  set transform(_i4.Transform? _transform) => super.noSuchMethod(
+        Invocation.setter(
+          #transform,
+          _transform,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i10.Textbody get textbody => (super.noSuchMethod(
+        Invocation.getter(#textbody),
+        returnValue: _FakeTextbody_8(
+          this,
+          Invocation.getter(#textbody),
+        ),
+        returnValueForMissingStub: _FakeTextbody_8(
+          this,
+          Invocation.getter(#textbody),
+        ),
+      ) as _i10.Textbody);
+
+  @override
+  set textbody(_i10.Textbody? _textbody) => super.noSuchMethod(
+        Invocation.setter(
+          #textbody,
+          _textbody,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i15.ShapeType get type => (super.noSuchMethod(
+        Invocation.getter(#type),
+        returnValue: _i15.ShapeType.picture,
+        returnValueForMissingStub: _i15.ShapeType.picture,
+      ) as _i15.ShapeType);
 }
 
 /// A class which mocks [PptxXmlToJsonConverter].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxXmlToJsonConverter extends _i1.Mock
-    implements _i20.PptxXmlToJsonConverter {
+    implements _i22.PptxXmlToJsonConverter {
   @override
   dynamic getJsonFromPptx(String? xmlFilePath) => super.noSuchMethod(
         Invocation.method(
@@ -704,14 +773,14 @@ class MockPptxXmlToJsonConverter extends _i1.Mock
           #getTempPath,
           [],
         ),
-        returnValue: _i11.dummyValue<String>(
+        returnValue: _i12.dummyValue<String>(
           this,
           Invocation.method(
             #getTempPath,
             [],
           ),
         ),
-        returnValueForMissingStub: _i11.dummyValue<String>(
+        returnValueForMissingStub: _i12.dummyValue<String>(
           this,
           Invocation.method(
             #getTempPath,
@@ -734,7 +803,7 @@ class MockPptxXmlToJsonConverter extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxSlideCountParser extends _i1.Mock
-    implements _i21.PptxSlideCountParser {
+    implements _i23.PptxSlideCountParser {
   @override
   int get slideCount => (super.noSuchMethod(
         Invocation.getter(#slideCount),
@@ -746,12 +815,12 @@ class MockPptxSlideCountParser extends _i1.Mock
 /// A class which mocks [PptxShapeBuilder].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPptxShapeBuilder extends _i1.Mock implements _i22.PptxShapeBuilder {
+class MockPptxShapeBuilder extends _i1.Mock implements _i24.PptxShapeBuilder {
   @override
-  List<_i13.Shape> getShapes(
+  List<_i14.Shape> getShapes(
     Map<String, dynamic>? shapeTree,
     int? slideIndex,
-    _i19.PptxHierarchy? hierarchy,
+    _i20.PptxHierarchy? hierarchy,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -762,20 +831,20 @@ class MockPptxShapeBuilder extends _i1.Mock implements _i22.PptxShapeBuilder {
             hierarchy,
           ],
         ),
-        returnValue: <_i13.Shape>[],
-        returnValueForMissingStub: <_i13.Shape>[],
-      ) as List<_i13.Shape>);
+        returnValue: <_i14.Shape>[],
+        returnValueForMissingStub: <_i14.Shape>[],
+      ) as List<_i14.Shape>);
 }
 
 /// A class which mocks [PptxRelationshipParser].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxRelationshipParser extends _i1.Mock
-    implements _i23.PptxRelationshipParser {
+    implements _i25.PptxRelationshipParser {
   @override
   int getParentIndex(
     int? currentIndex,
-    _i19.PptxHierarchy? pptxHierarchy,
+    _i20.PptxHierarchy? pptxHierarchy,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -792,7 +861,7 @@ class MockPptxRelationshipParser extends _i1.Mock
   @override
   String findTargetByRId(
     int? currentIndex,
-    _i19.PptxHierarchy? pptxHierarchy,
+    _i20.PptxHierarchy? pptxHierarchy,
     String? rId,
   ) =>
       (super.noSuchMethod(
@@ -804,7 +873,7 @@ class MockPptxRelationshipParser extends _i1.Mock
             rId,
           ],
         ),
-        returnValue: _i11.dummyValue<String>(
+        returnValue: _i12.dummyValue<String>(
           this,
           Invocation.method(
             #findTargetByRId,
@@ -815,7 +884,7 @@ class MockPptxRelationshipParser extends _i1.Mock
             ],
           ),
         ),
-        returnValueForMissingStub: _i11.dummyValue<String>(
+        returnValueForMissingStub: _i12.dummyValue<String>(
           this,
           Invocation.method(
             #findTargetByRId,
@@ -833,11 +902,11 @@ class MockPptxRelationshipParser extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPptxSlideLayoutParser extends _i1.Mock
-    implements _i24.PptxSlideLayoutParser {
+    implements _i26.PptxSlideLayoutParser {
   @override
   Map<String, dynamic> getPlaceholderShape(
     int? parentIndex,
-    int? idx,
+    int? placeholderIndex,
     String? shapeType,
   ) =>
       (super.noSuchMethod(
@@ -845,7 +914,7 @@ class MockPptxSlideLayoutParser extends _i1.Mock
           #getPlaceholderShape,
           [
             parentIndex,
-            idx,
+            placeholderIndex,
             shapeType,
           ],
         ),

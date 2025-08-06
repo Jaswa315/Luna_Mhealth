@@ -9,7 +9,7 @@ import 'package:luna_core/units/bounding_box.dart';
 /// TextBuilder is a builder class for constructing a [TextComponent].
 /// It extracts necessary properties from a [TextboxShape] and
 /// maps PowerPoint text properties to Luna's text component structure.
-class TextBuilder implements IBuilder<TextComponent>{
+class TextBuilder implements IBuilder<TextComponent> {
   late List<TextPart> _textChildren;
   late BoundingBox _boundingBox;
   
@@ -25,9 +25,9 @@ class TextBuilder implements IBuilder<TextComponent>{
           fontSize: run.fontSize.value / 100.0,
           fontWeight: run.bold ? FontWeight.bold : FontWeight.normal,
           fontStyle: run.italics ? FontStyle.italic : FontStyle.normal,
-          fontUnderline: run.underlineType == SimpleTypeTextUnderlineType.sng
-              ? TextDecoration.underline
-              : TextDecoration.none,
+          fontUnderline: run.underlineType == SimpleTypeTextUnderlineType.none
+              ? TextDecoration.none
+              : TextDecoration.underline,
         ));
       }
     }
