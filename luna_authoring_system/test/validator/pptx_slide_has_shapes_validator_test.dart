@@ -3,7 +3,7 @@ import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/luna_constants.dart';
 import 'package:luna_authoring_system/validator/i_validation_issue.dart';
-import 'package:luna_authoring_system/validator/pptx_slide_has_shapes_validator.dart';
+import 'package:luna_authoring_system/validator/pptx_validators/pptx_slide_has_shapes_validator.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
