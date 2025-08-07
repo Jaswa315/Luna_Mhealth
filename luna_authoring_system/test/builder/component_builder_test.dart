@@ -56,7 +56,7 @@ void main() {
       moduleBuilder.setDimensions(EMU(1920).value, EMU(1080).value);
     });
 
-    test('Should throw an error if shape is not an unsopprted shape', () {
+    test('Should throw an error if shape is not an unsupported shape', () {
       final shape = MockUnsupportedShape();
 
       expect(
