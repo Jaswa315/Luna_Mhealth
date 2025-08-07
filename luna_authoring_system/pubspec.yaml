@@ -32,6 +32,7 @@ dependencies:
   azure_application_insights: ^4.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  csv: ^5.0.0
   cupertino_icons: ^1.0.6
   flutter:
     sdk: flutter
@@ -47,6 +48,7 @@ dependencies:
   uuid: ^4.4.0
   xml: ^6.5.0
   xml2json: ^6.2.3
+  
 
 
 dev_dependencies:
