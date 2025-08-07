@@ -26,17 +26,17 @@ void main() {
       final chunks = extractTextChunks(createFakeModule());
 
       expect(chunks[0].slideNumber, 0);
-      expect(chunks[0].originalText, 'Eat healthy during pregnancy');
+      expect(chunks[0].Text, 'Eat healthy during pregnancy');
 
       expect(chunks[1].slideNumber, 1);
-      expect(chunks[1].originalText, 'Visit a clinic if you feel weak or dizzy');
+      expect(chunks[1].Text, 'Visit a clinic if you feel weak or dizzy');
     });
 
     test('No empty or whitespace-only chunks are included', () {
       final module = createFakeModule();
       final chunks = extractTextChunks(module);
 
-      expect(chunks.any((c) => c.originalText.trim().isEmpty), isFalse);
+      expect(chunks.any((c) => c.Text.trim().isEmpty), isFalse);
     });
 
     test('Ignores empty or whitespace-only TextParts', () { // This test ensures empty and whitespace-only TextParts are skipped
@@ -44,7 +44,7 @@ void main() {
       final chunks = extractTextChunks(module);
 
       expect(chunks.length, 1);
-      expect(chunks[0].originalText, 'Valid text');
+      expect(chunks[0].Text, 'Valid text');
       expect(chunks[0].slideNumber, 0);
     });
   });

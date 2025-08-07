@@ -32,7 +32,7 @@ List<TextChunk> _extractChunksFromPage(Page page, int slideIndex) {
         if (textPart.text.trim().isNotEmpty) {
           chunks.add(TextChunk(
             slideNumber: slideIndex,
-            originalText: textPart.text,
+            Text: textPart.text,
           ));
         }
       }
