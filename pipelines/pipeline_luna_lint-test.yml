@@ -22,8 +22,8 @@ steps:
     parameters:
       package_path: ${{ folder }}
       package_name: ${{ folder }}
-      include_coverage: 'true'
-
+      include_coverage: 'false'
+      test_file_name: "$(Build.SourcesDirectory)/${{ folder }}/test/all_tests.dart"
 
 - template: templates/test_file_existence.yml
 
@@ -43,5 +43,3 @@ steps:
     release_dir: /x64/runner/Debug
 
 - template: templates/publish_test_lint_results.yml
-  parameters:
-    include_coverage: 'true'

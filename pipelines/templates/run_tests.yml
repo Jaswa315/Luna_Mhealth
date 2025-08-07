@@ -9,7 +9,10 @@ parameters:
   default: current_coverage
 - name: include_coverage
   default: 'false'
-- name: test_file_name # parameter to determine if a custom test file is run
+  # test_file_name determines if one giant test file is run. 
+  # When running in one test file, dart only uses one isolate which is faster
+  # A good setting to achieve that is "$(Build.SourcesDirectory)/${{ folder }}/test/all_tests.dart"
+- name: test_file_name
   default: ''
 
 steps:
