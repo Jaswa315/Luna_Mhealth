@@ -1,7 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/builder/component_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/connection_shape.dart';
+import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
+import 'package:luna_authoring_system/pptx_data_objects/pptx_simple_type_text_font_size.dart';
+import 'package:luna_authoring_system/pptx_data_objects/run.dart';
+import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
+import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
+import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
+import 'package:luna_core/models/components/text_component/text_component.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
@@ -12,6 +19,8 @@ import 'package:flutter/rendering.dart';
 import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/display_pixel.dart';
 import 'package:luna_authoring_system/builder/module_builder.dart';
+import 'package:mockito/mockito.dart';
+import '../mocks/mock.mocks.dart';
 
 /// **Mock ConnectionShape for Testing**
 class MockConnectionShape extends ConnectionShape {
@@ -29,7 +38,7 @@ class MockConnectionShape extends ConnectionShape {
 /// **Mock Unsupported Shape for Testing**
 class MockUnsupportedShape extends Shape {
   @override
-  ShapeType get type => ShapeType.textbox; //Not a ConnectionShape
+  ShapeType get type => ShapeType.picture; //Not a ConnectionShape
 
   @override
   Transform get transform =>
@@ -47,7 +56,7 @@ void main() {
       moduleBuilder.setDimensions(EMU(1920).value, EMU(1080).value);
     });
 
-    test('Should throw an error if shape is not a ConnectionShape for now', () {
+    test('Should throw an error if shape is not an unsopprted shape', () {
       final shape = MockUnsupportedShape();
 
       expect(
@@ -69,6 +78,34 @@ void main() {
 
       expect(component.color, equals(shape.color));
       expect(component.style, equals(shape.style));
+    });
+
+    test('Should correctly build a Text Component from TextboxShape', () {
+      final shape = MockTextboxShape();
+      when(shape.textbody).thenReturn(Textbody(
+        paragraphs: [
+          Paragraph(
+            runs: [
+              Run(
+                text: 'Hello World',
+                languageID: Locale('en', 'US'),
+                fontSize: PptxSimpleTypeTextFontSize(1200),
+                bold: false,
+                italics: false,
+                underlineType: SimpleTypeTextUnderlineType.none,
+              ),
+            ],
+          ),
+        ],
+      ));
+
+      when(shape.transform).thenReturn(Transform(
+        Point(EMU(500000), EMU(500000)),
+        Point(EMU(1000000), EMU(1000000)),
+      ));
+      final component = ComponentBuilder(shape).build();
+
+      expect(component, isA<TextComponent>());
     });
   });
 }
