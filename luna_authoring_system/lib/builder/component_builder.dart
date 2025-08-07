@@ -12,8 +12,8 @@ import 'package:luna_core/models/components/text_component/text_component.dart';
 /// ComponentBuilder is responsible for constructing a [Component] object.
 ///
 /// It takes in a shape extracted from a PowerPoint file and determines
-/// the appropriate component type to build. Currently, it supports [LineComponent]
-/// if the shape is a [ConnectionShape].
+/// the appropriate component type to build. Currently, it supports [LineComponent] and
+/// [TextComponent] if the shape is a [ConnectionShape] or [TextboxShape], respectively.
 ///
 /// If an unsupported shape type is encountered, an [ArgumentError] is thrown.
 class ComponentBuilder implements IBuilder<Component> {
