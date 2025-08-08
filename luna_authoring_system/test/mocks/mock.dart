@@ -14,6 +14,7 @@ import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relat
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_builder.dart';
 
 @GenerateMocks([PptxTree, Slide, Shape])
 @GenerateNiceMocks([
@@ -29,5 +30,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide
   MockSpec<PptxShapeBuilder>(),
   MockSpec<PptxRelationshipParser>(),
   MockSpec<PptxSlideLayoutParser>(),
+  MockSpec<PptxTextboxShapeBuilder>(),
 ])
 void main() {}
