@@ -7,8 +7,8 @@ void main() {
   group('TextExporter Tests', () {
     test('Generates CSV with correct headers and rows', () {
       final chunks = [
-        TextChunk(slideNumber: 0, Text: 'Eat healthy during pregnancy'),
-        TextChunk(slideNumber: 1, Text: 'Visit a clinic if you feel weak or dizzy'),
+        TextChunk(slideNumber: 0, text: 'Eat healthy during pregnancy'),
+        TextChunk(slideNumber: 1, text: 'Visit a clinic if you feel weak or dizzy'),
       ];
 
       // Create an instance of TextExporter
