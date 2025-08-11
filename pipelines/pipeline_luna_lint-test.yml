@@ -25,6 +25,7 @@ steps:
       include_coverage: 'false'
       test_file_name: "$(Build.SourcesDirectory)/${{ folder }}/test/all_tests.dart"
 
+# Check for existence of the license file
 - template: templates/test_file_existence.yml
 
 - template: templates/build_authoring_system.yml

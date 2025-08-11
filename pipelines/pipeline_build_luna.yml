@@ -17,8 +17,11 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
+    # Checkout the repo with persist Credentials
+    # This two tasks are needed so that the pipeline can fetch and push tags
     - checkout: self
       persistCredentials: true
+
     - bash: |
         git config --global user.email "pipeline@dev.azure.com"
         git config --global user.name "Azure DevOps Pipeline"
@@ -76,6 +79,7 @@ jobs:
     steps:
 
     - template: templates/install_prereqs.yml
+    
     - template: templates/build_authoring_system.yml
       parameters:
         build_os: $(buildOS)
