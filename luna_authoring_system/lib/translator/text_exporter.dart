@@ -1,8 +1,8 @@
-/// A utility class that converts a list of TextChunk objects into a CSV-formatted string.
 import 'package:csv/csv.dart';
 import 'csv_column_index.dart';
 import 'text_chunk.dart';
 
+/// A utility class that converts a list of TextChunk objects into a CSV-formatted string.
 class TextExporter {
   /// Converts TextChunks to CSV-formatted string with headers
   String generateCsv(List<TextChunk> chunks) {

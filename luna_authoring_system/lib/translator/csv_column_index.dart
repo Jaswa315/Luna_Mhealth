@@ -1,6 +1,6 @@
 enum CsvColumn {
   slideNumber,
-  originalText,
+  text,
   translation,
 }
 
@@ -9,7 +9,7 @@ extension CsvColumnExtension on CsvColumn {
     switch (this) {
       case CsvColumn.slideNumber:
         return 'Slide';
-      case CsvColumn.originalText:
+      case CsvColumn.text:
         return 'Text';
       case CsvColumn.translation:
         return 'Translation';
