@@ -76,10 +76,14 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     Locale languageID = Locale(codes[0], codes[1]);
 
     PptxSimpleTypeTextFontSize fontSize;
-    if (runMap[eRPr][eSz] == null) { // if font size is not specified in slide xml, need to parse slide layout
+    if (placeholderIndex != -1 && runMap[eRPr][eSz] == null) {
       fontSize = _getFontSizeFromSlideLayout(placeholderIndex);
     } else {
-      fontSize = PptxSimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
+      if (runMap[eRPr][eSz] == null) {
+        fontSize = PptxSimpleTypeTextFontSize(1200); // Default font size, will get correct font size from slide master
+      } else {
+        fontSize = PptxSimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
+      }
     }
 
     bool isBold;
@@ -184,8 +188,10 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     }
 
     int placeholderIndex = -1;
-    if (textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
-      placeholderIndex = int.parse(textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
+    if (textboxShapeMap[eNvSpPr][eNvPr].isNotEmpty) {
+      if (textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
+        placeholderIndex = int.parse(textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
+      }
     }
 
     List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP], placeholderIndex);

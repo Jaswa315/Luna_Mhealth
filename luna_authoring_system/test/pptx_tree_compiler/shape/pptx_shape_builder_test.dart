@@ -16,6 +16,8 @@ void main() {
   late MockConnectionShape mockConnectionShape;
   late MockPptxPictureShapeBuilder mockPictureShapeBuilder;
   late MockPictureShape mockPictureShape;
+  late MockPptxTextboxShapeBuilder mockTextboxShapeBuilder;
+  late MockTextboxShape mockTextboxShape;
   late List<Shape> mockConnectionShapes;
   late List<Shape> mockPictureShapes;
   const int slideIndex = 1;
@@ -24,16 +26,30 @@ void main() {
   setUp(() {
     mockConnectionShape = MockConnectionShape();
     mockPictureShape = MockPictureShape();
+    mockTextboxShape = MockTextboxShape();
     mockConnectionShapes = [mockConnectionShape];
     mockPictureShapes = [mockPictureShape];
     mockConnectionShapeBuilder = MockPptxConnectionShapeBuilder();
     mockPictureShapeBuilder = MockPptxPictureShapeBuilder();
+    mockTextboxShapeBuilder = MockPptxTextboxShapeBuilder();
     when(mockConnectionShapeBuilder.getShapes(any))
         .thenReturn(mockConnectionShapes);
     when(mockPictureShapeBuilder.getShapes(any))
         .thenReturn(mockPictureShapes);
+    when(mockTextboxShapeBuilder.getShapes(any))
+        .thenAnswer((invocation) {
+          final arg = invocation.positionalArguments[0];
+          final size = arg is List ? arg.length : (arg is Map ? 1 : 0);
+          
+          return List.generate(
+            size, 
+            (index) => mockTextboxShape,
+            growable: false
+          );
+        }
+    );
     shapeBuilder =
-        PptxShapeBuilder(mockConnectionShapeBuilder, mockPictureShapeBuilder);
+        PptxShapeBuilder(mockConnectionShapeBuilder, mockPictureShapeBuilder, mockTextboxShapeBuilder);
   });
 
   group('PptxShapeBuilder Tests', () {
@@ -67,6 +83,97 @@ void main() {
 
       expect(shapes.length, mockPictureShapes.length);
       verify(mockPictureShapeBuilder.getShapes(any)).called(1);
+    });
+
+    test('getShapes returns textbox shapes when eTextboxShape is present and has placeholder and nonplaceholder shapes in slide hierarchy', () {
+      Json shapeTree = {
+        eTextboxShape: [
+          {
+            eNvSpPr: {
+              eNvPr: {
+                ePlaceholder: {}
+              }
+            }
+          },
+          {
+            eNvSpPr: {
+              eNvPr: {
+              }
+            }
+          }
+        ]
+      };
+
+      List<Shape> shapes =
+          shapeBuilder.getShapes(shapeTree, slideIndex, hierarchy);
+
+      expect(shapes.length, 2);
+      verify(mockTextboxShapeBuilder.getShapes(any)).called(1);
+    });
+
+    test('getShapes only returns textbox shapes for nonplaceholder shapes in slideMaster hierarchy', () {
+      Json shapeTree = {
+        eTextboxShape: [
+          {
+            eNvSpPr: {
+              eNvPr: {
+                ePlaceholder: {}
+              }
+            }
+          },
+          {
+            eNvSpPr: {
+              eNvPr: {
+              }
+            }
+          },
+          {
+            eNvSpPr: {
+              eNvPr: {
+              }
+            }
+          }
+        ]
+      };
+
+      List<Shape> shapes =
+          shapeBuilder.getShapes(shapeTree, slideIndex, PptxHierarchy.slideMaster);
+
+      expect(shapes.length, 2);
+      verify(mockTextboxShapeBuilder.getShapes(any)).called(1);
+    });
+
+    test('getShapes only returns textbox shapes for nonplaceholder shapes in slideLayout hierarchy', () {
+      Json shapeTree = {
+        eTextboxShape: [
+          {
+            eNvSpPr: {
+              eNvPr: {
+                ePlaceholder: {}
+              }
+            }
+          },
+          {
+            eNvSpPr: {
+              eNvPr: {
+              }
+            }
+          },
+          {
+            eNvSpPr: {
+              eNvPr: {
+                ePlaceholder: {}
+              }
+            }
+          }
+        ]
+      };
+
+      List<Shape> shapes =
+          shapeBuilder.getShapes(shapeTree, slideIndex, PptxHierarchy.slideMaster);
+
+      expect(shapes.length, 1);
+      verify(mockTextboxShapeBuilder.getShapes(any)).called(1);
     });
 
     test('getShapes ignores unknown keys in the shapeTree', () {

@@ -6,6 +6,7 @@ import 'package:luna_authoring_system/pptx_data_objects/picture_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/section.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
+import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/units/emu.dart';
 import 'dart:io';
@@ -131,6 +132,30 @@ void main() {
       List<Shape> shapes = pptxTree.slides[0].shapes!;
       expect(shapes[0], isA<PictureShape>());
       expect(shapes[1], isA<PictureShape>());
+    });
+  });
+
+  group('Tests for PptxTreeBuilder using A Textbox in Slide.pptx', () {
+    final pptxFile = File('test/test_assets/A Textbox in Slide.pptx');
+    PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
+    PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
+
+    test('Textbox shapes are extracted.', () async {
+      List<Shape> shapes = pptxTree.slides[0].shapes!;
+      expect(shapes.length, 1);
+      expect(shapes[0], isA<TextboxShape>());
+      TextboxShape textboxShape = shapes[0] as TextboxShape;
+      expect(textboxShape.textbody.paragraphs[0].runs[0].text, "This is a textbox in slide");
+      expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1400);
+      expect(textboxShape.textbody.paragraphs[0].runs[0].bold, isFalse);
+      expect(textboxShape.textbody.paragraphs[0].runs[0].italics, isFalse);
+      expect(textboxShape.textbody.paragraphs[0].runs[0].underlineType.xmlValue, "none");
+      expect(textboxShape.textbody.paragraphs[0].runs[0].languageID.languageCode, "en");
+      expect(textboxShape.textbody.paragraphs[0].runs[0].languageID.countryCode, "US");
+      expect((textboxShape.transform.offset.x as EMU).value, 2743200);
+      expect((textboxShape.transform.offset.y as EMU).value, 2262433);
+      expect((textboxShape.transform.size.x as EMU).value, 1989584);
+      expect((textboxShape.transform.size.y as EMU).value, 307777);
     });
   });
 }
