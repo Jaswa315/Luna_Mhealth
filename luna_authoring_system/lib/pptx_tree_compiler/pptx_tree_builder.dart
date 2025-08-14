@@ -13,6 +13,8 @@ import 'package:luna_authoring_system/pptx_tree_compiler/section/pptx_section_bu
 import 'package:luna_authoring_system/pptx_tree_compiler/shape/pptx_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide/pptx_slide_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_count_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 
 /// The PptxTreeBuilder takes a .pptx file and is capable of making a
@@ -30,6 +32,8 @@ class PptxTreeBuilder {
   late PptxPictureShapeBuilder _pptxPictureShapeBuilder;
   late PptxRelationshipParser _pptxRelationshipParser;
   late PptxSlideBuilder _pptxSlideBuilder;
+  late PptxTextboxShapeBuilder _pptxTextboxShapeBuilder;
+  late PptxSlideLayoutParser _pptxSlideLayoutParser;
 
   PptxTree _pptxTree = PptxTree();
 
@@ -43,7 +47,9 @@ class PptxTreeBuilder {
     _pptxConnectionShapeBuilder = PptxConnectionShapeBuilder(_pptxTransformBuilder);
     _pptxRelationshipParser = PptxRelationshipParser(_pptxLoader);
     _pptxPictureShapeBuilder = PptxPictureShapeBuilder(_pptxTransformBuilder, _pptxRelationshipParser);
-    _pptxShapeBuilder = PptxShapeBuilder(_pptxConnectionShapeBuilder, _pptxPictureShapeBuilder);
+    _pptxSlideLayoutParser = PptxSlideLayoutParser(_pptxLoader);
+    _pptxTextboxShapeBuilder = PptxTextboxShapeBuilder(_pptxTransformBuilder, _pptxRelationshipParser, _pptxSlideLayoutParser);
+    _pptxShapeBuilder = PptxShapeBuilder(_pptxConnectionShapeBuilder, _pptxPictureShapeBuilder, _pptxTextboxShapeBuilder);
     _pptxSlideBuilder = PptxSlideBuilder(_pptxLoader, _pptxSlideCountParser, _pptxShapeBuilder, _pptxRelationshipParser);
   }
 
