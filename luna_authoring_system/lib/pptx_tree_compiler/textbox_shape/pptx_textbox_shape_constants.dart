@@ -71,3 +71,7 @@ const String eLvl1pPr = 'a:lvl1pPr';
 /// The XML element contains all default run level text properties for
 /// the text runs within a containing paragraph.
 const String eDefRPr = 'a:defRPr';
+
+/// Integer value representing the initial placeholder index for text boxes.
+/// This is used to determine if the text box is a placeholder shape.
+const int initialPLaceholderIndex = -1;

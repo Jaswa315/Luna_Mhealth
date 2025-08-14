@@ -76,7 +76,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     Locale languageID = Locale(codes[0], codes[1]);
 
     PptxSimpleTypeTextFontSize fontSize;
-    if (placeholderIndex != -1 && runMap[eRPr][eSz] == null) {
+    if (placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eSz] == null) {
       fontSize = _getFontSizeFromSlideLayout(placeholderIndex);
     } else {
       if (runMap[eRPr][eSz] == null) {
@@ -87,21 +87,21 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     }
 
     bool isBold;
-    if(placeholderIndex != -1 && runMap[eRPr][eB] == null) {
+    if(placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eB] == null) {
       isBold = _getBoldFromSlideLayout(placeholderIndex);
     } else {
       isBold = runMap[eRPr][eB]?.toString() == "1";
     }
 
     bool isItalic;
-    if(placeholderIndex != -1 && runMap[eRPr][eI] == null) {
+    if(placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eI] == null) {
       isItalic = _getItalicsFromSlideLayout(placeholderIndex);
     } else {
       isItalic = runMap[eRPr][eI]?.toString() == "1";
     }
 
     SimpleTypeTextUnderlineType underlineType;
-    if(placeholderIndex != -1 && runMap[eRPr][eU] == null) {
+    if(placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eU] == null) {
       underlineType = _getTextUnderlineTypeFromSlideLayout(placeholderIndex);
     } else {
       String underlineValue = runMap[eRPr][eU]?.toString() ?? 'none';
@@ -187,7 +187,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       }
     }
 
-    int placeholderIndex = -1;
+    int placeholderIndex = initialPLaceholderIndex;
     if (textboxShapeMap[eNvSpPr][eNvPr].isNotEmpty) {
       if (textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
         placeholderIndex = int.parse(textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
