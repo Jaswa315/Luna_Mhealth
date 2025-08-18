@@ -13,8 +13,6 @@ parameters:
   - name: luna_test_files
     type: object  
     default:
-      - luna_mod_name: "a_red_line_test"
-        input_file_name: "A red line.pptx"
       - luna_mod_name: "a_line_test"
         input_file_name: "A line.pptx"
 

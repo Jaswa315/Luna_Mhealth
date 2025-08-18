@@ -1,27 +1,76 @@
+# Nightly Build for Luna mHealth
+# Runs unit tests and then integration tests
+
 trigger: none
 
-pool:
-  vmImage: ubuntu-latest
+jobs:
 
-variables:
-  - name: package_folders
-    value: luna_core,luna_authoring_system,luna_mobile
 
-steps:
+- job: BuildPatrolApp
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+    - template: ../templates/install_prereqs.yml
+    - task: PowerShell@2
+      displayName: 'Create Patrol Mobile App'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd luna_mobile
+          flutter pub global activate patrol_cli 3.6.0
+          flutter create --platform=android .
+          patrol build android --target integration_test/luna_mobile_e2e_test.dart
 
-- template: ../templates/install_prereqs.yml
+    - publish: $(Build.SourcesDirectory)/luna_mobile/build/app/outputs/apk
+      artifact: patrolAPK
+      displayName: 'Publish artifact'
 
-- ${{ each folder in split(variables.package_folders, ',') }}:
-  - template: ../templates/lint_luna.yml
+
+- job: WindowsTests
+  dependsOn: BuildPatrolApp
+  pool:
+    vmImage: windows-latest
+  variables:
+    - name: package_folders
+      value: luna_core,luna_authoring_system,luna_mobile
+    - name: buildOS
+      value: windows
+    - name: package_name
+      value: WindowsBuild_$(Build.BuildNumber)
+    - name: release_dir
+      value: /x64/runner/Debug
+
+  steps:
+
+  - download: current
+    artifact: patrolAPK
+
+  - template: ../templates/install_prereqs.yml
+
+  - ${{ each folder in split(variables.package_folders, ',') }}:
+    - template: ../templates/lint_luna.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+
+    - template: ../templates/run_tests.yml
+      parameters:
+        package_path: ${{ folder }}
+        package_name: ${{ folder }}
+        include_coverage: 'true'
+
+  - template: ../templates/publish_test_lint_results.yml
     parameters:
-      package_path: ${{ folder }}
-      package_name: ${{ folder }}
-  - template: ../templates/run_tests.yml
-    parameters:
-      package_path: ${{ folder }}
-      package_name: ${{ folder }}
       include_coverage: 'true'
 
-- template: ../templates/publish_test_lint_results.yml
-  parameters:
-    include_coverage: 'true'
+  - template: ../templates/build_authoring_system.yml
+    parameters:
+      build_os: $(buildOS)
+      package_name: $(package_name)
+      release_directory: $(release_dir)
+      build_name: $(Build.BuildNumber)
+      debug_mode: true
+      archive_file: false
+
+  - template: ../templates/run_luna_mobile_tests_firebase.yml
+

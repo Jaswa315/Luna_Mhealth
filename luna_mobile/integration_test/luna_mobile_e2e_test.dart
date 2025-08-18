@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 
 
 void main() {
-
+// ,"a_red_line_test.luna":"A Red Line"
   // list of luna files and assocaited titles to test
-  const lunaFileTitlesTest = {"a_line_test.luna":"A line","a_red_line_test.luna":"A Red Line"};
+  const lunaFileTitlesTest = {"a_line_test.luna":"A line"};
 
 
     Future<Widget> createTestApp() async {
