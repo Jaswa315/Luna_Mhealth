@@ -9,6 +9,7 @@ import 'package:luna_authoring_system/pptx_data_objects/shape_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_core/units/emu.dart';
+import 'package:luna_authoring_system/helper/generate_module.dart';
 import 'dart:io';
 
 void main() {
@@ -136,9 +137,8 @@ void main() {
   });
 
   group('Tests for PptxTreeBuilder using A Textbox in Slide.pptx', () {
-    final pptxFile = File('test/test_assets/A Textbox in Slide.pptx');
-    PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
-    PptxTree pptxTree = pptxTreeBuilder.getPptxTree();
+    PptxTree pptxTree = getPptxTree('test/test_assets/A Textbox in Slide.pptx');
+    
 
     test('Textbox shapes are extracted.', () async {
       List<Shape> shapes = pptxTree.slides[0].shapes!;
