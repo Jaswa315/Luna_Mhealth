@@ -115,5 +115,18 @@ void main() {
       expect(slides.length, 1);
       expect(slides[0].shapes!.length, 3);
     });
+
+    test('Slide number is set correctly.', () {
+      stubMockPptxLoader(mockPptxLoader, PptxHierarchy.slideMaster,
+          mockSlideIndex, mockShapeTree);
+      stubMockPptxLoader(mockPptxLoader, PptxHierarchy.slideLayout,
+          mockSlideIndex, mockShapeTree);
+      stubMockPptxLoader(
+          mockPptxLoader, PptxHierarchy.slide, mockSlideIndex, mockShapeTree);
+
+      List<Slide> slides = pptxSlideBuilder.getSlides();
+
+      expect(slides[0].slideNumber, mockSlideIndex);
+    });
   });
 }

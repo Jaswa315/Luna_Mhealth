@@ -31,5 +31,12 @@ void main() {
 
       expect(slide.shapes, shapes);
     });
+
+    test('slideNumber can be set and retrieved', () async {
+      Slide slide = Slide();
+      slide.slideNumber = 1;
+
+      expect(slide.slideNumber, 1);
+    });
   });
 }
