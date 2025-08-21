@@ -70,6 +70,7 @@ class PptxSlideBuilder {
   Slide _getSlide(int slideIndex) {
     Slide slide = Slide();
     slide.shapes = _aggregateShapesFromHierarchy(slideIndex, PptxHierarchy.slide);
+    slide.slideNumber = slideIndex;
 
     return slide;
   }
