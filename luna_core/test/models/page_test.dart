@@ -104,5 +104,11 @@ void main() {
       expect(json['components'].first['type'], 'text');
       */
     });
+
+    test('Page constructor initializes with empty components', () {
+      final page = Page(components: [], slideNumber: 1);
+      expect(page.components, isEmpty);
+      expect(page.slideNumber, equals(1));
+    });
   });
 }
