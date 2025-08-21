@@ -11,9 +11,9 @@ void main() {
 
     setUp(() {
       // Initialize test data
-      page1 = Page(components: []);
-      page2 = Page(components: []);
-      page3 = Page(components: []);
+      page1 = Page(components: [], slideNumber: 1);
+      page2 = Page(components: [], slideNumber: 2);
+      page3 = Page(components: [], slideNumber: 3);
     });
 
     test('Should return the correct list of pages', () {

@@ -52,7 +52,8 @@ void main() {
         MockConnectionShape(),
         MockConnectionShape()
       ];
-      builder.buildPage(shapes);
+      final slideNumber = 1;
+      builder.buildPage(shapes, slideNumber);
 
       final page = builder.build();
 
@@ -61,11 +62,12 @@ void main() {
 
     test('Should not retain old components after calling buildPage()', () {
       final firstShapes = [MockConnectionShape()];
-      builder.buildPage(firstShapes);
+      final slideNumber = 1;
+      builder.buildPage(firstShapes, slideNumber);
       expect(builder.build().components.length, equals(1));
 
       final newShapes = [MockConnectionShape(), MockConnectionShape()];
-      builder.buildPage(newShapes);
+      builder.buildPage(newShapes, slideNumber);
 
       expect(builder.build().components.length,
           equals(2)); // Old components should be cleared
@@ -82,8 +84,18 @@ void main() {
       expect(page.components.length, equals(2));
     });
 
+    test('Should build a page with the correct slide number', () {
+      final shapes = [MockConnectionShape()];
+      final slideNumber = 1;
+      builder.buildPage(shapes, slideNumber);
+
+      final page = builder.build();
+
+      expect(page.slideNumber, equals(slideNumber));
+    });
+
     test('Should handle an empty ConnectionShape list without errors', () {
-      builder.buildPage([]);
+      builder.buildPage([], 1);
 
       final page = builder.build();
 

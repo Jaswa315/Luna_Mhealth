@@ -17,12 +17,16 @@ class Page {
   /// A list of components on the slide.
   final List<Component> components;
 
+  /// The slide number of this page
+  final int slideNumber;
+
   /// The parent sequence of pages to which this page belongs.
   late SequenceOfPages _sequenceOfPages;
 
   /// Constructs a new instance of [Page].
   Page({
     List<Component>? components,
+    required this.slideNumber,
   }) : components = components ?? [];
 
   /// Gets the list of components in the page.
@@ -63,7 +67,9 @@ class Page {
         .map((shapeJson) => ComponentSerializer.fromJson(shapeJson))
         .toList();
 
-    final page = Page(components: components);
+    int slideNumber = json['slideNumber'] as int;
+
+    final page = Page(components: components, slideNumber: slideNumber);
     page._sequenceOfPages = sequence;
 
     return page;
@@ -89,6 +95,7 @@ class Page {
       'shapes': components
           .map((c) => ComponentSerializer.serializeComponent(c))
           .toList(),
+      'slideNumber': slideNumber,
     };
   }
 

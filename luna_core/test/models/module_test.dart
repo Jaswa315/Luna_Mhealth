@@ -8,7 +8,7 @@ import 'dart:convert';
 void main() {
   group('Module Class Tests', () {
     test('Module is created with expected properties', () {
-      final entryPg = Page(components: []);
+      final entryPg = Page(components: [], slideNumber: 1);
       final module = Module(
         moduleId: '12345',
         title: 'This is title',
@@ -45,7 +45,7 @@ void main() {
           'entryPage': 'page_1',
         },
         'definitions': {
-          'page_1': {'type': 'page', 'shapes': []},
+          'page_1': {'type': 'page', 'shapes': [], 'slideNumber': 1},
           'sequence_1': {
             'sequenceOfPages': ['page_1']
           }
@@ -65,6 +65,7 @@ void main() {
       expect(module.aspectRatio, closeTo(1.7777777, 0.0001));
       expect(module.entryPage.runtimeType, Page);
       expect(module.entryPage.components, isEmpty);
+      expect(module.entryPage.slideNumber, 1);
     });
 
     test('Deserialization from valid JSON with pages', () {
@@ -79,8 +80,8 @@ void main() {
           'entryPage': 'page_1',
         },
         'definitions': {
-          'page_1': {'type': 'page', 'shapes': []},
-          'page_2': {'type': 'page', 'shapes': []},
+          'page_1': {'type': 'page', 'shapes': [], 'slideNumber': 1},
+          'page_2': {'type': 'page', 'shapes': [], 'slideNumber': 2},
           'sequence_1': {
             'sequenceOfPages': ['page_1', 'page_2']
           }

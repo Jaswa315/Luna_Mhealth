@@ -11,8 +11,8 @@ void main() {
 
     setUp(() {
       // Initialize test data
-      initialPage = Page(components: []);
-      newPage = Page(components: []);
+      initialPage = Page(components: [], slideNumber: 1);
+      newPage = Page(components: [], slideNumber: 2);
       moduleState = ModuleState(currentPage: initialPage);
     });
 
