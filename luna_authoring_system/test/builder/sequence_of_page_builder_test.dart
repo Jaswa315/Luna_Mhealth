@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/builder/sequence_of_page_builder.dart';
 import 'package:luna_core/models/pages/sequence_of_pages.dart';
@@ -34,8 +36,12 @@ void main() {
       expect(sequenceOfPagesSet.length, equals(2)); // Two sections
       expect(sequenceOfPagesSet.first.sequenceOfPages.length,
           equals(2)); // First section has 2 pages
+      expect(
+          sequenceOfPagesSet.first.sequenceOfPages.first.slideNumber, equals(1));
       expect(sequenceOfPagesSet.last.sequenceOfPages.length,
           equals(1)); // Second section has 1 page
+      expect(
+          sequenceOfPagesSet.last.sequenceOfPages.first.slideNumber, equals(3));
       expect(builder.firstPage, isA<Page>());
       expect(builder.firstPage.components, isEmpty);
     });

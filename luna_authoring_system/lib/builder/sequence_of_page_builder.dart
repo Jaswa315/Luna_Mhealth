@@ -48,10 +48,12 @@ class SequenceOfPageBuilder implements IBuilder<Set<SequenceOfPages>> {
 
   /// Builds a single [Page] object from a slide index.
   Page _buildPageFromSlide(int slideIndex) {
-    return _pageBuilder
+    Page page = _pageBuilder
         .buildPage(_slides[slideIndex - 1].shapes ??
-            []) // Build the page from slide shapes
+            [], slideIndex) // Build the page from slide shapes
         .build();
+
+    return page;
   }
 
   /// Adds a [SequenceOfPages] to the set of sequences.

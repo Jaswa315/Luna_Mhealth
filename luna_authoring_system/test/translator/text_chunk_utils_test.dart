@@ -72,6 +72,7 @@ void main() {
             ),
           ),
         ],
+        slideNumber: 1,
       );
 
       // Wrap in a SequenceOfPages and Module

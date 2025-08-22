@@ -107,7 +107,7 @@ void main() {
         authoringVersion: '1.0.0',
         setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
-        entryPage: luna_page.Page(components: []),
+        entryPage: luna_page.Page(components: [], slideNumber: 1),
       ),
       Module(
         moduleId: 'module-2',
@@ -116,7 +116,7 @@ void main() {
         authoringVersion: '1.0.0',
         setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
-        entryPage: luna_page.Page(components: []),
+        entryPage: luna_page.Page(components: [], slideNumber: 1),
       ),
       Module(
         moduleId: 'module-3',
@@ -125,7 +125,7 @@ void main() {
         authoringVersion: '1.0.0',
         setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
-        entryPage: luna_page.Page(components: []),
+        entryPage: luna_page.Page(components: [], slideNumber: 1),
       ),
       Module(
         moduleId: 'module-4',
@@ -134,7 +134,7 @@ void main() {
         authoringVersion: '1.0.0',
         setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
-        entryPage: luna_page.Page(components: []),
+        entryPage: luna_page.Page(components: [], slideNumber: 1),
       ),
     ];
 
@@ -153,7 +153,7 @@ void main() {
         authoringVersion: '1.0.0',
         setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
-        entryPage: luna_page.Page(components: []),
+        entryPage: luna_page.Page(components: [], slideNumber: 1),
       ),
       Module(
         moduleId: 'module-2',
@@ -162,7 +162,7 @@ void main() {
         authoringVersion: '1.0.0',
         setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
-        entryPage: luna_page.Page(components: []),
+        entryPage: luna_page.Page(components: [], slideNumber: 1),
       ),
     ];
 
@@ -194,7 +194,7 @@ void main() {
         authoringVersion: '1.0.0',
         setOfSequenceOfPages: {SequenceOfPages(sequenceOfPages: [])},
         aspectRatio: 4 / 3,
-        entryPage: luna_page.Page(components: []),
+        entryPage: luna_page.Page(components: [], slideNumber: 1),
       ),
     ];
 
