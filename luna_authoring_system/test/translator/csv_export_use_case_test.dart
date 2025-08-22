@@ -29,6 +29,7 @@ class FakeCsvWriter extends CsvWriter {
 /// Helpers to build tiny Modules inline
 Module _moduleWithTexts(List<String> texts) {
   final page = Page(
+    slideNumber: 0,
     components: [
       TextComponent(
         textChildren: texts.map((t) => TextPart(text: t)).toList(),
