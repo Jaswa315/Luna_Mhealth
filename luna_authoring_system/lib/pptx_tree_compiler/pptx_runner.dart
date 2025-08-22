@@ -15,6 +15,8 @@ class PptxRunner {
   late String _moduleName;
   late PptxTree _pptxTree;
   ValidationIssuesStore store;
+  Module? _builtModule;
+  Module? get builtModule => _builtModule;
 
   PptxRunner(this.store);
 
@@ -43,6 +45,7 @@ class PptxRunner {
     Module module = await moduleConstructor.constructLunaModule();
     String moduleJson = jsonEncode(module.toJson());
 
+    _builtModule = module;
     await ModuleResourceFactory.addModule(_moduleName, moduleJson);
   }
 }
