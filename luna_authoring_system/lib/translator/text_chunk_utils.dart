@@ -10,7 +10,7 @@ import 'text_chunk.dart';
 /// Extract all text components from a Module and convert them into TextChunks
 List<TextChunk> extractTextChunks(Module module) {
   final List<TextChunk> chunks = [];
-  int slideIndex = 0;
+  int slideIndex = 1;
 
   for (final sequence in module.setOfSequenceOfPages) {
     for (final page in sequence.sequenceOfPages) {
