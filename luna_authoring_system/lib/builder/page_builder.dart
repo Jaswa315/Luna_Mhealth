@@ -10,7 +10,7 @@ import 'package:luna_core/models/pages/page.dart';
 
 class PageBuilder implements IBuilder<Page> {
   List<Component> _components = [];
-  int _slideNumber = 0;
+  int _slideNumber = 1;
   PageBuilder();
 
   /// converts a shape into a component and adds it to the list.
