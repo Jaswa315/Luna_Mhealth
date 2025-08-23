@@ -37,7 +37,7 @@ void main() {
 
       // Verify: this deck has a single textbox on the first (and only) slide
       expect(chunks.length, 1);
-      expect(chunks[0].slideNumber, 0);
+      expect(chunks[0].slideNumber, 1);
       expect(chunks[0].text, 'This is a textbox in slide');
     });
 
@@ -49,9 +49,9 @@ void main() {
       // Extract
       final chunks = extractTextChunks(module);
 
-      // Verify: 1 chunk, exact text match, slide index as produced by extractor (starts at 0)
+      // Verify: 1 chunk, exact text match, slide index as produced by extractor
       expect(chunks.length, 1);
-      expect(chunks[0].slideNumber, 0);
+      expect(chunks[0].slideNumber, 1);
       expect(chunks[0].text, 'This is a textbox in slide');
     });
 
@@ -93,7 +93,7 @@ void main() {
       // Assert
       expect(chunks.length, 1);
       expect(chunks[0].text, 'Valid text');
-      expect(chunks[0].slideNumber, 0); // first (and only) page → index 0
+      expect(chunks[0].slideNumber, 1); 
       expect(chunks.any((c) => c.text.trim().isEmpty), isFalse);
     });
   });

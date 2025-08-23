@@ -10,12 +10,10 @@ import 'text_chunk.dart';
 /// Extract all text components from a Module and convert them into TextChunks
 List<TextChunk> extractTextChunks(Module module) {
   final List<TextChunk> chunks = [];
-  int slideIndex = 0;
 
   for (final sequence in module.setOfSequenceOfPages) {
     for (final page in sequence.sequenceOfPages) {
-      chunks.addAll(_extractChunksFromPage(page, slideIndex));
-      slideIndex++;
+      chunks.addAll(_extractChunksFromPage(page));
     }
   }
 
@@ -23,7 +21,7 @@ List<TextChunk> extractTextChunks(Module module) {
 }
 
 /// Helper to extract TextChunks from a single page
-List<TextChunk> _extractChunksFromPage(Page page, int slideIndex) {
+List<TextChunk> _extractChunksFromPage(Page page) {
   final List<TextChunk> chunks = [];
 
   for (final component in page.components) {
@@ -31,7 +29,7 @@ List<TextChunk> _extractChunksFromPage(Page page, int slideIndex) {
       for (final textPart in component.textChildren) {
         if (textPart.text.trim().isNotEmpty) {
           chunks.add(TextChunk(
-            slideNumber: slideIndex,
+            slideNumber: page.slideNumber, // use Page’s own 1-based number
             text: textPart.text,
           ));
         }
