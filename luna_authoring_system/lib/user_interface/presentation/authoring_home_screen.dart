@@ -10,7 +10,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
+import 'package:luna_authoring_system/translator/csv_export_use_case.dart';
 import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
+import 'package:luna_core/models/module.dart';
 import 'package:provider/provider.dart';
 
 /// Home page for the Authoring System
@@ -26,6 +28,12 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   bool filePicked = false;
   bool textEntered = false;
 
+  // New: state & helpers for CSV export and UX polish
+  Module? _builtModule;
+  final CsvExportUseCase _csvUseCase = CsvExportUseCase();
+  final _formKey = GlobalKey<FormState>();
+  bool _busy = false;
+
   final TextEditingController _controller = TextEditingController();
   final store = ValidationIssuesStore();
   late final PptxRunner _runner;
@@ -36,25 +44,102 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
     _runner = PptxRunner(store);
   }
 
-  Future _pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['pptx'],
+      withData: false,
+    );
+    if (result != null && result.files.single.path != null) {
       setState(() {
-        filePath = result.files.single.path;
+        filePath = result.files.single.path!;
         filePicked = true;
+        textEntered = false;
+        _builtModule = null; // reset if new file is picked
       });
     }
   }
 
-  Future _submitText() async {
-    await _runner.processPptx(filePath!, _controller.text);
-    if (store.hasIssues) {
-      // If there are validation issues, we will not proceed further.
+  Future<void> _submitText() async {
+    // Guard rails
+    if (!filePicked || filePath == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please pick a .pptx file first.')),
+      );
       return;
     }
-    setState(() {
-      textEntered = true;
-    });
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _busy = true);
+    try {
+      await _runner.processPptx(filePath!, _controller.text.trim());
+
+      if (store.hasIssues) {
+        // Validators have populated the store; UI will render issues below.
+        setState(() {
+          textEntered = false;
+          _builtModule = null;
+        });
+        return;
+      }
+
+      // IMPORTANT: Requires PptxRunner to expose the built module via a getter.
+      // Add in PptxRunner:
+      //   Module? _builtModule;
+      //   Module? get builtModule => _builtModule;
+      //   _builtModule = module; // in _generateLunaModule()
+      _builtModule = _runner.builtModule;
+
+      setState(() {
+        textEntered = true;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Conversion failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _exportCsv() async {
+    if (_builtModule == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No Module available to export.')),
+      );
+      return;
+    }
+
+    final savePath = await FilePicker.platform.saveFile(
+      dialogTitle: 'Save CSV as...',
+      fileName: '${_controller.text.trim().isEmpty ? "module" : _controller.text.trim()}.csv',
+      type: FileType.custom,
+      allowedExtensions: const ['csv'],
+    );
+    if (savePath == null) return;
+
+    setState(() => _busy = true);
+    try {
+      final ok = await _csvUseCase.exportModuleToCsv(
+        module: _builtModule!,
+        outputFilePath: savePath,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(ok ? 'CSV saved.' : 'CSV save failed.')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('CSV export failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
 
   @override
@@ -62,47 +147,84 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
     return ChangeNotifierProvider(
       create: (_) => store,
       child: Scaffold(
-        appBar: AppBar(title: Text("Luna Authoring System")),
+        appBar: AppBar(title: const Text("Luna Authoring System")),
         body: Consumer<ValidationIssuesStore>(
           builder: (context, store, child) {
             return Center(
               child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (!filePicked)
-                      ElevatedButton(
-                        onPressed: () => _pickFile(),
-                        child: Text("Pick a PPTX File"),
-                      ),
-                    if (filePicked && !textEntered) ...[
-                      Text("File Selected: $filePath"),
-                      TextField(
-                        controller: _controller,
-                        decoration:
-                            InputDecoration(labelText: "Enter Module Name"),
-                      ),
-                      SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () => _submitText(),
-                        child: Text("Submit"),
-                      ),
+                padding: const EdgeInsets.all(20),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 720),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (!filePicked)
+                        ElevatedButton(
+                          onPressed: _busy ? null : _pickFile,
+                          child: const Text("Pick a PPTX File"),
+                        ),
+
+                      if (filePicked && !textEntered) ...[
+                        Text("File Selected: $filePath"),
+                        const SizedBox(height: 12),
+                        Form(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          child: TextFormField(
+                            controller: _controller,
+                            enabled: !_busy,
+                            decoration: const InputDecoration(
+                              labelText: "Enter Module Name",
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (v) {
+                              final s = (v ?? '').trim();
+                              if (s.isEmpty) return 'Module name is required';
+                              if (!RegExp(r'^[A-Za-z0-9 _\.-]{3,}$').hasMatch(s)) {
+                                return 'Use 3+ chars: letters, numbers, space, _ . -';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _submitText(),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: _busy ? null : _submitText,
+                          child: _busy
+                              ? const SizedBox(
+                                  width: 18, height: 18,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : const Text("Submit"),
+                        ),
+                      ],
+
+                      if (textEntered && !store.hasIssues) ...[
+                        const SizedBox(height: 8),
+                        const Text(
+                          "Job done!",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton.icon(
+                          onPressed: _busy ? null : _exportCsv,
+                          icon: const Icon(Icons.save_alt),
+                          label: const Text('Export CSV'),
+                        ),
+                      ],
+
+                      if (store.hasIssues) ...[
+                        const SizedBox(height: 20),
+                        ValidationIssuesSummary(
+                          issues: store.issues,
+                          store: store,
+                        ),
+                      ],
                     ],
-                    if (textEntered && !store.hasIssues)
-                      Text(
-                        "Job done!",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    if (store.hasIssues) ...[
-                      SizedBox(height: 20),
-                      ValidationIssuesSummary(
-                        issues: store.issues,
-                        store: store,
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
               ),
             );
