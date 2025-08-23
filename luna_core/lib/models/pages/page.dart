@@ -27,7 +27,11 @@ class Page {
   Page({
     List<Component>? components,
     required this.slideNumber,
-  }) : components = components ?? [];
+  }) : components = components ?? [] {
+    if (slideNumber < 1) {
+      throw ArgumentError('slideNumber must be greater than 0');
+    }
+  }
 
   /// Gets the list of components in the page.
   List<Component> get getPageComponents => List.unmodifiable(components);

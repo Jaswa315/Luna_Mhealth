@@ -110,5 +110,9 @@ void main() {
       expect(page.components, isEmpty);
       expect(page.slideNumber, equals(1));
     });
+
+    test('Page constructor throws error for invalid slideNumber', () {
+      expect(() => Page(components: [], slideNumber: 0), throwsArgumentError);
+    });
   });
 }
