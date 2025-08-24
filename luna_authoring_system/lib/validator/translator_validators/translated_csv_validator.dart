@@ -5,7 +5,8 @@ import 'package:luna_authoring_system/validator/i_validation_issue.dart';
 import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/issue/translator_issues/translated_cell_missing.dart';
 
-/// Validates an uploaded translation CSV
+/// Validates an uploaded translation CSV:
+/// Requires headers: sourceHeader (default: "text") and translatedHeader (default: "Translated text")
 class TranslatedCsvValidator implements IValidator {
   final String csvText;
   final String translatedHeader; 
@@ -13,7 +14,7 @@ class TranslatedCsvValidator implements IValidator {
 
   TranslatedCsvValidator(
     this.csvText, {
-    this.translatedHeader = 'translation',
+    this.translatedHeader = 'Translated text',
     this.sourceHeader = 'text',
   });
 
@@ -29,7 +30,7 @@ class TranslatedCsvValidator implements IValidator {
 
     final header = _split(lines.first).map((h) => h.trim()).toList();
     final translatedIdx = _indexOfIgnoreCase(header, translatedHeader);
-    final sourceIdx = _indexOfIgnoreCase(header, sourceHeader);
+    final sourceIdx     = _indexOfIgnoreCase(header, sourceHeader);
 
     if (translatedIdx == -1) {
       issues.add(_CsvFormatIssue('Missing header column "$translatedHeader".'));
@@ -55,7 +56,7 @@ class TranslatedCsvValidator implements IValidator {
     return issues;
   }
 
-  // --- helpers: simple CSV splitting (OK if no quoted commas) ---
+  // --- helpers (simple CSV splitting; fine if no quoted commas) ---
   List<String> _split(String line) => line.split(',');
 
   int _indexOfIgnoreCase(List<String> cols, String name) {

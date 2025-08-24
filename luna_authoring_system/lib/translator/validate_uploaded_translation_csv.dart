@@ -11,7 +11,7 @@ void validateUploadedTranslationCsv({
   
   final validator = TranslatedCsvValidator(
     csvText,
-    translatedHeader: 'Translation',
+    translatedHeader: 'Translated text',
     sourceHeader: 'text',
   );
 
