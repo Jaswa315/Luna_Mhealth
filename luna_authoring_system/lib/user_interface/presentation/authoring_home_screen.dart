@@ -6,11 +6,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/translator/csv_export_use_case.dart';
+import 'package:luna_authoring_system/translator/validate_uploaded_translation_csv.dart';
 import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +30,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   bool filePicked = false;
   bool textEntered = false;
 
-  // New: state & helpers for CSV export and UX polish
+  // CSV export + UX
   Module? _builtModule;
   final CsvExportUseCase _csvUseCase = CsvExportUseCase();
   final _formKey = GlobalKey<FormState>();
@@ -61,13 +63,12 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
         filePath = result.files.single.path!;
         filePicked = true;
         textEntered = false;
-        _builtModule = null; // reset if new file is picked
+        _builtModule = null;
       });
     }
   }
 
   Future<void> _submitText() async {
-    // Guard rails
     if (!filePicked || filePath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please pick a .pptx file first.')),
@@ -81,7 +82,6 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
       await _runner.processPptx(filePath!, _controller.text.trim());
 
       if (store.hasIssues) {
-        // Validators have populated the store; UI will render issues below.
         setState(() {
           textEntered = false;
           _builtModule = null;
@@ -89,11 +89,6 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
         return;
       }
 
-      // IMPORTANT: Requires PptxRunner to expose the built module via a getter.
-      // Add in PptxRunner:
-      //   Module? _builtModule;
-      //   Module? get builtModule => _builtModule;
-      //   _builtModule = module; // in _generateLunaModule()
       _builtModule = _runner.builtModule;
 
       setState(() {
@@ -139,6 +134,28 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
       );
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _validateTranslatedCsv() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['csv'],
+      withData: true,
+    );
+    if (result == null || result.files.single.bytes == null) return;
+
+    final csvText = utf8.decode(result.files.single.bytes!);
+
+    // Optional: clear previous issues if your store supports it
+    // store.clear();
+
+    validateUploadedTranslationCsv(csvText: csvText, store: store);
+
+    if (!store.hasIssues) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('CSV looks good — all translations present.')),
+      );
     }
   }
 
@@ -209,10 +226,21 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                           style: TextStyle(fontSize: 20),
                         ),
                         const SizedBox(height: 12),
-                        ElevatedButton.icon(
-                          onPressed: _busy ? null : _exportCsv,
-                          icon: const Icon(Icons.save_alt),
-                          label: const Text('Export CSV'),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 8,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: _busy ? null : _exportCsv,
+                              icon: const Icon(Icons.save_alt),
+                              label: const Text('Export CSV'),
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: _busy ? null : _validateTranslatedCsv,
+                              icon: const Icon(Icons.fact_check),
+                              label: const Text('Validate Translated CSV'),
+                            ),
+                          ],
                         ),
                       ],
 
@@ -221,6 +249,12 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                         ValidationIssuesSummary(
                           issues: store.issues,
                           store: store,
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton.icon(
+                          onPressed: _busy ? null : _validateTranslatedCsv,
+                          icon: const Icon(Icons.upload_file),
+                          label: const Text('Validate Translated CSV'),
                         ),
                       ],
                     ],
