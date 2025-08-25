@@ -6,7 +6,11 @@ import 'package:luna_authoring_system/validator/i_validator.dart';
 import 'package:luna_authoring_system/validator/issue/translator_issues/translated_cell_missing.dart';
 
 /// Validates an uploaded translation CSV:
-/// Requires headers: sourceHeader (default: "text") and translatedHeader (default: "Translated text")
+/// Requires headers: [sourceHeader] (default: "text")
+/// and [translatedHeader] (default: "Translated text").
+///
+/// NOTE: This parser is intentionally simple (split by ',') and assumes
+/// cells don't contain embedded commas or quoted fields.
 class TranslatedCsvValidator implements IValidator {
   final String csvText;
   final String translatedHeader; // e.g. "Translated text"
@@ -22,10 +26,10 @@ class TranslatedCsvValidator implements IValidator {
   Set<IValidationIssue> validate() {
     final issues = <IValidationIssue>{};
 
-    // Split into raw lines
+    // 1) Split lines
     final rawLines = const LineSplitter().convert(csvText);
 
-    // Skip leading empty/whitespace-only lines so the first non-empty line is the header.
+    // 2) Skip leading blank lines so first non-empty is header
     final lines = <String>[];
     bool seenHeader = false;
     for (final l in rawLines) {
@@ -41,10 +45,10 @@ class TranslatedCsvValidator implements IValidator {
       return issues;
     }
 
-    // Parse header
+    // 3) Parse header
     final header = _split(lines.first).map((h) => h.trim()).toList();
 
-    // Strip BOM if present on first header cell (common with Excel CSVs)
+    // Strip BOM if present on the first header cell (common with Excel)
     if (header.isNotEmpty && header.first.startsWith('\uFEFF')) {
       header[0] = header.first.replaceFirst('\uFEFF', '');
     }
@@ -61,14 +65,18 @@ class TranslatedCsvValidator implements IValidator {
       return issues;
     }
 
-    // Data rows (note: i is 1-based from 'lines' so rowIndex = i + 1 includes header)
+    // 4) Validate rows
+    // i = 1 because lines[0] is header; rowIndex = i + 1 to be 1-based incl header
     for (int i = 1; i < lines.length; i++) {
       final row = _split(lines[i]);
+
+      // Skip entirely empty rows
       if (_rowIsEmpty(row)) continue;
 
       final translated = _safeGet(row, translatedIdx).trim();
       final source = _safeGet(row, sourceIdx).trim();
 
+      // Treat whitespace-only as missing
       if (translated.isEmpty) {
         issues.add(TranslatedCellMissing(rowIndex: i + 1, sourceText: source));
       }
@@ -77,13 +85,14 @@ class TranslatedCsvValidator implements IValidator {
     return issues;
   }
 
-  // --- helpers (simple CSV splitting; fine if no quoted commas) ---
+  // --- helpers (simple CSV splitting; OK if no quoted commas) ---
+
   List<String> _split(String line) => line.split(',');
 
   int _indexOfIgnoreCase(List<String> cols, String name) {
     final target = name.toLowerCase();
     for (int i = 0; i < cols.length; i++) {
-      if (cols[i].toLowerCase() == target) return i;
+      if (cols[i].trim().toLowerCase() == target) return i;
     }
     return -1;
   }
