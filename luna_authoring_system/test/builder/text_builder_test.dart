@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_authoring_system/builder/module_builder.dart';
 import 'package:luna_authoring_system/builder/text_builder.dart';
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_simple_type_text_font_size.dart';
@@ -9,6 +10,7 @@ import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_core/models/components/text_component/text_component.dart';
 import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:mockito/mockito.dart';
 import '../mocks/mock.mocks.dart';
@@ -17,6 +19,8 @@ void main() {
   group('TextBuilder Tests', () {
     test('Should build a TextComponent from a TextboxShape', () {
       final mockTextboxShape = MockTextboxShape();
+      ModuleBuilder moduleBuilder = ModuleBuilder();
+      moduleBuilder.setDimensions(EMU(5000000).value, EMU(3000000).value);
 
       when(mockTextboxShape.textbody).thenReturn(Textbody(
         paragraphs: [
@@ -51,6 +55,8 @@ void main() {
 
     test('Should correctly set text children from TextboxShape', () {
       final mockTextboxShape = MockTextboxShape();
+      ModuleBuilder moduleBuilder = ModuleBuilder();
+      moduleBuilder.setDimensions(EMU(5000000).value, EMU(3000000).value);
 
       when(mockTextboxShape.textbody).thenReturn(Textbody(
         paragraphs: [
@@ -102,6 +108,8 @@ void main() {
 
     test('Should correctly set bounding box from TextboxShape', () {
       final mockTextboxShape = MockTextboxShape();
+      ModuleBuilder moduleBuilder = ModuleBuilder();
+      moduleBuilder.setDimensions(EMU(5000000).value, EMU(3000000).value);
 
       when(mockTextboxShape.textbody).thenReturn(Textbody(
         paragraphs: [
@@ -131,10 +139,10 @@ void main() {
           .build();
 
       expect(textComponent.boundingBox, isNotNull);
-      expect(textComponent.boundingBox.topLeftCorner.dx, 500000);
-      expect(textComponent.boundingBox.topLeftCorner.dy, 500000);
-      expect(double.parse(textComponent.boundingBox.width.toString()), EMU(1000000).value);
-      expect(double.parse(textComponent.boundingBox.height.toString()), EMU(1000000).value);
+      expect(textComponent.boundingBox.topLeftCorner.dx, 0.1);
+      expect(textComponent.boundingBox.topLeftCorner.dy, 500000 / 3000000);
+      expect((textComponent.boundingBox.width as Percent).value, 1000000 / 5000000);
+      expect((textComponent.boundingBox.height as Percent).value, 1000000 / 3000000);
     });
 
     test('Should throw an error if build() is called before setting start and end points', () {

@@ -1,10 +1,14 @@
 import 'dart:ui';
 import 'package:luna_authoring_system/builder/i_builder.dart';
+import 'package:luna_authoring_system/builder/module_builder.dart';
+import 'package:luna_authoring_system/helper/emu_conversions.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_core/models/components/text_component/text_component.dart';
 import 'package:luna_core/models/components/text_component/text_part.dart';
 import 'package:luna_core/units/bounding_box.dart';
+import 'package:luna_core/units/emu.dart';
+import 'package:luna_core/units/percent.dart';
 
 /// TextBuilder is a builder class for constructing a [TextComponent].
 /// It extracts necessary properties from a [TextboxShape] and
@@ -36,11 +40,15 @@ class TextBuilder implements IBuilder<TextComponent> {
 
   /// Sets the bounding box for the TextComponent.
   TextBuilder setBoundingBox(TextboxShape shape) {
+    // need to convert from EMU to percentage based on module dimensions
+    final double startX = EmuConversions.updateEmuToPercentage(shape.transform.offset.x as EMU, EMU(ModuleBuilder.moduleWidth));
+    final double startY = EmuConversions.updateEmuToPercentage(shape.transform.offset.y as EMU, EMU(ModuleBuilder.moduleHeight));
+    final double width = EmuConversions.updateEmuToPercentage(shape.transform.size.x as EMU, EMU(ModuleBuilder.moduleWidth));
+    final double height = EmuConversions.updateEmuToPercentage(shape.transform.size.y as EMU , EMU(ModuleBuilder.moduleHeight));
     _boundingBox = BoundingBox(
-      topLeftCorner: Offset(double.parse(shape.transform.offset.x.toString()),
-        (double.parse(shape.transform.offset.y.toString()))),
-      width: shape.transform.size.x,
-      height: shape.transform.size.y,
+      topLeftCorner: Offset(startX, startY),
+      width: Percent(width),
+      height: Percent(height)
     );
     return this;
   }
