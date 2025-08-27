@@ -41,14 +41,17 @@ class TextBuilder implements IBuilder<TextComponent> {
   /// Sets the bounding box for the TextComponent.
   TextBuilder setBoundingBox(TextboxShape shape) {
     // need to convert from EMU to percentage based on module dimensions
-    final double startX = EmuConversions.updateEmuToPercentage(shape.transform.offset.x as EMU, EMU(ModuleBuilder.moduleWidth));
-    final double startY = EmuConversions.updateEmuToPercentage(shape.transform.offset.y as EMU, EMU(ModuleBuilder.moduleHeight));
-    final double width = EmuConversions.updateEmuToPercentage(shape.transform.size.x as EMU, EMU(ModuleBuilder.moduleWidth));
-    final double height = EmuConversions.updateEmuToPercentage(shape.transform.size.y as EMU , EMU(ModuleBuilder.moduleHeight));
+    final double startXAsPercent = EmuConversions.updateEmuToPercentage(shape.transform.offset.x as EMU, EMU(ModuleBuilder.moduleWidth));
+    final double startYAsPercent = EmuConversions.updateEmuToPercentage(shape.transform.offset.y as EMU, EMU(ModuleBuilder.moduleHeight));
+    final topLeftCorner = Offset(startXAsPercent, startYAsPercent);
+
+    final Percent widthAsPercent = Percent(EmuConversions.updateEmuToPercentage(shape.transform.size.x as EMU, EMU(ModuleBuilder.moduleWidth)));
+    final Percent heightAsPercent = Percent(EmuConversions.updateEmuToPercentage(shape.transform.size.y as EMU , EMU(ModuleBuilder.moduleHeight)));
+    
     _boundingBox = BoundingBox(
-      topLeftCorner: Offset(startX, startY),
-      width: Percent(width),
-      height: Percent(height)
+      topLeftCorner: topLeftCorner,
+      width: widthAsPercent,
+      height: heightAsPercent
     );
     return this;
   }
