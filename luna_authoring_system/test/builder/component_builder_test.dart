@@ -100,8 +100,8 @@ void main() {
       ));
 
       when(shape.transform).thenReturn(Transform(
-        Point(EMU(500000), EMU(500000)),
-        Point(EMU(1000000), EMU(1000000)),
+        Point(EMU(12700), EMU(12700)),
+        Point(EMU(12700 * 3), EMU(12700 * 3)),
       ));
       final component = ComponentBuilder(shape).build();
 
