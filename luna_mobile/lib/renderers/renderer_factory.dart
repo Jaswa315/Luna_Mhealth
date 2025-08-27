@@ -6,14 +6,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'package:flutter/material.dart';
 import 'package:luna_core/models/components/line_component.dart';
+import 'package:luna_core/models/components/text_component/text_component.dart';
 import 'package:luna_mobile/renderers/irenderer.dart';
 import 'package:luna_mobile/renderers/line_component_renderer.dart';
+import 'package:luna_mobile/renderers/text_component_renderer.dart';
 
 /// A factory class for creating component renderers.
 class RendererFactory {
   static final Map<Type, IRenderer> _renderers = {
     LineComponent: LineComponentRenderer(),
+    TextComponent: TextComponentRenderer(),
   };
 
   /// Returns the renderer for the specified component type.
