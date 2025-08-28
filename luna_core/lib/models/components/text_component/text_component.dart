@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:luna_core/models/components/bounding_box_component.dart';
 import 'package:luna_core/models/components/text_component/text_part.dart';
 import 'package:luna_core/units/bounding_box.dart';
 import 'package:luna_core/utils/types.dart';
-import 'package:luna_mobile/renderers/text_component_renderer.dart';
 
 /// Represents a text component that can be used in the Luna mHealth Mobile app.
 ///
