@@ -8,6 +8,7 @@
 
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/components/text_component/text_component.dart';
+import 'package:luna_mobile/custom_exception_types/unsupported_component_type_exception.dart';
 import 'package:luna_mobile/renderers/irenderer.dart';
 import 'package:luna_mobile/renderers/line_component_renderer.dart';
 import 'package:luna_mobile/renderers/text_component_renderer.dart';
@@ -26,7 +27,7 @@ class RendererFactory {
     if (_renderers.containsKey(componentType)) {
       return _renderers[componentType]!;
     } else {
-      throw Exception('Unsupported component type');
+      throw UnsupportedComponentTypeException(componentType.toString(), _renderers.keys.map((type) => type.toString()).toList());
     }
   }
 }
