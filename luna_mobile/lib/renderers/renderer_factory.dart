@@ -6,7 +6,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'package:flutter/material.dart';
 import 'package:luna_core/models/components/line_component.dart';
 import 'package:luna_core/models/components/text_component/text_component.dart';
 import 'package:luna_mobile/renderers/irenderer.dart';
