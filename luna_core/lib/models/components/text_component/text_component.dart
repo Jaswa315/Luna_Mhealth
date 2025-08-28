@@ -45,10 +45,4 @@ class TextComponent extends BoundingBoxComponent {
         'textParts': textChildren.map((textPart) => textPart.toJson()).toList(),
         'boundingBox': boundingBox.toJson(),
       };
-
-  /// Renders the text as a [Widget].
-  @override
-  Future<Widget> render(Size screenSize) async {
-    return TextComponentRenderer().renderComponent(this, screenSize);
-  }
 }

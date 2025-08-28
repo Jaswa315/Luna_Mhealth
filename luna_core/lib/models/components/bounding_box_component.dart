@@ -40,10 +40,4 @@ class BoundingBoxComponent extends Component {
       'height': json['boundingBox']['height'],
     });
   }
-
-  @override
-  Future<Widget> render(Size screenSize) {
-    // ToDo: implement render
-    throw UnimplementedError();
-  }
 }

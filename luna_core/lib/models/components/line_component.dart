@@ -40,12 +40,6 @@ class LineComponent extends Component {
     required this.endPoint,
   });
 
-  /// Renders the line as a [Widget].
-  @override
-  Future<Widget> render(Size screenSize) async {
-    return LineComponentRenderer().renderComponent(this, screenSize);
-  }
-
   /// Converts the current [LineComponent] instance to a JSON object.
   /// Returns: A [Json] object containing all the properties of the line.
   Json toJson() {
