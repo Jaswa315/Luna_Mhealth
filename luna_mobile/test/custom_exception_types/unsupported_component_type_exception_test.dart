@@ -16,7 +16,6 @@ void main() {
   });
 
   test('UnsupportedRendererException default message', () {
-    
     final exception = UnsupportedComponentTypeException(
       'UnsupportedComponent',
       ['LineComponent', 'TextComponent'],
