@@ -18,8 +18,6 @@ import 'module_storage.dart';
 
 /// An archive handler that provides methods to handle Luna files.
 class ModuleResourceFactory {
-  /// The name of the module.
-  static String moduleName = '';
 
   /// The module storage instance.
   static ModuleStorage moduleStorage = ModuleStorage();
@@ -58,12 +56,11 @@ class ModuleResourceFactory {
   }
 
   /// Adds a module file with the given name and file data.
-  static Future<bool> addModuleFile(
-      String moduleName, Uint8List fileData) async {
-    await cleanupModuleData(moduleName); // FIXME: Code - Remove this line
+  static Future<bool> addModuleFile(String moduleName, Uint8List fileData) async {
+  // Removed the destructive pre-cleanup to avoid accidental data loss.
+  return moduleStorage.importModuleFile(moduleName, fileData);
+}
 
-    return moduleStorage.importModuleFile(moduleName, fileData);
-  }
 
   static Future<bool> _populateModuleDataWithInitialAssets(
       String moduleName, String jsonData) async {
@@ -83,10 +80,12 @@ class ModuleResourceFactory {
   }
 
   /// Gets the image with the given name from the stored module.
-  static Future<Uint8List?> getImageBytes(String imageFileName) async {
-    return moduleStorage.getAsset(
-        moduleName, '${_getImagePath()}/$imageFileName');
-  }
+  static Future<Uint8List?> getImageBytes(
+  String moduleName,
+  String imageFileName,
+) async {
+  return moduleStorage.getImageBytes(moduleName, imageFileName);
+}
 
   /// Gets the audio with the given name and language locale from the stored module.
   static Future<Uint8List?> getAudioBytes(
@@ -112,23 +111,8 @@ class ModuleResourceFactory {
 
   /// Loads all modules from storage.
   static Future<List<Module>> _getAllModulesFromStorage() async {
-    return await moduleStorage.loadAllModules() as List<Module>;
-  }
-
-  /// Method to get the full path for an image file within a module
-  String getImagePath(String moduleName, String imageFileName) {
-    moduleName = moduleName.trim().replaceAll(" ", "_");
-    return 'resources/images/$imageFileName';
-  }
-
-  /// Method to get the full path for an audio file within a module,
-  /// considering language locale
-  String getAudioPath(
-      String moduleName, String audioFileName, String langLocale) {
-    moduleName = moduleName.trim().replaceAll(" ", "_");
-    return 'resources/$langLocale/audio/$audioFileName';
-  }
-
+  return moduleStorage.loadAllModules();
+}
   static String _getResourcePath() {
     return "resources";
   }
