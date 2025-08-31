@@ -1,10 +1,13 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
-import 'package:luna_authoring_system/helper/authoring_initializer.dart';
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_authoring_system/helper/authoring_initializer.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
+import 'package:luna_core/storage/module_resource_factory.dart';
+import 'package:path/path.dart';
 
 void main() {
   group('Tests for PptxRunner using A line.pptx', () {
@@ -12,8 +15,7 @@ void main() {
 
     TestWidgetsFlutterBinding.ensureInitialized();
 
-    //platform channels are not available in unit tests
-    //taken from package_info_plus github (https://github.com/fluttercommunity/plus_plugins/blob/main/packages/package_info_plus/package_info_plus/test/package_info_test.dart)
+    // platform channels are not available in unit tests (mock package_info_plus)
     const channel = MethodChannel('dev.fluttercommunity.plus/package_info');
     final log = <MethodCall>[];
 
@@ -54,12 +56,20 @@ void main() {
     });
 
     final pptxFile = File('test/test_assets/A line.pptx');
+
     test('Process PPTX makes a luna file.', () async {
       const fileName = 'unit_test_luna';
-      var filePath = join(testDir, "$fileName.luna");
-      ValidationIssuesStore store = ValidationIssuesStore();
+      final filePath = join(testDir, "$fileName.luna");
+      final store = ValidationIssuesStore();
+
       await AuthoringInitializer.initializeAuthoring();
-      await PptxRunner(store).processPptx(pptxFile.path, fileName);
+
+      // Build only with PptxRunner (no saving inside runner)
+      final module = await PptxRunner(store).buildModule(pptxFile.path, fileName);
+
+      // Explicitly save via ModuleResourceFactory
+      await ModuleResourceFactory.addModule(fileName, jsonEncode(module.toJson()));
+
       expect(await File(filePath).exists(), true);
     });
   });

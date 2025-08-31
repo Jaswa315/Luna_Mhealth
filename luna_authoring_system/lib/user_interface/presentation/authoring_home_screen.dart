@@ -6,6 +6,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
@@ -13,7 +15,9 @@ import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/translator/csv_export_use_case.dart';
 import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
 import 'package:luna_core/models/module.dart';
+import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:provider/provider.dart';
+
 
 /// Home page for the Authoring System
 /// Goes through each input for the system
@@ -67,46 +71,51 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   }
 
   Future<void> _submitText() async {
-    // Guard rails
-    if (!filePicked || filePath == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please pick a .pptx file first.')),
-      );
+  // Guard rails
+  if (!filePicked || filePath == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please pick a .pptx file first.')),
+    );
+    return;
+  }
+  if (!_formKey.currentState!.validate()) return;
+
+  setState(() => _busy = true);
+  try {
+    // Build only (runner no longer saves)
+    final module = await _runner.buildModule(
+      filePath!,
+      _controller.text.trim(),
+    );
+
+    // If validators found issues, show them and stop
+    if (store.hasIssues) {
+      setState(() {
+        textEntered = false;
+        _builtModule = null;
+      });
       return;
     }
-    if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _busy = true);
-    try {
-      await _runner.processPptx(filePath!, _controller.text.trim());
+    // Save explicitly (keeps previous behavior)
+    await ModuleResourceFactory.addModule(
+      _controller.text.trim(),
+      jsonEncode(module.toJson()),
+    );
 
-      if (store.hasIssues) {
-        // Validators have populated the store; UI will render issues below.
-        setState(() {
-          textEntered = false;
-          _builtModule = null;
-        });
-        return;
-      }
-
-      // IMPORTANT: Requires PptxRunner to expose the built module via a getter.
-      // Add in PptxRunner:
-      //   Module? _builtModule;
-      //   Module? get builtModule => _builtModule;
-      //   _builtModule = module; // in _generateLunaModule()
-      _builtModule = _runner.builtModule;
-
-      setState(() {
-        textEntered = true;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Conversion failed: $e')),
-      );
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
+    setState(() {
+      _builtModule = module;   // keep for CSV export
+      textEntered = true;
+    });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Conversion failed: $e')),
+    );
+  } finally {
+    if (mounted) setState(() => _busy = false);
   }
+}
+
 
   Future<void> _exportCsv() async {
     if (_builtModule == null) {
