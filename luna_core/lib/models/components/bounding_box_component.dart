@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/units/bounding_box.dart';
 import 'package:luna_core/utils/types.dart';
@@ -39,11 +36,5 @@ class BoundingBoxComponent extends Component {
       'width': json['boundingBox']['width'],
       'height': json['boundingBox']['height'],
     });
-  }
-
-  @override
-  Future<Widget> render(Size screenSize) {
-    // ToDo: implement render
-    throw UnimplementedError();
   }
 }

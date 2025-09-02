@@ -3,7 +3,6 @@ import 'package:luna_core/models/components/component.dart';
 import 'package:luna_core/units/percent.dart';
 import 'package:luna_core/units/point.dart';
 import 'package:luna_core/utils/types.dart';
-import 'package:luna_mobile/renderers/line_component_renderer.dart';
 
 /// Represents a line component that can be used in the Luna mHealth Mobile app.
 /// This component provides a line to separate content sections visually,
@@ -39,12 +38,6 @@ class LineComponent extends Component {
     required this.startPoint,
     required this.endPoint,
   });
-
-  /// Renders the line as a [Widget].
-  @override
-  Future<Widget> render(Size screenSize) async {
-    return LineComponentRenderer().renderComponent(this, screenSize);
-  }
 
   /// Converts the current [LineComponent] instance to a JSON object.
   /// Returns: A [Json] object containing all the properties of the line.

@@ -1,10 +1,15 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
-import 'package:luna_authoring_system/helper/authoring_initializer.dart';
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:luna_authoring_system/helper/authoring_initializer.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
+import 'package:luna_core/storage/module_resource_factory.dart';
+import 'package:path/path.dart';
+import 'package:luna_authoring_system/builder/module_constructor.dart';
+import 'package:luna_core/models/module.dart';
 
 void main() {
   group('Tests for PptxRunner using A line.pptx', () {
@@ -12,8 +17,6 @@ void main() {
 
     TestWidgetsFlutterBinding.ensureInitialized();
 
-    //platform channels are not available in unit tests
-    //taken from package_info_plus github (https://github.com/fluttercommunity/plus_plugins/blob/main/packages/package_info_plus/package_info_plus/test/package_info_test.dart)
     const channel = MethodChannel('dev.fluttercommunity.plus/package_info');
     final log = <MethodCall>[];
 
@@ -38,7 +41,6 @@ void main() {
       },
     );
 
-    // mock path provider too
     const path_channel = MethodChannel('plugins.flutter.io/path_provider');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(path_channel, (MethodCall methodCall) async {
@@ -49,17 +51,32 @@ void main() {
     });
 
     tearDown(() async {
-      await Directory(testDir).delete(recursive: true);
+      // If it exists, clean it up between tests.
+      if (await Directory(testDir).exists()) {
+        await Directory(testDir).delete(recursive: true);
+      }
       log.clear();
     });
 
     final pptxFile = File('test/test_assets/A line.pptx');
+
     test('Process PPTX makes a luna file.', () async {
       const fileName = 'unit_test_luna';
-      var filePath = join(testDir, "$fileName.luna");
-      ValidationIssuesStore store = ValidationIssuesStore();
+      final filePath = join(testDir, "$fileName.luna");
+      final store = ValidationIssuesStore();
+
       await AuthoringInitializer.initializeAuthoring();
-      await PptxRunner(store).processPptx(pptxFile.path, fileName);
+
+      // Build PPTX tree 
+      final tree = await PptxRunner(store).buildTree(pptxFile.path, fileName);
+
+      // Build Module from tree
+      final Module module = await ModuleConstructor(tree).constructLunaModule();
+
+      //Save module explicitly
+      await ModuleResourceFactory.addModule(fileName, jsonEncode(module.toJson()));
+
+
       expect(await File(filePath).exists(), true);
     });
   });

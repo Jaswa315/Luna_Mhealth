@@ -18,22 +18,5 @@ abstract class BaseComponentRenderer<T extends Component> implements IRenderer {
   /// Returns a [Widget] representing the rendered component.
   /// Throws an [ArgumentError] if the component is not of the correct type.
   @override
-  Widget renderComponent(dynamic component, Size screenSize) {
-    if (component is T) {
-      return FutureBuilder<Widget>(
-        future: component.render(screenSize),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return CircularProgressIndicator();
-          }
-          if (snapshot.hasError) throw Exception('Error loading component');
-          if (!snapshot.hasData) throw Exception('No data');
-
-          return snapshot.data!;
-        },
-      );
-    } else {
-      throw ArgumentError('component must be of type ${T.toString()}');
-    }
-  }
+  Widget renderComponent(dynamic component, Size screenSize);
 }
