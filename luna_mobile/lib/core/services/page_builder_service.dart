@@ -29,7 +29,7 @@ class ModulePageBuilderService {
   final ScaleUtilities scaleUtilities = ScaleUtilities();
 
   /// A map of cached pages for each module.
-  //Map<int, Widget> cachedPages = {}; // FIXEME: remove this line
+  //Map<int, Widget> cachedPages = {};
 
   /// Builds or retrieves a cached page for a given module and page index.
   ///
@@ -46,9 +46,6 @@ class ModulePageBuilderService {
     Widget Function(page_model.Page, Size) buildPage,
   ) {
     //double scale = scaleUtilities.calculateScale(screenSize, module.width);
-
-    // ToDo: Fix We should be using a ModuleContext to get the current module and core properties
-    ModuleResourceFactory.moduleName = module.title;
 
     if (!cachedPages.containsKey(pageIndex)) {
       if (cachedPages.length >= cacheSizeLimit) {
