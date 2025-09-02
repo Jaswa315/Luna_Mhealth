@@ -8,25 +8,24 @@ import 'package:luna_core/storage/module_resource_factory.dart';
 
 class ModuleBuildService {
   final ValidationIssuesStore store;
-
   ModuleBuildService(this.store);
 
-  /// Parses, validates PPTX, builds Module, saves .luna, returns Module.
-  Future<Module> buildAndSave(String pptxFilePath, String moduleName) async {
-    // Parse & validate (no saving here)
+  /// Parse, validate PPTX, then build a Module
+  Future<Module> build(String pptxFilePath, String moduleName) async {
     final tree = await PptxRunner(store).buildTree(pptxFilePath, moduleName);
 
-    // If validation failed, bubble up so UI can show issues
     if (store.hasIssues) {
-      throw StateError('Validation issues present; not saving module.');
+      throw StateError('Validation issues present; not building module.');
     }
 
-    // Build module from tree
-    final module = await ModuleConstructor(tree).constructLunaModule();
+    return ModuleConstructor(tree).constructLunaModule();
+  }
 
-    // Save module json into .luna
-    await ModuleResourceFactory.addModule(moduleName, jsonEncode(module.toJson()));
-
-    return module;
+  /// Save a built Module as a .luna file.
+  Future<void> save(String moduleName, Module module) async {
+    await ModuleResourceFactory.addModule(
+      moduleName,
+      jsonEncode(module.toJson()),
+    );
   }
 }

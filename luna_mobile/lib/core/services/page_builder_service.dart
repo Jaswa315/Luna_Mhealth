@@ -11,7 +11,6 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:luna_core/models/pages/page.dart' as page_model;
-import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:luna_core/utils/scale_utilities.dart';
 import 'package:luna_mobile/core/constants/constants.dart';
 import 'package:luna_mobile/renderers/irenderer.dart';

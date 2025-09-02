@@ -71,21 +71,24 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
     setState(() => _busy = true);
     try {
-      // Delegate build+save to the service (keeps UI clean)
       final service = ModuleBuildService(store);
-      final module = await service.buildAndSave(
-        filePath!,
-        _controller.text.trim(),
-      );
+      final name = _controller.text.trim();
 
-      // If validators found issues, show them and stop
-      if (store.hasIssues) {
+      // parse, validate, construct module.
+      late Module module;
+      try {
+        module = await service.build(filePath!, name);
+      } on StateError catch (_) {
+        // Validation issues present; UI will show them via store.
         setState(() {
           textEntered = false;
           _builtModule = null;
         });
         return;
       }
+
+      // Saving the module via ModuleResourceFactory
+      await service.save(name, module);
 
       setState(() {
         _builtModule = module; // for CSV export
@@ -110,7 +113,8 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
     final savePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Save CSV as...',
-      fileName: '${_controller.text.trim().isEmpty ? "module" : _controller.text.trim()}.csv',
+      fileName:
+          '${_controller.text.trim().isEmpty ? "module" : _controller.text.trim()}.csv',
       type: FileType.custom,
       allowedExtensions: const ['csv'],
     );
@@ -153,7 +157,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                     children: [
                       if (!filePicked)
                         ElevatedButton(
-                          onPressed: _busy ? null : () => _pickFile(),
+                          onPressed: _busy ? null : _pickFile,
                           child: const Text("Pick a PPTX File"),
                         ),
 
@@ -173,7 +177,8 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                             validator: (v) {
                               final s = (v ?? '').trim();
                               if (s.isEmpty) return 'Module name is required';
-                              if (!RegExp(r'^[A-Za-z0-9 _\.-]{3,}$').hasMatch(s)) {
+                              if (!RegExp(r'^[A-Za-z0-9 _\.-]{3,}$')
+                                  .hasMatch(s)) {
                                 return 'Use 3+ chars: letters, numbers, space, _ . -';
                               }
                               return null;
@@ -184,11 +189,13 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: _busy ? null : () => _submitText(),
+                          onPressed: _busy ? null : _submitText,
                           child: _busy
                               ? const SizedBox(
-                                  width: 18, height: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 2),
                                 )
                               : const Text("Submit"),
                         ),
@@ -202,7 +209,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton.icon(
-                          onPressed: _busy ? null : () => _exportCsv(),
+                          onPressed: _busy ? null : _exportCsv,
                           icon: const Icon(Icons.save_alt),
                           label: const Text('Export CSV'),
                         ),
