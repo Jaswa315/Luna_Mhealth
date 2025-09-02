@@ -1,12 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:luna_authoring_system/controllers/module_build_service.dart';
 import 'package:luna_authoring_system/helper/authoring_initializer.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/user_interface/presentation/authoring_home_screen.dart';
-import 'package:luna_core/storage/module_resource_factory.dart';
+
 
 Future<void> main(List<String> arguments) async {
   if (arguments.isEmpty) {
@@ -15,17 +14,13 @@ Future<void> main(List<String> arguments) async {
     return;
   }
 
-  // Process CMD app if applicable
-  await AuthoringInitializer.initializeAuthoring();
-  ValidationIssuesStore store = ValidationIssuesStore();
+await AuthoringInitializer.initializeAuthoring();
+final store = ValidationIssuesStore();
 
-  // Build the pptxFile into a Module (no saving inside runner)
-  final module = await PptxRunner(store).buildModule(arguments[0], arguments[1]);
+// delegate to the service
+await ModuleBuildService(store).buildAndSave(arguments[0], arguments[1]);
+exit(0);
 
-  // Save explicitly via ModuleResourceFactory
-  await ModuleResourceFactory.addModule(arguments[1], jsonEncode(module.toJson()));
-
-  exit(0);
 }
 
 /// The root widget of the application.
