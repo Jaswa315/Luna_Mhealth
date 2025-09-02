@@ -18,20 +18,20 @@ class PptxRunner {
 
   /// Parses a PPTX file, validates, and builds a Module (no saving).
   Future<Module> buildModule(pptxFilePath, String moduleName) async {
-    // Step 1: Validate and load file
+    
     final File pptxFile =
         PptxInputHandler.processInputs([pptxFilePath, moduleName]);
 
-    // Step 2: Build PPTX Tree from the file
+    
     final PptxTreeBuilder pptxTreeBuilder = PptxTreeBuilder(pptxFile);
     _pptxTree = pptxTreeBuilder.getPptxTree();
 
-    // Step 3: Run validators via a dedicated runner
+    
     final validator = PptxValidator(_pptxTree);
     final validatorRunner = ValidatorRunner(validator);
     validatorRunner.runValidators(store);
 
-    // Step 4: Construct Module (return it; no persistence here)
+    
     final moduleConstructor = ModuleConstructor(_pptxTree);
     return moduleConstructor.constructLunaModule();
   }
