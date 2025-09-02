@@ -8,6 +8,8 @@ import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:path/path.dart';
+import 'package:luna_authoring_system/builder/module_constructor.dart';
+import 'package:luna_core/models/module.dart';
 
 void main() {
   group('Tests for PptxRunner using A line.pptx', () {
@@ -15,7 +17,6 @@ void main() {
 
     TestWidgetsFlutterBinding.ensureInitialized();
 
-    // platform channels are not available in unit tests (mock package_info_plus)
     const channel = MethodChannel('dev.fluttercommunity.plus/package_info');
     final log = <MethodCall>[];
 
@@ -40,7 +41,6 @@ void main() {
       },
     );
 
-    // mock path provider too
     const path_channel = MethodChannel('plugins.flutter.io/path_provider');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(path_channel, (MethodCall methodCall) async {
@@ -51,7 +51,10 @@ void main() {
     });
 
     tearDown(() async {
-      await Directory(testDir).delete(recursive: true);
+      // If it exists, clean it up between tests.
+      if (await Directory(testDir).exists()) {
+        await Directory(testDir).delete(recursive: true);
+      }
       log.clear();
     });
 
@@ -64,11 +67,15 @@ void main() {
 
       await AuthoringInitializer.initializeAuthoring();
 
-      // Build only with PptxRunner (no saving inside runner)
-      final module = await PptxRunner(store).buildModule(pptxFile.path, fileName);
+      // Build PPTX tree 
+      final tree = await PptxRunner(store).buildTree(pptxFile.path, fileName);
 
-      // Explicitly save via ModuleResourceFactory
+      // Build Module from tree
+      final Module module = await ModuleConstructor(tree).constructLunaModule();
+
+      //Save module explicitly
       await ModuleResourceFactory.addModule(fileName, jsonEncode(module.toJson()));
+
 
       expect(await File(filePath).exists(), true);
     });
