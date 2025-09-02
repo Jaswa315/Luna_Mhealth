@@ -66,13 +66,6 @@ class ModuleResourceFactory {
       String moduleName, String jsonData) async {
     await moduleStorage.addFolderToModule(moduleName, _getImagePath());
 
-    // ToDo: CSV generation should be in Authoring, not in the standard createmodule flow.
-    //Uint8List? csvFileBytes = await _createInitialNewLanguageCSV(jsonData);
-
-    //String csvFilePath = _getInitialCSVFilePath(jsonData);
-
-    //await _updateOrAddAssetToArchive(moduleArchive, csvFilePath, csvFileBytes!);
-
     await moduleStorage.addFolderToModule(
         moduleName, _getInitialAudioDirectoryPath(jsonData));
 
@@ -102,7 +95,6 @@ class ModuleResourceFactory {
   }
 
   /// Adds an audio asset to a Module.luna archive package.
-  /// (matched audio structure)
   static Future<bool> addModuleAudio(String moduleName, String audioFileName,
       Uint8List? audioBytes, String langLocale) async {
     String filePath = "resources/$langLocale/audio/$audioFileName";
