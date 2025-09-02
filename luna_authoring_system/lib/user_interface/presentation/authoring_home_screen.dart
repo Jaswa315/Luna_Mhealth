@@ -6,18 +6,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import 'dart:convert';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
+import 'package:luna_authoring_system/controllers/module_build_service.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/translator/csv_export_use_case.dart';
 import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
 import 'package:luna_core/models/module.dart';
-import 'package:luna_core/storage/module_resource_factory.dart';
 import 'package:provider/provider.dart';
-
 
 /// Home page for the Authoring System
 /// Goes through each input for the system
@@ -32,7 +28,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   bool filePicked = false;
   bool textEntered = false;
 
-  // New: state & helpers for CSV export and UX polish
+  // State & helpers
   Module? _builtModule;
   final CsvExportUseCase _csvUseCase = CsvExportUseCase();
   final _formKey = GlobalKey<FormState>();
@@ -40,13 +36,6 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
   final TextEditingController _controller = TextEditingController();
   final store = ValidationIssuesStore();
-  late final PptxRunner _runner;
-
-  @override
-  void initState() {
-    super.initState();
-    _runner = PptxRunner(store);
-  }
 
   @override
   void dispose() {
@@ -71,51 +60,45 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   }
 
   Future<void> _submitText() async {
-  // Guard rails
-  if (!filePicked || filePath == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please pick a .pptx file first.')),
-    );
-    return;
-  }
-  if (!_formKey.currentState!.validate()) return;
-
-  setState(() => _busy = true);
-  try {
-    // Build only (runner no longer saves)
-    final module = await _runner.buildModule(
-      filePath!,
-      _controller.text.trim(),
-    );
-
-    // If validators found issues, show them and stop
-    if (store.hasIssues) {
-      setState(() {
-        textEntered = false;
-        _builtModule = null;
-      });
+    // Guard rails
+    if (!filePicked || filePath == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please pick a .pptx file first.')),
+      );
       return;
     }
+    if (!_formKey.currentState!.validate()) return;
 
-    // Save explicitly (keeps previous behavior)
-    await ModuleResourceFactory.addModule(
-      _controller.text.trim(),
-      jsonEncode(module.toJson()),
-    );
+    setState(() => _busy = true);
+    try {
+      // Delegate build+save to the service (keeps UI clean)
+      final service = ModuleBuildService(store);
+      final module = await service.buildAndSave(
+        filePath!,
+        _controller.text.trim(),
+      );
 
-    setState(() {
-      _builtModule = module;   // keep for CSV export
-      textEntered = true;
-    });
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Conversion failed: $e')),
-    );
-  } finally {
-    if (mounted) setState(() => _busy = false);
+      // If validators found issues, show them and stop
+      if (store.hasIssues) {
+        setState(() {
+          textEntered = false;
+          _builtModule = null;
+        });
+        return;
+      }
+
+      setState(() {
+        _builtModule = module; // for CSV export
+        textEntered = true;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Conversion failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
-}
-
 
   Future<void> _exportCsv() async {
     if (_builtModule == null) {
@@ -170,7 +153,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                     children: [
                       if (!filePicked)
                         ElevatedButton(
-                          onPressed: _busy ? null : _pickFile,
+                          onPressed: _busy ? null : () => _pickFile(),
                           child: const Text("Pick a PPTX File"),
                         ),
 
@@ -201,7 +184,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: _busy ? null : _submitText,
+                          onPressed: _busy ? null : () => _submitText(),
                           child: _busy
                               ? const SizedBox(
                                   width: 18, height: 18,
@@ -219,7 +202,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton.icon(
-                          onPressed: _busy ? null : _exportCsv,
+                          onPressed: _busy ? null : () => _exportCsv(),
                           icon: const Icon(Icons.save_alt),
                           label: const Text('Export CSV'),
                         ),
