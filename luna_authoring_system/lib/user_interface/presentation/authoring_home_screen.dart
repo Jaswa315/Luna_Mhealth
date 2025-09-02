@@ -8,7 +8,7 @@
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:luna_authoring_system/pptx_tree_compiler/pptx_runner.dart';
+import 'package:luna_authoring_system/controllers/module_build_service.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/translator/csv_export_use_case.dart';
 import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
@@ -28,7 +28,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   bool filePicked = false;
   bool textEntered = false;
 
-  // New: state & helpers for CSV export and UX polish
+  // State & helpers
   Module? _builtModule;
   final CsvExportUseCase _csvUseCase = CsvExportUseCase();
   final _formKey = GlobalKey<FormState>();
@@ -36,13 +36,6 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
   final TextEditingController _controller = TextEditingController();
   final store = ValidationIssuesStore();
-  late final PptxRunner _runner;
-
-  @override
-  void initState() {
-    super.initState();
-    _runner = PptxRunner(store);
-  }
 
   @override
   void dispose() {
@@ -78,10 +71,15 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
     setState(() => _busy = true);
     try {
-      await _runner.processPptx(filePath!, _controller.text.trim());
+      final service = ModuleBuildService(store);
+      final name = _controller.text.trim();
 
-      if (store.hasIssues) {
-        // Validators have populated the store; UI will render issues below.
+      // parse, validate, construct module.
+      late Module module;
+      try {
+        module = await service.build(filePath!, name);
+      } on StateError catch (_) {
+        // Validation issues present; UI will show them via store.
         setState(() {
           textEntered = false;
           _builtModule = null;
@@ -89,14 +87,11 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
         return;
       }
 
-      // IMPORTANT: Requires PptxRunner to expose the built module via a getter.
-      // Add in PptxRunner:
-      //   Module? _builtModule;
-      //   Module? get builtModule => _builtModule;
-      //   _builtModule = module; // in _generateLunaModule()
-      _builtModule = _runner.builtModule;
+      // Saving the module via ModuleResourceFactory
+      await service.save(name, module);
 
       setState(() {
+        _builtModule = module; // for CSV export
         textEntered = true;
       });
     } catch (e) {
@@ -118,7 +113,8 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
     final savePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Save CSV as...',
-      fileName: '${_controller.text.trim().isEmpty ? "module" : _controller.text.trim()}.csv',
+      fileName:
+          '${_controller.text.trim().isEmpty ? "module" : _controller.text.trim()}.csv',
       type: FileType.custom,
       allowedExtensions: const ['csv'],
     );
@@ -181,7 +177,8 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                             validator: (v) {
                               final s = (v ?? '').trim();
                               if (s.isEmpty) return 'Module name is required';
-                              if (!RegExp(r'^[A-Za-z0-9 _\.-]{3,}$').hasMatch(s)) {
+                              if (!RegExp(r'^[A-Za-z0-9 _\.-]{3,}$')
+                                  .hasMatch(s)) {
                                 return 'Use 3+ chars: letters, numbers, space, _ . -';
                               }
                               return null;
@@ -195,8 +192,10 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                           onPressed: _busy ? null : _submitText,
                           child: _busy
                               ? const SizedBox(
-                                  width: 18, height: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 2),
                                 )
                               : const Text("Submit"),
                         ),

@@ -108,7 +108,7 @@ class ModuleStorage {
   /// ```dart
   /// List<Module?> modules = await ModuleStorage().loadAllModules();
   /// ```
-  Future<List<Module?>> loadAllModules() async {
+  Future<List<Module>> loadAllModules() async {
     return await LogManager().logFunction('ModuleStorage.loadAllModules',
         () async {
       List<Module> modules = [];
