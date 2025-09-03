@@ -23,6 +23,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
 
   late int _slideIndex;
   late PptxHierarchy _hierarchy;
+  int _placeholderIndex = initialPLaceholderIndex;
 
   PptxTextboxShapeBuilder(this._pptxTransformBuilder, this._relationshipParser, this._pptxSlideLayoutParser);
 
@@ -33,35 +34,35 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return _pptxTransformBuilder.getTransform(transformMap);
   }
 
-  Json _getPlaceholderShape(int placeholderIndex) {
+  Json _getPlaceholderShape() {
     int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
 
-    return _pptxSlideLayoutParser.getPlaceholderShape(parentIndex, placeholderIndex, eTextboxShape);
+    return _pptxSlideLayoutParser.getPlaceholderShape(parentIndex, _placeholderIndex, eTextboxShape);
   }
 
   /// Gets the font size from the parent slide layout placeholder shape
-  PptxSimpleTypeTextFontSize _getFontSizeFromSlideLayout(int placeholderIndex) {
-    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
+  PptxSimpleTypeTextFontSize _getFontSizeFromSlideLayout() {
+    Json placeholderShape = _getPlaceholderShape();
 
     return PptxSimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
   }
 
   /// Gets the bold property from the parent slide layout placeholder shape
-  bool _getBoldFromSlideLayout(int placeholderIndex) {
-    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
+  bool _getBoldFromSlideLayout() {
+    Json placeholderShape = _getPlaceholderShape();
 
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eB]?.toString() == "1";
   }
 
   /// Gets the italics property from the parent slide layout placeholder shape
-  bool _getItalicsFromSlideLayout(int placeholderIndex) {
-    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
+  bool _getItalicsFromSlideLayout() {
+    Json placeholderShape = _getPlaceholderShape();
 
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eI]?.toString() == "1";
   }
 
-  SimpleTypeTextUnderlineType _getTextUnderlineTypeFromSlideLayout(int placeholderIndex) {
-    Json placeholderShape = _getPlaceholderShape(placeholderIndex);
+  SimpleTypeTextUnderlineType _getTextUnderlineTypeFromSlideLayout() {
+    Json placeholderShape = _getPlaceholderShape();
 
     String underlineValue = placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eU]?.toString() ?? 'none';
 
@@ -69,15 +70,15 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   }
 
   /// Builds a Run object from the provided run map.
-  Run _getRun(Json runMap, int placeholderIndex) {
+  Run _getRun(Json runMap) {
     String text = runMap[eT];
     String lang = runMap[eRPr][eLang] ?? '';
     List<String> codes = lang.split('-');
     Locale languageID = Locale(codes[0], codes[1]);
 
     PptxSimpleTypeTextFontSize fontSize;
-    if (placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eSz] == null) {
-      fontSize = _getFontSizeFromSlideLayout(placeholderIndex);
+    if (_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eSz] == null) {
+      fontSize = _getFontSizeFromSlideLayout();
     } else {
       if (runMap[eRPr][eSz] == null) {
         fontSize = PptxSimpleTypeTextFontSize(1200); // Default font size, will get correct font size from slide master
@@ -87,22 +88,22 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     }
 
     bool isBold;
-    if(placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eB] == null) {
-      isBold = _getBoldFromSlideLayout(placeholderIndex);
+    if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eB] == null) {
+      isBold = _getBoldFromSlideLayout();
     } else {
       isBold = runMap[eRPr][eB]?.toString() == "1";
     }
 
     bool isItalic;
-    if(placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eI] == null) {
-      isItalic = _getItalicsFromSlideLayout(placeholderIndex);
+    if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eI] == null) {
+      isItalic = _getItalicsFromSlideLayout();
     } else {
       isItalic = runMap[eRPr][eI]?.toString() == "1";
     }
 
     SimpleTypeTextUnderlineType underlineType;
-    if(placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eU] == null) {
-      underlineType = _getTextUnderlineTypeFromSlideLayout(placeholderIndex);
+    if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eU] == null) {
+      underlineType = _getTextUnderlineTypeFromSlideLayout();
     } else {
       String underlineValue = runMap[eRPr][eU]?.toString() ?? 'none';
       underlineType = SimpleTypeTextUnderlineType.fromXml(underlineValue);
@@ -119,27 +120,27 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   }
 
   /// Extracts runs from the provided run map and returns a list of Run objects.
-  List<Run> _getRuns(dynamic runMap, int placeholderIndex) {
+  List<Run> _getRuns(dynamic runMap) {
     List<Run> runs = [];
 
     if (runMap is List) {
       for (Json run in runMap) {
-        runs.add(_getRun(run, placeholderIndex));
+        runs.add(_getRun(run));
       }
     } else if (runMap is Map) {
-      runs.add(_getRun(runMap as Json, placeholderIndex));
+      runs.add(_getRun(runMap as Json));
     }
 
     return runs;
   }
 
   /// Builds a Paragraph object from the provided paragraph map.
-  Paragraph _getParagraph(Map<dynamic, dynamic> paragraphMap, int placeholderIndex) {
+  Paragraph _getParagraph(Map<dynamic, dynamic> paragraphMap) {
     // If the paragraph map does not contain the 'eR' key, return an empty Paragraph.
     if (paragraphMap[eR] == null) {
       return Paragraph(runs: []);
     }
-    List<Run> runs = _getRuns(paragraphMap[eR], placeholderIndex);
+    List<Run> runs = _getRuns(paragraphMap[eR]);
 
     return Paragraph(
       runs: runs,
@@ -147,16 +148,16 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   }
 
   /// Extracts paragraphs from the provided paragraph map and returns a list of Paragraph objects.
-  List<Paragraph> _getParagraphs(dynamic paragraphMap, int placeholderIndex) {
+  List<Paragraph> _getParagraphs(dynamic paragraphMap) {
     List<Paragraph> paragraphs = [];
     if (paragraphMap is List) {
       for (var paragraph in paragraphMap) {
         if (paragraph is Map) {
-          paragraphs.add(_getParagraph(paragraph, placeholderIndex));
+          paragraphs.add(_getParagraph(paragraph));
         }
       }
     } else if (paragraphMap is Map) {
-      paragraphs.add(_getParagraph(paragraphMap as Json, placeholderIndex));
+      paragraphs.add(_getParagraph(paragraphMap as Json));
     }
 
     return paragraphs;
@@ -164,10 +165,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
 
   /// Gets transform from corresponding parent slide layout placeholder
   Transform _getTransformFromSlideLayout(Json shapeMap) {
-    int parentIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
-    int placeholderIndex = int.parse(shapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
-    Json placeholderShape = _pptxSlideLayoutParser.getPlaceholderShape(
-      parentIndex, placeholderIndex, eTextboxShape,);
+    Json placeholderShape = _getPlaceholderShape();
 
     return _getTransform(placeholderShape[eShapeProperty][eTransform]);
   }
@@ -175,6 +173,12 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   /// Builds a TextboxShape object from the provided textbox shape map.
   @override
   TextboxShape buildShape(Json textboxShapeMap) {
+    if (textboxShapeMap[eNvSpPr][eNvPr].isNotEmpty) {
+      if (textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
+        _placeholderIndex = int.parse(textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
+      }
+    }
+
     late Transform transform;
     if (textboxShapeMap[eShapeProperty].isNotEmpty) {
       transform = _getTransform(textboxShapeMap[eShapeProperty][eTransform]);
@@ -187,14 +191,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       }
     }
 
-    int placeholderIndex = initialPLaceholderIndex;
-    if (textboxShapeMap[eNvSpPr][eNvPr].isNotEmpty) {
-      if (textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
-        placeholderIndex = int.parse(textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
-      }
-    }
-
-    List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP], placeholderIndex);
+    List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP]);
 
     Textbody textbody = Textbody(
       paragraphs: paragraphs,
