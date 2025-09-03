@@ -170,14 +170,18 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return _getTransform(placeholderShape[eShapeProperty][eTransform]);
   }
 
+  void _getPlaceholderIndex(Json shapeMap) {
+    if (shapeMap[eNvSpPr][eNvPr].isNotEmpty) {
+      if (shapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
+        _placeholderIndex = int.parse(shapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
+      }
+    }
+  }
+
   /// Builds a TextboxShape object from the provided textbox shape map.
   @override
   TextboxShape buildShape(Json textboxShapeMap) {
-    if (textboxShapeMap[eNvSpPr][eNvPr].isNotEmpty) {
-      if (textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
-        _placeholderIndex = int.parse(textboxShapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
-      }
-    }
+    _getPlaceholderIndex(textboxShapeMap);
 
     late Transform transform;
     if (textboxShapeMap[eShapeProperty].isNotEmpty) {
