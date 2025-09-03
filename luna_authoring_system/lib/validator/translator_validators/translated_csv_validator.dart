@@ -7,18 +7,15 @@ import 'package:luna_authoring_system/validator/issue/translator_issues/translat
 
 /// Validates an uploaded translation CSV:
 /// Requires headers: [sourceHeader] (default: "text")
-/// and [translatedHeader] (default: "Translated text").
-///
-/// NOTE: This parser is intentionally simple (split by ',') and assumes
-/// cells don't contain embedded commas or quoted fields.
+/// and [translatedHeader] (default: "Translation").
 class TranslatedCsvValidator implements IValidator {
   final String csvText;
-  final String translatedHeader; // e.g. "Translated text"
-  final String sourceHeader;     // e.g. "text"
+  final String translatedHeader; 
+  final String sourceHeader;     
 
   TranslatedCsvValidator(
     this.csvText, {
-    this.translatedHeader = 'Translated text',
+    this.translatedHeader = 'Translation',
     this.sourceHeader = 'text',
   });
 
@@ -26,10 +23,10 @@ class TranslatedCsvValidator implements IValidator {
   Set<IValidationIssue> validate() {
     final issues = <IValidationIssue>{};
 
-    // 1) Split lines
+    // Split lines
     final rawLines = const LineSplitter().convert(csvText);
 
-    // 2) Skip leading blank lines so first non-empty is header
+    // Skip leading blank lines so first non-empty is header
     final lines = <String>[];
     bool seenHeader = false;
     for (final l in rawLines) {
@@ -45,10 +42,10 @@ class TranslatedCsvValidator implements IValidator {
       return issues;
     }
 
-    // 3) Parse header
-    final header = _split(lines.first).map((h) => h.trim()).toList();
+    //  Parse header 
+    final header = _split(lines.first).map((h) => _stripQuotes(h.trim())).toList();
 
-    // Strip BOM if present on the first header cell (common with Excel)
+    // Remove BOM if present
     if (header.isNotEmpty && header.first.startsWith('\uFEFF')) {
       header[0] = header.first.replaceFirst('\uFEFF', '');
     }
@@ -65,8 +62,7 @@ class TranslatedCsvValidator implements IValidator {
       return issues;
     }
 
-    // 4) Validate rows
-    // i = 1 because lines[0] is header; rowIndex = i + 1 to be 1-based incl header
+    // Validate rows
     for (int i = 1; i < lines.length; i++) {
       final row = _split(lines[i]);
 
@@ -85,14 +81,21 @@ class TranslatedCsvValidator implements IValidator {
     return issues;
   }
 
-  // --- helpers (simple CSV splitting; OK if no quoted commas) ---
-
   List<String> _split(String line) => line.split(',');
 
+  String _stripQuotes(String s) {
+    if (s.length >= 2 &&
+        ((s.startsWith('"') && s.endsWith('"')) ||
+         (s.startsWith("'") && s.endsWith("'")))) {
+      return s.substring(1, s.length - 1).trim();
+    }
+    return s;
+  }
+
   int _indexOfIgnoreCase(List<String> cols, String name) {
-    final target = name.toLowerCase();
+    final target = _stripQuotes(name.trim()).toLowerCase();
     for (int i = 0; i < cols.length; i++) {
-      if (cols[i].trim().toLowerCase() == target) return i;
+      if (_stripQuotes(cols[i].trim()).toLowerCase() == target) return i;
     }
     return -1;
   }

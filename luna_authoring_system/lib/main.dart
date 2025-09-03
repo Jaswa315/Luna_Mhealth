@@ -7,7 +7,7 @@ import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/user_interface/presentation/authoring_home_screen.dart';
 
 Future<void> main(List<String> arguments) async {
-  // GUI mode 
+  // GUI mode
   if (arguments.isEmpty) {
     runApp(MyApp());
     return;
@@ -22,7 +22,7 @@ Future<void> main(List<String> arguments) async {
     // Build Module
     final module = await service.build(arguments[0], arguments[1]);
 
-    // Save 
+    // Save
     await service.save(arguments[1], module);
 
     exit(0);

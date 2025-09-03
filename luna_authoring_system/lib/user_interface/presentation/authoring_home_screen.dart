@@ -6,12 +6,16 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/controllers/module_build_service.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/translator/csv_export_use_case.dart';
 import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
+import 'package:luna_authoring_system/validator/translator_validators/translated_csv_validator.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:provider/provider.dart';
 
@@ -138,6 +142,53 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
     }
   }
 
+  /// Validate a user-picked translated CSV and surface issues in [store].
+  Future<void> _validateTranslatedCsv() async {
+    setState(() => _busy = true);
+    try {
+      final picked = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: const ['csv'],
+        withData: true,
+      );
+      if (picked == null) return;
+
+      // Read CSV text from bytes or file path
+      final file = picked.files.single;
+      String csvText;
+      if (file.bytes != null) {
+        csvText = utf8.decode(file.bytes!);
+      } else {
+        csvText = await File(file.path!).readAsString();
+      }
+
+      // Run validator and update store
+      store.clear();
+      final issues = TranslatedCsvValidator(csvText).validate();
+      for (final i in issues) {
+        store.addIssue(i);
+      }
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            issues.isEmpty
+                ? 'No validation issues found.'
+                : 'Validation Issues Found: ${issues.length}',
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Validation failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -194,8 +245,8 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                               ? const SizedBox(
                                   width: 18,
                                   height: 18,
-                                  child: CircularProgressIndicator(
-                                      strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : const Text("Submit"),
                         ),
@@ -203,15 +254,22 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
                       if (textEntered && !store.hasIssues) ...[
                         const SizedBox(height: 8),
-                        const Text(
-                          "Job done!",
-                          style: TextStyle(fontSize: 20),
-                        ),
+                        const Text("Job done!", style: TextStyle(fontSize: 20)),
                         const SizedBox(height: 12),
-                        ElevatedButton.icon(
-                          onPressed: _busy ? null : _exportCsv,
-                          icon: const Icon(Icons.save_alt),
-                          label: const Text('Export CSV'),
+                        Row(
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: _busy ? null : _exportCsv,
+                              icon: const Icon(Icons.save_alt),
+                              label: const Text('Export CSV'),
+                            ),
+                            const SizedBox(width: 12),
+                            ElevatedButton.icon(
+                              onPressed: _busy ? null : _validateTranslatedCsv,
+                              icon: const Icon(Icons.fact_check),
+                              label: const Text('Validate Translated CSV'),
+                            ),
+                          ],
                         ),
                       ],
 
@@ -220,6 +278,12 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
                         ValidationIssuesSummary(
                           issues: store.issues,
                           store: store,
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton.icon(
+                          onPressed: _busy ? null : _validateTranslatedCsv,
+                          icon: const Icon(Icons.fact_check),
+                          label: const Text('Validate Translated CSV'),
                         ),
                       ],
                     ],
