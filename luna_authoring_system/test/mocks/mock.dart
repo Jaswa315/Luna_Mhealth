@@ -1,4 +1,5 @@
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_master/pptx_slide_master_parser.dart';
 import 'package:mockito/annotations.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_tree.dart';
 import 'package:luna_authoring_system/pptx_data_objects/slide.dart';
@@ -31,5 +32,6 @@ import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_text
   MockSpec<PptxRelationshipParser>(),
   MockSpec<PptxSlideLayoutParser>(),
   MockSpec<PptxTextboxShapeBuilder>(),
+  MockSpec<PptxSlideMasterParser>(),
 ])
 void main() {}

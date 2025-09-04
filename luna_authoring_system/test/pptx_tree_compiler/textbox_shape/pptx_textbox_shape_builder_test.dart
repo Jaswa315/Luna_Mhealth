@@ -6,6 +6,7 @@ import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_xml_to_json_converter.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_master/pptx_slide_master_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
@@ -22,6 +23,7 @@ void main() {
   late MockPptxTransformBuilder mockPptxTransformBuilder;
   late MockPptxRelationshipParser mockPptxRelationshipParser;
   late MockPptxSlideLayoutParser mockPptxSlideLayoutParser;
+  late MockPptxSlideMasterParser mockPptxSlideMasterParser;
   final MockTransform mockTransform = MockTransform();
   const Json mockTransformMap = {"": {}};
   const String mockText = "Hello World";
@@ -31,6 +33,9 @@ void main() {
 
   const Json mockTextboxSingleTextRunShapeMap = {
     eNvSpPr: {
+      eCNvPr: {
+        eName: 'Text Placeholder 1',
+      },
       eNvPr: {
       },
     },
@@ -55,6 +60,9 @@ void main() {
 
   const Json mockTextboxMultiTextRunShapeMap = {
     eNvSpPr: {
+      eCNvPr: {
+        eName: 'Textbox 1',
+      },
       eNvPr: {
       },
     },
@@ -86,6 +94,9 @@ void main() {
 
   const Json mockTextboxMultiParagraphShapeMap = {
     eNvSpPr: {
+      eCNvPr: {
+        eName: 'Textbox 1',
+      },
       eNvPr: {
       },
     },
@@ -98,7 +109,7 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800',
+              eSz: '1200',
               eB: '1',
             },
             eT: mockText1,
@@ -108,7 +119,7 @@ void main() {
           eR: {
             eRPr: {
               eLang: englishLanguageCode,
-              eSz: '1800',
+              eSz: '1200',
             },
             eT: mockText2,
           },
@@ -119,6 +130,9 @@ void main() {
 
   const Json mockTextboxWithEmptyParagraphShapeMap = {
     eNvSpPr: {
+      eCNvPr: {
+        eName: 'Textbox 1',
+      },
       eNvPr: {
       },
     },
@@ -148,8 +162,9 @@ void main() {
         .thenReturn(mockTransform);
     mockPptxRelationshipParser = MockPptxRelationshipParser();
     mockPptxSlideLayoutParser = MockPptxSlideLayoutParser();
+    mockPptxSlideMasterParser = MockPptxSlideMasterParser();
     pptxTextboxShapeBuilder =
-        PptxTextboxShapeBuilder(mockPptxTransformBuilder, mockPptxRelationshipParser, mockPptxSlideLayoutParser);
+        PptxTextboxShapeBuilder(mockPptxTransformBuilder, mockPptxRelationshipParser, mockPptxSlideLayoutParser, mockPptxSlideMasterParser);
   });
 
   test('A text box shape with single paragraph and text run is parsed', () async {
@@ -208,6 +223,7 @@ void main() {
     expect(textboxShape.textbody.paragraphs.length, 2);
     expect(textboxShape.textbody.paragraphs[0].runs.length, 1);
     expect(textboxShape.textbody.paragraphs[0].runs[0].text, mockText1);
+    expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1200);
     expect(textboxShape.textbody.paragraphs[0].runs[0].languageCode, englishLanguageCode);
     expect(textboxShape.textbody.paragraphs[1].runs[0].text, mockText2);
     expect(textboxShape.textbody.paragraphs[1].runs[0].languageCode, englishLanguageCode);
@@ -252,7 +268,7 @@ void main() {
     final pptxFile = File('test/test_assets/1 textbox from placeholder in slide layout.pptx');
     PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
     PptxTextboxShapeBuilder pptxTextboxShapeBuilder = PptxTextboxShapeBuilder(
-        PptxTransformBuilder(), PptxRelationshipParser(pptxLoader), PptxSlideLayoutParser(pptxLoader));
+        PptxTransformBuilder(), PptxRelationshipParser(pptxLoader), PptxSlideLayoutParser(pptxLoader), PptxSlideMasterParser(pptxLoader));
 
     final shapeTree = pptxLoader.getJsonFromPptx(
               'ppt/slides/slide1.xml')['p:sld']['p:cSld']
@@ -278,5 +294,30 @@ void main() {
     expect(textboxShape.textbody.paragraphs[0].runs[0].bold, true);
     expect(textboxShape.textbody.paragraphs[0].runs[0].italics, false);
     expect(textboxShape.textbody.paragraphs[0].runs[0].underlineType, SimpleTypeTextUnderlineType.none);
+  });
+
+  group('Textbox shapes with default font sizes parsed', () {
+    final pptxFile = File('test/test_assets/Text with default font sizes.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxTextboxShapeBuilder pptxTextboxShapeBuilder = PptxTextboxShapeBuilder(
+        PptxTransformBuilder(), PptxRelationshipParser(pptxLoader), PptxSlideLayoutParser(pptxLoader), PptxSlideMasterParser(pptxLoader));
+    final shapeTree = pptxLoader.getJsonFromPptx(
+              'ppt/slides/slide1.xml')['p:sld']['p:cSld']
+          ['p:spTree']['p:sp'];
+      pptxTextboxShapeBuilder.slideIndex = 1;
+      pptxTextboxShapeBuilder.hierarchy = PptxHierarchy.slide;
+    final shapes = pptxTextboxShapeBuilder.getShapes(shapeTree);
+
+    test('A text box shape with default body font size is parsed', () async {
+      TextboxShape textboxShape = shapes[0] as TextboxShape;
+      expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Placeholder Text");
+      expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 2800);
+    });
+
+    test('A text box shape with default other font size is parsed', () async {
+      TextboxShape textboxShape = shapes[1] as TextboxShape;
+      expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Non-placeholder Text");
+      expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1800);
+    }); 
   });
 }
