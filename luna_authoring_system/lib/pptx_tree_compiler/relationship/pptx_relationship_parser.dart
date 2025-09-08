@@ -11,13 +11,20 @@ class PptxRelationshipParser {
 
   /// Parse the target string to get the index of the parent.
   int _parseParentTargetString(String target, PptxHierarchy pptxHierarchy) {
-    RegExp regex = RegExp('${pptxHierarchy.parent!.name}(\\d+)\\.xml');
-    Match? match = regex.firstMatch(target);
-    if (match != null) {
-      return int.parse(match.group(1)!);
-    }
-    throw Exception("Invalid slide layout target string: $target");
+  
+  if (pptxHierarchy.parent == null || pptxHierarchy.parent!.name.isEmpty) {
+    throw ArgumentError('pptxHierarchy.parent must not be null or empty');
   }
+
+  final regex = RegExp('${pptxHierarchy.parent!.name}(\\d+)\\.xml');
+  final match = regex.firstMatch(target);
+  if (match == null) {
+    throw FormatException("Invalid slide layout target string: $target");
+  }
+
+  return int.parse(match.group(1)!);
+}
+
 
   /// Get the parent index of the current hierarchy.
   int getParentIndex(int currentIndex, PptxHierarchy pptxHierarchy) {
