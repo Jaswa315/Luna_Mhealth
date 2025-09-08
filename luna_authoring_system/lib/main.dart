@@ -9,9 +9,19 @@ import 'package:luna_authoring_system/user_interface/presentation/authoring_home
 Future<void> main(List<String> arguments) async {
   // GUI mode
   if (arguments.isEmpty) {
-    runApp(MyApp());
+    // Initialize once for GUI
+    await AuthoringInitializer.initializeAuthoring();
+    runApp(const MyApp());
     return;
   }
+
+  // CLI mode: need 2 args
+  if (arguments.length < 2) {
+    stderr.writeln('Usage: app -- <pptx> <moduleName>');
+    exit(64); 
+  }
+  final pptx = arguments[0];
+  final moduleName = arguments[1];
 
   await AuthoringInitializer.initializeAuthoring();
 
@@ -19,15 +29,10 @@ Future<void> main(List<String> arguments) async {
   final service = ModuleBuildService(store);
 
   try {
-    // Build Module
-    final module = await service.build(arguments[0], arguments[1]);
-
-    // Save
-    await service.save(arguments[1], module);
-
+    final module = await service.build(pptx, moduleName);
+    await service.save(moduleName, module);
     exit(0);
   } on StateError catch (e) {
-    // Thrown by build() when validation issues are present
     stderr.writeln('Validation failed: ${e.message}');
     exit(2);
   } catch (e) {
@@ -36,13 +41,11 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
-/// The root widget of the application.
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    // Initialize shared authoring services on app start
-    Future.microtask(() => AuthoringInitializer.initializeAuthoring());
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AuthoringHomeScreen(),
