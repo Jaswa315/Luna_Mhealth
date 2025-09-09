@@ -33,12 +33,11 @@ class PptxSectionBuilder {
   void _updateRelationshipIdToSlideIndexMap(Map<String, int> rIdToSlideIndex, Json relationship) {
     RegExp regex = RegExp(r'slides/slide(\d+)\.xml');
     Match? match = regex.firstMatch(relationship[eTarget]);
-    if (match != null) {
-      rIdToSlideIndex[relationship[eId]] = int.parse(match.group(1)!);
-    } else {
-      throw Exception("Slide index not found for this relationship: $relationship");
-    }
+    if (match == null) {
+    throw FormatException('Slide index not found for relationship: $relationship');
   }
+  rIdToSlideIndex[relationship[eId]] = int.parse(match.group(1)!);
+}
 
   Map<String, int> _getRelationshipIdToSlideIndexMap() {
     Map<String, int> result = {};
