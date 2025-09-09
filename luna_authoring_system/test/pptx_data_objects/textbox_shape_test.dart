@@ -20,7 +20,7 @@ void main() {
     // Shared test objects
     final run = Run(languageID: lang, text: text, 
       fontSize: PptxSimpleTypeTextFontSize(1200), bold: false, italics: false, 
-      underlineType: SimpleTypeTextUnderlineType.none);
+      underlineType: SimpleTypeTextUnderlineType.none, color: Color(0xFF000000));
     final paragraph = Paragraph(runs: [run]);
     final textbody = Textbody(paragraphs: [paragraph]);
     final transform = Transform(

@@ -116,6 +116,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       bold: isBold,
       italics: isItalic,
       underlineType: underlineType,
+      color: Color(0xFF000000) // Default color, will get correct color later
     );
   }
 
