@@ -38,6 +38,8 @@ import 'package:luna_authoring_system/pptx_tree_compiler/slide_count/pptx_slide_
     as _i23;
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart'
     as _i26;
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_master/pptx_slide_master_parser.dart'
+    as _i28;
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_builder.dart'
     as _i27;
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart'
@@ -290,6 +292,21 @@ class MockSlide extends _i1.Mock implements _i14.Slide {
         Invocation.setter(
           #shapes,
           _shapes,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  int get slideNumber => (super.noSuchMethod(
+        Invocation.getter(#slideNumber),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  set slideNumber(int? _slideNumber) => super.noSuchMethod(
+        Invocation.setter(
+          #slideNumber,
+          _slideNumber,
         ),
         returnValueForMissingStub: null,
       );
@@ -990,4 +1007,27 @@ class MockPptxTextboxShapeBuilder extends _i1.Mock
         returnValue: <_i15.Shape>[],
         returnValueForMissingStub: <_i15.Shape>[],
       ) as List<_i15.Shape>);
+}
+
+/// A class which mocks [PptxSlideMasterParser].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPptxSlideMasterParser extends _i1.Mock
+    implements _i28.PptxSlideMasterParser {
+  @override
+  int getFontSizeFromSlideMaster(
+    int? parentIndex,
+    String? textStyle,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getFontSizeFromSlideMaster,
+          [
+            parentIndex,
+            textStyle,
+          ],
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
 }

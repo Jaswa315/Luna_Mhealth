@@ -49,6 +49,9 @@ const String eTextboxShape = 'p:sp';
 /// The XML element for an instance of a slide layout in the PowerPoint file.
 const String eSlideLayout = 'p:sldLayout';
 
+/// The XML element for an instance of a slide master in the PowerPoint file.
+const String eSlideMaster = 'p:sldMaster';
+
 /// The XML attribute to specifiy whether the text run is bold.
 const String eB = '_b';
 
@@ -75,3 +78,19 @@ const String eDefRPr = 'a:defRPr';
 /// Integer value representing the initial placeholder index for text boxes.
 /// This is used to determine if the text box is a placeholder shape.
 const int initialPLaceholderIndex = -1;
+
+/// String value representing the body placeholder type for text boxes
+/// that use body text styles.
+const String body = 'body';
+
+/// String value representing other text styles.
+const String other = 'other';
+
+/// The XML element for the non-visual canvas properties for a shape.
+const String eCNvPr = 'p:cNvPr';
+
+/// The XML atribute specifies the name of a shape.
+const String eName = '_name';
+
+/// String value representing the placeholder name for text boxes
+const String placeholder = 'Placeholder';

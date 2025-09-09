@@ -10,6 +10,7 @@ import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/pptx_base_shape_builder.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/relationship/pptx_relationship_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/slide_layout/pptx_slide_layout_parser.dart';
+import 'package:luna_authoring_system/pptx_tree_compiler/slide_master/pptx_slide_master_parser.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/textbox_shape/pptx_textbox_shape_constants.dart';
 import 'package:luna_authoring_system/pptx_tree_compiler/transform/pptx_transform_builder.dart';
 import 'package:luna_core/utils/types.dart';
@@ -20,12 +21,14 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   final PptxTransformBuilder _pptxTransformBuilder;
   final PptxRelationshipParser _relationshipParser;
   final PptxSlideLayoutParser _pptxSlideLayoutParser;
+  final PptxSlideMasterParser _pptxSlideMasterParser;
 
   late int _slideIndex;
   late PptxHierarchy _hierarchy;
-  int _placeholderIndex = initialPLaceholderIndex;
+  late int _placeholderIndex;
+  late String _textStyle;
 
-  PptxTextboxShapeBuilder(this._pptxTransformBuilder, this._relationshipParser, this._pptxSlideLayoutParser);
+  PptxTextboxShapeBuilder(this._pptxTransformBuilder, this._relationshipParser, this._pptxSlideLayoutParser, this._pptxSlideMasterParser);
 
   set slideIndex(int value) => _slideIndex = value;
   set hierarchy(PptxHierarchy value) => _hierarchy = value;
@@ -40,9 +43,28 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return _pptxSlideLayoutParser.getPlaceholderShape(parentIndex, _placeholderIndex, eTextboxShape);
   }
 
+  int _getSlideMasterIndex() {
+    if (_hierarchy.xmlKey == eSlideMaster) {
+      return _slideIndex;
+    } else if (_hierarchy.xmlKey == eSlideLayout) {
+      return _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
+    }
+    int parentSlideLayoutIndex = _relationshipParser.getParentIndex(_slideIndex, _hierarchy);
+    int slideMasterIndex = _relationshipParser.getParentIndex(parentSlideLayoutIndex, _hierarchy.parent!);
+    return slideMasterIndex;
+  }
+
+  PptxSimpleTypeTextFontSize _getFontSizeFromSlideMaster(String textStyle) {
+    int slideMasterIndex = _getSlideMasterIndex();
+    return PptxSimpleTypeTextFontSize(_pptxSlideMasterParser.getFontSizeFromSlideMaster(slideMasterIndex, textStyle));
+  }
+
   /// Gets the font size from the parent slide layout placeholder shape
   PptxSimpleTypeTextFontSize _getFontSizeFromSlideLayout() {
     Json placeholderShape = _getPlaceholderShape();
+    if (placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr].isEmpty) {
+      return _getFontSizeFromSlideMaster(_textStyle);
+    }
 
     return PptxSimpleTypeTextFontSize(int.parse(placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eSz]));
   }
@@ -50,6 +72,9 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   /// Gets the bold property from the parent slide layout placeholder shape
   bool _getBoldFromSlideLayout() {
     Json placeholderShape = _getPlaceholderShape();
+    if (placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr].isEmpty) {
+      return false;
+    }
 
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eB]?.toString() == "1";
   }
@@ -57,13 +82,18 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   /// Gets the italics property from the parent slide layout placeholder shape
   bool _getItalicsFromSlideLayout() {
     Json placeholderShape = _getPlaceholderShape();
+    if (placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr].isEmpty) {
+      return false;
+    }
 
     return placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eI]?.toString() == "1";
   }
 
   SimpleTypeTextUnderlineType _getTextUnderlineTypeFromSlideLayout() {
     Json placeholderShape = _getPlaceholderShape();
-
+    if (placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr].isEmpty) {
+      return SimpleTypeTextUnderlineType.none;
+    }
     String underlineValue = placeholderShape[eTextBody][eLstStyle][eLvl1pPr][eDefRPr][eU]?.toString() ?? 'none';
 
     return SimpleTypeTextUnderlineType.fromXml(underlineValue);
@@ -81,7 +111,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       fontSize = _getFontSizeFromSlideLayout();
     } else {
       if (runMap[eRPr][eSz] == null) {
-        fontSize = PptxSimpleTypeTextFontSize(1200); // Default font size, will get correct font size from slide master
+        fontSize = _getFontSizeFromSlideMaster(_textStyle);
       } else {
         fontSize = PptxSimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
       }
@@ -171,18 +201,31 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     return _getTransform(placeholderShape[eShapeProperty][eTransform]);
   }
 
-  void _getPlaceholderIndex(Json shapeMap) {
+  void _setPlaceholderIndex(Json shapeMap) {
     if (shapeMap[eNvSpPr][eNvPr].isNotEmpty) {
       if (shapeMap[eNvSpPr][eNvPr][ePlaceholder] != null) {
-        _placeholderIndex = int.parse(shapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx]);
+        _placeholderIndex = int.parse(shapeMap[eNvSpPr][eNvPr][ePlaceholder][eIdx] ?? initialPLaceholderIndex.toString());
+      } else {
+        _placeholderIndex = initialPLaceholderIndex;
       }
+    } else {
+      _placeholderIndex = initialPLaceholderIndex;
+    }
+  }
+
+  void _setTextStyle(Json shapeMap) {
+    if (shapeMap[eNvSpPr][eCNvPr][eName].contains(placeholder)) {
+      _textStyle = body;
+    } else {
+      _textStyle = other;
     }
   }
 
   /// Builds a TextboxShape object from the provided textbox shape map.
   @override
   TextboxShape buildShape(Json textboxShapeMap) {
-    _getPlaceholderIndex(textboxShapeMap);
+    _setPlaceholderIndex(textboxShapeMap);
+    _setTextStyle(textboxShapeMap);
 
     late Transform transform;
     if (textboxShapeMap[eShapeProperty].isNotEmpty) {
@@ -190,9 +233,6 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     } else { // get transform from its corresponding placeholder shape from corresponding parent
       if (_hierarchy.parent?.xmlKey == eSlideLayout) {
         transform = _getTransformFromSlideLayout(textboxShapeMap);
-      } else {
-        /// TODO: handle this case properly, need to get transform from slide master placeholder shape
-        throw UnimplementedError("Getting transform from slide master placeholder shape is not implemented yet.");
       }
     }
 
