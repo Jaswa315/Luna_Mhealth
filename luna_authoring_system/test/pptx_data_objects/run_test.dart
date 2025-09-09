@@ -14,7 +14,8 @@ void main() {
         fontSize: PptxSimpleTypeTextFontSize(1200),
         bold: false,
         italics: false,
-        underlineType: SimpleTypeTextUnderlineType.none);
+        underlineType: SimpleTypeTextUnderlineType.none,
+        color: Color(0xFF000000));
 
       expect(run1.languageID.languageCode, 'en');
       expect(run1.languageID.countryCode, 'US');
@@ -24,6 +25,7 @@ void main() {
       expect(run1.bold, false);
       expect(run1.italics, false);
       expect(run1.underlineType, SimpleTypeTextUnderlineType.none);
+      expect(run1.color, Color(0xFF000000));
     });
 
     test('Constructor initializes with invalid languageID', () {
@@ -32,7 +34,9 @@ void main() {
       fontSize: PptxSimpleTypeTextFontSize(1200),
       bold: false,
       italics: false,
-      underlineType: SimpleTypeTextUnderlineType.dbl);
+      underlineType: SimpleTypeTextUnderlineType.dbl,
+      color: Color(0xFF000000));
+      
       expect(run.languageID.languageCode, 'xx');
       expect(run.languageID.countryCode, 'xx');
       expect(run.languageCode, 'xx-xx');
@@ -52,6 +56,7 @@ void main() {
           bold: false,
           italics: false,
           underlineType: SimpleTypeTextUnderlineType.none,
+          color: Color(0xFF000000)
         ),
         throwsA(isA<ArgumentError>()),
       );

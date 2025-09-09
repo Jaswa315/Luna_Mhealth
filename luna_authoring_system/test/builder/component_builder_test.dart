@@ -93,6 +93,7 @@ void main() {
                 bold: false,
                 italics: false,
                 underlineType: SimpleTypeTextUnderlineType.none,
+                color: Color(0xFF000000)
               ),
             ],
           ),

@@ -16,7 +16,7 @@ void main() {
     test('Constructor initializes with single run', () {
       final run1 = Run(languageID: Locale('en', 'us'), text: 'Hello', 
         fontSize: PptxSimpleTypeTextFontSize(1200), bold: false, italics: false, 
-        underlineType: SimpleTypeTextUnderlineType.none);
+        underlineType: SimpleTypeTextUnderlineType.none, color: Color(0xFF000000));
       final paragraph = Paragraph(runs: [run1]);
       
       expect(paragraph.runs, hasLength(1));
@@ -31,10 +31,10 @@ void main() {
     test('Constructor initializes with multiple runs', () {
       final run1 = Run(languageID: Locale('es', 'ES'), text: 'Hola', 
         fontSize: PptxSimpleTypeTextFontSize(1500), bold: true, italics: true, 
-        underlineType: SimpleTypeTextUnderlineType.sng);
+        underlineType: SimpleTypeTextUnderlineType.sng, color: Color(0xFF000000));
       final run2 = Run(languageID: Locale('fr', 'FR'), text: 'Bonjour', 
         fontSize: PptxSimpleTypeTextFontSize(1800), bold: false, italics: true, 
-        underlineType: SimpleTypeTextUnderlineType.dbl);
+        underlineType: SimpleTypeTextUnderlineType.dbl, color: Color(0xFF000000));
       final paragraph = Paragraph(runs: [run1, run2]);
       
       expect(paragraph.runs, hasLength(2));

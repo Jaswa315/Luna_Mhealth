@@ -12,6 +12,7 @@ class Run {
   final bool bold;
   final bool italics;
   final SimpleTypeTextUnderlineType underlineType; // change to LunaTextUnderlineType
+  final Color color;
 
   Run({
     required this.languageID,
@@ -20,6 +21,7 @@ class Run {
     required this.bold,
     required this.italics,
     required this.underlineType,
+    required this.color,
   });
 
   /// Returns the languageID as a string (e.g., "en-US").

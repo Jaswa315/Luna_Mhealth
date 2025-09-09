@@ -11,7 +11,7 @@ void main() {
     test('Constructor initializes with single paragraph', () {
       final run1 = Run(languageID: Locale('en', 'us'), text: 'Hello', 
       fontSize: PptxSimpleTypeTextFontSize(1200), bold: false, italics: false, 
-      underlineType: SimpleTypeTextUnderlineType.none);
+      underlineType: SimpleTypeTextUnderlineType.none, color: Color(0xFF000000));
       final paragraph1 = Paragraph(runs: [run1]);
       final textbody = Textbody(paragraphs: [paragraph1]);
       
@@ -27,10 +27,10 @@ void main() {
     test('Constructor initializes with multiple paragraphs', () {
       final run1 = Run(languageID: Locale('en', 'us'), text: 'Hello', 
       fontSize: PptxSimpleTypeTextFontSize(1200), bold: false, italics: false, 
-      underlineType: SimpleTypeTextUnderlineType.none);
+      underlineType: SimpleTypeTextUnderlineType.none, color: Color(0xFF000000));
       final run2 = Run(languageID: Locale('es', 'ES'), text: 'Hola', 
       fontSize: PptxSimpleTypeTextFontSize(1500), bold: true, italics: true, 
-      underlineType: SimpleTypeTextUnderlineType.sng);
+      underlineType: SimpleTypeTextUnderlineType.sng, color: Color(0xFF000000));
       final paragraph1 = Paragraph(runs: [run1]);
       final paragraph2 = Paragraph(runs: [run1, run2]);
       final emptyParagraph = Paragraph(runs: []);
