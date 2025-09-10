@@ -89,7 +89,7 @@ void main() {
       expect(fakeWriter.capturedPath, 'translation.csv');
 
       // CSV sanity: has headers and exported text
-      expect(fakeWriter.capturedCsv, contains('Slide,Text,Translation'));
+      expect(fakeWriter.capturedCsv, contains('Slide,Text,Translated text'));
       expect(fakeWriter.capturedCsv, contains('Eat healthy during pregnancy'));
     });
   });

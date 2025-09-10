@@ -13,7 +13,7 @@ void main() {
 
   test('returns empty and leaves store empty when CSV is valid', () {
     const csv = '''
-text,Translation
+Text,Translated text
 Hello,Hola
 World,Mundo
 ''';
@@ -26,7 +26,7 @@ World,Mundo
 
   test('adds missing-translation issues to the store and returns them', () {
     const csv = '''
-text,Translation
+Text,Translated text
 Hello,
 World,Mundo
 ''';
@@ -38,9 +38,9 @@ World,Mundo
     expect(issues.first.toText(), contains('Hello')); // row with empty translation
   });
 
-  test('accepts legacy header "Translated text"', () {
+  test('accepts legacy header "Translation"', () {
     const csv = '''
-text,Translated text
+Text,Translation
 Hello,
 ''';
 
@@ -52,14 +52,14 @@ Hello,
 
   test('clears previous issues before adding new ones', () {
     const badCsv = '''
-text,Translation
+Text,Translated text
 Hi,
 ''';
     svc.validateCsvText(badCsv, store);
     expect(store.hasIssues, isTrue);
 
     const goodCsv = '''
-text,Translation
+Text,Translated text
 Hi,Hola
 ''';
     final issues = svc.validateCsvText(goodCsv, store);
