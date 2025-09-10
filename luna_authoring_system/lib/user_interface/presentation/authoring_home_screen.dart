@@ -12,10 +12,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:luna_authoring_system/controllers/module_build_service.dart';
+import 'package:luna_authoring_system/controllers/translation_validation_service.dart';
 import 'package:luna_authoring_system/providers/validation_issues_store.dart';
 import 'package:luna_authoring_system/translator/csv_export_use_case.dart';
 import 'package:luna_authoring_system/user_interface/validation_issues_summary.dart';
-import 'package:luna_authoring_system/validator/translator_validators/translated_csv_validator.dart';
 import 'package:luna_core/models/module.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +40,7 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
 
   final TextEditingController _controller = TextEditingController();
   final store = ValidationIssuesStore();
+  final _translationValidation = TranslationValidationService();
 
   @override
   void dispose() {
@@ -142,57 +143,50 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
     }
   }
 
-  /// Validate a user-picked translated CSV and surface issues in [store].
-  Future<void> _validateTranslatedCsv() async {
-    setState(() => _busy = true);
-    try {
-      final picked = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: const ['csv'],
-        withData: true,
-      );
-      if (picked == null) return;
+  /// Validate a user-picked translated CSV (UI wrapper only).
+Future<void> _validateTranslatedCsv() async {
+  setState(() => _busy = true);
+  try {
+    final picked = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['csv'],
+      withData: true,
+    );
+    if (picked == null) return;
 
-      // Read CSV text from bytes or file path
-      final file = picked.files.single;
-      String csvText;
-      if (file.bytes != null) {
-        csvText = utf8.decode(file.bytes!);
-      } else {
-        csvText = await File(file.path!).readAsString();
-      }
+    // Read CSV text
+    final file = picked.files.single;
+    final csvText = file.bytes != null
+        ? utf8.decode(file.bytes!)
+        : await File(file.path!).readAsString();
 
-      // Run validator and update store
-      store.clear();
-      final issues = TranslatedCsvValidator(csvText).validate();
-      for (final i in issues) {
-        store.addIssue(i);
-      }
+    // Delegate business logic to the service
+    final issues = _translationValidation.validateCsvText(csvText, store);
 
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            issues.isEmpty
-                ? 'No validation issues found.'
-                : 'Validation Issues Found: ${issues.length}',
-          ),
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          issues.isEmpty
+              ? 'No validation issues found.'
+              : 'Validation Issues Found: ${issues.length}',
         ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Validation failed: $e')),
-      );
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
+      ),
+    );
+  } catch (e) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Validation failed: $e')),
+    );
+  } finally {
+    if (mounted) setState(() => _busy = false);
   }
+}
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => store,
+    return ChangeNotifierProvider.value(
+      value: store,
       child: Scaffold(
         appBar: AppBar(title: const Text("Luna Authoring System")),
         body: Consumer<ValidationIssuesStore>(
