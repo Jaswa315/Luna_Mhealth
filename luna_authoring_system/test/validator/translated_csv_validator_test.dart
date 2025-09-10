@@ -7,7 +7,7 @@ void main() {
     test('flags rows with empty translated cells', () {
       // header row + 3 data rows (1 & 3 missing translations)
       const csv = '''
-text,Translated text
+Text,Translated text
 Hello,
 World,Hola
 Thanks,
@@ -32,7 +32,7 @@ Thanks,
 
     test('passes when all translated cells are filled', () {
       const csv = '''
-text,Translated text
+Text,Translated text
 Hello,Bonjour
 World,Monde
 Thanks,Merci
@@ -46,7 +46,7 @@ Thanks,Merci
 
     test('treats whitespace-only translated as missing', () {
       const csv = '''
-text,Translated text
+Text,Translated text
 Hello,   
 ''';
 
@@ -59,7 +59,7 @@ Hello,
 
     test('ignores completely empty rows', () {
       const csv = '''
-text,Translated text
+Text,Translated text
 Hello,Bonjour
 
 World,Monde

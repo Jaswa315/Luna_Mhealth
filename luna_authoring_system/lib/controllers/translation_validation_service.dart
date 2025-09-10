@@ -6,7 +6,6 @@ import 'package:luna_authoring_system/validator/translator_validators/translated
 /// and reflecting results into the ValidationIssuesStore.
 class TranslationValidationService {
   /// Runs the CSV validator and updates [store] with the results.
-  /// Returns the set so the caller can show counts, etc.
   Set<IValidationIssue> validateCsvText(
     String csvText,
     ValidationIssuesStore store,
