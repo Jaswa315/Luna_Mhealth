@@ -33,6 +33,33 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
   set slideIndex(int value) => _slideIndex = value;
   set hierarchy(PptxHierarchy value) => _hierarchy = value;
 
+  /// Builds a TextboxShape object from the provided textbox shape map.
+  @override
+  TextboxShape buildShape(Json textboxShapeMap) {
+    _setPlaceholderIndex(textboxShapeMap);
+    _setTextStyle(textboxShapeMap);
+
+    late Transform transform;
+    if (textboxShapeMap[eShapeProperty].isNotEmpty) {
+      transform = _getTransform(textboxShapeMap[eShapeProperty][eTransform]);
+    } else { // get transform from its corresponding placeholder shape from corresponding parent
+      if (_hierarchy.parent?.xmlKey == eSlideLayout) {
+        transform = _getTransformFromSlideLayout(textboxShapeMap);
+      }
+    }
+
+    List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP]);
+
+    Textbody textbody = Textbody(
+      paragraphs: paragraphs,
+    );
+
+    return TextboxShape(
+      transform: transform,
+      textbody: textbody,
+    );
+  }
+
   Transform _getTransform(Json transformMap) {
     return _pptxTransformBuilder.getTransform(transformMap);
   }
@@ -101,36 +128,22 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
 
   /// Builds a Run object from the provided run map.
   Run _getRun(Json runMap) {
-    String text = runMap[eT];
     String lang = runMap[eRPr][eLang] ?? '';
     List<String> codes = lang.split('-');
     Locale languageID = Locale(codes[0], codes[1]);
 
-    PptxSimpleTypeTextFontSize fontSize;
-    if (_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eSz] == null) {
-      fontSize = _getFontSizeFromSlideLayout();
-    } else {
-      if (runMap[eRPr][eSz] == null) {
-        fontSize = _getFontSizeFromSlideMaster(_textStyle);
-      } else {
-        fontSize = PptxSimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
-      }
-    }
+    return Run(
+      languageID: languageID,
+      text: runMap[eT],
+      fontSize: _getFontSize(runMap),
+      bold: _getBold(runMap),
+      italics: _getItalic(runMap),
+      underlineType: _getUnderlineType(runMap),
+      color: Color(0xFF000000) // Default color, will get correct color later
+    );
+  }
 
-    bool isBold;
-    if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eB] == null) {
-      isBold = _getBoldFromSlideLayout();
-    } else {
-      isBold = runMap[eRPr][eB]?.toString() == "1";
-    }
-
-    bool isItalic;
-    if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eI] == null) {
-      isItalic = _getItalicsFromSlideLayout();
-    } else {
-      isItalic = runMap[eRPr][eI]?.toString() == "1";
-    }
-
+  SimpleTypeTextUnderlineType _getUnderlineType(Json runMap) {
     SimpleTypeTextUnderlineType underlineType;
     if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eU] == null) {
       underlineType = _getTextUnderlineTypeFromSlideLayout();
@@ -138,16 +151,39 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       String underlineValue = runMap[eRPr][eU]?.toString() ?? 'none';
       underlineType = SimpleTypeTextUnderlineType.fromXml(underlineValue);
     }
+    return underlineType;
+  }
 
-    return Run(
-      languageID: languageID,
-      text: text,
-      fontSize: fontSize,
-      bold: isBold,
-      italics: isItalic,
-      underlineType: underlineType,
-      color: Color(0xFF000000) // Default color, will get correct color later
-    );
+  bool _getItalic(Json runMap) {
+    bool isItalic;
+    if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eI] == null) {
+      isItalic = _getItalicsFromSlideLayout();
+    } else {
+      isItalic = runMap[eRPr][eI]?.toString() == "1";
+    }
+    return isItalic;
+  }
+
+  PptxSimpleTypeTextFontSize _getFontSize(Json runMap) {
+    if (_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eSz] == null) {
+      return _getFontSizeFromSlideLayout();
+    } else {
+      if (runMap[eRPr][eSz] == null) {
+        return _getFontSizeFromSlideMaster(_textStyle);
+      } else {
+        return PptxSimpleTypeTextFontSize(int.parse(runMap[eRPr][eSz]));
+      }
+    }
+  }
+
+  bool _getBold(Json runMap) {
+    bool isBold;
+    if(_placeholderIndex != initialPLaceholderIndex && runMap[eRPr][eB] == null) {
+      isBold = _getBoldFromSlideLayout();
+    } else {
+      isBold = runMap[eRPr][eB]?.toString() == "1";
+    }
+    return isBold;
   }
 
   /// Extracts runs from the provided run map and returns a list of Run objects.
@@ -219,32 +255,5 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
     } else {
       _textStyle = other;
     }
-  }
-
-  /// Builds a TextboxShape object from the provided textbox shape map.
-  @override
-  TextboxShape buildShape(Json textboxShapeMap) {
-    _setPlaceholderIndex(textboxShapeMap);
-    _setTextStyle(textboxShapeMap);
-
-    late Transform transform;
-    if (textboxShapeMap[eShapeProperty].isNotEmpty) {
-      transform = _getTransform(textboxShapeMap[eShapeProperty][eTransform]);
-    } else { // get transform from its corresponding placeholder shape from corresponding parent
-      if (_hierarchy.parent?.xmlKey == eSlideLayout) {
-        transform = _getTransformFromSlideLayout(textboxShapeMap);
-      }
-    }
-
-    List<Paragraph> paragraphs = _getParagraphs(textboxShapeMap[eTextBody][eP]);
-
-    Textbody textbody = Textbody(
-      paragraphs: paragraphs,
-    );
-
-    return TextboxShape(
-      transform: transform,
-      textbody: textbody,
-    );
   }
 }
