@@ -1,7 +1,8 @@
+import 'package:luna_authoring_system/luna_constants.dart';
+
 enum CsvColumn {
   slideNumber,
-  text,
-  translation,
+  text, translated
 }
 
 extension CsvColumnExtension on CsvColumn {
@@ -10,9 +11,9 @@ extension CsvColumnExtension on CsvColumn {
       case CsvColumn.slideNumber:
         return 'Slide';
       case CsvColumn.text:
-        return 'Text';
-      case CsvColumn.translation:
-        return 'Translation';
+        return CsvHeaders.source; //Text
+      case CsvColumn.translated:
+        return CsvHeaders.translated; // Translated text
     }
   }
 }

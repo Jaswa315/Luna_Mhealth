@@ -18,7 +18,7 @@ void main() {
       final csv = exporter.generateCsv(chunks);
 
       // Check if the CSV contains header row
-      expect(csv, contains('Slide,Text,Translation'));
+      expect(csv, contains('Slide,Text,Translated text'));
 
       // Check if the CSV contains data rows
       expect(csv, contains('0,Eat healthy during pregnancy,'));
@@ -30,7 +30,7 @@ void main() {
       final csv = exporter.generateCsv([]);
 
       // Expect only the header row in the CSV output
-      expect(csv, contains('Slide,Text,Translation'));
+      expect(csv, contains('Slide,Text,Translated text'));
       expect(csv.split('\n').length, 1); // header row
     });
   });

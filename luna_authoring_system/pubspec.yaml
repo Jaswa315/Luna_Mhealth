@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   archive: ^3.4.10
+  args: ^2.7.0
   azure_application_insights: ^4.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -48,6 +49,7 @@ dependencies:
   uuid: ^4.4.0
   xml: ^6.5.0
   xml2json: ^6.2.3
+  
   
 
 
