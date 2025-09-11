@@ -44,7 +44,8 @@ class TranslatedCsvValidator implements IValidator {
       header[0] = header.first.replaceFirst('\uFEFF', '');
     }
 
-    final translatedIdx = _indexOfAnyIgnoreCase(header, [translatedHeader]);
+    // Accept legacy "Translation" as well as the configured translatedHeader
+    final translatedIdx = _indexOfAnyIgnoreCase(header, [translatedHeader, 'Translation']);
     final sourceIdx = _indexOfIgnoreCase(header, sourceHeader);
 
     if (translatedIdx == -1) {
