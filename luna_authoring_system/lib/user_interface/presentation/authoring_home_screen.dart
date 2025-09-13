@@ -19,9 +19,6 @@ import 'package:luna_authoring_system/user_interface/validation_issues_summary.d
 import 'package:luna_core/models/module.dart';
 import 'package:provider/provider.dart';
 
-/// Home page for the Authoring System
-/// Goes through each input for the system
-/// Once all inputs are selected, converts the specified input file to a .luna
 class AuthoringHomeScreen extends StatefulWidget {
   @override
   _AuthoringHomeScreenState createState() => _AuthoringHomeScreenState();
@@ -32,7 +29,6 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   bool filePicked = false;
   bool textEntered = false;
 
-  // State & helpers
   Module? _builtModule;
   final CsvExportUseCase _csvUseCase = CsvExportUseCase();
   final _formKey = GlobalKey<FormState>();
@@ -41,6 +37,8 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
   final TextEditingController _controller = TextEditingController();
   final store = ValidationIssuesStore();
   final _translationValidation = TranslationValidationService();
+
+  String? _exportedSourceCsvText;
 
   @override
   void dispose() {
@@ -59,13 +57,13 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
         filePath = result.files.single.path!;
         filePicked = true;
         textEntered = false;
-        _builtModule = null; // reset if new file is picked
+        _builtModule = null;
+        _exportedSourceCsvText = null;
       });
     }
   }
 
   Future<void> _submitText() async {
-    // Guard rails
     if (!filePicked || filePath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please pick a .pptx file first.')),
@@ -79,12 +77,10 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
       final service = ModuleBuildService(store);
       final name = _controller.text.trim();
 
-      // parse, validate, construct module.
       late Module module;
       try {
         module = await service.build(filePath!, name);
-      } on StateError catch (_) {
-        // Validation issues present; UI will show them via store.
+      } on StateError {
         setState(() {
           textEntered = false;
           _builtModule = null;
@@ -92,17 +88,15 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
         return;
       }
 
-      // Saving the module via ModuleResourceFactory
       await service.save(name, module);
 
       setState(() {
-        _builtModule = module; // for CSV export
+        _builtModule = module;
         textEntered = true;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Conversion failed: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Conversion failed: $e')));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -131,57 +125,70 @@ class _AuthoringHomeScreenState extends State<AuthoringHomeScreen> {
         module: _builtModule!,
         outputFilePath: savePath,
       );
+
+      if (ok) {
+        _exportedSourceCsvText = await File(savePath).readAsString();
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(ok ? 'CSV saved.' : 'CSV save failed.')),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('CSV export failed: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('CSV export failed: $e')));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
-  /// Validate a user-picked translated CSV (UI wrapper only).
-Future<void> _validateTranslatedCsv() async {
-  setState(() => _busy = true);
-  try {
-    final picked = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: const ['csv'],
-      withData: true,
-    );
-    if (picked == null) return;
-
-    // Read CSV text
-    final file = picked.files.single;
-    final csvText = file.bytes != null
-        ? utf8.decode(file.bytes!)
-        : await File(file.path!).readAsString();
-
-    // Delegate business logic to the service
-    final issues = _translationValidation.validateCsvText(csvText, store);
-
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          issues.isEmpty
-              ? 'No validation issues found.'
-              : 'Validation Issues Found: ${issues.length}',
+  Future<void> _validateTranslatedCsv() async {
+    if (_exportedSourceCsvText == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Export the source CSV first, then validate the translation.'),
         ),
-      ),
-    );
-  } catch (e) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Validation failed: $e')),
-    );
-  } finally {
-    if (mounted) setState(() => _busy = false);
+      );
+      return;
+    }
+
+    setState(() => _busy = true);
+    try {
+      final picked = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: const ['csv'],
+        withData: true,
+      );
+      if (picked == null) return;
+
+      final file = picked.files.single;
+      final csvText = file.bytes != null
+          ? utf8.decode(file.bytes!)
+          : await File(file.path!).readAsString();
+
+      final issues = _translationValidation.validateCsvText(
+        csvText,
+        store,
+        sourceCsvText: _exportedSourceCsvText,
+      );
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            issues.isEmpty
+                ? 'No validation issues found.'
+                : 'Validation Issues Found: ${issues.length}',
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Validation failed: $e')));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +212,6 @@ Future<void> _validateTranslatedCsv() async {
                           onPressed: _busy ? null : _pickFile,
                           child: const Text("Pick a PPTX File"),
                         ),
-
                       if (filePicked && !textEntered) ...[
                         Text("File Selected: $filePath"),
                         const SizedBox(height: 12),
@@ -222,8 +228,7 @@ Future<void> _validateTranslatedCsv() async {
                             validator: (v) {
                               final s = (v ?? '').trim();
                               if (s.isEmpty) return 'Module name is required';
-                              if (!RegExp(r'^[A-Za-z0-9 _\.-]{3,}$')
-                                  .hasMatch(s)) {
+                              if (!RegExp(r'^[A-Za-z0-9 _\.-]{3,}$').hasMatch(s)) {
                                 return 'Use 3+ chars: letters, numbers, space, _ . -';
                               }
                               return null;
@@ -239,13 +244,11 @@ Future<void> _validateTranslatedCsv() async {
                               ? const SizedBox(
                                   width: 18,
                                   height: 18,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : const Text("Submit"),
                         ),
                       ],
-
                       if (textEntered && !store.hasIssues) ...[
                         const SizedBox(height: 8),
                         const Text("Job done!", style: TextStyle(fontSize: 20)),
@@ -266,7 +269,6 @@ Future<void> _validateTranslatedCsv() async {
                           ],
                         ),
                       ],
-
                       if (store.hasIssues) ...[
                         const SizedBox(height: 20),
                         ValidationIssuesSummary(
