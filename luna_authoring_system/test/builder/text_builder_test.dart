@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/builder/module_builder.dart';
@@ -79,7 +80,7 @@ void main() {
                 bold: false,
                 italics: false,
                 underlineType: SimpleTypeTextUnderlineType.sng,
-                color: Color(0xFF000000),
+                color: Color(0xFFC00000),
               ),
             ],
           ),
@@ -102,11 +103,13 @@ void main() {
       expect(textComponent.textChildren.first.fontWeight, FontWeight.bold);
       expect(textComponent.textChildren.first.fontStyle, FontStyle.italic);
       expect(textComponent.textChildren.first.fontUnderline, TextDecoration.none);
+      expect(textComponent.textChildren.first.color, Color(0xFF000000));
       expect(textComponent.textChildren.last.text, 'Foo Bar');
       expect(textComponent.textChildren.last.fontSize, 18.0);
       expect(textComponent.textChildren.last.fontWeight, FontWeight.normal);
       expect(textComponent.textChildren.last.fontStyle, FontStyle.normal);
       expect(textComponent.textChildren.last.fontUnderline, TextDecoration.underline);
+      expect(textComponent.textChildren.last.color, Color(0xFFC00000));
     });
 
     test('Should correctly set bounding box from TextboxShape', () {
