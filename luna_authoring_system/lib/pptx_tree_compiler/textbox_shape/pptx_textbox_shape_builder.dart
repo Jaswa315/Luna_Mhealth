@@ -1,9 +1,12 @@
 import 'package:flutter/widgets.dart' hide Transform;
+import 'package:luna_authoring_system/helper/color_conversions.dart';
+import 'package:luna_authoring_system/pptx_data_objects/alpha.dart';
 import 'package:luna_authoring_system/pptx_data_objects/paragraph.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_simple_type_text_font_size.dart';
 import 'package:luna_authoring_system/pptx_data_objects/run.dart';
 import 'package:luna_authoring_system/pptx_data_objects/simple_type_text_underline_type.dart';
+import 'package:luna_authoring_system/pptx_data_objects/srgb_color.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbody.dart';
 import 'package:luna_authoring_system/pptx_data_objects/textbox_shape.dart';
 import 'package:luna_authoring_system/pptx_data_objects/transform.dart';
@@ -139,8 +142,20 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
       bold: _getBold(runMap),
       italics: _getItalic(runMap),
       underlineType: _getUnderlineType(runMap),
-      color: Color(0xFF000000) // Default color, will get correct color later
+      color: _getFontColor(runMap)
     );
+  }
+
+  Color _getFontColor(Json runMap) {
+    SrgbColor color = SrgbColor(runMap[eRPr][eSolidFill]?[eSrgbColor]
+            ?[eValue] ??
+        SrgbColor.defaultColor);
+    Alpha alpha =
+        Alpha(int.parse(runMap[eRPr][eSolidFill]?[eSrgbColor][eAlpha] ?? "${Alpha.maxAlpha}"));
+    Color fontColor =
+        ColorConversions.updateSrgbColorAndAlphaToFlutterColor(color, alpha);
+
+    return fontColor;
   }
 
   SimpleTypeTextUnderlineType _getUnderlineType(Json runMap) {
