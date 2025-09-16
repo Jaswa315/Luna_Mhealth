@@ -134,7 +134,7 @@ class PptxTextboxShapeBuilder extends PptxBaseShapeBuilder<TextboxShape> {
 
     return Run(
       languageID: languageID,
-      text: runMap[eT],
+      text: runMap[eT] == '' ? ' ' : runMap[eT],
       fontSize: _getFontSize(runMap),
       bold: _getBold(runMap),
       italics: _getItalic(runMap),

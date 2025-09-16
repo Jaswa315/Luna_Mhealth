@@ -288,4 +288,39 @@ void main() {
       expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1800);
     }); 
   });
+
+  test('A text box shape with empty text run is parsed', () async {
+    const Json mockTextboxWithEmptyTextRunShapeMap = {
+      eNvSpPr: {
+        eCNvPr: {
+          eName: 'Textbox 1',
+        },
+        eNvPr: {
+        },
+      },
+      eShapeProperty: {
+        eTransform: mockTransformMap,
+      },
+      eTextBody: {
+        eP: [
+          {
+            eR: {
+              eRPr: {
+                eLang: englishLanguageCode,
+                eSz: '1800',
+              },
+              eT: '',
+            },
+          },
+        ],
+      },
+    };
+    Json mockTextboxShapeMap = mockTextboxWithEmptyTextRunShapeMap;
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
+    TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
+
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, ' ');
+  });
 }
