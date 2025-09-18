@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/material.dart' hide Transform;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/builder/module_builder.dart';
 import 'package:luna_authoring_system/builder/text_builder.dart';
@@ -17,6 +18,8 @@ import 'package:mockito/mockito.dart';
 import '../mocks/mock.mocks.dart';
 
 void main() {
+  const black = Colors.black;
+  const red = Colors.red;
   group('TextBuilder Tests', () {
     test('Should build a TextComponent from a TextboxShape', () {
       final mockTextboxShape = MockTextboxShape();
@@ -34,7 +37,7 @@ void main() {
                 bold: false,
                 italics: false,
                 underlineType: SimpleTypeTextUnderlineType.none,
-                color: Color(0xFF000000),
+                color: black,
               ),
             ],
           ),
@@ -71,7 +74,7 @@ void main() {
                 bold: true,
                 italics: true,
                 underlineType: SimpleTypeTextUnderlineType.none,
-                color: Color(0xFF000000),
+                color: black,
               ),
               Run(
                 text: 'Foo Bar',
@@ -80,7 +83,7 @@ void main() {
                 bold: false,
                 italics: false,
                 underlineType: SimpleTypeTextUnderlineType.sng,
-                color: Color(0xFFC00000),
+                color: red,
               ),
             ],
           ),
@@ -103,13 +106,13 @@ void main() {
       expect(textComponent.textChildren.first.fontWeight, FontWeight.bold);
       expect(textComponent.textChildren.first.fontStyle, FontStyle.italic);
       expect(textComponent.textChildren.first.fontUnderline, TextDecoration.none);
-      expect(textComponent.textChildren.first.color, Color(0xFF000000));
+      expect(textComponent.textChildren.first.color, black);
       expect(textComponent.textChildren.last.text, 'Foo Bar');
       expect(textComponent.textChildren.last.fontSize, 18.0);
       expect(textComponent.textChildren.last.fontWeight, FontWeight.normal);
       expect(textComponent.textChildren.last.fontStyle, FontStyle.normal);
       expect(textComponent.textChildren.last.fontUnderline, TextDecoration.underline);
-      expect(textComponent.textChildren.last.color, Color(0xFFC00000));
+      expect(textComponent.textChildren.last.color, red);
     });
 
     test('Should correctly set bounding box from TextboxShape', () {
@@ -128,7 +131,7 @@ void main() {
                 bold: false,
                 italics: false,
                 underlineType: SimpleTypeTextUnderlineType.none,
-                color: Color(0xFF000000),
+                color: black,
               ),
             ],
           ),
@@ -166,7 +169,7 @@ void main() {
                 bold: false,
                 italics: false,
                 underlineType: SimpleTypeTextUnderlineType.none,
-                color: Color(0xFF000000),
+                color: black,
               ),
             ],
           ),
