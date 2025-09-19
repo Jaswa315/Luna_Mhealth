@@ -291,6 +291,7 @@ void main() {
     }); 
   });
 
+<<<<<<< HEAD
   group('Textbox shapes with font colors parsed', () {
     final pptxFile = File('test/test_assets/Text with different font colors.pptx');
     PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
@@ -314,5 +315,40 @@ void main() {
       expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Text with blue font color");
       expect(textboxShape.textbody.paragraphs[0].runs[0].color, const Color(0xFF0070C0));
     }); 
+=======
+  test('A text box shape with empty text run is parsed', () async {
+    const Json mockTextboxWithEmptyTextRunShapeMap = {
+      eNvSpPr: {
+        eCNvPr: {
+          eName: 'Textbox 1',
+        },
+        eNvPr: {
+        },
+      },
+      eShapeProperty: {
+        eTransform: mockTransformMap,
+      },
+      eTextBody: {
+        eP: [
+          {
+            eR: {
+              eRPr: {
+                eLang: englishLanguageCode,
+                eSz: '1800',
+              },
+              eT: '',
+            },
+          },
+        ],
+      },
+    };
+    Json mockTextboxShapeMap = mockTextboxWithEmptyTextRunShapeMap;
+
+    List<Shape> textboxShapes =
+        pptxTextboxShapeBuilder.getShapes(mockTextboxShapeMap);
+    TextboxShape textboxShape = textboxShapes[0] as TextboxShape;
+
+    expect(textboxShape.textbody.paragraphs[0].runs[0].text, ' ');
+>>>>>>> 9d468529a7190a31f527b83a3d709558442c68f3
   });
 }
