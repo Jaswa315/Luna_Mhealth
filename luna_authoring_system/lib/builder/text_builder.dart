@@ -32,6 +32,7 @@ class TextBuilder implements IBuilder<TextComponent> {
           fontUnderline: run.underlineType == SimpleTypeTextUnderlineType.none
               ? TextDecoration.none
               : TextDecoration.underline,
+          color: run.color,
         ));
       }
     }

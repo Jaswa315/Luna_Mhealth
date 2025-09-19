@@ -94,3 +94,15 @@ const String eName = '_name';
 
 /// String value representing the placeholder name for text boxes
 const String placeholder = 'Placeholder';
+
+/// The XML element for the solid color fill.
+const String eSolidFill = 'a:solidFill';
+
+/// The XML element specifies a color using the red, green, blue RGB color model.
+const String eSrgbColor = 'a:srgbClr';
+
+/// The XML attribute for the RGB color value.
+const String eValue = '_val';
+
+/// The XML element for the alpha (transparency) value.
+const String eAlpha = 'a:alpha';

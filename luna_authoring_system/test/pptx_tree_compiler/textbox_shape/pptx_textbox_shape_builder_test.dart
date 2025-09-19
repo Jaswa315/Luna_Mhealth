@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luna_authoring_system/pptx_data_objects/pptx_hierarchy.dart';
 import 'package:luna_authoring_system/pptx_data_objects/shape.dart';
@@ -287,6 +289,31 @@ void main() {
       expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Non-placeholder Text");
       expect(textboxShape.textbody.paragraphs[0].runs[0].fontSize.value, 1800);
     }); 
+  });
+
+  group('Textbox shapes with font colors parsed', () {
+    final pptxFile = File('test/test_assets/Text with different font colors.pptx');
+    PptxXmlToJsonConverter pptxLoader = PptxXmlToJsonConverter(pptxFile);
+    PptxTextboxShapeBuilder pptxTextboxShapeBuilder = PptxTextboxShapeBuilder(
+        PptxTransformBuilder(), PptxRelationshipParser(pptxLoader), PptxSlideLayoutParser(pptxLoader), PptxSlideMasterParser(pptxLoader));
+    final shapeTree = pptxLoader.getJsonFromPptx(
+              'ppt/slides/slide1.xml')['p:sld']['p:cSld']
+          ['p:spTree']['p:sp'];
+      pptxTextboxShapeBuilder.slideIndex = 1;
+      pptxTextboxShapeBuilder.hierarchy = PptxHierarchy.slide;
+    final shapes = pptxTextboxShapeBuilder.getShapes(shapeTree);
+
+    test('A text box shape with red font color is parsed', () async {
+      TextboxShape textboxShape = shapes[0] as TextboxShape;
+      expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Text with red font color");
+      expect(textboxShape.textbody.paragraphs[0].runs[0].color, const Color(0xFFC00000));
+    });
+
+    test('A text box shape with blue font color is parsed', () async {
+      TextboxShape textboxShape = shapes[1] as TextboxShape;
+      expect(textboxShape.textbody.paragraphs[0].runs[0].text, "Text with blue font color");
+      expect(textboxShape.textbody.paragraphs[0].runs[0].color, const Color(0xFF0070C0));
+    });
   });
 
   test('A text box shape with empty text run is parsed', () async {
